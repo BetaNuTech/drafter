@@ -1,24 +1,23 @@
-# README
+# Summary
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Drafter (c)2022 Bluestone Properties
 
-Things you may want to cover:
+# Development Setup
 
-* Ruby version
+*Dependencies*
 
-* System dependencies
+* Ruby version 3.1.2
+* NodeJS version 16
+* PostgreSQL version 14
 
-* Configuration
+# Credentials/Secrets
 
-* Database creation
+Credentials are stored encrypted at `config/credentials/ENVIRONMENT.yml.enc`
+Rails uses the `RAILS_MASTER_KEY` environment variable to decrypt this file.
 
-* Database initialization
+In development, store the master key in `.env`
 
-* How to run the test suite
+Edit credentials/secrets with:
+`RAILS_MASTER_KEY=XXXX rails credentials:edit --environment development`
+`RAILS_MASTER_KEY=XXXX rails credentials:edit --environment production`
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
