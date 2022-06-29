@@ -6,7 +6,7 @@ ruby "3.1.2"
 #gem 'kredis'
 #gem 'sidekiq'
 gem 'aasm'
-gem 'attr_encrypted'
+#gem 'attr_encrypted'
 gem 'audited'
 gem 'bcrypt'
 gem 'bootsnap', require: false
