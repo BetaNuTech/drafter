@@ -22,6 +22,7 @@ FIRST!:
 * Clean up stopped containers: `docker system prune`
 
 NOTE: files generated using docker will be owned by root. You will have to change file ownership manually.
+From the project root directory: `sudo chown -R $USER:$USER ./`
 
 ## Dependencies
 

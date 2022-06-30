@@ -28,11 +28,12 @@ gem 'pundit'
 gem 'rails'
 gem 'redis'
 gem 'sassc-rails'
-gem 'secure_headers'
+#gem 'secure_headers'
 gem 'sprockets-rails'
 gem 'stimulus-rails'
 gem 'turbo-rails'
 gem 'foreman'
+gem 'bootstrap', '~> 5.1.3'
 
 group :development do
   gem 'web-console'

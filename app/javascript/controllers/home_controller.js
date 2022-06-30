@@ -2,11 +2,11 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   connect() {
-    this.element.textContent = "Hello World!"
-    say_hello()
+    const el = this.element
+    console.log(`DEBUG: Home handler loaded for #${el.id}`)
   }
 
   say_hello() {
-    console.log('Hello world!')
+    alert('Hello from Home!')
   }
 }
