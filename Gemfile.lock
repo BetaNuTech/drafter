@@ -58,6 +58,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_record_query_trace (1.8)
     activejob (7.0.3)
       activesupport (= 7.0.3)
       globalid (>= 0.3.6)
@@ -80,10 +81,14 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    annotate (3.2.0)
+      activerecord (>= 3.2, < 8.0)
+      rake (>= 10.4, < 14.0)
     audited (5.0.2)
       activerecord (>= 5.0, < 7.1)
     autoprefixer-rails (10.4.7.0)
       execjs (~> 2)
+    awesome_print (1.9.2)
     bcrypt (3.1.18)
     bindex (0.8.1)
     binding_of_caller (1.0.0)
@@ -377,7 +382,10 @@ PLATFORMS
 DEPENDENCIES
   aasm
   action-cable-testing
+  active_record_query_trace
+  annotate
   audited
+  awesome_print
   bcrypt
   bootsnap
   bootstrap (~> 5.1.3)

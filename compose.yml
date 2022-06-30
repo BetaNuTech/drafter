@@ -21,14 +21,15 @@ x-backend: &backend
   volumes:
     - .:/app:cached
     - bundle:/usr/local/bundle
-    - rails_cache:/app/tmp/cache
+    - app_tmp:/app/tmp:cached
+    - app_log:/app/log
     - node_modules:/app/node_modules
     - packs:/app/public/packs
     - packs-test:/app/public/packs-test
     - history:/usr/local/hist
   environment: &backend_environment
     <<: *env
-    DATABASE_URL: postgres://postgres:postgres@postgres:5432
+    DATABASE_URL: postgres://postgres:postgres@postgres:5432/drafter_development
     MALLOC_ARENA_MAX: 2
     WEB_CONCURRENCY: ${WEB_CONCURRENCY:-1}
     BOOTSNAP_CACHE_DIR: /usr/local/bundle/_bootsnap
@@ -48,11 +49,18 @@ services:
     command: bin/docker_web_entrypoint.sh
     ports:
       - '3000:3000'
+  test:
+    <<: *backend
+    #command: bin/docker_web_entrypoint.sh
+    command: "echo 'NOOP (temporary)'"
+    environment:
+      <<: *env
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/drafter_test
+      RAILS_ENV: test
 
   postgres:
     image: postgres:14
     volumes:
-      - .psqlrc:/root/.psqlrc:ro
       - postgres:/var/lib/postgresql/data
       - history:/user/local/hist
     environment:
@@ -68,7 +76,8 @@ volumes:
   bundle:
   node_modules:
   history:
-  rails_cache:
   postgres:
   packs:
   packs-test:
+  app_tmp:
+  app_log:

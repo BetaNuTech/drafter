@@ -9,16 +9,21 @@ Draw Requests for constructed multi-family properties, working along side Asana 
 FIRST!:
 * Install docker, docker-compose
 * Create `.env` file based on `env.example` (Ask for development `RAILS_MASTER_KEY` value from other developer)
-* First time use/setup: `docker-compose build; docker-compose run web rake db:setup db:migrate db:seed`
+* First time use/setup:
+```
+docker-compose build
+docker-compose run web rake db:setup db:migrate db:seed`
+docker-compose run test rake db:test:prepare
+```
 
 ## General Use Commands
 
 * Start the stack: `docker-compose up`
-* Run tests: `docker-compose run web rspec`
+* Run tests: `docker-compose run test rspec` for a single run -or- `docker-compose run test guard` to continuously test
+* View/tail logs `docker-compose run web tail -f log/*.log`
 * Run a command against a service: `docker-compose run web XXXX`
   * Open a console: `docker-compose run web rails console`
   * Open a database console: `docker-compose run web rails dbconsole`
-* View/tail logs `tail -f log/*.log`
 * Clean up stopped containers: `docker system prune`
 
 NOTE: files generated using docker will be owned by root. You will have to change file ownership manually.
@@ -48,7 +53,7 @@ From the project root directory: `sudo chown -R $USER:$USER ./`
 * Stop running containers: `docker stop XXX`
 * Clean up stopped containers: `docker system prune` (this affects all containers on the system, not just drafter)
 * Delete image: `docker images | grep drafter-dev | awk '{print $3}' | xargs docker rm`
-* Delete volumes: `docker volume ls` `docker volume rm XXX`
+* Delete volumes: `docker volume ls` to list, then `docker volume rm XXX` for each drafter volume
 
 # Credentials/Secrets
 

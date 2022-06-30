@@ -33,8 +33,33 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #  index_users_on_unlock_token          (unlock_token) UNIQUE
 #
-class User < ApplicationRecord
-  include Users::Devise
-  include Users::Profile
-  include Users::Role
+require 'rails_helper'
+
+RSpec.describe User, type: :model do
+  include_context 'users'
+
+  describe 'Initialization' do
+    it 'create a new user record' do
+      user_count = User.count
+      assert(user.valid?)
+      assert(user.save)
+      assert(user.id.present?)
+      expect(User.count).to be > user_count
+    end
+
+  end
+
+  describe 'Profiles' do
+    it 'creates a new user record with a profile' do
+      user.save
+      expect(user.profile).to be_a(UserProfile)
+    end
+  end
+
+  describe 'Roles' do
+    it 'creates a new user with a role' do
+      user.save
+      expect(user.role).to be_a(Role)
+    end
+  end
 end

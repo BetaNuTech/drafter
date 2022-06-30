@@ -34,6 +34,7 @@ gem 'stimulus-rails'
 gem 'turbo-rails'
 gem 'foreman'
 gem 'bootstrap', '~> 5.1.3'
+gem 'awesome_print'
 
 group :development do
   gem 'web-console'
@@ -41,6 +42,8 @@ group :development do
   # gem "spring"
   gem 'letter_opener'
   gem 'letter_opener_web'
+  gem 'annotate'
+  gem 'active_record_query_trace'
 end
 
 

@@ -1,0 +1,13 @@
+:roles:
+  :version: 1
+  :key: :slug
+  :data:
+    - :slug: admin
+      :name: Administrator
+      :description: Full system access
+    - :slug: executive
+      :name: Executive
+      :description: Privileged user
+    - :slug: user
+      :name: User
+      :description: Typical limited user

@@ -8,6 +8,7 @@ class CreateUserProfiles < ActiveRecord::Migration[7.0]
       t.string :name_suffix
       t.string :company
       t.string :title
+      t.string :phone
       t.text :notes
       t.jsonb :appsettings
 
