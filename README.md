@@ -16,6 +16,7 @@ Draw Requests for constructed multi-family properties, working along side Asana 
   * Open a console: `docker-compose run web rails console`
   * Open a database console: `docker-compose run web rails dbconsole`
 * View/tail logs `tail -f log/*.log`
+* Clean up stopped containers: `docker system prune`
 
 NOTE: files generated using docker will be owned by root. You will have to change file ownership manually.
 
