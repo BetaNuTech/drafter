@@ -6,9 +6,12 @@ Draw Requests for constructed multi-family properties, working along side Asana 
 
 # Development 
 
-## General Use Commands
-
+FIRST!:
+* Install docker, docker-compose
+* Create `.env` file based on `env.example` (Ask for development `RAILS_MASTER_KEY` value from other developer)
 * First time use/setup: `docker-compose build; docker-compose run web rake db:setup db:migrate db:seed`
+
+## General Use Commands
 
 * Start the stack: `docker-compose up`
 * Run tests: `docker-compose run web rspec`
