@@ -20,7 +20,7 @@ docker-compose run test rake db:test:prepare
 
 * Start the stack: `docker-compose up`
 * Run tests: `docker-compose run test rspec` for a single run -or- `docker-compose run test guard` to continuously test
-* View/tail logs `docker-compose run web tail -f log/*.log`
+* View/tail logs `docker-compose run web bin/tail_logs`
 * Run a command against a service: `docker-compose run web XXXX`
   * Open a console: `docker-compose run web rails console`
   * Open a database console: `docker-compose run web rails dbconsole`
@@ -42,11 +42,6 @@ From the project root directory: `sudo chown -R $USER:$USER ./`
 * Docker
 * Docker Compose
 
-## Docker
-
-* Install docker, docker-compose
-* Create `.env` file based on `env.example` (Ask for development `RAILS_MASTER_KEY` value from other developer)
-
 ### Cleanup
 
 * List running containers: `docker ps`
@@ -67,8 +62,10 @@ Edit credentials/secrets with:
 
 `RAILS_MASTER_KEY=XXXX rails credentials:edit --environment production`
 
-# Docker Development Environment
+# Email
 
-* Install docker and docker-compose
+## Development
 
+In development the mail handler is "letter opener".
 
+Go to `http://localhost:3000/letter_opener` to view outgoing emails
