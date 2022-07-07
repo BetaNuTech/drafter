@@ -1,0 +1,65 @@
+<div class="row">
+  <div class="col-10">
+    <h1>Users</h1>
+  </div>
+
+  <div class="col-2">
+    <%= link_to('Create User', new_user_path, class: 'btn btn-sm btn-primary') %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Status</th>
+          <th scope="col">Name</th>
+          <th scope="col">Company/Title</th>
+          <th scope="col">Contact</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @collection.each do |user| %>
+          <tr>
+            <td>
+              <% if user.confirmed? %>
+                <% if user.active? %>
+                  <span class="badge bg-primary">active</span> 
+                <% else %>
+                  <span class="badge bg-light">deactivated</span> 
+                <% end %>
+              <% else %>
+                <span class="badge bg-warning">unconfirmed</span>
+              <% end %>
+              <span class="badge bg-<%= role_badge_color_class(user.role) %>"><%= user.role&.name || 'NONE' %></span>
+              <p> 
+                <small>
+                  <em>Last Login: </em>
+                  <span class="text-nowrap">
+                    <%= full_datetime(user.current_sign_in_at) || 'Never' %>
+                  </span>
+                </small>
+              </p>
+          </td>
+          <td class="nowrap">
+            <span><%= user.full_name %></span>
+          </td>
+          <td class="nowrap">
+            <span><%= user.title %></span> 
+            <span><%= user.company %></span>
+          </td>
+          <td class="nowrap">
+            <em>Email:</em> <span><%= mail_to user.email %></span><br/>
+            <em>Phone:</em> <span><%= user.phone %></span>
+          </td>
+          <td>
+            <span><%= link_to('Edit', edit_user_path(user), class: 'btn btn-sm btn-primary') %></span> 
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+</div>

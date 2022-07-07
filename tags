@@ -1,0 +1,81 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+<=>	./app/models/role.rb	/^  def <=>(other)$/;"	f	class:Role
+Application	./config/application.rb	/^  class Application < Rails::Application$/;"	c	class:Drafter
+ApplicationCable	./app/channels/application_cable/channel.rb	/^module ApplicationCable$/;"	m
+ApplicationCable	./app/channels/application_cable/connection.rb	/^module ApplicationCable$/;"	m
+ApplicationController	./app/controllers/application_controller.rb	/^class ApplicationController < ActionController::Base$/;"	c
+ApplicationHelper	./app/helpers/application_helper.rb	/^module ApplicationHelper$/;"	m
+ApplicationJob	./app/jobs/application_job.rb	/^class ApplicationJob < ActiveJob::Base$/;"	c
+ApplicationMailer	./app/mailers/application_mailer.rb	/^class ApplicationMailer < ActionMailer::Base$/;"	c
+ApplicationRecord	./app/models/application_record.rb	/^class ApplicationRecord < ActiveRecord::Base$/;"	c
+Channel	./app/channels/application_cable/channel.rb	/^  class Channel < ActionCable::Channel::Base$/;"	c	class:ApplicationCable
+Connection	./app/channels/application_cable/connection.rb	/^  class Connection < ActionCable::Connection::Base$/;"	c	class:ApplicationCable
+CreateRoles	./db/migrate/20220630210948_create_roles.rb	/^class CreateRoles < ActiveRecord::Migration[7.0]$/;"	c
+CreateUserProfiles	./db/migrate/20220630204256_create_user_profiles.rb	/^class CreateUserProfiles < ActiveRecord::Migration[7.0]$/;"	c
+Devise	./app/models/concerns/users/devise.rb	/^  module Devise$/;"	m	class:Users
+DeviseCreateUsers	./db/migrate/20220629233840_devise_create_users.rb	/^class DeviseCreateUsers < ActiveRecord::Migration[7.0]$/;"	c
+Drafter	./config/application.rb	/^module Drafter$/;"	m
+DrafterDeviseMailer	./app/mailers/drafter_devise_mailer.rb	/^class DrafterDeviseMailer < Devise::Mailer$/;"	c
+HomeController	./app/controllers/home_controller.rb	/^class HomeController < ApplicationController$/;"	c
+HomeHelper	./app/helpers/home_helper.rb	/^module HomeHelper$/;"	m
+Profile	./app/models/concerns/users/profile.rb	/^  module Profile$/;"	m	class:Users
+RequestSpecHelper	./spec/support/request_spec_helper.rb	/^module RequestSpecHelper$/;"	m
+Role	./app/models/concerns/users/role.rb	/^  module Role$/;"	m	class:Users
+Role	./app/models/role.rb	/^class Role < ApplicationRecord$/;"	c
+Seedable	./app/models/concerns/seeds/seedable.rb	/^  module Seedable$/;"	m	class:Seeds
+Seeds	./app/models/concerns/seeds/seedable.rb	/^module Seeds$/;"	m
+User	./app/models/user.rb	/^class User < ApplicationRecord$/;"	c
+UserProfile	./app/models/user_profile.rb	/^class UserProfile < ApplicationRecord$/;"	c
+Users	./app/models/concerns/users/devise.rb	/^module Users$/;"	m
+Users	./app/models/concerns/users/profile.rb	/^module Users$/;"	m
+Users	./app/models/concerns/users/role.rb	/^module Users$/;"	m
+UsersController	./app/controllers/users_controller.rb	/^class UsersController < ApplicationController$/;"	c
+UsersHelper	./app/helpers/users_helper.rb	/^module UsersHelper$/;"	m
+activate_bundler	./bin/bundle	/^  def activate_bundler$/;"	f
+activation_error_handling	./bin/bundle	/^  def activation_error_handling$/;"	f
+admin	./app/models/role.rb	/^  def self.admin$/;"	F	class:Role
+admin?	./app/models/concerns/users/role.rb	/^      def admin?$/;"	f	class:Users.Role
+admin?	./app/models/role.rb	/^  def admin?$/;"	f	class:Role
+administrator?	./app/models/concerns/users/role.rb	/^      def administrator?$/;"	f	class:Users.Role
+bundler_requirement	./bin/bundle	/^  def bundler_requirement$/;"	f
+bundler_requirement_for	./bin/bundle	/^  def bundler_requirement_for(version)$/;"	f
+change	./db/migrate/20220629233840_devise_create_users.rb	/^  def change$/;"	f	class:DeviseCreateUsers
+change	./db/migrate/20220630204256_create_user_profiles.rb	/^  def change$/;"	f	class:CreateUserProfiles
+change	./db/migrate/20220630210948_create_roles.rb	/^  def change$/;"	f	class:CreateRoles
+cli_arg_version	./bin/bundle	/^  def cli_arg_version$/;"	f
+confirmation_instructions	./app/mailers/drafter_devise_mailer.rb	/^  def confirmation_instructions(record, token, opts={})$/;"	f	class:DrafterDeviseMailer
+destroy	./app/controllers/users_controller.rb	/^  def destroy$/;"	f	class:UsersController
+edit	./app/controllers/users_controller.rb	/^  def edit$/;"	f	class:UsersController
+env_var_version	./bin/bundle	/^  def env_var_version$/;"	f
+executive	./app/models/role.rb	/^  def self.executive$/;"	F	class:Role
+executive?	./app/models/concerns/users/role.rb	/^      def executive?$/;"	f	class:Users.Role
+full_name	./app/models/concerns/users/profile.rb	/^      def full_name$/;"	f	class:Users.Profile
+gemfile	./bin/bundle	/^  def gemfile$/;"	f
+http_auth_credentials	./app/controllers/application_controller.rb	/^  def self.http_auth_credentials$/;"	F	class:ApplicationController
+included	./spec/support/request_spec_helper.rb	/^  def self.included(base)$/;"	F	class:RequestSpecHelper
+index	./app/controllers/home_controller.rb	/^  def index$/;"	f	class:HomeController
+index	./app/controllers/users_controller.rb	/^  def index$/;"	f	class:UsersController
+invoked_as_script?	./bin/bundle	/^  def invoked_as_script?$/;"	f
+load_bundler!	./bin/bundle	/^  def load_bundler!$/;"	f
+load_seed_data	./app/models/concerns/seeds/seedable.rb	/^      def load_seed_data(yaml_path=nil)$/;"	f	class:Seeds.Seedable
+lockfile	./bin/bundle	/^  def lockfile$/;"	f
+lockfile_version	./bin/bundle	/^  def lockfile_version$/;"	f
+name	./app/models/concerns/users/profile.rb	/^      def name$/;"	f	class:Users.Profile
+new	./app/controllers/users_controller.rb	/^  def new$/;"	f	class:UsersController
+password_required?	./app/models/concerns/users/devise.rb	/^      def password_required?$/;"	f	class:Users.Devise
+set_user	./app/controllers/users_controller.rb	/^  def set_user$/;"	f	class:UsersController
+show	./app/controllers/users_controller.rb	/^  def show$/;"	f	class:UsersController
+sign_in	./spec/support/request_spec_helper.rb	/^  def sign_in(resource)$/;"	f	class:RequestSpecHelper
+sign_out	./spec/support/request_spec_helper.rb	/^  def sign_out(resource)$/;"	f	class:RequestSpecHelper
+system!	./bin/setup	/^def system!(*args)$/;"	f
+update	./app/controllers/users_controller.rb	/^  def update$/;"	f	class:UsersController
+user	./app/models/role.rb	/^  def self.user$/;"	F	class:Role
+user?	./app/models/concerns/users/role.rb	/^      def user?$/;"	f	class:Users.Role
+user_not_authorized	./app/controllers/application_controller.rb	/^  def user_not_authorized$/;"	f	class:ApplicationController
+user_timezone	./app/controllers/application_controller.rb	/^  def user_timezone(&block)$/;"	f	class:ApplicationController
+warden_scope	./spec/support/request_spec_helper.rb	/^  def warden_scope(resource)$/;"	f	class:RequestSpecHelper

@@ -1,0 +1,11 @@
+@font-face {
+  font-family: 'Libre Baskerville';
+  src: url('LibreBaskerville-Regular.ttf');
+}
+
+$default-font-family: 'Libre Baskerville';
+$default-font-family: 'Serif';
+
+body * {
+  // font-family: $default-font-family;
+}

@@ -14,11 +14,18 @@ module Users
       delegate :name_prefix, to: :profile, allow_nil: true
       delegate :first_name, to: :profile, allow_nil: true
       delegate :last_name, to: :profile, allow_nil: true
-      delegate :phone, to: :profile, allow_nil: true
+      delegate :name_suffix, to: :profile, allow_nil: true
+      delegate :title, to: :profile, allow_nil: true
+      delegate :company, to: :profile, allow_nil: true
       delegate :notes, to: :profile, allow_nil: true
+      delegate :phone, to: :profile, allow_nil: true
+
+      def full_name
+        [name_prefix, first_name, last_name, name_suffix].join(' ')
+      end
 
       def name
-        [first_name, last_name].join(' ')
+        [first_name, last_name, name_suffix].join(' ')
       end
     end
   end

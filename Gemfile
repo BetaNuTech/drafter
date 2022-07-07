@@ -38,6 +38,8 @@ gem 'awesome_print'
 
 group :development do
   gem 'web-console'
+  gem 'stackprof'
+  gem 'memory_profiler'
   gem 'rack-mini-profiler'
   # gem "spring"
   gem 'letter_opener'

@@ -31,10 +31,20 @@
 #  index_users_on_confirmation_token    (confirmation_token) UNIQUE
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  index_users_on_role_id               (role_id)
 #  index_users_on_unlock_token          (unlock_token) UNIQUE
 #
 class User < ApplicationRecord
   include Users::Devise
   include Users::Profile
   include Users::Role
+
+  ALLOWED_PARAMS = [:id, :email, :timezone, :password, :password_confirmation ]
+
+  validates :email, uniqueness: true, presence: true
+  validates :role_id, inclusion: {in: Role.pluck(:id)}
+
+  def deactivated?
+    !active?
+  end
 end

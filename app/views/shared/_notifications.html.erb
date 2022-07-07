@@ -1,0 +1,32 @@
+<div id="notifications">
+  <div class="row">
+    <div class="col">
+      <% if notice.present? %>
+        <div class="row alert alert-dismissable fade show bg-info">
+          <div class="col-1">
+            <%= image_tag "icons/info-circle-fill.svg", class: 'svgicon' %>
+          </div>
+          <div class="col-10">
+            <%= notice %>
+          </div>
+          <div class="col-1">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        </div>
+      <% end %>
+      <% if alert.present? %>
+        <div class="row alert alert-dismissable fade show bg-warning">
+          <div class="col-1">
+            <%= image_tag "icons/exclamation-triangle-fill.svg", class: 'svgicon' %>
+          </div>
+          <div class="col-10">
+            <%= alert %>
+          </div>
+          <div class="col-1">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

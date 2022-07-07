@@ -7,11 +7,11 @@ module Users
 
       ### System Roles
       def admin?
-        role.try(:admin?) || false
+        role&.admin? || false
       end
 
       def executive?
-        role.try(:executive?) || false
+        role&.executive? || false
       end
 
       def administrator?
@@ -19,7 +19,7 @@ module Users
       end
 
       def user?
-        role.try(:user?)
+        role&.user? || false
       end
 
     end

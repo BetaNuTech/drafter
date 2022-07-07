@@ -9,6 +9,10 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
+# Indexes
+#
+#  index_roles_on_slug  (slug) UNIQUE
+#
 class Role < ApplicationRecord
   HIERARCHY = [:admin, :executive, :user]
 
@@ -39,6 +43,14 @@ class Role < ApplicationRecord
 
   def admin?
     slug == 'admin'
+  end
+
+  def executive?
+    slug == 'executive'
+  end
+
+  def user?
+    slug == 'user'
   end
 
   

@@ -12,8 +12,12 @@
   </head>
 
   <body>
+    <%= render partial: 'shared/navbar' %>
     <div id="content" class="container-fluid">
-      <%= yield %>
+      <div class="container">
+        <%= render partial: 'shared/notifications' %>
+        <%= yield %>
+      </div>
     </div>
   </body>
 </html>
