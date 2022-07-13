@@ -42,7 +42,7 @@ class User < ApplicationRecord
   ALLOWED_PARAMS = [:id, :email, :timezone, :password, :password_confirmation ]
 
   validates :email, uniqueness: true, presence: true
-  validates :role_id, inclusion: {in: Role.pluck(:id)}
+  validates :role_id, presence: true
 
   def deactivated?
     !active?
