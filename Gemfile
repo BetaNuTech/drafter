@@ -35,6 +35,9 @@ gem 'turbo-rails'
 gem 'foreman'
 gem 'bootstrap', '~> 5.1.3'
 gem 'awesome_print'
+gem 'delayed_job_active_record'
+gem 'delayed_job_web'
+gem 'daemons'
 
 group :development do
   gem 'web-console'

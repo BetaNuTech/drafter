@@ -50,6 +50,9 @@ services:
     command: bin/docker_web_entrypoint.sh
     ports:
       - '3000:3000'
+  worker:
+    <<: *backend
+    command: bin/delayed_job -n 2 start
   test:
     <<: *backend
     #command: bin/docker_web_entrypoint.sh
