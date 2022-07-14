@@ -61,7 +61,6 @@ services:
       <<: *env
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/drafter_test
       RAILS_ENV: test
-
   postgres:
     image: postgres:14
     volumes:

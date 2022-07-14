@@ -30,6 +30,8 @@ namespace :db do
         )
 
         if user.save
+          user.confirmed_at = Time.now
+          user.save
           puts "OK (#{email} / #{password})"
         else
           puts 'FAILED'

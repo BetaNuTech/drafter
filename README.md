@@ -48,7 +48,7 @@ From the project root directory: `sudo chown -R $USER:$USER ./`
 * Stop running containers: `docker stop XXX`
 * Clean up stopped containers: `docker system prune` (this affects all containers on the system, not just drafter)
 * Delete image: `docker images | grep drafter-dev | awk '{print $3}' | xargs docker rm`
-* Delete volumes: `docker volume ls` to list, then `docker volume rm XXX` for each drafter volume
+* Delete volumes: `docker volume ls | grep drafter | awk '{print $2}' | xargs docker volume rm`
 
 # Credentials/Secrets
 
@@ -69,3 +69,13 @@ Edit credentials/secrets with:
 In development the mail handler is "letter opener".
 
 Go to `http://localhost:3000/letter_opener` to view outgoing emails
+
+# Background Workers
+
+Background jobs are handled using DelayedJob backed by the default database.
+A logged-in administrator has access to a web interface to observe jobs at `/delayed_job`
+
+In development, there is a dedicated worker service/container which runs `bin/delayed_job`.
+
+For more information, see: `https://github.com/collectiveidea/delayed_job`
+
