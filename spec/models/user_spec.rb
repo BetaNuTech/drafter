@@ -24,6 +24,7 @@
 #  unlock_token           :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  organization_id        :uuid
 #  role_id                :uuid
 #
 # Indexes
@@ -61,6 +62,16 @@ RSpec.describe User, type: :model do
     it 'creates a new user with a role' do
       user.save
       expect(user.role).to be_a(Role)
+    end
+  end
+
+  describe 'Organizations' do
+    it 'has an optional organization' do
+      expect(user.organization).to be_a(Organization)
+      assert(user.valid?)
+      user.organization = nil
+      assert(user.valid?)
+      assert(user.save)
     end
   end
 end

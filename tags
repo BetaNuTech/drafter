@@ -12,9 +12,12 @@ ApplicationController	./app/controllers/application_controller.rb	/^class Applic
 ApplicationHelper	./app/helpers/application_helper.rb	/^module ApplicationHelper$/;"	m
 ApplicationJob	./app/jobs/application_job.rb	/^class ApplicationJob < ActiveJob::Base$/;"	c
 ApplicationMailer	./app/mailers/application_mailer.rb	/^class ApplicationMailer < ActionMailer::Base$/;"	c
+ApplicationPolicy	./app/policies/application_policy.rb	/^class ApplicationPolicy$/;"	c
 ApplicationRecord	./app/models/application_record.rb	/^class ApplicationRecord < ActiveRecord::Base$/;"	c
 Channel	./app/channels/application_cable/channel.rb	/^  class Channel < ActionCable::Channel::Base$/;"	c	class:ApplicationCable
 Connection	./app/channels/application_cable/connection.rb	/^  class Connection < ActionCable::Connection::Base$/;"	c	class:ApplicationCable
+CreateDelayedJobs	./db/migrate/20220714180131_create_delayed_jobs.rb	/^class CreateDelayedJobs < ActiveRecord::Migration[7.0]$/;"	c
+CreateOrganizations	./db/migrate/20220715041216_create_organizations.rb	/^class CreateOrganizations < ActiveRecord::Migration[7.0]$/;"	c
 CreateRoles	./db/migrate/20220630210948_create_roles.rb	/^class CreateRoles < ActiveRecord::Migration[7.0]$/;"	c
 CreateUserProfiles	./db/migrate/20220630204256_create_user_profiles.rb	/^class CreateUserProfiles < ActiveRecord::Migration[7.0]$/;"	c
 Devise	./app/models/concerns/users/devise.rb	/^  module Devise$/;"	m	class:Users
@@ -23,14 +26,28 @@ Drafter	./config/application.rb	/^module Drafter$/;"	m
 DrafterDeviseMailer	./app/mailers/drafter_devise_mailer.rb	/^class DrafterDeviseMailer < Devise::Mailer$/;"	c
 HomeController	./app/controllers/home_controller.rb	/^class HomeController < ApplicationController$/;"	c
 HomeHelper	./app/helpers/home_helper.rb	/^module HomeHelper$/;"	m
+Organization	./app/models/organization.rb	/^class Organization < ApplicationRecord$/;"	c
+OrganizationPolicy	./app/policies/organization_policy.rb	/^class OrganizationPolicy < ApplicationPolicy$/;"	c
+OrganizationsController	./app/controllers/organizations_controller.rb	/^class OrganizationsController < ApplicationController$/;"	c
 Profile	./app/models/concerns/users/profile.rb	/^  module Profile$/;"	m	class:Users
 RequestSpecHelper	./spec/support/request_spec_helper.rb	/^module RequestSpecHelper$/;"	m
 Role	./app/models/concerns/users/role.rb	/^  module Role$/;"	m	class:Users
 Role	./app/models/role.rb	/^class Role < ApplicationRecord$/;"	c
+Scope	./app/policies/application_policy.rb	/^  class Scope$/;"	c	class:ApplicationPolicy
+Scope	./app/policies/organization_policy.rb	/^  class Scope < Scope$/;"	c	class:OrganizationPolicy
+Scope	./app/policies/user_policy.rb	/^  class Scope < Scope$/;"	c	class:UserPolicy
 Seedable	./app/models/concerns/seeds/seedable.rb	/^  module Seedable$/;"	m	class:Seeds
 Seeds	./app/models/concerns/seeds/seedable.rb	/^module Seeds$/;"	m
+TestMailer	./app/mailers/test_mailer.rb	/^class TestMailer < ApplicationMailer$/;"	c
 User	./app/models/user.rb	/^class User < ApplicationRecord$/;"	c
+UserPolicy	./app/policies/user_policy.rb	/^class UserPolicy < ApplicationPolicy$/;"	c
 UserProfile	./app/models/user_profile.rb	/^class UserProfile < ApplicationRecord$/;"	c
+Users	./app/controllers/users/confirmations_controller.rb	/^class Users::ConfirmationsController < Devise::ConfirmationsController$/;"	c
+Users	./app/controllers/users/omniauth_callbacks_controller.rb	/^class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController$/;"	c
+Users	./app/controllers/users/passwords_controller.rb	/^class Users::PasswordsController < Devise::PasswordsController$/;"	c
+Users	./app/controllers/users/registrations_controller.rb	/^class Users::RegistrationsController < Devise::RegistrationsController$/;"	c
+Users	./app/controllers/users/sessions_controller.rb	/^class Users::SessionsController < Devise::SessionsController$/;"	c
+Users	./app/controllers/users/unlocks_controller.rb	/^class Users::UnlocksController < Devise::UnlocksController$/;"	c
 Users	./app/models/concerns/users/devise.rb	/^module Users$/;"	m
 Users	./app/models/concerns/users/profile.rb	/^module Users$/;"	m
 Users	./app/models/concerns/users/role.rb	/^module Users$/;"	m
@@ -38,44 +55,109 @@ UsersController	./app/controllers/users_controller.rb	/^class UsersController < 
 UsersHelper	./app/helpers/users_helper.rb	/^module UsersHelper$/;"	m
 activate_bundler	./bin/bundle	/^  def activate_bundler$/;"	f
 activation_error_handling	./bin/bundle	/^  def activation_error_handling$/;"	f
+active_for_authentication?	./app/models/concerns/users/devise.rb	/^      def active_for_authentication?$/;"	f	class:Users.Devise
 admin	./app/models/role.rb	/^  def self.admin$/;"	F	class:Role
 admin?	./app/models/concerns/users/role.rb	/^      def admin?$/;"	f	class:Users.Role
 admin?	./app/models/role.rb	/^  def admin?$/;"	f	class:Role
 administrator?	./app/models/concerns/users/role.rb	/^      def administrator?$/;"	f	class:Users.Role
+after_confirmation_path_for	./app/controllers/users/confirmations_controller.rb	/^  def after_confirmation_path_for(resource_name, resource)$/;"	f	class:Users
+allowed_params	./app/policies/organization_policy.rb	/^  def allowed_params$/;"	f	class:OrganizationPolicy
+allowed_params	./app/policies/user_policy.rb	/^  def allowed_params$/;"	f	class:UserPolicy
+assign_to_organization?	./app/policies/user_policy.rb	/^  def assign_to_organization?$/;"	f	class:UserPolicy
+assign_to_role?	./app/policies/user_policy.rb	/^  def assign_to_role?$/;"	f	class:UserPolicy
 bundler_requirement	./bin/bundle	/^  def bundler_requirement$/;"	f
 bundler_requirement_for	./bin/bundle	/^  def bundler_requirement_for(version)$/;"	f
 change	./db/migrate/20220629233840_devise_create_users.rb	/^  def change$/;"	f	class:DeviseCreateUsers
 change	./db/migrate/20220630204256_create_user_profiles.rb	/^  def change$/;"	f	class:CreateUserProfiles
 change	./db/migrate/20220630210948_create_roles.rb	/^  def change$/;"	f	class:CreateRoles
+change	./db/migrate/20220715041216_create_organizations.rb	/^  def change$/;"	f	class:CreateOrganizations
 cli_arg_version	./bin/bundle	/^  def cli_arg_version$/;"	f
 confirmation_instructions	./app/mailers/drafter_devise_mailer.rb	/^  def confirmation_instructions(record, token, opts={})$/;"	f	class:DrafterDeviseMailer
+create	./app/controllers/organizations_controller.rb	/^  def create$/;"	f	class:OrganizationsController
+create	./app/controllers/users/confirmations_controller.rb	/^   def create$/;"	f	class:Users
+create	./app/controllers/users_controller.rb	/^  def create$/;"	f	class:UsersController
+create?	./app/policies/organization_policy.rb	/^  def create?$/;"	f	class:OrganizationPolicy
+create?	./app/policies/user_policy.rb	/^  def create?$/;"	f	class:UserPolicy
+deactivate?	./app/policies/user_policy.rb	/^  def deactivate?$/;"	f	class:UserPolicy
+deactivated?	./app/models/user.rb	/^  def deactivated?$/;"	f	class:User
+destroy	./app/controllers/organizations_controller.rb	/^  def destroy$/;"	f	class:OrganizationsController
 destroy	./app/controllers/users_controller.rb	/^  def destroy$/;"	f	class:UsersController
+destroy?	./app/policies/organization_policy.rb	/^  def destroy?$/;"	f	class:OrganizationPolicy
+destroy?	./app/policies/user_policy.rb	/^  def destroy?$/;"	f	class:UserPolicy
+disable_turbo_forms	./app/javascript/util/turbo_customizations.js	/^function disable_turbo_forms() {$/;"	f
+down	./db/migrate/20220714180131_create_delayed_jobs.rb	/^  def self.down$/;"	F	class:CreateDelayedJobs
+edit	./app/controllers/organizations_controller.rb	/^  def edit$/;"	f	class:OrganizationsController
 edit	./app/controllers/users_controller.rb	/^  def edit$/;"	f	class:UsersController
+edit?	./app/policies/organization_policy.rb	/^  def edit?$/;"	f	class:OrganizationPolicy
+edit?	./app/policies/user_policy.rb	/^  def edit?$/;"	f	class:UserPolicy
 env_var_version	./bin/bundle	/^  def env_var_version$/;"	f
 executive	./app/models/role.rb	/^  def self.executive$/;"	F	class:Role
 executive?	./app/models/concerns/users/role.rb	/^      def executive?$/;"	f	class:Users.Role
+executive?	./app/models/role.rb	/^  def executive?$/;"	f	class:Role
+format_phone	./app/models/user_profile.rb	/^  def self.format_phone(number, prefixed: false)$/;"	F	class:UserProfile
+full_datetime	./app/helpers/application_helper.rb	/^  def full_datetime(time)$/;"	f	class:ApplicationHelper
 full_name	./app/models/concerns/users/profile.rb	/^      def full_name$/;"	f	class:Users.Profile
 gemfile	./bin/bundle	/^  def gemfile$/;"	f
 http_auth_credentials	./app/controllers/application_controller.rb	/^  def self.http_auth_credentials$/;"	F	class:ApplicationController
+impersonate?	./app/policies/user_policy.rb	/^  def impersonate?$/;"	f	class:UserPolicy
 included	./spec/support/request_spec_helper.rb	/^  def self.included(base)$/;"	F	class:RequestSpecHelper
 index	./app/controllers/home_controller.rb	/^  def index$/;"	f	class:HomeController
+index	./app/controllers/organizations_controller.rb	/^  def index$/;"	f	class:OrganizationsController
 index	./app/controllers/users_controller.rb	/^  def index$/;"	f	class:UsersController
+index?	./app/policies/organization_policy.rb	/^  def index?$/;"	f	class:OrganizationPolicy
+index?	./app/policies/user_policy.rb	/^  def index?$/;"	f	class:UserPolicy
+index_redirect	./app/controllers/users_controller.rb	/^  def index_redirect$/;"	f	class:UsersController
+initialize	./app/policies/application_policy.rb	/^    def initialize(user, scope)$/;"	f	class:ApplicationPolicy.Scope
+initialize	./app/policies/application_policy.rb	/^  def initialize(user, record)$/;"	f	class:ApplicationPolicy
 invoked_as_script?	./bin/bundle	/^  def invoked_as_script?$/;"	f
+is_owner?	./app/policies/application_policy.rb	/^  def is_owner?$/;"	f	class:ApplicationPolicy
 load_bundler!	./bin/bundle	/^  def load_bundler!$/;"	f
 load_seed_data	./app/models/concerns/seeds/seedable.rb	/^      def load_seed_data(yaml_path=nil)$/;"	f	class:Seeds.Seedable
 lockfile	./bin/bundle	/^  def lockfile$/;"	f
 lockfile_version	./bin/bundle	/^  def lockfile_version$/;"	f
+manage_features?	./app/policies/user_policy.rb	/^  def manage_features?$/;"	f	class:UserPolicy
+may_change_role?	./app/policies/user_policy.rb	/^  def may_change_role?(new_role_id=nil)$/;"	f	class:UserPolicy
 name	./app/models/concerns/users/profile.rb	/^      def name$/;"	f	class:Users.Profile
+new	./app/controllers/organizations_controller.rb	/^  def new$/;"	f	class:OrganizationsController
+new	./app/controllers/users/confirmations_controller.rb	/^   def new$/;"	f	class:Users
 new	./app/controllers/users_controller.rb	/^  def new$/;"	f	class:UsersController
+new?	./app/policies/organization_policy.rb	/^  def new?$/;"	f	class:OrganizationPolicy
+new?	./app/policies/user_policy.rb	/^  def new?$/;"	f	class:UserPolicy
+normalize_phone	./app/models/user_profile.rb	/^  def normalize_phone$/;"	f	class:UserProfile
+organization_options_for_select	./app/helpers/users_helper.rb	/^  def organization_options_for_select(user)$/;"	f	class:UsersHelper
+organization_params	./app/controllers/organizations_controller.rb	/^  def organization_params$/;"	f	class:OrganizationsController
+organizations_for_select	./app/policies/organization_policy.rb	/^  def organizations_for_select$/;"	f	class:OrganizationPolicy
+organizations_for_select	./app/policies/user_policy.rb	/^  def organizations_for_select$/;"	f	class:UserPolicy
 password_required?	./app/models/concerns/users/devise.rb	/^      def password_required?$/;"	f	class:Users.Devise
+record_scope	./app/controllers/organizations_controller.rb	/^  def record_scope$/;"	f	class:OrganizationsController
+record_scope	./app/controllers/users_controller.rb	/^  def record_scope$/;"	f	class:UsersController
+resolve	./app/policies/organization_policy.rb	/^    def resolve$/;"	f	class:OrganizationPolicy.Scope
+resolve	./app/policies/user_policy.rb	/^    def resolve$/;"	f	class:UserPolicy.Scope
+role_badge_color_class	./app/helpers/application_helper.rb	/^  def role_badge_color_class(role)$/;"	f	class:ApplicationHelper
+role_options_for_select	./app/helpers/users_helper.rb	/^  def role_options_for_select(user)$/;"	f	class:UsersHelper
+roles_for_select	./app/policies/user_policy.rb	/^  def roles_for_select$/;"	f	class:UserPolicy
+set_organization	./app/controllers/organizations_controller.rb	/^  def set_organization$/;"	f	class:OrganizationsController
+set_password_path	./app/controllers/users/confirmations_controller.rb	/^  def set_password_path(resource)$/;"	f	class:Users
 set_user	./app/controllers/users_controller.rb	/^  def set_user$/;"	f	class:UsersController
+show	./app/controllers/organizations_controller.rb	/^  def show$/;"	f	class:OrganizationsController
+show	./app/controllers/users/confirmations_controller.rb	/^  def show$/;"	f	class:Users
 show	./app/controllers/users_controller.rb	/^  def show$/;"	f	class:UsersController
+show?	./app/policies/organization_policy.rb	/^  def show?$/;"	f	class:OrganizationPolicy
+show?	./app/policies/user_policy.rb	/^  def show?$/;"	f	class:UserPolicy
 sign_in	./spec/support/request_spec_helper.rb	/^  def sign_in(resource)$/;"	f	class:RequestSpecHelper
 sign_out	./spec/support/request_spec_helper.rb	/^  def sign_out(resource)$/;"	f	class:RequestSpecHelper
+switch_setting?	./app/policies/user_policy.rb	/^  def switch_setting?$/;"	f	class:UserPolicy
 system!	./bin/setup	/^def system!(*args)$/;"	f
+test_email	./app/mailers/test_mailer.rb	/^  def test_email$/;"	f	class:TestMailer
+up	./db/migrate/20220714180131_create_delayed_jobs.rb	/^  def self.up$/;"	F	class:CreateDelayedJobs
+update	./app/controllers/organizations_controller.rb	/^  def update$/;"	f	class:OrganizationsController
 update	./app/controllers/users_controller.rb	/^  def update$/;"	f	class:UsersController
+update?	./app/policies/organization_policy.rb	/^  def update?$/;"	f	class:OrganizationPolicy
+update?	./app/policies/user_policy.rb	/^  def update?$/;"	f	class:UserPolicy
 user	./app/models/role.rb	/^  def self.user$/;"	F	class:Role
 user?	./app/models/concerns/users/role.rb	/^      def user?$/;"	f	class:Users.Role
+user?	./app/models/role.rb	/^  def user?$/;"	f	class:Role
 user_not_authorized	./app/controllers/application_controller.rb	/^  def user_not_authorized$/;"	f	class:ApplicationController
+user_params	./app/controllers/users_controller.rb	/^  def user_params$/;"	f	class:UsersController
 user_timezone	./app/controllers/application_controller.rb	/^  def user_timezone(&block)$/;"	f	class:ApplicationController
 warden_scope	./spec/support/request_spec_helper.rb	/^  def warden_scope(resource)$/;"	f	class:RequestSpecHelper

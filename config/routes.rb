@@ -15,5 +15,6 @@ Rails.application.routes.draw do
   end
   root to: redirect('/users/sign_in')
 
+  resources :organizations
   resources :users
 end

@@ -56,14 +56,20 @@
             </div>
           </div>
         <% end %>
-        <% if policy(user).assign_to_role? %>
           <div class="row">
-            <div class="col-sm-12 col-md-4 form-group">
+          <% if policy(user).assign_to_role? %>
+            <div class="col-sm-12 col-md-6 form-group">
               <%= form.label :role_id, 'Role' %><br/>
               <%= form.select :role_id, role_options_for_select(user), {}, { class: "form-select form-select" } %>
             </div>
+          <% end %>
+          <% if policy(user).assign_to_organization? %>
+            <div class="col-sm-12 col-md-6 form-group">
+              <%= form.label :organization_id, 'Organization' %><br/>
+              <%= form.select :organization_id, organization_options_for_select(user), {include_blank: true}, { class: "form-select form-select" } %>
+            </div>
+          <% end %>
           </div>
-        <% end %>
       </fieldset>
     </div>
   </div>

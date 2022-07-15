@@ -82,6 +82,19 @@ class UserPolicy < ApplicationPolicy
     end
   end
 
+  def assign_to_organization?
+    case user
+    when nil
+      false
+    when ->(u) { user.admin? }
+      true
+    when -> (u) { u.executive? }
+      true
+    else
+      false
+    end
+  end
+
   def allowed_params
     valid_user_params = User::ALLOWED_PARAMS
     valid_user_profile_params = [ { profile_attributes: UserProfile::ALLOWED_PARAMS + [ UserProfile::APPSETTING_PARAMS ] } ]
@@ -92,13 +105,13 @@ class UserPolicy < ApplicationPolicy
     when ->(u) { u.administrator? }
       # All valid fields allowed
       # Allow setting feature flags
-      valid_user_params = valid_user_params + [:active, :role_id]
+      valid_user_params = valid_user_params + [:active, :role_id, :organization_id]
       valid_user_profile_params = [ { profile_attributes: UserProfile::ALLOWED_PARAMS + [ UserProfile::FEATURE_PARAMS ] + [ UserProfile::APPSETTING_PARAMS ] } ]
     when ->(u) { u.executive? }
       if user.user?
         # Only allow editing user role accounts
         # Allow deactivating user role accounts
-        valid_user_params = valid_user_params + [:active]
+        valid_user_params = valid_user_params + [:active, :organization_id]
       else
         # Disallow editing non-user role accounts
         valid_user_params = []
@@ -129,9 +142,15 @@ class UserPolicy < ApplicationPolicy
   end
 
   def roles_for_select
-    return Role.all.to_a.
+    return Role.all.to_a.sort.
       select{|role| user.role.present? ? user.role >= role : false}.
       map{|role| [role.name, role.id]}
+  end
+
+  def organizations_for_select
+    OrganizationPolicy::Scope.new(user, Organization).resolve.
+      order(name: :asc).
+      map{|x| [x.name, x.id] }
   end
 
 end

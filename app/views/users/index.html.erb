@@ -1,10 +1,10 @@
 <div class="row">
-  <div class="col-10">
+  <div class="col-auto me-auto">
     <h1>Users</h1>
   </div>
 
-  <div class="col-2">
-    <%= link_to('Create User', new_user_path, class: 'btn btn-sm btn-primary') %>
+  <div class="col-sm-6 col-md-2 col-auto">
+    <%= link_to('Create User', new_user_path, class: 'btn btn-primary') %>
   </div>
 </div>
 
@@ -51,11 +51,16 @@
             <span><%= user.company %></span>
           </td>
           <td class="nowrap">
+            <% if user.organization.present? %>
+              <em>Organization:</em>
+              <%= link_to(user.organization.name, organization_path(user.organization)) %>
+              <br/>
+            <% end %>
             <em>Email:</em> <span><%= mail_to user.email %></span><br/>
-            <em>Phone:</em> <span><%= user.phone %></span>
+            <em>Phone:</em> <span><%= user.phone %></span><br/>
           </td>
           <td>
-            <span><%= link_to('Edit', edit_user_path(user), class: 'btn btn-sm btn-primary') %></span> 
+            <span><%= link_to('Edit', edit_user_path(user), class: 'btn btn-sm btn-primary') if policy(user).edit? %></span> 
           </td>
         </tr>
       <% end %>

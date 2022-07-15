@@ -11,6 +11,10 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+    organization_id = params[:organization_id]
+    if policy(@user).assign_to_organization? && organization_id
+      @user.organization_id = organization_id
+    end
     authorize @user
   end
 

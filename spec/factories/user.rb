@@ -6,5 +6,6 @@ FactoryBot.define do
     timezone { 'America/Detroit' } 
     profile { build(:user_profile)}
     role { Role.user }
+    organization
   end
 end
