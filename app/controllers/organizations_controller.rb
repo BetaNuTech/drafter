@@ -18,7 +18,7 @@ class OrganizationsController < ApplicationController
     authorize @organization
     respond_to do |format|
       if @organization.save
-        format.html { redirect_to organizations_path, notice: 'Created new organization' }
+        format.html { redirect_to organization_path(@organization), notice: 'Created new organization' }
       else
         format.html { render :new }
       end

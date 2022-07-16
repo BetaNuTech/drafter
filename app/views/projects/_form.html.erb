@@ -1,0 +1,39 @@
+<%= form_with(model: project, local: true) do |form| %>
+  <div class="row">
+    <div class="col">
+      <fieldset>
+        <legend>General Info</legend>
+
+        <div class="row">
+          <div class="col-sm-12 col-md-8 form-group">
+            <%= form.label :name %>
+            <%= form.text_field :name, class: 'form-control form-control-lg', autofocus: true %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12 col-md-8 form-group">
+            <%= form.label :description %>
+            <%= form.text_area :description, class: 'form-control' %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12 col-md-8 form-group">
+            <%= form.label :budget %>
+            <div class="input-group mb-3">
+              <span class="input-group-text">$</span>
+              <%= form.text_field :budget, class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-10 form-group">
+      <button type="submit" class="btn btn-lg btn-primary">Save</button>
+      <%= link_to 'Back', ( policy(Project).index? ? projects_path : :back ), class: "btn btn-sm btn-info" %>
+    </div>
+  </div>
+<% end %>

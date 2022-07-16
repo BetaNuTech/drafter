@@ -12,4 +12,5 @@ class Organization < ApplicationRecord
   ALLOWED_PARAMS = [:id, :name, :description].freeze
 
   has_many :users
+  validates :name, presence: true
 end

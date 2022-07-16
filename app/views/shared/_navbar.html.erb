@@ -11,6 +11,11 @@
             <%= image_tag 'icons/house-fill.svg' %>
           <% end %>
         </li>
+        <% if policy(Project).index? %>
+          <li class="nav-item">
+            <%= link_to('Projects', projects_path, class: 'nav-link') %>
+          </li>
+        <% end %>
         <% if policy(User).index? %>
           <li class="nav-item">
             <%= link_to('Users', users_path, class: 'nav-link') %>

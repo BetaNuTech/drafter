@@ -1,23 +1,21 @@
-class OrganizationPolicy < ApplicationPolicy
-
+class ProjectPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope
       case user
-      when -> (u) { u.admin?}
+      when -> (u) { u.admin? }
         scope
       when -> (u) { u.executive? }
         scope
       else
-        Organization.where("1=0")
+        Project.where("1=0")
       end
     end
   end
 
   def index?
-   return false unless user
+    return false unless user
 
-   user.admin? || user.executive?
+    user.admin? || user.executive?
   end
 
   def new?
@@ -28,6 +26,10 @@ class OrganizationPolicy < ApplicationPolicy
     new?
   end
 
+  def show?
+    user.admin? || user.executive?
+  end
+
   def edit?
     user.admin? || user.executive?
   end
@@ -36,30 +38,19 @@ class OrganizationPolicy < ApplicationPolicy
     edit?
   end
 
-  def show?
-    index?
-  end
-
   def destroy?
-    ( user.admin? || user.executive? ) && record.users.empty?
+    user.admin? || user.executive?
   end
-
 
   def allowed_params
     case user
     when ->(u) { u.admin? }
-      Organization::ALLOWED_PARAMS
+      Project::ALLOWED_PARAMS
     when ->(u) { u.corporate? }
-      Organization::ALLOWED_PARAMS
+      Project::ALLOWED_PARAMS
     else
       []
     end
-  end
-
-  def organizations_for_select
-    Scope.new(user, record).resolve.
-      order(name: :asc).
-      map{|org| [org.name, org.id]}
   end
 
 end
