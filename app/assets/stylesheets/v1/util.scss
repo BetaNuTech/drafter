@@ -7,8 +7,15 @@ div.field_with_errors {
   }
 }
 
-img.svgicon {
-  width: 1.2em;
-  height: 1.2em;
+a.action-link {
+  img {
+    width: 1em;
+    height: 1em;
+  }
 }
-
+a.action-link:hover {
+  img {
+    width: 1.3em;
+    height: 1.3em;
+  }
+}

@@ -7,6 +7,7 @@ class ProjectPolicy < ApplicationPolicy
       when -> (u) { u.executive? }
         scope
       else
+        # TODO
         Project.where("1=0")
       end
     end

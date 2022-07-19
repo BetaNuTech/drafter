@@ -1,4 +1,78 @@
-<div id="home-container" class="container-xl" data-controller="home">
-  <h1>Welcome to Drafter!</h1>
-  <button data-action="click->home#say_hello">OK</button>
+<div class="row">
+  <div class="col-6">
+    <div class="row" style="margin-top: 1em">
+      <h2>
+        Projects
+        <small>
+          <%= link_to(new_project_path, class: 'action-link') do %>
+            <%= image_tag('icons/plus-square.svg') %>
+          <% end %>
+        </small>
+      </h2>
+    </div>
+    <%= render partial: 'project', collection: @projects %>
+  </div>
+  <div class="col-6">
+    <div class="row">
+      <div class="col">
+        <div id="notifications-section" class="card home-section">
+          <div class="card-header">
+            <h5>
+              Notifications
+              <span class="badge bg-info">4</span>
+            </h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <span class="badge rounded-pill bg-info">7/12/22</span>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              </li>
+              <li class="list-group-item">
+                <span class="badge rounded-pill bg-success">7/6/22</span>
+                Praesent fringilla blandit lorem nec sagittis.
+              </li>
+              <li class="list-group-item">
+                <span class="badge rounded-pill bg-danger">7/5/22</span>
+                Donec vitae lacinia leo, vel condimentum lacus.
+              </li>
+              <li class="list-group-item">
+                <span class="badge rounded-pill bg-primary">7/5/22</span>
+                Phasellus placerat egestas semper.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="events-section" class="card">
+          <div class="card-header">
+            <h5>
+              Events
+              <span class="badge bg-info">4</span>
+            </h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <span class="badge rounded-pill bg-info">7/12/22</span>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              </li>
+              <li class="list-group-item">
+                <span class="badge rounded-pill bg-success">7/6/22</span>
+                Praesent fringilla blandit lorem nec sagittis.
+              </li>
+              <li class="list-group-item">
+                <span class="badge rounded-pill bg-danger">7/5/22</span>
+                Donec vitae lacinia leo, vel condimentum lacus.
+              </li>
+              <li class="list-group-item">
+                <span class="badge rounded-pill bg-primary">7/5/22</span>
+                Phasellus placerat egestas semper.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
