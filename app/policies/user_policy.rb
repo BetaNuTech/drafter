@@ -82,6 +82,19 @@ class UserPolicy < ApplicationPolicy
     end
   end
 
+  def assign_to_project_role?
+    case user
+    when nil
+      false
+    when ->(u) { user.admin? }
+      true
+    when -> (u) { u.executive? }
+      false
+    else
+      false
+    end
+  end
+
   def assign_to_organization?
     case user
     when nil

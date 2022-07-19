@@ -1,0 +1,16 @@
+<div class="card">
+  <h5 class="card-header">
+    Members
+    <span class="badge bg-info" style="font-size: 0.6em; vertical-align: middle;">
+      2
+    </span>
+    <%= link_to('Add Member', '#', class: 'btn btn-sm btn-success') %>
+  </h5>
+  <div class="card-body">
+    <ul class="list-group list-group-flush">
+      <% project.users.ordered_by_name.each do |user| %>
+        <li></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
