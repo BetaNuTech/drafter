@@ -10,5 +10,9 @@
 puts "*** Seeding Roles"
 Rake::Task["db:seed:roles"].invoke
 
+puts "*** Seeding Project Roles"
+Rake::Task["db:seed:project_roles"].invoke
+
 puts "*** Seeding Users"
 Rake::Task["db:seed:users"].invoke
+

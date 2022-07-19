@@ -1,0 +1,19 @@
+:project_roles:
+  :version: 1
+  :key: :slug
+  :data:
+    - :slug: owner
+      :name: Owner
+      :description: Has full control and ownership of a Project
+    - :slug: manager
+      :name: Manager
+      :description: Can do approvals and task management
+    - :slug: finance
+      :name: Finance
+      :description: Can do clean approvals and task management
+    - :slug: consultant
+      :name: Consultant/Investor
+      :description: View project and can make comments
+    - :slug: developer
+      :name: Developer
+      :description: Restricted view. May create draw requests

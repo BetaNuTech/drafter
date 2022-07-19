@@ -44,5 +44,10 @@ namespace :db do
       exit(1)
     end # task :users
 
+    desc "Seed ProjectRoles"
+    task :project_roles => :environment do
+      ProjectRole.load_seed_data
+    end
+
   end # namespace seed
 end # namespace db

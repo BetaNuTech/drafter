@@ -1,38 +1,23 @@
 # == Schema Information
 #
-# Table name: roles
+# Table name: project_roles
 #
 #  id          :uuid             not null, primary key
 #  description :text
 #  name        :string           not null
-#  slug        :string
+#  slug        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
 # Indexes
 #
-#  index_roles_on_slug  (slug) UNIQUE
+#  index_project_roles_on_slug  (slug)
 #
-class Role < ApplicationRecord
-  HIERARCHY = [:admin, :executive, :user]
+class ProjectRole < ApplicationRecord
+  HIERARCHY = [:owner, :manager, :finance, :consultant, :developer]
 
   include Comparable
   include Seeds::Seedable
-
-  has_many :users
-  #validates uniqueness: :slug
-
-  def self.admin
-    Role.where(slug: :admin).first
-  end
-
-  def self.executive
-    Role.where(slug: :executive).first
-  end
-
-  def self.user
-    Role.where(slug: :user).first
-  end
 
   def <=>(other)
     return 1 if other.nil?
@@ -40,18 +25,4 @@ class Role < ApplicationRecord
     return -1 if HIERARCHY.index(slug.to_sym).nil?
     return HIERARCHY.index(other.slug.to_sym) <=> HIERARCHY.index(slug.to_sym)
   end
-
-  def admin?
-    slug == 'admin'
-  end
-
-  def executive?
-    slug == 'executive'
-  end
-
-  def user?
-    slug == 'user'
-  end
-
-  
 end
