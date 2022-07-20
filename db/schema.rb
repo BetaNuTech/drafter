@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_19_193134) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_19_225846) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -71,6 +71,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_193134) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_roles_on_slug", unique: true
+  end
+
+  create_table "system_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "event_source_type", null: false
+    t.uuid "event_source_id", null: false
+    t.string "incidental_type"
+    t.uuid "incidental_id"
+    t.string "description"
+    t.text "debug"
+    t.integer "severity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_source_type", "event_source_id", "incidental_type", "incidental_id", "severity"], name: "system_events_idx1"
   end
 
   create_table "user_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

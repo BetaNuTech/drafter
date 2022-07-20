@@ -18,6 +18,7 @@ class ProjectsController < ApplicationController
     authorize @project
     respond_to do |format|
       if @project.save
+        SystemEvent.log(description: 'Created new project',event_source: @project, incidental: @current_user, severity: :warn)
         format.html { redirect_to project_path(@project), notice: 'Created new project'}
       else
         format.html { render :new }
@@ -37,6 +38,7 @@ class ProjectsController < ApplicationController
     authorize @project
     respond_to do |format|
       if @project.update(project_params)
+        SystemEvent.log(description: "Updated Project",event_source: @project, incidental: @current_user, severity: :info)
         format.html { redirect_to project_path(@project), notice: 'Updated project' }
       else
         format.html { render :edit }
@@ -48,6 +50,7 @@ class ProjectsController < ApplicationController
   def destroy
     authorize @project
     @project.destroy
+    SystemEvent.log(description: "Removed Project", event_source: @project, incidental: @current_user, severity: :warn)
     respond_to do |format|
       format.html { redirect_to projects_path, notice: 'Removed project' }
     end
