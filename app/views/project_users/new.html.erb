@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col">
+    <h1>Add Member to Project <%= @project.name %></h1>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col">
+    <%= turbo_frame_tag dom_id(@project_user) do %>
+      <%= render 'form', project_user: @project_user %>
+    <% end %>
+  </div>
+</div>

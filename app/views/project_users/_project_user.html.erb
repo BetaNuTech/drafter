@@ -1,0 +1,10 @@
+<%= turbo_frame_tag project_user do %>
+  <div class="row row-cols-auto">
+    <div class="col">
+      <%= project_user.user.name %>
+    </div>
+    <div class="col">
+      <%= project_user.project_role.name %>
+    </div>
+  </div>
+<% end %>

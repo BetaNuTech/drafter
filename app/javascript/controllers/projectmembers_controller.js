@@ -6,4 +6,11 @@ export default class extends Controller {
     console.log(`DEBUG: Project Members controller loaded for #${el.id}`)
   }
 
+  add_member(e) {
+    e.preventDefault()
+    console.log('DEBUG: clicked "Add Member"')
+
+    
+  }
+
 }

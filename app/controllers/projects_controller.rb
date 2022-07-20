@@ -17,14 +17,12 @@ class ProjectsController < ApplicationController
     @service = Projects::Updater.new(Project.new, @current_user)
     @project = @service.project
     authorize @project
-    respond_to do |format|
-      if @service.create(params)
-        @project = @service.project
-        SystemEvent.log(description: 'Created new project',event_source: @project, incidental: @current_user, severity: :warn)
-        format.html { redirect_to project_path(@project), notice: 'Created new project'}
-      else
-        format.html { render :new, status: :unprocessable_entity }
-      end
+    if @service.create(params)
+      @project = @service.project
+      SystemEvent.log(description: 'Created new project',event_source: @project, incidental: @current_user, severity: :warn)
+      redirect_to project_path(@project), notice: 'Created new project'
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -40,13 +38,11 @@ class ProjectsController < ApplicationController
   def update
     authorize @project
     @service = Projects::Updater.new(@project, current_user)
-    respond_to do |format|
-      if @project.update(params)
-        SystemEvent.log(description: "Updated Project",event_source: @project, incidental: @current_user, severity: :info)
-        format.html { redirect_to project_path(@project), notice: 'Updated project' }
-      else
-        format.html { render :edit, status: :unprocessable_entity  }
-      end
+    if @project.update(params)
+      SystemEvent.log(description: "Updated Project",event_source: @project, incidental: @current_user, severity: :info)
+      redirect_to project_path(@project), notice: 'Updated project'
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -54,16 +50,21 @@ class ProjectsController < ApplicationController
     authorize @project
     @project.destroy
     SystemEvent.log(description: "Removed Project", event_source: @project, incidental: @current_user, severity: :warn)
-    respond_to do |format|
-      format.html { redirect_to projects_path, notice: 'Removed project' }
-    end
+    redirect_to projects_path, notice: 'Removed project'
   end
 
   def add_member
     authorize @project
     @service = Projects::Updater.new(@project, current_user)
-    
-    @service.add_member(user: params[:user_id], role: params[:role_id])
+    @service.add_member(user: params[:user_id], role: params[:project_role_id])
+    redirect_to project_path(@project), notice: 'A new member was added to the project'
+  end
+
+  def remove_member
+    authorize @project
+    @service = Projects::Updater.new(@project, current_user)
+    @service.remove_member(user: params[:user_id]) 
+    redirect_to project_path(@project), notice: 'A member was removed from the project'
   end
 
   private

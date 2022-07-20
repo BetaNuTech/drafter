@@ -13,11 +13,11 @@
 
   <body>
     <%= render partial: 'shared/navbar' %>
-    <div id="content" class="container-fluid">
+    <main id="content" class="container-fluid">
       <div class="container">
         <%= render partial: 'shared/notifications' %>
         <%= yield %>
       </div>
-    </div>
+    </main>
   </body>
 </html>

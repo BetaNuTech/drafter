@@ -18,8 +18,8 @@ Rails.application.routes.draw do
   resources :organizations
   resources :users
   resources :projects do
-    member do
-      post 'add_member'
+    resources :project_users do
+
     end
   end
 end

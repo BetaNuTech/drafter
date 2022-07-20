@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-auto me-auto">
+    <h1><%= @project.name %> Members</h1>
+  </div>
+  <div class="col-auto">
+    <%= link_to('Add Member', new_project_project_user_path, data: {'turbo_frame': dom_id(ProjectUser.new(project: @project))}, class: 'btn btn-success') %>
+  </div>
+</div>
+
+<%= turbo_frame_tag ProjectUser.new(project: @project) %>
+
+<div class="row">
+  <div class="col">
+    <%= turbo_frame_tag 'project_users' do %>
+      <%= render @project_users %>
+    <% end %>
+  </div>
+</div>

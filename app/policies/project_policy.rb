@@ -47,6 +47,10 @@ class ProjectPolicy < ApplicationPolicy
     user.admin? || user.executive?
   end
 
+  def remove_member?
+    user.admin? || user.executive?
+  end
+
   def allowed_params
     case user
     when ->(u) { u.admin? }
