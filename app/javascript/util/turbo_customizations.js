@@ -5,6 +5,6 @@ function disable_turbo_forms() {
   })
 }
 
-document.addEventListener("turbo:load", function() {
-  disable_turbo_forms();
-});
+/*document.addEventListener("turbo:load", function() {*/
+/*disable_turbo_forms();*/
+/*});*/

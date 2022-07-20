@@ -47,6 +47,7 @@ class User < ApplicationRecord
   belongs_to :organization, required: false
 
   scope :ordered_by_name, -> { includes(:profile).order("user_profiles.last_name ASC, user_profiles.first_name ASC")}
+  scope :active, -> { where(active: true) }
 
   def deactivated?
     !active?

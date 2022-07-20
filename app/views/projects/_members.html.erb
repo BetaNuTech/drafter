@@ -1,17 +1,27 @@
-<div class="card">
+<div class="card" data-controller="projectmembers" id="project-members--container">
   <h5 class="card-header">
     Members
-    <span class="badge bg-info" style="font-size: 0.6em; vertical-align: middle;">
-      2
+    <span class="badge bg-info">
+      <%= service.member_count %>
     </span>
     <%= link_to('New User', '#', class: 'btn btn-sm btn-success') %>
-    <%= link_to('Select...', '#', class: 'btn btn-sm btn-success') %>
+    <%= link_to('Select Member...', '#project-members--user-selector',
+                {
+              class: 'btn btn-sm btn-success',
+              data: {
+                'bs-toggle': 'collapse',
+                'aria-expanded': 'false',
+                'aria-controls': 'project-members--user-selector'
+              }
+            }
+         ) %>
   </h5>
   <div class="card-body">
+    <%= render partial: 'members_add_member', locals: { service: @service } %>
     <ul class="list-group list-group-flush">
       <% project.users.ordered_by_name.each do |user| %>
-        <li></li>
+        <li><%= user.name %></li>
       <% end %>
     </ul>
   </div>
-</div>
+</div> 

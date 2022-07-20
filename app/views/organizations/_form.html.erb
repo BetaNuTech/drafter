@@ -4,17 +4,21 @@
       <fieldset>
         <legend>General Info</legend>
 
-        <div class="row">
-          <div class="col-sm-12 col-md-8 form-group">
-            <%= form.label :name %>
-            <%= form.text_field :name, class: 'form-control form-control-lg', autofocus: true %>
+        <div class="row g-2 mb-3">
+          <div class="col-sm-12 col-md-8">
+            <div class="form-floating">
+              <%= form.text_field :name, class: 'form-control form-control-lg', autofocus: true, placeholder: 'Name' %>
+              <%= form.label :name %>
+            </div>
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-sm-12 col-md-8 form-group">
-            <%= form.label :description %>
-            <%= form.text_area :description, class: 'form-control' %>
+        <div class="row g-2 mb-3">
+          <div class="col-sm-12 col-md-8">
+            <div class="form-floating">
+              <%= form.text_area :description, class: 'form-control', placeholder: 'Description' %>
+              <%= form.label :description %>
+            </div>
           </div>
         </div>
       </fieldset>

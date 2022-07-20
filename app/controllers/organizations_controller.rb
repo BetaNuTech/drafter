@@ -20,7 +20,7 @@ class OrganizationsController < ApplicationController
       if @organization.save
         format.html { redirect_to organization_path(@organization), notice: 'Created new organization' }
       else
-        format.html { render :new }
+        format.html { render :new, status: :unprocessable_entity  }
       end
     end
   end
@@ -39,7 +39,7 @@ class OrganizationsController < ApplicationController
       if @organization.update(organization_params)
         format.html { redirect_to edit_organization_path(@organization), notice: 'Organization updated'}
       else
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_entity  }
       end
     end
   end

@@ -1,11 +1,11 @@
 module Projects
   class Updater
-    attr_reader :project, :user
+    attr_reader :project, :current_user
 
-    def initialize(project, current_user: )
+    def initialize(project, current_user)
       @project = project
-      @current_user = user
-      @policy = ProjectPolicy.new(@project, @current_user)
+      @current_user = current_user
+      @policy = ProjectPolicy.new(@current_user, @project)
       @errors = []
     end
 
@@ -16,7 +16,7 @@ module Projects
 
       @project = Project.new(sanitize_params(params))
       if @project.save
-        SystemEvent.log(description: 'Created new project',event_source: @project, incidental: @current_user, severity: :warn)
+        SystemEvent.log(description: 'Created new project', event_source: @project, incidental: @current_user, severity: :warn)
         return @project
       else
         record_errors
@@ -26,7 +26,7 @@ module Projects
 
     def update(params)
       if @project.update(sanitize_params(params))
-        SystemEvent.log(description: 'Updated project',event_source: @project, incidental: @current_user, severity: :info)
+        SystemEvent.log(description: 'Updated project', event_source: @project, incidental: @current_user, severity: :info)
         return @project
       else
         record_errors
@@ -41,11 +41,12 @@ module Projects
         return nil
       end
 
+      user = User.active.where(id: user).first unless user.is_a?(User)
       if users.include?(user)
         return user
       end
 
-      project_role = ProjectRole.where(slug: role).first
+      project_role = role.is_a?(ProjectRole) ? role : ProjectRole.where(id: role).first
       unless project_role.present?
         msg = "Invalid project role '#{role}'"
         @errors << msg
@@ -58,12 +59,22 @@ module Projects
         @project.project_users.reload
         SystemEvent.log(description: msg, event_source: @project, incidental: user, severity: :warn)
         user.projects.reload
+        project.users.reload
+        notify_member_of_role_change
         return user
       else
         msg = "Could not add member: #{project_user.full_messages.join(', ')}"
         @errors << msg
         return nil
       end
+    end
+
+    def notify_member_of_role_change
+      # TODO create event record
+      # TODO create notification record for user
+      # TODO create Project mailer
+      # TODO create Project mailer action
+      # TODO send notification email
     end
 
     def update_member_role(user:, role: )
@@ -93,8 +104,21 @@ module Projects
         @errors << msg
         return user
       end
-
+      notify_member_of_role_change
       user
+    end
+
+    def available_members
+      current_members = @project.users.pluck(&:id)
+      User.active.where.not(id: current_members).ordered_by_name
+    end
+
+    def member_count
+      @project.users.count
+    end
+
+    def available_roles
+      ProjectRole.in_order_of(:slug, ProjectRole::HIERARCHY)
     end
 
     def errors?
@@ -108,7 +132,7 @@ module Projects
     end
 
     def refresh_policy
-      @policy = ProjectPolicy.new(@project, @current_user)
+      @policy = ProjectPolicy.new(@current_user, @project)
     end
 
     def record_errors

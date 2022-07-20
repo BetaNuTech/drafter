@@ -25,7 +25,7 @@ class UsersController < ApplicationController
       if @user.save
         format.html { redirect_to users_path, notice: 'Created new user'}
       else
-        format.html { render :new }
+        format.html { render :new, status: :unprocessable_entity  }
       end
     end
   end
@@ -45,7 +45,7 @@ class UsersController < ApplicationController
       if @user.update(user_params)
         format.html { redirect_to edit_user_path(@user), notice: 'Account Information updated'} 
       else
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_entity  }
       end
     end
   end

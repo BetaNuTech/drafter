@@ -8,25 +8,36 @@
         </h1>
         <p class="lead">
           <b>Budget:</b> <%= number_to_currency(@project.budget) %>
-          <br/>
-          <%= @project.description %>
-        </p>
-      </div>
-    </div>
-    <div class="col">
-      <%= render partial: 'members', locals: {project: @project} %> 
+        <br/>
+        <%= @project.description %>
+      </p>
     </div>
   </div>
+</div>
 </section>
 
 <hr class="my-4">
 
 <section>
-  <h2>Draw 1</h2>
   <div class="row row-cols-1 row-cols-md-2 g-4">
     <div class="col">
-      <%= render partial: 'draw_requests', locals: { project: @project } %>
+      <%= render partial: 'draws', locals: { project: @project } %>
     </div>
+
+    <div class="col">
+      <div class="row row-cols-1 g-2">
+        <div class="col">
+          <%= render partial: 'shared/user_notifications', locals: { notifications: @notifications} %>
+        </div>
+        <div class="col">
+          <%= render partial: 'shared/events', locals: { events: @events } %>
+        </div>
+        <div class="col">
+          <%= render partial: 'members', locals: {project: @project, service: @service} %> 
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
