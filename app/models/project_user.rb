@@ -17,4 +17,12 @@ class ProjectUser < ApplicationRecord
   belongs_to :project
   belongs_to :project_role
   belongs_to :user
+
+  def available_users
+    project.present? ? project&.available_users.ordered_by_name : []
+  end
+
+  def available_roles
+    ProjectRole.in_order_of(:slug, ProjectRole::HIERARCHY)
+  end
 end

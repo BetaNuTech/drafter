@@ -30,7 +30,7 @@
           <%= render partial: 'shared/user_notifications', locals: { notifications: @notifications} %>
         </div>
         <div class="col">
-          <%= render partial: 'shared/events', locals: { events: @events } %>
+          <%= render partial: 'shared/events', locals: { events: @project.events } %>
         </div>
         <div class="col">
           <%= render partial: 'members', locals: {project: @project, service: @service} %> 

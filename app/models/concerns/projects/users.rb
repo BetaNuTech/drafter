@@ -14,6 +14,11 @@ module Projects
         project_users.where(project_role_id: ProjectRole.owner.id)
       end
 
+      def available_users
+        current_members = users.pluck(&:id)
+        User.active.where.not(id: current_members).ordered_by_name
+      end
+
     end
   end
 end

@@ -1,1 +1,33 @@
-Form
+<% if project_user.id.present? || ( !project_user.id.present? && project_user.available_users.any? ) %>
+<%= form_with(model: project_user,  url: [project_user.project, project_user], class: 'form-floating') do |form| %>
+  <div class="row row-cols-1 row-cols-md-2">
+    <div class="col">
+      <% if project_user.new_record? %>
+        <div class="form-floating mb-3 g-2">
+          <%= form.select(:user_id, options_from_collection_for_select(project_user.available_users, 'id', 'name'), {}, { class: "form-select" } ) %>
+          <%= form.label :user_id, 'User' %>
+        </div>
+      <% else %>
+        <b><%= project_user.user.name %></b><br/>
+        <em><%= project_user.user.organization&.name %></em>
+      <% end %>
+    </div>
+    <div class="col">
+      <div class="form-floating mb-3 g-2">
+        <%= form.select('project_role_id', options_from_collection_for_select(project_user.available_roles, 'id', 'name', project_user.project_role_id), {}, { class: "form-select" } ) %>
+        <%= form.label :project_role_id, 'Role' %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-auto me-auto">
+      <button type="submit" class="btn btn-sm btn-success">Save</button>
+      <%= link_to 'Cancel', :back, class: "btn btn-sm btn-light" %>
+    </div>
+  </div>
+<% end %>
+<% else %>
+  <p><em>There are no users eligible for project membership</em></p>
+  <%= link_to 'Cancel', :back, class: "btn btn-sm btn-light" %>
+<% end %>
+<hr/>

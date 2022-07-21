@@ -15,7 +15,9 @@
     <%= render partial: 'shared/navbar' %>
     <main id="content" class="container-fluid">
       <div class="container">
-        <%= render partial: 'shared/notifications' %>
+        <%= turbo_frame_tag 'system_notifications' do %>
+          <%= render partial: 'shared/notifications' %>
+        <% end %>
         <%= yield %>
       </div>
     </main>

@@ -16,4 +16,9 @@ class Project < ApplicationRecord
   include Projects::Users
 
   validates :name, presence: true
+
+  def events
+    SystemEvent.where(event_source: self).
+      or(SystemEvent.where(incidental: self))
+  end
 end

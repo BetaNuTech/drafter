@@ -2,27 +2,26 @@
   <div class="card-header">
     <h5>
       Events
-      <span class="badge bg-secondary">4</span>
+      <span class="badge bg-secondary"><%= events.count %></span>
     </h5>
   </div>
   <div class="card-body">
     <ul class="list-group">
-      <li class="list-group-item">
-        <span class="badge rounded-pill bg-info">7/12/22</span>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      </li>
-      <li class="list-group-item">
-        <span class="badge rounded-pill bg-success">7/6/22</span>
-        Praesent fringilla blandit lorem nec sagittis.
-      </li>
-      <li class="list-group-item">
-        <span class="badge rounded-pill bg-danger">7/5/22</span>
-        Donec vitae lacinia leo, vel condimentum lacus.
-      </li>
-      <li class="list-group-item">
-        <span class="badge rounded-pill bg-primary">7/5/22</span>
-        Phasellus placerat egestas semper.
-      </li>
+      <% events.each do |event| %>
+        <li class="list-group-item">
+          <span class="badge rounded-pill bg-<%= event_severity_color_class(event) %>">
+            <em><%= full_datetime(event.created_at) %></em>
+          </span>
+          <%= event.description %>
+          <span class="text-nowrap">
+            <%= link_to(event.event_source.name,
+                        url_for(event.event_source),
+                        {
+                          data: {'turbo_frame': '_top' }
+                        }) %>
+          </span>
+        </li>
+      <% end %>
     </ul>
   </div>
 </div>

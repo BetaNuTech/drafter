@@ -12,7 +12,7 @@
       :name: Finance
       :description: Can do clean approvals and task management
     - :slug: consultant
-      :name: Consultant/Investor
+      :name: Consultant
       :description: View project and can make comments
     - :slug: developer
       :name: Developer

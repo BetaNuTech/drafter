@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    @service = Projects::Updater.new(Project.new, @current_user)
+    @service = Projects::Updater.new(@current_user, Project.new)
     @project = @service.project
     authorize @project
     if @service.create(params)
@@ -28,7 +28,7 @@ class ProjectsController < ApplicationController
 
   def show
     authorize @project
-    @service = Projects::Updater.new(@project, @current_user)
+    @service = Projects::Updater.new(@current_user, @project)
   end
 
   def edit
@@ -37,7 +37,7 @@ class ProjectsController < ApplicationController
 
   def update
     authorize @project
-    @service = Projects::Updater.new(@project, current_user)
+    @service = Projects::Updater.new(@current_user, @project)
     if @project.update(params)
       SystemEvent.log(description: "Updated Project",event_source: @project, incidental: @current_user, severity: :info)
       redirect_to project_path(@project), notice: 'Updated project'
@@ -55,14 +55,14 @@ class ProjectsController < ApplicationController
 
   def add_member
     authorize @project
-    @service = Projects::Updater.new(@project, current_user)
+    @service = Projects::Updater.new(@current_user, @project)
     @service.add_member(user: params[:user_id], role: params[:project_role_id])
     redirect_to project_path(@project), notice: 'A new member was added to the project'
   end
 
   def remove_member
     authorize @project
-    @service = Projects::Updater.new(@project, current_user)
+    @service = Projects::Updater.new(@current_user, @project)
     @service.remove_member(user: params[:user_id]) 
     redirect_to project_path(@project), notice: 'A member was removed from the project'
   end

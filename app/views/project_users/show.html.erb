@@ -1,13 +1,13 @@
 <div class="row">
-  <div class="col">
-    <h1>Add Member to Project <%= @project.name %></h1>
+  <div class="col-auto me-auto">
+    <h1>'<%= @project.name %>' Member</h1>
   </div>
 </div>
 
 <div class="row">
   <div class="col">
     <%= turbo_frame_tag @project_user do %>
-      <%= render 'form', project_user: @project_user %>
+      <%= render @project_user %>
     <% end %>
   </div>
 </div>

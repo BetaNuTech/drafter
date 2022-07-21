@@ -1,27 +1,28 @@
-<%= turbo_frame_tag 'project-members' do %>
 <div class="card" data-controller="projectmembers" id="project-members--container">
     <h5 class="card-header">
       Members
       <span class="badge bg-info">
-        <%= service.member_count %>
+        <%= turbo_frame_tag 'project_users_count' do %>
+          <%= service.member_count %>
+        <% end %>
       </span>
-      <%= link_to('Select Member', '#project-members--user-selector',
+      <%= link_to('Select Member', new_project_project_user_path(project_id: project.id),
                   { class: 'btn btn-sm btn-primary',
-                    data: {
-                      'bs-toggle': 'collapse',
-                      'aria-expanded': 'false',
-                      'aria-controls': 'project-members--user-selector',
-                      'turbo': 'false'
-                    }
+                    data: { 'turbo_frame': dom_id(ProjectUser.new(project: project)) }
                   }) %>
     </h5>
   <div class="card-body">
-    <%= render partial: 'members_add_member', locals: { service: @service } %>
-    <ul class="list-group list-group-flush">
-      <% project.users.ordered_by_name.each do |user| %>
-          <li><%= user.name %></li>
-      <% end %>
-    </ul>
+    <div class="row g-1">
+      <div class="col">
+        <%= turbo_frame_tag dom_id(ProjectUser.new(project: project))%>
+      </div>
+    </div>
+    <div class="row g-1">
+      <div class="col">
+        <%= turbo_frame_tag 'project_users' do %>
+          <% render partial: 'project_users/project_user', collection: project.project_users %>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div> 
-<% end %>
