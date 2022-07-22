@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @draw %>
+
+<div>
+  <%= link_to "Edit this draw", edit_draw_path(@draw) %> |
+  <%= link_to "Back to draws", draws_path %>
+
+  <%= button_to "Destroy this draw", @draw, method: :delete %>
+</div>

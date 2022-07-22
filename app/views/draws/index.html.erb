@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Draws</h1>
+
+<div id="draws">
+  <% @draws.each do |draw| %>
+    <%= render draw %>
+    <p>
+      <%= link_to "Show this draw", draw %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New draw", new_draw_path %>

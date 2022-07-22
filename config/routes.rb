@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :draws
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   authenticated :user, -> user { user.admin? }  do
