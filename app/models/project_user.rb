@@ -25,4 +25,8 @@ class ProjectUser < ApplicationRecord
   def available_roles
     ProjectRole.in_order_of(:slug, ProjectRole::HIERARCHY)
   end
+
+  def name
+    user&.name || 'UNKNOWN'
+  end
 end

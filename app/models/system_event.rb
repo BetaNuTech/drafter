@@ -28,6 +28,15 @@ class SystemEvent < ApplicationRecord
   ### Associations
   belongs_to :event_source, polymorphic: true
   belongs_to :incidental, polymorphic: true, required: false
+  
+  #broadcasts_to -> (system_event) { [system_event.event_source, system_event] }, inserts_by: :prepend
+  after_create_commit -> (system_event) {
+    target =  "#{system_event.event_source_type}_#{system_event.event_source_id}_system_events"
+    broadcast_prepend_to target,
+                         partial: "system_events/system_event",
+                         locals: {system_event: self},
+                         target: target
+  }
 
   def self.log(event_source:, description:, incidental: nil, debug: nil, severity: :info)
     system_event = create(

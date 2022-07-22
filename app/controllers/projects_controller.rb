@@ -19,7 +19,6 @@ class ProjectsController < ApplicationController
     authorize @project
     if @service.create(params)
       @project = @service.project
-      SystemEvent.log(description: 'Created new project',event_source: @project, incidental: @current_user, severity: :warn)
       redirect_to project_path(@project), notice: 'Created new project'
     else
       render :new, status: :unprocessable_entity
@@ -39,7 +38,6 @@ class ProjectsController < ApplicationController
     authorize @project
     @service = Projects::Updater.new(@current_user, @project)
     if @project.update(params)
-      SystemEvent.log(description: "Updated Project",event_source: @project, incidental: @current_user, severity: :info)
       redirect_to project_path(@project), notice: 'Updated project'
     else
       render :edit, status: :unprocessable_entity

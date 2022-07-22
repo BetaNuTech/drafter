@@ -15,10 +15,8 @@ class Project < ApplicationRecord
 
   include Projects::Users
 
+  has_many :system_events, as: :event_source, dependent: :destroy
+
   validates :name, presence: true
 
-  def events
-    SystemEvent.where(event_source: self).
-      or(SystemEvent.where(incidental: self))
-  end
 end

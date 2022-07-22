@@ -1,0 +1,10 @@
+<li class="list-group-item">
+  <span class="badge rounded-pill bg-<%= event_severity_color_class(system_event) %>">
+    <em><%= full_datetime(system_event.created_at) %></em>
+  </span>
+  <%= system_event.description %>
+  &mdash;
+  <span class="text-nowrap">
+    <%= link_to(system_event.event_source.name, url_for(system_event.event_source), { data: {'turbo_frame': '_top' } }) %>
+  </span>
+</li>

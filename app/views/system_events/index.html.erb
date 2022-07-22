@@ -1,0 +1,15 @@
+<div id="events-section" class="card">
+  <div class="card-header">
+    <h5>
+      Events
+      <span class="badge bg-secondary"><%= @system_events.count %></span>
+    </h5>
+  </div>
+  <div class="card-body">
+    <ul class="list-group">
+      <% @system_events.order(created_at: :desc).limit(10).each do |system_event| %>
+        <%= render system_event %>
+      <% end %>
+    </ul>
+  </div>
+</div>

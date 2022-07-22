@@ -1,0 +1,18 @@
+<div id="events-section" class="card">
+  <div class="card-header">
+    <h5>
+      Events
+      <span class="badge bg-secondary"><%= system_events.count %></span>
+    </h5>
+  </div>
+  <div class="card-body">
+    <ul class="list-group">
+      <%= turbo_stream_from "Project_#{project.id}_system_events" %>
+      <%= turbo_frame_tag "Project_#{project.id}_system_events" do %>
+        <% system_events.order(created_at: :desc).limit(10).each do |system_event| %>
+          <%= render system_event %>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+</div>

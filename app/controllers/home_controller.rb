@@ -6,6 +6,6 @@ class HomeController < ApplicationController
     authorize :home, :index? 
     @projects = policy_scope(Project).order(name: :asc)
     @notifications = []  # TODO
-    @events = [] # TODO
+    @events = SystemEvent.where("1=0") # TODO
   end
 end
