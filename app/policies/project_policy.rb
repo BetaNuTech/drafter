@@ -7,8 +7,7 @@ class ProjectPolicy < ApplicationPolicy
       when -> (u) { u.executive? }
         scope
       else
-        # TODO
-        Project.where("1=0")
+        user.projects
       end
     end
   end
@@ -16,11 +15,11 @@ class ProjectPolicy < ApplicationPolicy
   def index?
     return false unless user
 
-    user.admin? || user.executive?
+    user.administrator?
   end
 
   def new?
-    user.admin? || user.executive?
+    user.administrator?
   end
 
   def create?
@@ -28,11 +27,11 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def show?
-    user.admin? || user.executive?
+    user.administrator? || user.project_internal?(record)
   end
 
   def edit?
-    user.admin? || user.executive?
+    user.administrator? || user.project_management?(record)
   end
 
   def update?
@@ -40,22 +39,22 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.admin? || user.executive?
+    user.administrator? || user.project_role(record).owner?
   end
 
   def add_member?
-    user.admin? || user.executive?
+    edit?
   end
 
   def remove_member?
-    user.admin? || user.executive?
+    add_member?
   end
 
   def allowed_params
     case user
-    when ->(u) { u.admin? }
+    when ->(u) { u.administrator? }
       Project::ALLOWED_PARAMS
-    when ->(u) { u.corporate? }
+    when -> (u) { u.project_manager?(record) }
       Project::ALLOWED_PARAMS
     else
       []

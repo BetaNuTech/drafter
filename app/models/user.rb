@@ -38,6 +38,7 @@
 class User < ApplicationRecord
   include Users::Devise
   include Users::Profile
+  include Users::Projects
   include Users::Role
 
   ALLOWED_PARAMS = [:id, :email, :timezone, :password, :password_confirmation ]
@@ -52,4 +53,5 @@ class User < ApplicationRecord
   def deactivated?
     !active?
   end
+
 end

@@ -11,12 +11,16 @@
 #  updated_at  :datetime         not null
 #
 class Project < ApplicationRecord
-  ALLOWED_PARAMS = [:id, :name, :description, :budget].freeze
-
+  ### Concerns
   include Projects::Users
 
+  ### Params
+  ALLOWED_PARAMS = [:id, :name, :description, :budget].freeze
+
+  ### Associations
   has_many :system_events, as: :event_source, dependent: :destroy
+  has_many :draws, dependent: :destroy
 
+  ### Validations
   validates :name, presence: true
-
 end

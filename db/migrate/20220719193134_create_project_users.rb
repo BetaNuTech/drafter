@@ -8,6 +8,6 @@ class CreateProjectUsers < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_index :project_users, [:project_id, :user_id, :project_role_id], name: 'project_users_idx', unique: true
+    add_index :project_users, [:project_id, :user_id], name: 'project_users_idx', unique: true
   end
 end

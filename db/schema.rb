@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_19_225846) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_22_192532) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -28,6 +28,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_225846) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "draws", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.integer "index", default: 1, null: false
+    t.string "name", null: false
+    t.string "state", default: "pending", null: false
+    t.string "reference"
+    t.decimal "total"
+    t.uuid "approver"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id", "index"], name: "index_draws_on_project_id_and_index", unique: true
   end
 
   create_table "organizations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -52,7 +66,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_225846) do
     t.uuid "project_role_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["project_id", "user_id", "project_role_id"], name: "project_users_idx", unique: true
+    t.index ["project_id", "user_id"], name: "project_users_idx", unique: true
   end
 
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

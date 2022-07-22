@@ -14,12 +14,15 @@
 #  index_project_roles_on_slug  (slug)
 #
 class ProjectRole < ApplicationRecord
-  HIERARCHY = [:owner, :manager, :finance, :consultant, :developer]
-  OWNER_ROLE = 'owner'
-  MANAGER_ROLE = 'manager'
-  FINANCE_ROLE = 'finance'
-  CONSULTANT_ROLE = 'consultant'
-  DEVELOPER_ROLE = 'developer'
+  OWNER_ROLE = :owner
+  MANAGER_ROLE = :manager
+  FINANCE_ROLE = :finance
+  CONSULTANT_ROLE = :consultant
+  DEVELOPER_ROLE = :developer
+  HIERARCHY = [OWNER_ROLE, MANAGER_ROLE, FINANCE_ROLE, CONSULTANT_ROLE, DEVELOPER_ROLE]
+  MANAGER_ROLES = [OWNER_ROLE, MANAGER_ROLE]
+  INTERNAL_ROLES = [OWNER_ROLE, MANAGER_ROLE, FINANCE_ROLE]
+  EXTERNAL_ROLES = [CONSULTANT_ROLE, DEVELOPER_ROLE]
 
   include Comparable
   include Seeds::Seedable
@@ -49,6 +52,26 @@ class ProjectRole < ApplicationRecord
 
   def self.developer
     ProjectRole.where(slug: DEVELOPER_ROLE).first
+  end
+
+  def owner?
+    slug == OWNER_ROLE.to_s
+  end
+
+  def manager?
+    slug == MANAGER_ROLE.to_s
+  end
+
+  def management?
+    MANAGER_ROLES.include?(slug.to_sym)
+  end
+
+  def internal?
+    INTERNAL_ROLES.include?(slug.to_sym)
+  end
+
+  def external?
+    EXTERNAL_ROLES.include?(slug.to_sym)
   end
 
 end

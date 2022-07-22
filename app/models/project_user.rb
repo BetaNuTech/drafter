@@ -11,12 +11,16 @@
 #
 # Indexes
 #
-#  project_users_idx  (project_id,user_id,project_role_id) UNIQUE
+#  project_users_idx  (project_id,user_id) UNIQUE
 #
 class ProjectUser < ApplicationRecord
   belongs_to :project
   belongs_to :project_role
   belongs_to :user
+
+  validates :project_id, presence: true
+  validates :project_role_id, presence: true
+  validates :user_id, presence: true, uniqueness: { scope: :project_id} 
 
   def available_users
     project.present? ? project&.available_users.ordered_by_name : []

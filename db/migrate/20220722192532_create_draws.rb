@@ -1,10 +1,10 @@
 class CreateDraws < ActiveRecord::Migration[7.0]
   def change
     create_table :draws, id: :uuid do |t|
-      t.uuid :project_id
-      t.integer :index
-      t.string :name
-      t.string :state
+      t.uuid :project_id, null: false
+      t.integer :index, null: false, default: 1
+      t.string :name, null: false
+      t.string :state, null: false, default: 'pending'
       t.string :reference
       t.decimal :total
       t.uuid :approver
@@ -12,5 +12,7 @@ class CreateDraws < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+
+    add_index :draws, [:project_id, :index], unique: true
   end
 end
