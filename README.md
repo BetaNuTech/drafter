@@ -19,12 +19,12 @@ docker-compose run test rake db:test:prepare
 ## General Use Commands
 
 * Start the stack: `docker-compose up`
+* Stop the stack `docker-compose down`
 * Run tests: `docker-compose run test rspec` for a single run -or- `docker-compose run test guard` to continuously test
 * View/tail logs `docker-compose run web bin/tail_logs`
 * Run a command against a service: `docker-compose run web XXXX`
   * Open a console: `docker-compose run web rails console`
   * Open a database console: `docker-compose run web rails dbconsole`
-* Clean up stopped containers: `docker system prune`
 
 NOTE: files generated using docker will be owned by root. You will have to change file ownership manually.
 From the project root directory: `sudo chown -R $USER:$USER ./`
@@ -46,9 +46,9 @@ From the project root directory: `sudo chown -R $USER:$USER ./`
 
 * List running containers: `docker ps`
 * Stop running containers: `docker stop XXX`
-* Clean up stopped containers: `docker system prune` (this affects all containers on the system, not just drafter)
-* Delete image: `docker images | grep drafter-dev | awk '{print $3}' | xargs docker rm`
-* Delete volumes: `docker volume ls | grep drafter | awk '{print $2}' | xargs docker volume rm`
+* Stop the stack and remove containers: `docker-compose down`
+* Delete data volumes: `docker volume ls | grep drafter | awk '{print $2}' | xargs docker volume rm`
+* Delete webapp image: `docker images | grep drafter-dev | awk '{print $3}' | xargs docker rm`
 
 # Credentials/Secrets
 
