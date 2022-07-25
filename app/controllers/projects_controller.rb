@@ -37,7 +37,7 @@ class ProjectsController < ApplicationController
   def update
     authorize @project
     @service = Projects::Updater.new(@current_user, @project)
-    if @project.update(params)
+    if @service.update(params)
       redirect_to project_path(@project), notice: 'Updated project'
     else
       render :edit, status: :unprocessable_entity

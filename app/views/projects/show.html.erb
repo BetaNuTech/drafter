@@ -1,19 +1,7 @@
 <section>
-  <div class="row row-cols-1 row-cols-md-2 g-4">
-    <div class="col">
-      <div class="jumbotron">
-        <h1 class="display-4">
-          <%= @project.name %>
-          <%= link_to('Edit', edit_project_path(@project), class: 'btn btn-primary btn-sm') if policy(@project).edit? %>
-        </h1>
-        <p class="lead">
-          <b>Budget:</b> <%= number_to_currency(@project.budget) %>
-        <br/>
-        <%= @project.description %>
-      </p>
-    </div>
-  </div>
-</div>
+  <%= turbo_frame_tag @project do %>
+    <%= render @project %>
+  <% end %>
 </section>
 
 <hr class="my-4">

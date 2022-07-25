@@ -49,5 +49,10 @@ namespace :db do
       ProjectRole.load_seed_data
     end
 
+    desc "Development"
+    task :development => :environment do
+      DevelopmentSeeder.new.call
+    end
+
   end # namespace seed
 end # namespace db

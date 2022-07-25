@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-auto">
+    <div class="jumbotron">
+      <h1 class="display-4">
+        <%= @project.name %>
+        <small>
+          <%= link_to(image_tag('icons/pencil-square.svg'), edit_project_path(project), class: 'action-link')%>
+        </small>
+      </h1>
+      <p class="lead">
+        <b>Budget:</b> <%= number_to_currency(@project.budget) %>
+      <br/>
+      <%= @project.description %>
+    </div>
+  </div>
+  <div class="col-auto">
+  </div>
+</div>

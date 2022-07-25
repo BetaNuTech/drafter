@@ -5,22 +5,23 @@ class ProjectUsersController < ApplicationController
   after_action :verify_authorized
 
   def index
-    authorize ProjectUser
-    @project_users = @project.project_users.includes(user: :profile).order("user_profiles.last_name ASC, user_profiles.first_name ASC")
-    @project_user = ProjectUser.new(project: @project)
+    @service = Projects::Membership.new(current_user: @current_user, project: @project)
+    @project_user = @service.project_user
+    @project_users = @service.memberships
+    authorize @project_user
   end
 
   def new
-    @project_user = ProjectUser.new(project: @project)
+    @service = Projects::Membership.new(current_user: @current_user, project: @project)
+    @project_user = @service.project_user
     authorize @project_user
   end
 
   def create
-    @project_user = ProjectUser.new(project_user_params.merge(project_id: @project.id))
+    @service = Projects::Membership.new(current_user: @current_user, project: @project)
+    @project_user = @service.project_user
     authorize @project_user
-    if @project_user.save
-        log_message = "Added %s as a member in the %s role" % [@project_user.name, @project_user.project_role.name]
-        SystemEvent.log(description: log_message, event_source: @project, incidental: @project_user.user, severity: :warn)
+    if (@project_user = @service.add_member(user: project_user_params[:user_id], role: project_user_params[:project_role_id]))
       respond_to do |format|
         format.html { redirect_to project_project_users_path(project_id: @project.id), notice: 'Added project member'} 
         format.turbo_stream
@@ -31,17 +32,20 @@ class ProjectUsersController < ApplicationController
   end
 
   def edit
+    @service = Projects::Membership.new(current_user: @current_user, project: @project)
     authorize @project_user
   end
 
   def update
     authorize @project_user
-    if (new_project_role_id = project_user_params[:project_role_id]).present?
-      @project_user.project_role_id = new_project_role_id
+    @service = Projects::Membership.new(current_user: @current_user, project: @project)
+    unless (new_project_role_id = project_user_params[:project_role_id]).present?
+      raise 'foobar'
+      render :edit, status: :unprocessable_entitity
+      return
     end
-    if @project_user.save
-        log_message = "Changed %s to the %s role" % [@project_user.name, @project_user.project_role.name]
-        SystemEvent.log(description: log_message, event_source: @project, incidental: @project_user.user, severity: :warn)
+
+    if (@project_user = @service.update_member_role(user: @project_user.user, role: new_project_role_id))
       respond_to do |format|
         format.html { redirect_to project_project_user_path(project_id: @project.id, project_user_id: @project_user.id), notice: 'Updated project member' } 
         format.turbo_stream
@@ -53,10 +57,8 @@ class ProjectUsersController < ApplicationController
 
   def destroy
     authorize @project_user
-    @project = @project_user.project
-    @project_user.destroy
-        log_message = "Removed %s as a member" % [@project_user.name]
-        SystemEvent.log(description: log_message, event_source: @project, incidental: @project_user.user, severity: :warn)
+    @service = Projects::Membership.new(current_user: @current_user, project: @project)
+    @service.remove_member(@project_user.user)
     @project.reload
     respond_to do |format|
       format.html { redirect_to project_project_users_path(project_id: @project_user.project_id), notice: 'Project member removed' }

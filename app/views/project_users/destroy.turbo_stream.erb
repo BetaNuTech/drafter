@@ -1,2 +1,3 @@
 <%= turbo_stream.replace 'project_users_count', @project.project_users.count %>
 <%= turbo_stream.remove @project_user %>
+<%= turbo_stream.update ProjectUser.new(project: @project), "" %>

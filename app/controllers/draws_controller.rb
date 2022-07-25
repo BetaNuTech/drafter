@@ -1,5 +1,8 @@
 class DrawsController < ApplicationController
+  before_action :authenticate_user!
+  before_action :set_project
   before_action :set_draw, only: %i[ show edit update destroy ]
+  after_action :verify_authorized
 
   # GET /draws or /draws.json
   def index
@@ -67,4 +70,12 @@ class DrawsController < ApplicationController
     def draw_params
       params.require(:draw).permit(:project_id, :index, :name, :state, :reference, :total, :approver, :notes)
     end
+
+  def project_record_scope
+    ProjectPolicy::Scope.new(@current_user, Project).resolve
+  end
+
+  def set_project
+    @project ||= project_record_scope.find(params[:project_id])
+  end
 end

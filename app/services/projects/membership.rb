@@ -1,11 +1,24 @@
 module Projects
   class Membership
-    attr_reader :project, :project_user
+    attr_reader :project, :user, :project_user, :policy
 
-    def initialize(current_user, project)
+    def initialize(current_user:, project:)
       @project = project
       @current_user = current_user
       @policy = ProjectPolicy.new(@current_user, @project)
+      @errors = []
+    end
+
+    def project_user
+      ProjectUser.new(project: @project)
+    end
+
+    def memberships
+      @project.project_users
+    end
+
+    def members
+      @project.users.includes(user: :profile).order("user_profiles.last_name ASC, user_profiles.first_name ASC")
     end
 
     def add_member(user: , role: )
@@ -15,9 +28,9 @@ module Projects
         return nil
       end
 
-      user = User.active.where(id: user).first unless user.is_a?(User)
-      if users.include?(user)
-        return user
+      user = User.active.where(id: user).first if user.is_a?(String)
+      if @project.users.include?(user)
+        return project_user
       end
 
       project_role = role.is_a?(ProjectRole) ? role : ProjectRole.where(id: role).first
@@ -27,15 +40,15 @@ module Projects
         return nil
       end
 
-      project_user = ProjectUser.new(project: @project, user: user, role: project_role)
+      project_user = ProjectUser.new(project: @project, user: user, project_role: project_role)
       if project_user.save
-        msg = "Added #{user.name} as a #{project_role.name}"
+        msg = "Added #{user.name} with the #{project_role.name} role"
         @project.project_users.reload
         SystemEvent.log(description: msg, event_source: @project, incidental: user, severity: :warn)
         user.projects.reload
         project.users.reload
         notify_member_of_role_change(project_user)
-        return user
+        return project_user
       else
         msg = "Could not add member: #{project_user.full_messages.join(', ')}"
         @errors << msg
@@ -43,8 +56,14 @@ module Projects
       end
     end
 
+    def notify_member_of_membership(project_user)
+      # TODO create notification record for user
+      # TODO create Project mailer
+      # TODO create Project mailer action
+      # TODO send notification email
+    end
+
     def notify_member_of_role_change(project_user)
-        SystemEvent.log(description: 'Added project member', event_source: @project, incidental: project_user, severity: :warn)
       # TODO create notification record for user
       # TODO create Project mailer
       # TODO create Project mailer action
@@ -58,28 +77,46 @@ module Projects
         return nil
       end
 
-      project_user = @project.project_users.where(user_id: user.id)
+      project_user = @project.project_users.where(user_id: user.id).first
       unless project_user.present?
         msg = "Could not find project member"
         @errors << msg
         return nil
       end
 
-      project_role = ProjectRole.where(slug: role).first
+      project_role = ProjectRole.where(id: role).first
       unless project_role.present?
         msg = "Invalid project role '#{role}'"
         @errors << msg
-        return user
+        return project_user
       end
 
-      project_user.role = project_role
+      project_user.project_role = project_role
       unless project_user.save
         msg = "Could not assign member role"
         @errors << msg
-        return user
+        return project_user
       end
+      msg = "#{user.name} was re-assigned to the #{project_role.name} role"
+      SystemEvent.log(description: msg, event_source: @project, incidental: project_user.user, severity: :warn)
       notify_member_of_role_change(project_user)
-      user
+      project_user
+    end
+
+    def remove_member(user)
+      project_user = @project.project_users.where(user_id: user.id).first
+      unless project_user.present?
+        msg = "Could not find project member"
+        @errors << msg
+        return nil
+      end
+
+      project_user.destroy
+      log_message = "Removed %s as a member" % [project_user.name]
+      SystemEvent.log(description: log_message, event_source: @project, incidental: project_user.user, severity: :warn)
+
+      @project.reload
+      return true
     end
 
     def available_members
