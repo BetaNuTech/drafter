@@ -34,7 +34,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def destroy?
-    edit?
+    user.administrator?
   end
 
   def allowed_params

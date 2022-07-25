@@ -1,57 +1,43 @@
-<%= form_with(model: draw) do |form| %>
-  <% if draw.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(draw.errors.count, "error") %> prohibited this draw from being saved:</h2>
+<%= form_with(model: draw, url: [draw.project, draw], class: 'form-floating') do |form| %>
+  <%= form.hidden_field :index %>
 
-      <ul>
-        <% draw.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+  <div class="row">
+    <div class="col">
+      <div class="form-floating mb-3 g-2">
+        <%= form.text_field :name, class: 'form-control form-control-lg', autofocus: true, placeholder: 'Draw Name' %>
+        <%= form.label :name %>
+      </div>
     </div>
-  <% end %>
-
-  <div>
-    <%= form.label :project_id, style: "display: block" %>
-    <%= form.text_field :project_id %>
   </div>
 
-  <div>
-    <%= form.label :index, style: "display: block" %>
-    <%= form.number_field :index %>
+  <div class="row">
+    <div class="col-sm-12 col-6">
+      <div class="form-floating mb-3 g-2">
+        <%= form.number_field :total, class: 'form-control form-control', autofocus: true, placeholder: 'Total $', step: 0.01 %>
+        <%= form.label :total, 'Total $' %>
+      </div>
+    </div>
+    <div class="col-sm-12 col-6">
+      <div class="form-floating mb-3 g-2">
+        <%= form.text_field :reference, class: 'form-control form-control', autofocus: true, placeholder: 'Reference Number' %>
+        <%= form.label :reference, 'Reference Number' %>
+      </div>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="row">
+    <div class="col-12">
+      <div class="form-floating mb-3 g-2">
+        <%= form.text_area :notes, class: 'form-control form-control', autofocus: true, placeholder: 'Notes' %>
+        <%= form.label :notes %>
+      </div>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :state, style: "display: block" %>
-    <%= form.text_field :state %>
-  </div>
-
-  <div>
-    <%= form.label :reference, style: "display: block" %>
-    <%= form.text_field :reference %>
-  </div>
-
-  <div>
-    <%= form.label :total, style: "display: block" %>
-    <%= form.text_field :total %>
-  </div>
-
-  <div>
-    <%= form.label :approver, style: "display: block" %>
-    <%= form.text_field :approver %>
-  </div>
-
-  <div>
-    <%= form.label :notes, style: "display: block" %>
-    <%= form.text_area :notes %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="row">
+    <div class="col-auto me-auto">
+      <button type="submit" class="btn btn-sm btn-success">Save</button>
+      <%= link_to 'Cancel', :back, class: "btn btn-sm btn-light" %>
+    </div>
   </div>
 <% end %>

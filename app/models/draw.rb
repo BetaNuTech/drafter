@@ -19,10 +19,28 @@
 #  index_draws_on_project_id_and_index  (project_id,index) UNIQUE
 #
 class Draw < ApplicationRecord
-
   ### Params
-  ALLOWED_PARAMS = [:project_id, :name, :notes, :reference, :total]
+  ALLOWED_PARAMS = [:index, :name, :notes, :reference, :total]
 
   ### Associations
   belongs_to :project
+
+  ### Validations
+  validates :name, presence: true, uniqueness: {scope: :project_id}
+
+  def next_index
+    return 1 unless project.present?
+
+   (project.draws.pluck(:index).sort.last || 0) + 1
+  end
+
+  def budget_variance
+    # TODO
+    0.0
+  end
+
+  def over_budget?
+    budget_variance > 0
+  end
+
 end

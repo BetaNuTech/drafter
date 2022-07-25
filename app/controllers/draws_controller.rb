@@ -6,7 +6,9 @@ class DrawsController < ApplicationController
 
   # GET /draws or /draws.json
   def index
-    @draws = Draw.all
+    authorize Draw
+    @service = Projects::DrawService.new(current_user: @current_user, project: @project)
+    @draws = @service.draws
   end
 
   # GET /draws/1 or /draws/1.json
@@ -15,61 +17,75 @@ class DrawsController < ApplicationController
 
   # GET /draws/new
   def new
-    @draw = Draw.new
+    @service = Projects::DrawService.new(current_user: @current_user, project: @project)
+    authorize @service.draw
   end
 
   # GET /draws/1/edit
   def edit
+    @service = Projects::DrawService.new(current_user: @current_user, project: @project, draw: @draw)
+    authorize @service.draw
   end
 
   # POST /draws or /draws.json
   def create
-    @draw = Draw.new(draw_params)
-
-    respond_to do |format|
-      if @draw.save
-        format.html { redirect_to draw_url(@draw), notice: "Draw was successfully created." }
-        format.json { render :show, status: :created, location: @draw }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @draw.errors, status: :unprocessable_entity }
+    @service = Projects::DrawService.new(current_user: @current_user, project: @project)
+    authorize @service.draw
+    if @service.create(params)
+      respond_to do |format|
+        format.html { redirect_to project_draws_path(project_id: @service.project.id), notice: 'Drawed new draw'}
+        format.turbo_stream
       end
+    else
+      render :new, :unprocessable_entity
     end
+    
   end
 
   # PATCH/PUT /draws/1 or /draws/1.json
   def update
+    @service = Projects::DrawService.new(current_user: @current_user, project: @project, draw: @draw)
+    authorize @service.draw
     respond_to do |format|
-      if @draw.update(draw_params)
-        format.html { redirect_to draw_url(@draw), notice: "Draw was successfully updated." }
-        format.json { render :show, status: :ok, location: @draw }
+      if @service.update(params)
+        format.html { redirect_to project_draws_path(project_id: @service.project.id, id: @service.draw.id), notice: "Draw was successfully updated." }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @draw.errors, status: :unprocessable_entity }
+        render :edit, :unprocessable_entity
       end
     end
   end
 
   # DELETE /draws/1 or /draws/1.json
   def destroy
-    @draw.destroy
+    @service = Projects::DrawService.new(current_user: @current_user, project: @project, draw: @draw)
+    authorize @service.draw
 
-    respond_to do |format|
-      format.html { redirect_to draws_url, notice: "Draw was successfully destroyed." }
-      format.json { head :no_content }
+    if @service.destroy
+      respond_to do |format|
+        format.html { redirect_to draws_url, notice: "Draw was successfully destroyed." }
+        format.turbo_stream
+      end
+    else
+      render :edit, :unprocessable_entity
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_draw
-      @draw = Draw.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def draw_params
-      params.require(:draw).permit(:project_id, :index, :name, :state, :reference, :total, :approver, :notes)
-    end
+  def record_scope
+    @project.draws
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_draw
+    @draw = record_scope.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def draw_params
+    allowed_params = policy(Draw).allowed_params
+    params.require(:draw).permit(*allowed_params)
+  end
 
   def project_record_scope
     ProjectPolicy::Scope.new(@current_user, Project).resolve

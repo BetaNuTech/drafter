@@ -52,10 +52,6 @@ module Projects
 
     private
 
-    def member_management_check!
-
-    end
-
     def refresh_policy
       @policy = ProjectPolicy.new(@current_user, @project)
     end
@@ -73,7 +69,7 @@ module Projects
       if params.is_a?(ActionController::Parameters)
         params.require(:project).permit(*allowed_params)
       else
-        params.select{|k,v| allow_params.include?(k.to_s) }
+        params.select{|k,v| allowed_params.include?(k.to_s) }
       end
     end
 

@@ -1,14 +1,28 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Draws</h1>
-
-<div id="draws">
-  <% @draws.each do |draw| %>
-    <%= render draw %>
-    <p>
-      <%= link_to "Show this draw", draw %>
-    </p>
-  <% end %>
+<div class="row">
+  <div class="col-auto">
+    <h1>
+      <%= @service.project.name %> Draws
+      <small>
+        <%= link_to(image_tag('icons/plus-square.svg'),
+                    new_project_draw_path(project_id: @service.project.id),
+                    class: 'action-link',
+                    data: { 'turbo_frame': dom_id(@service.draw)}
+                   )%>
+      </small>
+    </h1>
+  </div>
 </div>
 
-<%= link_to "New draw", new_draw_path %>
+<div class="row">
+  <div class="col">
+    <%= turbo_frame_tag dom_id(@service.draw) %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <%= turbo_frame_tag 'project_draws' do %>
+      <%= render @service.draws %>
+    <% end %>
+  </div>
+</div>

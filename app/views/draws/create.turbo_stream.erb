@@ -1,0 +1,2 @@
+<%= turbo_stream.prepend "project_draws", @service.draw %>
+<%= turbo_stream.update Draw.new(project: @service.project), "" %>

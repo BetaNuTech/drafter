@@ -1,17 +1,27 @@
-<div class="row" style="margin-top: 1em">
+<div class="row">
   <div class="col">
     <h2>
       Draws
       <small>
-        <%= link_to('#', class: 'action-link') do %>
-          <%= image_tag('icons/plus-square.svg') %>
-        <% end %>
+        <%= link_to(image_tag('icons/plus-square.svg'),
+                    new_project_draw_path(project_id: project.id),
+                    class: 'action-link',
+                    data: { 'turbo_frame': dom_id(Draw.new(project: project))} ) %>
       </small>
     </h2>
   </div>
 </div>
+
 <div class="row">
   <div class="col">
-    <%= render partial: 'draw', collection: [:test, :test2] %>
+    <%= turbo_frame_tag dom_id(Draw.new(project: project))%>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <%= turbo_frame_tag 'project_draws' do %>
+      <%= render project.draws %>
+    <% end %>
   </div>
 </div>

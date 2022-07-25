@@ -1,42 +1,37 @@
-<div id="<%= dom_id draw %>">
-  <p>
-    <strong>Project:</strong>
-    <%= draw.project_id %>
-  </p>
-
-  <p>
-    <strong>Index:</strong>
-    <%= draw.index %>
-  </p>
-
-  <p>
-    <strong>Name:</strong>
-    <%= draw.name %>
-  </p>
-
-  <p>
-    <strong>State:</strong>
-    <%= draw.state %>
-  </p>
-
-  <p>
-    <strong>Reference:</strong>
-    <%= draw.reference %>
-  </p>
-
-  <p>
-    <strong>Total:</strong>
-    <%= draw.total %>
-  </p>
-
-  <p>
-    <strong>Approver:</strong>
-    <%= draw.approver %>
-  </p>
-
-  <p>
-    <strong>Notes:</strong>
-    <%= draw.notes %>
-  </p>
-
+<%= turbo_frame_tag draw do %>
+<div class="card project-card">
+  <div class="card-body">
+    <h5 class="card-title">
+      <%= link_to(draw.name, '#') %>
+    </h5>
+    <div class="edit-button">
+      <%= link_to(image_tag('icons/pencil-square.svg'),
+                  edit_project_draw_path(project_id: draw.project_id, id: draw.id),
+                  class: 'action-link',
+                  data: { 'turbo_frame': draw }) if policy(draw).edit? %>
+      <%= link_to(image_tag('icons/trash.svg'), project_draw_path(project_id: draw.project.id, id: draw.id),
+                  data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
+                  class: 'action-link') if policy(draw).destroy? %>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 g2">
+      <div class="col col-md-8">
+        <div class="card-text">
+          <!-- additional information here -->
+          <em>
+            <b>Reference #:</b> <%= draw.reference %>
+          </em>
+          <p>
+            <%= draw.notes %>
+          </p>
+        </div>
+      </div>
+      <div class="col col-md-4">
+        <b><%= number_to_currency(draw.total) %></b><br/>
+        <small>
+          <span class="badge round-pill bg-<%= draw.over_budget? ? 'danger' : 'success' %> "><%= number_to_currency(draw.budget_variance) %></span>
+        </small>
+      </div>
+    </div>
+  </div>
 </div>
+<% end %>
