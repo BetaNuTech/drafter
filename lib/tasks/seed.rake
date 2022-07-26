@@ -10,7 +10,7 @@ namespace :db do
     task :users => [:roles] do
       if User.count > 0
         puts " - Skipped user seeding. Accounts exist!"
-        exit(0)
+        next
       end
 
         #### Admin Account
@@ -41,12 +41,17 @@ namespace :db do
 
     rescue
       puts "\n!!! There were errors creating seed users"
-      exit(1)
+      next
     end # task :users
 
     desc "Seed ProjectRoles"
     task :project_roles => :environment do
       ProjectRole.load_seed_data
+    end
+
+    desc "Seed Draw Cost Samples"
+    task :draw_cost_samples => :environment do
+      DrawCostSample.load_seed_data
     end
 
     desc "Development"
