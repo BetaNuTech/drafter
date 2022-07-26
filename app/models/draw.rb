@@ -19,6 +19,8 @@
 #  index_draws_on_project_id_and_index  (project_id,index) UNIQUE
 #
 class Draw < ApplicationRecord
+  include Draws::StateMachine
+
   ### Params
   ALLOWED_PARAMS = [:index, :name, :notes, :reference, :total]
 
@@ -41,6 +43,12 @@ class Draw < ApplicationRecord
 
   def over_budget?
     budget_variance > 0
+  end
+
+  def approve(user)
+    self.approver = user
+    self.approved_at = Time.current
+    save
   end
 
 end
