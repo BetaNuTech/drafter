@@ -1,0 +1,28 @@
+:draw_cost_samples:
+  :version: 1
+  :key: :name
+  :data:
+    - :name: Land
+      :cost_type: land
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Building Cost
+      :cost_type: hard
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Architectural & Engineering Design
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+    - :name: 3rd Party Reports
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Impact/Tap Fees/Permit Fees
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Insurance BR & GL
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
