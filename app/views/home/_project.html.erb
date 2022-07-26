@@ -3,10 +3,10 @@
     <h5 class="card-title">
       <%= link_to(project.name, project_path(project)) %>
     </h5>
-    <div class="edit-button">
-      <%= link_to(edit_project_path(project), class: 'action-link') do %>
-        <%= image_tag('icons/pencil-square.svg') %>
-      <% end %>
+    <div class="card-action-buttons">
+      <%= link_to(image_tag('icons/trash.svg'), project_path(project),
+                  data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
+                  class: 'action-link') if policy(project).destroy? %>
     </div>
     <p class="card-text">
       <%= project.description %>

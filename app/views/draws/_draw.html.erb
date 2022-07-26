@@ -4,14 +4,14 @@
     <h5 class="card-title">
       <%= link_to(draw.name, '#') %>
     </h5>
-    <div class="edit-button">
+    <div class="card-action-buttons">
       <%= link_to(image_tag('icons/pencil-square.svg'),
                   edit_project_draw_path(project_id: draw.project_id, id: draw.id),
                   class: 'action-link',
                   data: { 'turbo_frame': draw }) if policy(draw).edit? %>
-      <%= link_to(image_tag('icons/trash.svg'), project_draw_path(project_id: draw.project.id, id: draw.id),
-                  data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
-                  class: 'action-link') if policy(draw).destroy? %>
+      <%= link_to(image_tag('icons/trash.svg', style: ''), project_draw_path(project_id: draw.project.id, id: draw.id),
+                  class: 'action-link',
+                  data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }) if policy(draw).destroy? %>
     </div>
     <div class="row row-cols-1 row-cols-md-2 g2">
       <div class="col col-md-8">
