@@ -60,6 +60,15 @@ module Projects
       @errors.present?
     end
 
+    def load_sample_costs
+      # TODO
+      return false unless ( @draw.present? && !@draw.new_record? )
+
+      DrawCostSample.standard.each do |dcs|
+      end
+
+    end
+
     private
 
     def record_errors

@@ -18,31 +18,32 @@ module Draws
         state :internally_approved
         state :externally_approved
         state :funded
+
+        event :start do
+          transitions from: [:pending], to: :in_progress
+        end
+
+        event :submit do
+          transitions from: [:in_progress], to: :submitted
+        end
+
+        event :approve_internal do
+          transitions from: [:submitted], to: :internally_approved
+        end
+
+        event :approve_external do
+          transitions from: [:submitted], to: :externally_approved
+        end
+
+        event :reject do
+          transitions from: [:internally_approved, :externally_approved], to: :submitted
+        end
+
+        event :fund do
+          transitions from: [:externally_approved], to: :funded
+        end
       end
 
-      event :start do
-        transitions from: [:pending], to: :in_progress
-      end
-
-      event :submit do
-        transitions from: [:in_progress], to: :submitted
-      end
-
-      event :approve_internal do
-        transitions from: [:submitted], to: :internally_approved
-      end
-
-      event :approve_external do
-        transitions from: [:submitted], to: :externally_approved
-      end
-
-      event :reject do
-        transitions from: [:internally_approved, :externally_approved], to: :submitted
-      end
-
-      event :fund do
-        transitions from: [:externally_approved], to: :funded
-      end
 
       def trigger_event(event_name:, user: nil)
         event = event_name.to_sym
@@ -61,7 +62,7 @@ module Draws
       def permitted_states
         aasm.states(permitted: true).map(&:name)
       end
-      
+
     end
   end
 end
