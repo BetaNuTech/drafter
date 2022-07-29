@@ -7,12 +7,14 @@
 # - Create Seed data YML in db/seeds/
 # - Add entry below to invoke the seed rake task
 
-puts "*** Seeding Roles"
+puts "===== Seeding Roles"
 Rake::Task["db:seed:roles"].invoke
 
-puts "*** Seeding Project Roles"
+puts "===== Seeding Project Roles"
 Rake::Task["db:seed:project_roles"].invoke
 
-puts "*** Seeding Users"
+puts "===== Seeding Users"
 Rake::Task["db:seed:users"].invoke
 
+puts "===== Seeding Draw Cost Samples"
+Rake::Task["db:seed:draw_cost_samples"].invoke

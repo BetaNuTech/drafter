@@ -19,8 +19,13 @@ class DrawCostSample < ApplicationRecord
 
   COST_TYPES = %w{land hard soft finance}
 
+  ### Enums
   enum cost_type: COST_TYPES
 
+  ### Validations
   validates :name, presence: true
   validates :cost_type, presence: true
+
+  ### Scopes
+  scope :standard, -> { where(standard: true) }
 end

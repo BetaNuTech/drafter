@@ -61,6 +61,22 @@ module Projects
       @errors.present?
     end
 
+    def load_sample_costs
+      return false unless ( @draw.present? && !@draw.new_record? )
+
+      DrawCostSample.standard.each do |dcs|
+        DrawCost.create(
+          draw: @draw,
+          name: dcs.name,
+          state: :pending,
+          cost_type: dcs.cost_type
+        )
+      end
+
+      @draw.reload
+      @draw.draw_costs
+    end
+
     private
 
     def add_draw_costs(draw)

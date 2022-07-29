@@ -26,9 +26,11 @@ class Draw < ApplicationRecord
 
   ### Associations
   belongs_to :project
+  has_many :draw_costs, dependent: :destroy
 
   ### Validations
   validates :name, presence: true, uniqueness: {scope: :project_id}
+  validates :index, presence: true, numericality: { greater_than_or_equal_to: 1}
 
   def next_index
     return 1 unless project.present?
@@ -37,7 +39,7 @@ class Draw < ApplicationRecord
   end
 
   def budget_variance
-    # TODO
+    # TODO from approved draw costs
     0.0
   end
 

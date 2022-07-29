@@ -26,3 +26,59 @@
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
+    - :name: Community Improvements & Offsite Improvements
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Real Estate Taxes
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Advertising & Marketing
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Project Related Business Expenses
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Legal & Closing
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Owner's Contingency
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Development Fee
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Equity Fee & DD
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+    - :name: FF & E
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Bank Inspection Fees
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Operating Deficit
+      :cost_type: finance
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Capitalized Interest
+      :cost_type: finance
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Bank Loan Fees
+      :cost_type: finance
+      :approval_lead_time: 0
+      :standard: true
+    - :name: Title & Recording
+      :cost_type: finance
+      :approval_lead_time: 0
+      :standard: true
