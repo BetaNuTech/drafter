@@ -98,7 +98,7 @@ module Projects
         return project_user
       end
       msg = "#{user.name} was re-assigned to the #{project_role.name} role"
-      SystemEvent.log(description: msg, event_source: @project, incidental: project_user.user, severity: :warn)
+      SystemEvent.log(description: msg, event_source: @project, incidental: project_user.user, severity: :info)
       notify_member_of_role_change(project_user)
       project_user
     end
@@ -113,7 +113,7 @@ module Projects
 
       project_user.destroy
       log_message = "Removed %s as a member" % [project_user.name]
-      SystemEvent.log(description: log_message, event_source: @project, incidental: project_user.user, severity: :warn)
+      SystemEvent.log(description: log_message, event_source: @project, incidental: project_user.user, severity: :info)
 
       @project.reload
       return true

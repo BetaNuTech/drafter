@@ -1,32 +1,27 @@
 <%= turbo_frame_tag project_user do %>
-  <div class="row row-cols-auto">
-    <div class="col-3">
-      <span class="badge pill-rounded bg-<%= project_role_background_class(project_user.project_role) %>">
-        <%= project_user.project_role.name %>
-      </span>
-    </div>
+  <div class="row row-cols-auto py-2">
     <div class="col-auto me-auto">
       <span>
         <b><%= project_user.user.name %></b>
       </span>
       <% if project_user.user.organization.present? %>
         <br/>
-        <span>
-          <em>
-            <%= project_user.user.organization&.name %>
-          </em>
-        </span>
+        <span><em><%= project_user.user.organization&.name %></em></span>
       <% end %>
       <br/>
-      <span>
-        <%= project_user.user.email %>
-      </span>
+      <span><%= project_user.user.email %></span>
     </div>
-    <div class="col-auto">
-      <%= link_to(image_tag('icons/pencil-square.svg'), edit_project_project_user_path(project_id: project_user.project.id, id: project_user.id), class: 'action-link')%>
-      <%= link_to(image_tag('icons/trash.svg'), project_project_user_path(project_id: project_user.project.id, id: project_user.id),
-                  data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
-                  class: 'action-link') %>
+    <div class="col-3 text-center">
+      <span class="badge pill-rounded bg-<%= project_role_background_class(project_user.project_role) %>">
+        <%= project_user.project_role.name %>
+      </span>
+      <br/>
+      <span>
+        <%= link_to(image_tag('icons/pencil-square.svg'), edit_project_project_user_path(project_id: project_user.project.id, id: project_user.id), class: 'action-link')%>
+        <%= link_to(image_tag('icons/trash.svg'), project_project_user_path(project_id: project_user.project.id, id: project_user.id),
+                    data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
+                    class: 'action-link') %>
+      </span>
     </div>
   </div>
 <% end %>

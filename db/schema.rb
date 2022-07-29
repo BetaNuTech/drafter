@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_26_205329) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_28_175237) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -38,6 +38,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_26_205329) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "standard"], name: "draw_cost_samples_idx"
+  end
+
+  create_table "draw_costs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "draw_id", null: false
+    t.integer "cost_type", null: false
+    t.string "name", null: false
+    t.string "state", default: "pending", null: false
+    t.integer "approval_lead_time", default: 0, null: false
+    t.decimal "total", default: "0.0", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["draw_id", "state"], name: "draw_costs_idx"
   end
 
   create_table "draws", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -28,6 +28,7 @@ module Projects
       @draw = Draw.new(sanitize_params(params))
       @draw.project = @project
       if @draw.save
+        add_draw_costs(@draw)
         SystemEvent.log(description: "Created new Draw '#{@draw.name}'", event_source: @project, incidental: @current_user, severity: :warn)
         return @draw
       else
@@ -38,7 +39,7 @@ module Projects
 
     def update(params)
       if @draw.update(sanitize_params(params))
-        SystemEvent.log(description: "Updated information for Draw '#{@draw.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+        SystemEvent.log(description: "Updated information for Draw '#{@draw.name}'", event_source: @project, incidental: @current_user, severity: :info)
         return @draw
       else
         record_errors
@@ -48,7 +49,7 @@ module Projects
 
     def destroy
       @draw.destroy
-      SystemEvent.log(description: "Deleted Draw '#{@draw.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Deleted Draw '#{@draw.name}'", event_source: @project, incidental: @current_user, severity: :danger)
       return true
     end
 
@@ -61,6 +62,9 @@ module Projects
     end
 
     private
+
+    def add_draw_costs(draw)
+    end
 
     def record_errors
       @errors = []
