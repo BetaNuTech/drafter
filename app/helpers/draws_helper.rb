@@ -5,4 +5,8 @@ module DrawsHelper
       draw.state.titleize
     end
   end
+
+  def draw_cost_cost_type_options
+    DrawCost.cost_types.to_a.map{|ct| [ct[0].capitalize, ct[0]]}
+  end
 end

@@ -1,58 +1,23 @@
 <div class="row">
   <div class="col">
-    <h1><%= @project.name %> &mdash; Costs</h1>
+    <h1><%= link_to(@draw.name, project_draw_path(project_id: @draw.project_id, id: @draw.id), data: {'turbo_frame': '_top'}) %> &mdash; Costs</h1>
   </div>
 </div>
 
-<% @draws.each do |draw| %>
-  <div class="row">
-    <div class="col">
-      <div class="row p-2 text-center">
-        <div class="col p-4 bg-light border border-1 border-secondary">
-          <h2><%= draw.name %> Total Cost: $XX,XXX.XX</h2>
-        </div>
+<div class="row">
+  <div class="col">
+    <div class="row p-2 text-center">
+      <div class="col p-4 bg-light border border-1 border-secondary">
+        <h2><%= @draw.name %> Total Cost: $XX,XXX.XX</h2>
       </div>
-
-        <% draw.draw_costs.each do |draw_cost| %>
-          <div class="row p-3 position-relative">
-            <div class="position-absolute top-10 start-50 translate-middle border border-1 border-secondary bg-<%= draw_cost.state_css_class %> text-white text-center" style="width: 10rem">
-              <%= draw.state.titleize %>
-            </div>
-            <div class="col-sm-12 col-md-3 p-3 bg-light border border-end-0 border-2 border-secondary">
-              <h5 style="line-height: 0.9em; margin-bottom: 0;"><%= draw_cost.name %></h5>  
-              <span><%= number_to_currency draw_cost.total %></span>
-              <p>
-                <b>Contingency</b>:
-                <span>$X,XXX.XX</span>
-              </p>
-            </div>
-            <div class="col-sm-12 col-md-9 p-3 bg-light border border-start-0 border-2 border-secondary">
-
-              <div class="card text-center p-1 m-1 d-inline-flex justify-content-evenly" style="width: 8rem;">
-                <img class="card-img-top" style="width: 90%; height: 10rem; margin: 0px auto; border: 1px solid #ccc;"></img>
-                <div class="card-body">
-                  <span>$X,XXX.XX</span><br/>
-                  OCR <%= image_tag(circle_check_image) %><br/>
-                  <%= image_tag square_check_image %>
-                  &nbsp;
-                  <%= image_tag square_x_open_image, style: 'opacity: 0.2;' %>
-                </div>
-              </div>
-
-              <div class="card text-center p-1 m-1 d-inline-flex justify-content-evenly" style="width: 8rem;">
-                <img class="card-img-top" style="width: 90%; height: 10rem; margin: 0px auto; border: 1px solid #ccc;"></img>
-                <div class="card-body">
-                  <span>$X,XXX.XX</span><br/>
-                  OCR <%= image_tag(circle_x_image) %><br/>
-                  <%= image_tag square_check_open_image %>
-                  &nbsp;
-                  <%= image_tag square_x_open_image %>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        <% end %>
     </div>
+
+    <div class="row">
+      <div class="col">
+        <%= link_to('Add Draw Cost', new_draw_draw_cost_path(draw_id: @draw.id), data: {'turbo_frame': '_top'}) %>
+      </div>
+    </div>
+
+    <%= render @draw.draw_costs %>
   </div>
-<% end %>
+</div>

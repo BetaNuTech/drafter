@@ -20,6 +20,7 @@ class DrawCost < ApplicationRecord
   include DrawCosts::StateMachine
 
   ALLOWED_PARAMS = [:id, :approval_lead_time, :cost_type, :name, :total]
+  enum :cost_type, [:land, :hard, :soft, :finance]
   
   ### Associations
   belongs_to :draw
@@ -31,5 +32,14 @@ class DrawCost < ApplicationRecord
   validates :name, presence: true
   validates :state, presence: true
   validates :total, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
+
+  def cost_type_css_class
+    {
+      land: 'secondary',
+      hard: 'primary',
+      soft: 'info',
+      finance: 'success'
+    }.fetch(cost_type.to_sym)
+  end
 
 end

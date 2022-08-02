@@ -17,9 +17,11 @@ Rails.application.routes.draw do
 
   resources :organizations
   resources :users
+  resources :draws do
+    resources :draw_costs
+  end
   resources :projects do
     resources :draws
-    resources :draw_costs
     resources :project_users
   end
 end

@@ -30,7 +30,7 @@
             <%= draw.notes %>
           </p>
           <%= link_to('Costs',
-                      project_draw_costs_path(project_id: draw.project_id),
+                      draw_draw_costs_path(draw_id: draw.id),
                       data: { 'turbo_frame': '_top'}) %>
         </div>
       </div>

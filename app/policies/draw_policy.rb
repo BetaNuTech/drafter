@@ -3,6 +3,7 @@ class DrawPolicy < ApplicationPolicy
     def resolve
       case user
       when -> (u) { u.administrator? }
+        scope
       else
         scope.where(project: user.projects)
       end
