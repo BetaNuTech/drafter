@@ -4,30 +4,26 @@ class DrawsController < ApplicationController
   before_action :set_draw, only: %i[ show edit update destroy ]
   after_action :verify_authorized
 
-  # GET /draws or /draws.json
   def index
     authorize Draw
     @service = Projects::DrawService.new(current_user: @current_user, project: @project)
     @draws = @service.draws
   end
 
-  # GET /draws/1 or /draws/1.json
   def show
+    authorize @draw
   end
 
-  # GET /draws/new
   def new
     @service = Projects::DrawService.new(current_user: @current_user, project: @project)
     authorize @service.draw
   end
 
-  # GET /draws/1/edit
   def edit
     @service = Projects::DrawService.new(current_user: @current_user, project: @project, draw: @draw)
     authorize @service.draw
   end
 
-  # POST /draws or /draws.json
   def create
     @service = Projects::DrawService.new(current_user: @current_user, project: @project)
     authorize @service.draw
@@ -42,7 +38,6 @@ class DrawsController < ApplicationController
     
   end
 
-  # PATCH/PUT /draws/1 or /draws/1.json
   def update
     @service = Projects::DrawService.new(current_user: @current_user, project: @project, draw: @draw)
     authorize @service.draw
@@ -55,7 +50,6 @@ class DrawsController < ApplicationController
     end
   end
 
-  # DELETE /draws/1 or /draws/1.json
   def destroy
     @service = Projects::DrawService.new(current_user: @current_user, project: @project, draw: @draw)
     authorize @service.draw

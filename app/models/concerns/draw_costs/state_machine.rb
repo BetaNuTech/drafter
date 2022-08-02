@@ -11,7 +11,7 @@ module DrawCosts
     included do
       include AASM
 
-      assm column: :state do
+      aasm column: :state do
          state :pending
          state :submitted
          state :deleted
@@ -43,6 +43,13 @@ module DrawCosts
         aasm.states(permitted: true).map(&:name)
       end
 
+      def state_css_class
+        {
+          'pending' => 'secondary',
+          'submitted' => 'success',
+          'deleted' => 'light'
+        }.fetch(state, 'primary')
+      end
     end
   end
 end

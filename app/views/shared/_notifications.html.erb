@@ -4,7 +4,7 @@
       <% if notice.present? %>
         <div class="row alert alert-dismissable fade show bg-info">
           <div class="col-1">
-            <%= image_tag "icons/info-circle-fill.svg", class: 'svgicon' %>
+            <%= image_tag info_image, class: 'svgicon' %>
           </div>
           <div class="col-10">
             <%= notice %>
@@ -17,7 +17,7 @@
       <% if alert.present? %>
         <div class="row alert alert-dismissable fade show bg-warning">
           <div class="col-1">
-            <%= image_tag "icons/exclamation-triangle-fill.svg", class: 'svgicon' %>
+            <%= image_tag alert_image, class: 'svgicon' %>
           </div>
           <div class="col-10">
             <%= alert %>

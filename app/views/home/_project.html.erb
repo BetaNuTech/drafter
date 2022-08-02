@@ -4,7 +4,7 @@
       <%= link_to(project.name, project_path(project)) %>
     </h5>
     <div class="card-action-buttons">
-      <%= link_to(image_tag('icons/trash.svg'), project_path(project),
+      <%= link_to(image_tag(destroy_image), project_path(project),
                   data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
                   class: 'action-link') if policy(project).destroy? %>
     </div>

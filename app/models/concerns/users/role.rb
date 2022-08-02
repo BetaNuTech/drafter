@@ -7,11 +7,11 @@ module Users
 
       ### System Roles
       def admin?
-        role&.admin? || false
+        role&.admin?
       end
 
       def executive?
-        role&.executive? || false
+        role&.executive?
       end
 
       def administrator?
@@ -19,7 +19,7 @@ module Users
       end
 
       def user?
-        role&.user? || false
+        role&.user?
       end
 
     end

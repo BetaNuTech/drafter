@@ -14,7 +14,10 @@
 #  index_roles_on_slug  (slug) UNIQUE
 #
 class Role < ApplicationRecord
-  HIERARCHY = [:admin, :executive, :user]
+  ADMIN_ROLE = :admin
+  EXECUTIVE_ROLE = :executive
+  USER_ROLE = :user
+  HIERARCHY = [ ADMIN_ROLE, EXECUTIVE_ROLE, USER_ROLE].freeze
 
   include Comparable
   include Seeds::Seedable
@@ -42,15 +45,15 @@ class Role < ApplicationRecord
   end
 
   def admin?
-    slug == 'admin'
+    slug == ADMIN_ROLE.to_s
   end
 
   def executive?
-    slug == 'executive'
+    slug == EXECUTIVE_ROLE.to_s
   end
 
   def user?
-    slug == 'user'
+    slug == USER_ROLE.to_s
   end
 
   

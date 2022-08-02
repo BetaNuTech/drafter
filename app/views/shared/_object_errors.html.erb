@@ -3,7 +3,7 @@
     <div id="<%= object.id %>-errors" class="col alert bg-warning" >
       <div class="row">
         <div class="col-1">
-          <%= image_tag "icons/exclamation-triangle-fill.svg", class: 'svgicon' %>
+          <%= image_tag alert_image, class: 'svgicon' %>
         </div>
         <div class="col">
           <%= pluralize(object.errors.count, "error") %> prohibited this <%= object_name%> from being saved:

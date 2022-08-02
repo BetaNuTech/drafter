@@ -63,6 +63,17 @@ module Draws
         aasm.states(permitted: true).map(&:name)
       end
 
+      def state_css_class
+        {
+          'pending' => 'secondary',
+          'in_progress' => 'warning',
+          'submitted' => 'danger',
+          'internally_approved' => 'info',
+          'externally_approved' => 'primary',
+          'funded' => 'success'
+        }.fetch(state, 'light')
+      end
+
     end
   end
 end

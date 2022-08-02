@@ -2,14 +2,20 @@
 <div class="card project-card">
   <div class="card-body">
     <h5 class="card-title">
-      <%= link_to(draw.name, '#') %>
+      <%= link_to(draw.name,
+                  project_draw_path(project_id: draw.project_id, id: draw.id),
+                  data: {'turbo_frame': '_top'}) %>
+      &nbsp;
+      <small>
+        <%= draw_state_badge(draw) %>
+      </small>
     </h5>
     <div class="card-action-buttons">
-      <%= link_to(image_tag('icons/pencil-square.svg'),
+      <%= link_to(image_tag(edit_image),
                   edit_project_draw_path(project_id: draw.project_id, id: draw.id),
                   class: 'action-link',
                   data: { 'turbo_frame': draw }) if policy(draw).edit? %>
-      <%= link_to(image_tag('icons/trash.svg', style: ''), project_draw_path(project_id: draw.project.id, id: draw.id),
+      <%= link_to(image_tag(destroy_image), project_draw_path(project_id: draw.project.id, id: draw.id),
                   class: 'action-link',
                   data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }) if policy(draw).destroy? %>
     </div>
@@ -23,6 +29,9 @@
           <p>
             <%= draw.notes %>
           </p>
+          <%= link_to('Costs',
+                      project_draw_costs_path(project_id: draw.project_id),
+                      data: { 'turbo_frame': '_top'}) %>
         </div>
       </div>
       <div class="col col-md-4">

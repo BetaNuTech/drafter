@@ -18,9 +18,12 @@
 #
 class DrawCost < ApplicationRecord
   include DrawCosts::StateMachine
+
+  ALLOWED_PARAMS = [:id, :approval_lead_time, :cost_type, :name, :total]
   
   ### Associations
   belongs_to :draw
+  has_one :project, through: :draw
 
   ### Validations
   validates :approval_lead_time, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }

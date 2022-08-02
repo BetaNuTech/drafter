@@ -28,8 +28,8 @@ module Projects
       @draw = Draw.new(sanitize_params(params))
       @draw.project = @project
       if @draw.save
-        add_draw_costs(@draw)
         SystemEvent.log(description: "Created new Draw '#{@draw.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+        add_draw_costs(@draw)
         return @draw
       else
         record_errors
@@ -73,6 +73,8 @@ module Projects
         )
       end
 
+      SystemEvent.log(description: "Added initial costs for '#{draw.name}'", event_source: @project, incidental: draw, severity: :info)
+
       @draw.reload
       @draw.draw_costs
     end
@@ -80,6 +82,16 @@ module Projects
     private
 
     def add_draw_costs(draw)
+      DrawCostSample.standard.order(cost_type: :asc, name: :asc).each do |sample|
+        draw.draw_costs.create(
+          cost_type: sample.cost_type,
+          name: sample.name,
+          approval_lead_time: sample.approval_lead_time,
+          total: 0.0,
+          state: 'pending'
+        )
+      end
+      @project.draw_costs.reload
     end
 
     def record_errors

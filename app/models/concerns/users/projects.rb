@@ -7,22 +7,22 @@ module Users
       has_many :projects, through: :project_users
 
       def project_role(project)
-        project_role = user_projects.where(project: project)
-        return nil unless project_role.any?
+        projectroles = user_projects.where(project: project)
+        return nil unless projectroles.any?
 
-        project_role.limit(1).first.project_role
+        projectroles.limit(1).first.project_role
       end
 
       def member?(project)
-        project_role.present?
+        project_role(project).present?
       end
 
       def project_owner?(project)
-        project_role.owner?
+        project_role(project).owner?
       end
 
       def project_management?(project)
-        project_role.management?
+        project_role(project).management?
       end
 
       def project_internal?(project)
