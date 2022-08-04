@@ -3,12 +3,12 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="#">Drafter</a>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
         <li class="nav-item">
           <%= link_to(root_path, class: 'nav-link active', aria: {current: 'page'}) do %>
-            <%= image_tag home_image%>
+            <span class="navbar-brand">Drafter</span>
+            <%= image_tag home_image, style: 'margin-top: -10px; width: 20px;'%>
           <% end %>
         </li>
         <% if policy(User).index? %>

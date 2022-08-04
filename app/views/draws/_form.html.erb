@@ -1,45 +1,50 @@
-<%= form_with(model: draw, url: [draw.project, draw], class: 'form-floating') do |form| %>
-  <%= form.hidden_field :index %>
-  <%= turbo_frame_tag dom_id(draw, 'errors') do %>
-    <%= render partial: 'shared/object_errors', locals: { object: draw } %>
-  <% end %>
-  <div class="row">
-    <div class="col">
-      <div class="form-floating mb-3 g-2">
-        <%= form.text_field :name, class: 'form-control form-control-lg', autofocus: true, placeholder: 'Draw Name' %>
-        <%= form.label :name %>
+<div class="row p-2">
+  <div class="col">
+    <%= form_with(model: draw, url: [draw.project, draw], class: 'form-floating') do |form| %>
+      <%= form.hidden_field :index %>
+      <%= turbo_frame_tag dom_id(draw, 'errors') do %>
+        <%= render partial: 'shared/object_errors', locals: { object: draw } %>
+      <% end %>
+      <div class="row">
+        <div class="col">
+          <div class="form-floating mb-3 g-2">
+            <%= form.text_field :name, class: 'form-control form-control-lg', autofocus: true, placeholder: 'Draw Name' %>
+            <%= form.label :name %>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="col-sm-12 col-6">
-      <div class="form-floating mb-3 g-2">
-        <%= form.number_field :total, class: 'form-control form-control', autofocus: true, placeholder: 'Total $', step: 0.01 %>
-        <%= form.label :total, 'Total $' %>
+      <div class="row">
+        <div class="col-sm-12 col-6">
+          <div class="form-floating mb-3 g-2">
+            <%= form.number_field :total, class: 'form-control form-control', autofocus: true, placeholder: 'Total $', step: 0.01 %>
+            <%= form.label :total, 'Total $' %>
+          </div>
+        </div>
+        <div class="col-sm-12 col-6">
+          <div class="form-floating mb-3 g-2">
+            <%= form.text_field :reference, class: 'form-control form-control', autofocus: true, placeholder: 'Reference Number' %>
+            <%= form.label :reference, 'Reference Number' %>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="col-sm-12 col-6">
-      <div class="form-floating mb-3 g-2">
-        <%= form.text_field :reference, class: 'form-control form-control', autofocus: true, placeholder: 'Reference Number' %>
-        <%= form.label :reference, 'Reference Number' %>
-      </div>
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="col-12">
-      <div class="form-floating mb-3 g-2">
-        <%= form.text_area :notes, class: 'form-control form-control', autofocus: true, placeholder: 'Notes' %>
-        <%= form.label :notes %>
+      <div class="row">
+        <div class="col-12">
+          <div class="form-floating mb-3 g-2">
+            <%= form.text_area :notes, class: 'form-control form-control', autofocus: true, placeholder: 'Notes' %>
+            <%= form.label :notes %>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="col-auto me-auto">
-      <button type="submit" class="btn btn-sm btn-success">Save</button>
-      <%= link_to 'Cancel', :back, class: "btn btn-sm btn-light" %>
-    </div>
+      <div class="row pe-2">
+        <div class="col-auto me-auto">
+          <button type="submit" class="btn btn-sm btn-success">Save</button>
+          <%= link_to 'Cancel', :back, class: "btn btn-sm btn-light" %>
+        </div>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>
+

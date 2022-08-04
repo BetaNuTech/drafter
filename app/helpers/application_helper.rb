@@ -28,4 +28,26 @@ module ApplicationHelper
     time&.strftime("%m/%d/%Y at %l:%M %p")
   end
 
+  def breadcrumbs_tag
+    return '' unless defined?(@breadcrumbs)
+
+    content_tag(:nav, 'aria-label': 'breadcrumb', class: 'breadcrumbs', style: '--bs-breadcrumb-divider: \'>\';') do
+      concat(content_tag(:ol, class: 'breadcrumb') do
+        @breadcrumbs.each do |crumb|
+          classes = ['breadcrumb-item']
+          classes << 'active' if crumb.active
+          options = {class: classes.join(' ')}
+          options['aria-current'] = 'page' if crumb.active
+          concat(content_tag(:li, options) do
+            if crumb.active
+              crumb.label
+            else
+              link_to(crumb.label, crumb.url, {turbo_frame: '_top'})
+            end
+          end)
+        end
+      end)
+    end
+  end
+
 end

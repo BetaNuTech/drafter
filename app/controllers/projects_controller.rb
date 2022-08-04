@@ -6,11 +6,15 @@ class ProjectsController < ApplicationController
   def index
     authorize Project
     @collection = record_scope.order(name: :asc)
+    breadcrumbs.add(label: 'Home', url: '/')
+    breadcrumbs.add(label: 'Projects', url: projects_path, active: true)
   end
 
   def new
     @project = Project.new
     authorize @project
+    breadcrumbs.add(label: 'Home', url: '/')
+    breadcrumbs.add(label: 'New Project', url: new_project_path, active: true)
   end
 
   def create
@@ -29,10 +33,14 @@ class ProjectsController < ApplicationController
   def show
     authorize @project
     @service = Projects::Updater.new(@current_user, @project)
+    breadcrumbs.add(label: 'Home', url: '/')
+    breadcrumbs.add(label: @project.name, url: project_path(@project), active: true)
   end
 
   def edit
     authorize @project
+    breadcrumbs.add(label: 'Home', url: '/')
+    breadcrumbs.add(label: 'Edit ' + @project.name, url: project_path(@project), active: true)
   end
 
   def update

@@ -19,3 +19,16 @@ a.action-link:hover {
     height: 1em;
   }
 }
+
+nav.breadcrumbs {
+  font-size: 1.2em;
+  padding: 0.25em;
+
+  li.active {
+    font-weight: bold;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}

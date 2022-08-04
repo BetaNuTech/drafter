@@ -18,6 +18,9 @@
         <%= turbo_frame_tag 'system_notifications' do %>
           <%= render partial: 'shared/notifications' %>
         <% end %>
+
+        <%= breadcrumbs_tag %>
+
         <%= yield %>
       </div>
     </main>

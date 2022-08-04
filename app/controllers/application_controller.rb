@@ -7,6 +7,10 @@ class ApplicationController < ActionController::Base
 
   around_action :user_timezone, if: :current_user
 
+  def breadcrumbs
+    @breadcrumbs ||= Breadcrumbs.new
+  end
+
   private
 
   def user_timezone(&block)

@@ -2,7 +2,7 @@
 
 ### Drafter (c)2022 Bluestone Properties
 
-Draw Requests for constructed multi-family properties, working along side Asana for reviews
+Draw Requests for constructed multi-family properties, working along side ClickUp for reviews
 
 # Development 
 

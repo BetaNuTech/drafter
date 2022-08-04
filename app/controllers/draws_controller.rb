@@ -12,16 +12,25 @@ class DrawsController < ApplicationController
 
   def show
     authorize @draw
+    breadcrumbs.add(label: 'Home', url: '/')
+    breadcrumbs.add(label: @project.name, url: project_path(@project))
+    breadcrumbs.add(label: @draw.name, url: project_draw_path(project_id: @project.id), active: true)
   end
 
   def new
     @service = Projects::DrawService.new(current_user: @current_user, project: @project)
     authorize @service.draw
+    breadcrumbs.add(label: 'Home', url: '/')
+    breadcrumbs.add(label: @project.name, url: project_path(@project))
+    breadcrumbs.add(label: 'New Draw', url: new_project_draw_path(project_id: @project.id), active: true)
   end
 
   def edit
     @service = Projects::DrawService.new(current_user: @current_user, project: @project, draw: @draw)
     authorize @service.draw
+    breadcrumbs.add(label: 'Home', url: '/')
+    breadcrumbs.add(label: @project.name, url: project_path(@project))
+    breadcrumbs.add(label: 'Edit Draw', url: edit_project_draw_path(project_id: @project.id), active: true)
   end
 
   def create

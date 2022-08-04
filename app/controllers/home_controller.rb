@@ -7,5 +7,6 @@ class HomeController < ApplicationController
     @projects = policy_scope(Project).order(name: :asc)
     @notifications = []  # TODO
     @events = SystemEvent.where("1=0") # TODO
+    breadcrumbs.add(label: 'Home', url: '/', active: true)
   end
 end
