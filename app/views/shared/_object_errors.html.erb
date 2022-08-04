@@ -1,12 +1,13 @@
 <% if object&.errors.any? %>
+  <% object_name = object.class.name unless defined?(object_name) %>
   <div class="row">
     <div id="<%= object.id %>-errors" class="col alert bg-warning" >
       <div class="row">
         <div class="col-1">
-          <%= image_tag alert_image, class: 'svgicon' %>
+          <%= image_tag alert_image, style: 'width: 50px;' %>
         </div>
         <div class="col">
-          <%= pluralize(object.errors.count, "error") %> prohibited this <%= object_name%> from being saved:
+          <%= pluralize(object.errors.count, "error") %> prohibited this <%= object_name %> from being saved:
           <ul>
             <% object.errors.full_messages.each do |message| %>
               <li><%= message %></li>

@@ -1,31 +1,38 @@
-<section>
-  <%= turbo_frame_tag @project do %>
-    <%= render @project %>
-  <% end %>
-</section>
+<div class="row">
+  <div class="col">
+    <%= turbo_frame_tag @project do %>
+      <%= render @project %>
+    <% end %>
+  </div>
+</div>
 
-<hr class="my-4">
+<div class="row">
+  <div class="col">
+      <%= link_to('Add Draw', new_project_draw_path(project_id: @project.id), class: 'btn btn-primary', data: {turbo_frame: dom_id(Draw.new)}) if policy(Draw).new? %>
+    <%= turbo_frame_tag dom_id(Draw.new) %>
+  </div>
+</div>
 
-<section>
-  <div class="row row-cols-1 row-cols-md-2 g-4">
-    <div class="col">
-      <%= render partial: 'draws', locals: { project: @project } %>
-    </div>
+<div class="row row-cols-1 row-cols-md-2 g-4">
+  <div class="col">
+    <%= turbo_frame_tag dom_id(@project, 'draws') do %>
+      <%= render @project.draws %>
+    <% end %>
+  </div>
 
-    <div class="col">
-      <div class="row row-cols-1 g-2">
-        <div class="col">
-          <%= render partial: 'shared/user_notifications', locals: { notifications: @notifications} %>
-        </div>
-        <div class="col">
-          <%= render partial: 'system_events', locals: {project: @project, system_events: @project.system_events} %> 
-        </div>
-        <div class="col">
-          <%= render partial: 'members', locals: {project: @project, service: @service} %> 
-        </div>
+  <div class="col">
+    <div class="row row-cols-1 g-2">
+      <div class="col">
+        <%= render partial: 'shared/user_notifications', locals: { notifications: @notifications} %>
+      </div>
+      <div class="col">
+        <%= render partial: 'system_events', locals: {project: @project, system_events: @project.system_events} %> 
+      </div>
+      <div class="col">
+        <%= render partial: 'members', locals: {project: @project, service: @service} %> 
       </div>
     </div>
-
   </div>
-</section>
+
+</div>
 

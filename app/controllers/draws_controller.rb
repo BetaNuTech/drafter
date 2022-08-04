@@ -29,11 +29,11 @@ class DrawsController < ApplicationController
     authorize @service.draw
     if @service.create(params)
       respond_to do |format|
-        format.html { redirect_to project_draws_path(project_id: @service.project.id), notice: 'Drawed new draw'}
+        format.html { redirect_to project_draw_path(project_id: @service.project, id: @service.draw.id), notice: 'Created new draw'}
         format.turbo_stream
       end
     else
-      render :new, :unprocessable_entity
+      render :new, status: :unprocessable_entity
     end
     
   end
@@ -45,7 +45,7 @@ class DrawsController < ApplicationController
       if @service.update(params)
         format.html { redirect_to project_draws_path(project_id: @service.project.id, id: @service.draw.id), notice: "Draw was successfully updated." }
       else
-        render :edit, :unprocessable_entity
+        render :edit, status: :unprocessable_entity
       end
     end
   end
@@ -60,7 +60,7 @@ class DrawsController < ApplicationController
         format.turbo_stream
       end
     else
-      render :edit, :unprocessable_entity
+      render :edit, status: :unprocessable_entity
     end
   end
 

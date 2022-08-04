@@ -21,6 +21,7 @@ class ProjectsController < ApplicationController
       @project = @service.project
       redirect_to project_path(@project), notice: 'Created new project'
     else
+      @project = @service.project
       render :new, status: :unprocessable_entity
     end
   end

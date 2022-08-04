@@ -18,14 +18,49 @@ class DrawCostsController < ApplicationController
     @draw_cost = @draw.draw_costs.new(draw_cost_params)
     authorize @draw_cost
     if @draw_cost.save
-      format.html { redirect_to draw_cost_cost_path(draw_id: @draw.id, id: @draw_cost.id), notice: 'Added a new Draw Cost' }
+        SystemEvent.log(description: "Added draw cost '#{@draw_cost.name}' for Draw '#{@draw.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      respond_to do |format|
+        format.html { redirect_to draw_draw_cost_path(draw_id: @draw_cost.draw_id, id: @draw_cost.id), notice: 'Added a new Draw Cost' }
+        format.turbo_stream
+      end
     else
-      render :new, :unprocessable_entity
+      render :new, status: :unprocessable_entity
     end
   end
 
   def show
     authorize @draw_cost
+  end
+
+  def edit
+    authorize @draw_cost
+  end
+
+  def update
+    authorize @draw_cost
+    if @draw_cost.update(draw_cost_params)
+      respond_to do |format|
+        SystemEvent.log(description: "Updated draw cost '#{@draw_cost.name}' for Draw '#{@draw.name}'", event_source: @draw.project, incidental: @current_user, severity: :warn)
+        format.html { redirect_to draw_draw_cost_path(draw_id: @draw_cost.draw_id, id: @draw_cost.id), notice: 'Updated Draw Cost' }
+        format.turbo_stream
+      end
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    authorize @draw_cost
+    if @draw_cost.destroy
+      respond_to do |format|
+        SystemEvent.log(description: "Deleted draw cost '#{@draw_cost.name}' for Draw '#{@draw.name}'", event_source: @draw.project, incidental: @current_user, severity: :warn)
+        format.html { redirect_to draw_path(@draw_cost.draw), notice: 'Draw cost deleted'}
+        format.turbo_stream
+      end
+    else
+      render :edit, status: :unprocessable_entity
+    end
+
   end
 
   private

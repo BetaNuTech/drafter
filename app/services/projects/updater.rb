@@ -58,7 +58,7 @@ module Projects
 
     def record_errors
       @errors = []
-      @project.full_messages.each do |error|
+      @project.errors.full_messages.each do |error|
         @errors << error
       end
       @errors

@@ -1,12 +1,12 @@
-<%= turbo_frame_tag @project do %>
-  <div class="row">
-    <div class="col">
-      <h1>Edit Project</h1>
-    </div>
+<div class="row">
+  <div class="col">
+    <h1>Edit Project</h1>
   </div>
-  <div class="row">
-    <div class="col">
+</div>
+<div class="row">
+  <div class="col">
+    <%= turbo_frame_tag @project do %>
       <%= render 'form', project: @project %>
-    </div>
+    <% end %>
   </div>
-<% end %>
+</div>

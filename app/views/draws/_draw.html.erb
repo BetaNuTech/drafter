@@ -1,7 +1,7 @@
 <%= turbo_frame_tag draw do %>
 <div class="card project-card">
   <div class="card-body">
-    <h5 class="card-title">
+    <h3 class="card-title">
       <%= link_to(draw.name,
                   project_draw_path(project_id: draw.project_id, id: draw.id),
                   data: {'turbo_frame': '_top'}) %>
@@ -9,7 +9,7 @@
       <small>
         <%= draw_state_badge(draw) %>
       </small>
-    </h5>
+    </h3>
     <div class="card-action-buttons">
       <%= link_to(image_tag(edit_image),
                   edit_project_draw_path(project_id: draw.project_id, id: draw.id),
@@ -29,16 +29,11 @@
           <p>
             <%= draw.notes %>
           </p>
-          <%= link_to('Costs',
-                      draw_draw_costs_path(draw_id: draw.id),
-                      data: { 'turbo_frame': '_top'}) %>
         </div>
       </div>
       <div class="col col-md-4">
         <b><%= number_to_currency(draw.total) %></b><br/>
-        <small>
-          <span class="badge round-pill bg-<%= draw.over_budget? ? 'danger' : 'success' %> "><%= number_to_currency(draw.budget_variance) %></span>
-        </small>
+        <span class="badge round-pill bg-<%= draw.over_budget? ? 'danger' : 'success' %> "><%= number_to_currency(draw.budget_variance) %></span>
       </div>
     </div>
   </div>

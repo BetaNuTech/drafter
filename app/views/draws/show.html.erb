@@ -1,5 +1,20 @@
-<p style="color: green"><%= notice %></p>
+<div class="row">
+  <div class="col">
+    <%= render @draw %>
+  </div>
+</div>
 
-<h1>WIP</h1>
-<%= render @draw %>
+<div class="row">
+  <div class="col">
+      <%= link_to('Add Draw Cost', new_draw_draw_cost_path(draw_id: @draw.id), class: 'btn btn-primary', data: {'turbo_frame': dom_id(DrawCost.new)}) %>
+    <%= turbo_frame_tag dom_id(DrawCost.new) %>
+  </div>
+</div>
 
+<div class="row">
+  <div class="col">
+    <%= turbo_frame_tag 'draw_costs' do %>
+      <%= render @draw.draw_costs %>
+    <% end %>
+  </div>
+</div>

@@ -1,8 +1,8 @@
 <div class="card project-card">
   <div class="card-body">
-    <h5 class="card-title">
+    <h3 class="card-title">
       <%= link_to(project.name, project_path(project)) %>
-    </h5>
+    </h3>
     <div class="card-action-buttons">
       <%= link_to(image_tag(destroy_image), project_path(project),
                   data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },

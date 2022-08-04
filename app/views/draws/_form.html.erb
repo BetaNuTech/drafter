@@ -1,6 +1,8 @@
 <%= form_with(model: draw, url: [draw.project, draw], class: 'form-floating') do |form| %>
   <%= form.hidden_field :index %>
-
+  <%= turbo_frame_tag dom_id(draw, 'errors') do %>
+    <%= render partial: 'shared/object_errors', locals: { object: draw } %>
+  <% end %>
   <div class="row">
     <div class="col">
       <div class="form-floating mb-3 g-2">

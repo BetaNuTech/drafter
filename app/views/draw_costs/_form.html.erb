@@ -1,4 +1,7 @@
 <%= form_with(model: draw_cost, url: [draw_cost.draw, draw_cost], class: 'form-floating') do |form| %>
+  <%= turbo_frame_tag dom_id(draw_cost, 'errors') do %>
+    <%= render partial: 'shared/object_errors', locals: { object: draw_cost } %>
+  <% end %>
   <div class="row row-cols-1">
     <div class="col">
       <div class="form-floating mb-3 g-2">
