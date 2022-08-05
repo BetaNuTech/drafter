@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   end
   root to: redirect('/users/sign_in')
 
+  get '/about', to: 'home#about', as: :about
+
   resources :organizations
   resources :users
   resources :draws do

@@ -1,4 +1,10 @@
 module ApplicationHelper
+  INITIAL_COPYRIGHT_DATE=2022
+
+  def copyright_years
+    years = (INITIAL_COPYRIGHT_DATE..Date.today.year).to_a
+    [years[0], years[-1]].uniq.map(&:to_s).join('-')
+  end
 
   def role_badge_color_class(role)
     case role.slug

@@ -1,46 +1,48 @@
-<%= form_with(model: project, data: {'turbo_frame': '_top'}) do |form| %>
-  <%= turbo_frame_tag dom_id(project, 'errors') do %>
-    <%= render partial: 'shared/object_errors', locals: { object: project } %>
-  <% end %>
+<div class="row p-2">
+  <div class="col">
+    <%= form_with(model: project, data: {'turbo_frame': '_top'}) do |form| %>
+      <%= turbo_frame_tag dom_id(project, 'errors') do %>
+        <%= render partial: 'shared/object_errors', locals: { object: project } %>
+      <% end %>
 
-  <div class="row">
-    <div class="col">
-      <fieldset>
-        <legend>General Info</legend>
+      <div class="row">
+        <div class="col">
 
-        <div class="row g-2 mb-3">
-          <div class="col-sm-12 col-md-8">
-            <div class="form-floating">
-              <%= form.text_field :name, class: 'form-control form-control-lg', autofocus: true, placeholder: 'Name' %>
-              <%= form.label :name %>
+          <div class="row">
+            <div class="col-sm-12 col-md-8">
+              <div class="form-floating mb-3 g-2">
+                <%= form.text_field :name, class: 'form-control form-control-lg', autofocus: true, placeholder: 'Name' %>
+                <%= form.label :name %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12 col-md-8">
+              <div class="form-floating mb-3 g-2">
+                <%= form.text_area :description, class: 'form-control' %>
+                <%= form.label :description %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12 col-md-8">
+              <div class="form-floating mb-3 g-2">
+                <%= form.text_field :budget, class: 'form-control' %>
+                <%= form.label :budget, 'Budget $' %>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="row g-2 mb-3">
-          <div class="col-sm-12 col-md-8">
-            <div class="form-floating">
-              <%= form.text_area :description, class: 'form-control' %>
-              <%= form.label :description %>
-            </div>
-          </div>
+      <div class="row pe-2">
+        <div class="col-auto me-auto">
+          <button type="submit" class="btn btn-success">Save</button>
+          <%= link_to 'Cancel', :back, class: "btn btn-sm btn-light", data: { 'turbo_frame': '_top'} %>
         </div>
-
-        <div class="row g-2 mb-3">
-          <div class="col-sm-12 col-md-8">
-            <div class="form-floating">
-              <%= form.text_field :budget, class: 'form-control' %>
-              <%= form.label :budget, 'Budget $' %>
-            </div>
-          </div>
-        </div>
-      </fieldset>
-    </div>
+      </div>
+    <% end %>
   </div>
-  <div class="row">
-    <div class="col form-group">
-      <button type="submit" class="btn btn-lg btn-success">Save</button>
-      <%= link_to 'Back', :back, class: "btn btn-sm btn-light", data: { 'turbo_frame': '_top'} %>
-    </div>
-  </div>
-<% end %>
+</div>

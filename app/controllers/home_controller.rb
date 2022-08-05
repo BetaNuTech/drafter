@@ -9,4 +9,8 @@ class HomeController < ApplicationController
     @events = SystemEvent.where("1=0") # TODO
     #breadcrumbs.add(label: 'Home', url: '/', active: true)
   end
+
+  def about
+    authorize :home, :about?
+  end
 end

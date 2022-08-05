@@ -1,8 +1,8 @@
 <div class="row pt-2">
-  <div class="col-6" style="font-size: 1.2em;">
+  <div class="col-sm-12 col-md-6" style="font-size: 1.2em;">
     <%= render partial: 'projects', locals: { projects: @projects} %>
   </div>
-  <div class="col-6">
+  <div class="col-sm-12 col-md-6">
     <div class="row row-cols-1 g-2">
       <div class="col">
         <%= render partial: 'shared/user_notifications', locals: { notifications: @notifications} %>

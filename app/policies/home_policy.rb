@@ -8,4 +8,8 @@ class HomePolicy
   def index?
     true
   end
+
+  def about?
+    true
+  end
 end

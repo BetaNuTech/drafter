@@ -26,7 +26,7 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Account
             </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <ul class="dropdown-menu p-2" aria-labelledby="navbarDropdownMenuLink">
               <% if policy(@current_user).edit? %>
                 <li class="nav-item">
                   <%= link_to('Profile', edit_user_path(@current_user), class: 'nav-link') %>
