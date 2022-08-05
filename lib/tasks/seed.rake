@@ -39,8 +39,9 @@ namespace :db do
         end
         #### Admin Account
 
-    rescue
+    rescue => e
       puts "\n!!! There were errors creating seed users"
+      puts e.to_s
       next
     end # task :users
 
