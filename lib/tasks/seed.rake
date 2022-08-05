@@ -14,12 +14,12 @@ namespace :db do
       end
 
         #### Admin Account
-        email =  'admin@example.com'
+        email =  ENV.fetch('ADMIN_EMAIL', 'admin@example.com')
         password = 'Password1.'
         print " - Create Admin account..."
         user = User.new(
           active: true,
-          email: 'admin@example.com',
+          email: email,
           role: Role.admin,
           password: password,
           password_confirmation: password,
