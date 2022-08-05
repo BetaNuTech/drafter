@@ -150,7 +150,7 @@ On your development/deployment machine:
 
 * Add a 'heroku-staging' git remote: `git remote add heroku-staging https://git.heroku.com/drafter-staging.git`
 * Update `bin/deploy_heroku` variables for staging/production application names if needed (and commit changes)
-* Update `staging` branch. `git checkout staging && git reset --hard master && git push`
+* Update `staging` branch. `git checkout staging && git reset --hard main && git push`
 
 ### 4. Deploy
 
