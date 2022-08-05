@@ -152,6 +152,10 @@ On your development/deployment machine:
 * Update `bin/deploy_heroku` variables for staging/production application names if needed (and commit changes)
 * Update `staging` branch. `git checkout staging && git reset --hard main && git push`
 
+### 4. Add Heroku Ruby Buildpack
+
+Go to the Settings tab in the applicaiton control panel, and add the `heroku/ruby` buildpack.
+
 ### 4. Deploy
 
 `bin/deploy_heroku staging`
