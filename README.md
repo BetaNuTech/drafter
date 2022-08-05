@@ -79,3 +79,93 @@ In development, there is a dedicated worker service/container which runs `bin/de
 
 For more information, see: `https://github.com/collectiveidea/delayed_job`
 
+# Staging
+
+Drafter Staging is hosted on Heroku.
+
+URL: `https://drafter-staging.heroku.com`
+Control Panel: `https://dashboard.heroku.com/apps/drafter-staging`
+
+## Heroku Config
+
+* Region: United States
+* Stack: heroku-22
+* Frameworks: NONE
+* Git URL: `https://git.heroku.com/drafter-staging.git`
+
+## Services/Resources
+
+### Database 
+
+* Service: Heroku Postgres:
+* Plan: Hobby Dev
+* Resource Name: `postgresql-angular-94031`
+* Quota: 10,000 rows
+
+### Email
+
+Twilio Sendgrid
+
+## Initial Staging Setup
+
+### 1. Setup Twilio
+
+* Go to the Twilio control panel from the drafter-staging Resources page
+* Create a 'Single Sender'
+* Create a Restricted API key with just the 'Mail Send' permission
+* Update the smtp_password in the staging credentials using the API key. Get production master key from lead developer.
+  * `RAILS_MASTER_KEY=XXX rails credentials:edit --environment production`
+
+### 2. Set Host Environment Variables
+
+```
+RAILS_MASTER_KEY=XXX # get from lead developer
+APPLICATION_HOST=drafter-staging.herokuapp.com
+APPLICATION_PROTOCOL="https"
+APPLICATION_DOMAIN=drafter-staging.herokuapp.com
+APPLICATION_ENV=staging
+LANG=en_US.UTF-8
+PORT=80
+RACK_ENV=production
+RAILS_ENV=production
+RAILS_MAX_THREADS=5
+RAILS_SERVE_STATIC_FILES=enabled
+WEB_CONCURRENCY=2
+```
+
+Run to set Heroku environment variables:
+```
+heroku config:set \
+  RAILS_MASTER_KEY=XXX \
+  APPLICATION_HOST=drafter-staging.herokuapp.com APPLICATION_PROTOCOL=http PORT=80 \
+  APPLICATION_DOMAIN=drafter-staging.herokuapp.com APPLICATION_ENV=staging \
+  LANG=en_US.UTF-8 RACK_ENV=production RAILS_ENV=production RAILS_MAX_THREADS=5 \
+  RAILS_SERVE_STATIC_FILES=enabled WEB_CONCURRENCY=2 \
+  --app drafter-staging
+```
+
+### 3. Setup Deployment Configuration
+
+On your development/deployment machine:
+
+* Add a 'heroku-staging' git remote: `git remote add heroku-staging https://git.heroku.com/drafter-staging.git`
+* Update `bin/deploy_heroku` variables for staging/production application names if needed (and commit changes)
+* Update `staging` branch. `git checkout staging && git reset --hard master && git push`
+
+### 4. Deploy
+
+`bin/deploy_heroku staging`
+
+### 5. Setup SSL
+
+* Setup SSL in Settings tab of control panel
+* Update Environment Variables
+
+```
+APPLICATION_PROTOCOL=https
+PORT=443
+```
+
+```
+heroku config:set APPLICATION_PROTOCOL=https PORT=443 --app drafter-staging
+```

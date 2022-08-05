@@ -13,7 +13,6 @@ end
 
 # Misc Constants
 HOSTNAME = ENV['HOSTNAME']
-MAILER_FROM='drafter@bluestone-prop.com'
 
 module Drafter
   class Application < Rails::Application
