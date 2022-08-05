@@ -19,7 +19,7 @@ if Rails.env.production?
       :password       => Rails.application.credentials.staging_sendgrid.smtp_password,
       :domain         => Rails.application.credentials.staging_sendgrid.smtp_domain,
       :authentication => Rails.application.credentials.staging_sendgrid.smtp_authentication,
-      :enable_starttls_auto => Rails.application.credentials.staging.sendgrid.smtp_enable_starttls_auto
+      :enable_starttls_auto => Rails.application.credentials.staging_sendgrid.smtp_enable_starttls_auto
     }
     MAILER_FROM = Rails.application.credentials.staging_from_address.freeze
   end
