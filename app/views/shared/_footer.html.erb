@@ -3,9 +3,11 @@
     <li class="nav-item">
       <%= link_to('Home', '/', class: 'nav-link text-muted', data: { turbo_frame: '_top' }) %>
     </li>
-    <li class="nav-item">
-      <%= link_to('My Account', edit_user_path(@current_user), class: 'nav-link text-muted', data: { turbo_frame: '_top' }) %>
-    </li>
+    <% if user_signed_in? %>
+      <li class="nav-item">
+        <%= link_to('My Account', edit_user_path(@current_user), class: 'nav-link text-muted', data: { turbo_frame: '_top' }) %>
+      </li>
+    <% end %>
     <li class="nav-item">
       <%= link_to('About', about_path, class: 'nav-link text-muted', data: { turbo_frame: '_top' }) %>
     </li>
