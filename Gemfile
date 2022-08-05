@@ -38,6 +38,7 @@ gem 'awesome_print'
 gem 'delayed_job_active_record'
 gem 'delayed_job_web'
 gem 'daemons'
+gem 'factory_bot_rails'
 
 group :development do
   gem 'web-console'
@@ -60,7 +61,6 @@ group :development, :test do
   gem 'byebug'
   gem 'bundler-audit'
   gem 'faker'
-  gem 'factory_bot_rails'
 end
 
 group :test do
