@@ -95,6 +95,14 @@ Control Panel: `https://dashboard.heroku.com/apps/drafter-staging`
 
 ## Services/Resources
 
+* Web Dyno x1 -- Hobby
+* Worker Dyno x1 -- Hobby
+
+### Addons
+
+* Heroku Postgres -- Hobby
+* Twilio Sendgrid -- Free
+
 ### Database 
 
 * Service: Heroku Postgres:
