@@ -19,7 +19,7 @@
       <tbody>
         <% @collection.each do |organization| %>
           <tr>
-            <td><%= organization.name %></td>
+          <td><%= link_to(organization.name, organization_path(organization)) %></td>
             <td><%= organization.description %></td>
             <td>
               <%= link_to('Edit', edit_organization_path(organization), class: 'btn btn-primary btn-sm') if policy(organization).edit? %>

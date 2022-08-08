@@ -43,12 +43,15 @@
                 </small>
               </p>
           </td>
-          <td class="nowrap">
+          <td class="text-nowrap">
             <span><%= user.full_name %></span>
           </td>
-          <td class="nowrap">
-            <span><%= user.title %></span> 
-            <span><%= user.company %></span>
+          <td>
+            <span class="text-nowrap"><em><%= user.title %></em></span> 
+            <% if user.company.present? %>
+              <br/>
+              <span><%= user.company %></span>
+            <% end %>
           </td>
           <td class="nowrap">
             <% if user.organization.present? %>
