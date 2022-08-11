@@ -41,6 +41,8 @@ RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get -yq dist-upgrad
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && truncate -s 0 /var/log/*log
 
+RUN npm install --location=global npm@latest
+
 ARG YARN_VERSION
 RUN npm install -g yarn@$YARN_VERSION
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_27_000423) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_11_193942) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -28,6 +28,30 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_27_000423) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "draw_cost_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "draw_id", null: false
+    t.uuid "draw_cost_id", null: false
+    t.uuid "user_id", null: false
+    t.uuid "organization_id", null: false
+    t.string "state", default: "pending", null: false
+    t.decimal "amount", default: "0.0", null: false
+    t.decimal "total", default: "0.0", null: false
+    t.text "description"
+    t.boolean "plan_change", default: false, null: false
+    t.text "plan_change_reason"
+    t.integer "alert", default: 0, null: false
+    t.boolean "audit", default: false, null: false
+    t.date "approval_due_date"
+    t.uuid "approver_id"
+    t.datetime "approved_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["draw_cost_id"], name: "index_draw_cost_requests_on_draw_cost_id"
+    t.index ["draw_id"], name: "index_draw_cost_requests_on_draw_id"
+    t.index ["organization_id"], name: "index_draw_cost_requests_on_organization_id"
+    t.index ["user_id"], name: "index_draw_cost_requests_on_user_id"
   end
 
   create_table "draw_cost_samples", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -169,4 +193,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_27_000423) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  add_foreign_key "draw_cost_requests", "draw_costs"
+  add_foreign_key "draw_cost_requests", "draws"
+  add_foreign_key "draw_cost_requests", "organizations"
+  add_foreign_key "draw_cost_requests", "users"
 end
