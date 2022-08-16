@@ -62,6 +62,10 @@ class ProjectRole < ApplicationRecord
     slug == MANAGER_ROLE.to_s
   end
 
+  def developer?
+    slug == DEVELOPER_ROLE.to_s
+  end
+
   def management?
     MANAGER_ROLES.include?(slug.to_sym)
   end

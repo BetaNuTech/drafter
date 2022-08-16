@@ -29,3 +29,7 @@ if Rails.env.development?
   ActionMailer::Base.delivery_method = :letter_opener_web
   MAILER_FROM = 'developer@localhost'.freeze
 end
+
+if Rails.env.test?
+  MAILER_FROM = 'developer@localhost'.freeze
+end

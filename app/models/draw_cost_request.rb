@@ -34,16 +34,21 @@
 #  fk_rails_...  (draw_id => draws.id)
 #  fk_rails_...  (organization_id => organizations.id)
 #  fk_rails_...  (user_id => users.id)
-#
+
 class DrawCostRequest < ApplicationRecord
+  include DrawCostRequests::StateMachine
+
+  ALLOWED_PARAMS = [:amount, :description, :plan_change, :plan_change_reason, :draw_cost_id, :draw_id]
+
   ### Associations
   belongs_to :draw
   belongs_to :draw_cost
   belongs_to :user
   belongs_to :organization
   belongs_to :approver, class_name: 'User'
+  has_one :project, through: :draw
 
   ### Enums
-  enum :alert, [:none, :auditfail, :unclean]
+  enum :alert, [:ok, :auditfail, :unclean]
 
 end
