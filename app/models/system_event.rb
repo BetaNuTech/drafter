@@ -21,7 +21,7 @@
 #
 class SystemEvent < ApplicationRecord
   ### Constants
-  SEVERITIES = %i[debug info warn error fatal unknown].freeze
+  SEVERITIES = %i[debug info warn error fatal unknown notification].freeze
 
   enum severity: SEVERITIES
 
