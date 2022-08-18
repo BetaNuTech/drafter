@@ -7,7 +7,7 @@ class CreateSystemEvents < ActiveRecord::Migration[7.0]
       t.uuid :incidental_id
       t.string :description
       t.text :debug
-      t.integer :severity, default: 'info'
+      t.integer :severity, default: 0
 
       t.timestamps
     end

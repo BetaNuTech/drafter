@@ -9,7 +9,7 @@
 #  description       :string
 #  event_source_type :string           not null
 #  incidental_type   :string
-#  severity          :integer
+#  severity          :integer          default("unknown")
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  event_source_id   :uuid             not null
@@ -21,15 +21,14 @@
 #
 class SystemEvent < ApplicationRecord
   ### Constants
-  SEVERITIES = %i[debug info warn error fatal unknown notification].freeze
+  SEVERITIES = %i[unknown notification debug info warn error fatal].freeze
 
-  enum severity: SEVERITIES
+  enum severity: SEVERITIES, _default: :unknown
 
   ### Associations
   belongs_to :event_source, polymorphic: true
   belongs_to :incidental, polymorphic: true, required: false
   
-  #broadcasts_to -> (system_event) { [system_event.event_source, system_event] }, inserts_by: :prepend
   after_create_commit -> (system_event) {
     target =  "#{system_event.event_source_type}_#{system_event.event_source_id}_system_events"
     broadcast_prepend_to target,
