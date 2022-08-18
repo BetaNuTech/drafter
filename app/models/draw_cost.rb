@@ -14,7 +14,12 @@
 #
 # Indexes
 #
-#  draw_costs_idx  (draw_id,state)
+#  draw_costs_idx               (draw_id,state)
+#  index_draw_costs_on_draw_id  (draw_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (draw_id => draws.id)
 #
 class DrawCost < ApplicationRecord
   include DrawCosts::StateMachine

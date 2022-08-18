@@ -11,7 +11,16 @@
 #
 # Indexes
 #
-#  project_users_idx  (project_id,user_id) UNIQUE
+#  index_project_users_on_project_id       (project_id)
+#  index_project_users_on_project_role_id  (project_role_id)
+#  index_project_users_on_user_id          (user_id)
+#  project_users_idx                       (project_id,user_id) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (project_id => projects.id)
+#  fk_rails_...  (project_role_id => project_roles.id)
+#  fk_rails_...  (user_id => users.id)
 #
 class ProjectUser < ApplicationRecord
   belongs_to :project

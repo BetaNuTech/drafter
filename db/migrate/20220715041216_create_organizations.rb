@@ -7,6 +7,6 @@ class CreateOrganizations < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_column :users, :organization_id, :uuid
+    add_reference :users, :organization, null: true, foreign_key: true, type: :uuid
   end
 end

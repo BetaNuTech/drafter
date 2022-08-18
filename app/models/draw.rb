@@ -16,7 +16,12 @@
 #
 # Indexes
 #
+#  index_draws_on_project_id            (project_id)
 #  index_draws_on_project_id_and_index  (project_id,index) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (project_id => projects.id)
 #
 class Draw < ApplicationRecord
   include Draws::StateMachine

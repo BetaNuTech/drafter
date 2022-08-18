@@ -74,6 +74,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_11_193942) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["draw_id", "state"], name: "draw_costs_idx"
+    t.index ["draw_id"], name: "index_draw_costs_on_draw_id"
   end
 
   create_table "draws", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -88,6 +89,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_11_193942) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id", "index"], name: "index_draws_on_project_id_and_index", unique: true
+    t.index ["project_id"], name: "index_draws_on_project_id"
   end
 
   create_table "organizations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -113,6 +115,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_11_193942) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id", "user_id"], name: "project_users_idx", unique: true
+    t.index ["project_id"], name: "index_project_users_on_project_id"
+    t.index ["project_role_id"], name: "index_project_users_on_project_role_id"
+    t.index ["user_id"], name: "index_project_users_on_user_id"
   end
 
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -180,14 +185,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_11_193942) do
     t.integer "failed_attempts", default: 0, null: false
     t.string "unlock_token"
     t.datetime "locked_at"
-    t.uuid "role_id"
-    t.string "timezone", default: "Central Time (US & Canada)", null: false
+    t.string "timezone", default: "Pacific Time (US & Canada)", null: false
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "role_id", null: false
     t.uuid "organization_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["role_id"], name: "index_users_on_role_id"
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
@@ -197,4 +203,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_11_193942) do
   add_foreign_key "draw_cost_requests", "draws"
   add_foreign_key "draw_cost_requests", "organizations"
   add_foreign_key "draw_cost_requests", "users"
+  add_foreign_key "draw_costs", "draws"
+  add_foreign_key "draws", "projects"
+  add_foreign_key "project_users", "project_roles"
+  add_foreign_key "project_users", "projects"
+  add_foreign_key "project_users", "users"
+  add_foreign_key "users", "organizations"
+  add_foreign_key "users", "roles"
 end

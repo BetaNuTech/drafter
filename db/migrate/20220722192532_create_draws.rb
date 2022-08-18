@@ -1,7 +1,7 @@
 class CreateDraws < ActiveRecord::Migration[7.0]
   def change
     create_table :draws, id: :uuid do |t|
-      t.uuid :project_id, null: false
+      t.references :project, null: false, foreign_key: true, type: :uuid
       t.integer :index, null: false, default: 1
       t.string :name, null: false
       t.string :state, null: false, default: 'pending'

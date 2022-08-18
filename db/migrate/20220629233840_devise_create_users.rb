@@ -35,8 +35,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.0]
       t.datetime :locked_at
 
       # Other Attributes
-      t.uuid :role_id
-      t.string :timezone, default: 'Central Time (US & Canada)', null: false
+      t.string :timezone, default: 'Pacific Time (US & Canada)', null: false
       t.boolean :active, default: true, null: false
 
       t.timestamps null: false
@@ -46,6 +45,5 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.0]
     add_index :users, :reset_password_token, unique: true
     add_index :users, :confirmation_token,   unique: true
     add_index :users, :unlock_token,         unique: true
-    add_index :users, :role_id
   end
 end

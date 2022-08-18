@@ -3,7 +3,7 @@
 # Table name: draw_cost_requests
 #
 #  id                 :uuid             not null, primary key
-#  alert              :integer          default(0), not null
+#  alert              :integer          default("ok"), not null
 #  amount             :decimal(, )      default(0.0), not null
 #  approval_due_date  :date
 #  approved_at        :datetime
@@ -34,6 +34,7 @@
 #  fk_rails_...  (draw_id => draws.id)
 #  fk_rails_...  (organization_id => organizations.id)
 #  fk_rails_...  (user_id => users.id)
+#
 
 class DrawCostRequest < ApplicationRecord
   include DrawCostRequests::StateMachine
@@ -47,6 +48,7 @@ class DrawCostRequest < ApplicationRecord
   belongs_to :organization
   belongs_to :approver, class_name: 'User'
   has_one :project, through: :draw
+  # has_many :cost_submissions
 
   ### Enums
   enum :alert, [:ok, :auditfail, :unclean]
