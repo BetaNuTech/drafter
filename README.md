@@ -25,9 +25,8 @@ docker-compose run test rake db:test:prepare
 * Run a command against a service: `docker-compose run web XXXX`
   * Open a console: `docker-compose run web rails console`
   * Open a database console: `docker-compose run web rails dbconsole`
-
-NOTE: files generated using docker will be owned by root. You will have to change file ownership manually.
-From the project root directory: `sudo chown -R $USER:$USER ./`
+* Fix local file permissions after running a Rails generator within a Docker container: `bin/fix_perms`
+  * NOTE: files generated using docker will be owned by root. You will have to change file ownership manually.
 
 ## Dependencies
 
