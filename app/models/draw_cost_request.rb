@@ -39,18 +39,32 @@
 class DrawCostRequest < ApplicationRecord
   include DrawCostRequests::StateMachine
 
-  ALLOWED_PARAMS = [:amount, :description, :plan_change, :plan_change_reason, :draw_cost_id, :draw_id]
+  ALLOWED_PARAMS = [:amount, :description, :plan_change, :plan_change_reason]
 
   ### Associations
   belongs_to :draw
   belongs_to :draw_cost
   belongs_to :user
   belongs_to :organization
-  belongs_to :approver, class_name: 'User'
+  belongs_to :approver, class_name: 'User', optional: true
   has_one :project, through: :draw
-  # has_many :cost_submissions
+  has_many :draw_cost_submissions
 
   ### Enums
   enum :alert, [:ok, :auditfail, :unclean]
 
+  ### Validations
+  validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
+
+  def approve_request(user)
+    self.approver = user
+    self.approved_at = Time.current
+    self.save
+  end
+
+  def reject_request
+    self.approver = nil
+    self.approved_at = nil
+    self.save
+  end
 end

@@ -28,6 +28,8 @@ x-backend: &backend
     - packs-test:/app/public/packs-test
     - packs:/app/public/packs
     - storage:/app/storage
+    - coverage:/app/public/coverage
+    - coverage:/app/coverage
   environment: &backend_environment
     <<: *env
     DATABASE_URL: postgres://postgres:postgres@postgres:5432/drafter_development
@@ -55,7 +57,6 @@ services:
     command: bin/delayed_job -n 2 start
   test:
     <<: *backend
-    #command: bin/docker_web_entrypoint.sh
     command: "echo 'NOOP (temporary)'"
     environment:
       <<: *env
@@ -79,6 +80,7 @@ volumes:
   app_log:
   app_tmp:
   bundle:
+  coverage:
   history:
   node_modules:
   packs-test:

@@ -7,7 +7,7 @@ module Users
       has_many :projects, through: :project_users
 
       def project_role(project)
-        project_role_assocs = user_projects.where(project: project)
+        project_role_assocs = project_users.where(project: project)
         return nil unless project_role_assocs.any?
 
         project_role_assocs.limit(1).first.project_role
@@ -18,19 +18,23 @@ module Users
       end
 
       def project_owner?(project)
-        project_role(project).owner?
+        project_role(project)&.owner?
       end
 
       def project_management?(project)
-        project_role(project).management?
+        project_role(project)&.management?
+      end
+
+      def project_finance?(project)
+        project_role(project)&.finance?
       end
 
       def project_internal?(project)
-        project_role(project).internal?
+        project_role(project)&.internal?
       end
 
       def project_developer?(project)
-        project_role(project).developer?
+        project_role(project)&.developer?
       end
 
     end

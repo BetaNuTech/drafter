@@ -14,7 +14,6 @@
 /config/credentials/staging.key
 /config/master.key
 /coverage/*
-/coverage/*
 /log/*
 /public/assets
 /storage/*

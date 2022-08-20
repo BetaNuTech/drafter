@@ -62,6 +62,7 @@ Profile	./app/models/concerns/users/profile.rb	/^  module Profile$/;"	m	class:Us
 Project	./app/models/project.rb	/^class Project < ApplicationRecord$/;"	c
 ProjectPolicy	./app/policies/project_policy.rb	/^class ProjectPolicy < ApplicationPolicy$/;"	c
 ProjectRole	./app/models/project_role.rb	/^class ProjectRole < ApplicationRecord$/;"	c
+ProjectSpecHelper	./spec/support/project_spec_helper.rb	/^module ProjectSpecHelper$/;"	m
 ProjectUser	./app/models/project_user.rb	/^class ProjectUser < ApplicationRecord$/;"	c
 ProjectUserPolicy	./app/policies/project_user_policy.rb	/^class ProjectUserPolicy < ApplicationPolicy$/;"	c
 ProjectUsersController	./app/controllers/project_users_controller.rb	/^class ProjectUsersController < ApplicationController$/;"	c
@@ -122,6 +123,8 @@ add_image	./app/helpers/images_helper.rb	/^  def add_image$/;"	f	class:ImagesHel
 add_member	./app/controllers/projects_controller.rb	/^  def add_member$/;"	f	class:ProjectsController
 add_member	./app/services/projects/membership.rb	/^    def add_member(user: , role: )$/;"	f	class:Projects.Membership
 add_member?	./app/policies/project_policy.rb	/^  def add_member?$/;"	f	class:ProjectPolicy
+add_project_user	./spec/support/project_spec_helper.rb	/^  def add_project_user(user:, project:, role:)$/;"	f	class:ProjectSpecHelper
+add_user	./app/models/concerns/projects/users.rb	/^      def add_user(user:, role:)$/;"	f	class:Projects.Users
 admin	./app/models/role.rb	/^  def self.admin$/;"	F	class:Role
 admin?	./app/models/concerns/users/role.rb	/^      def admin?$/;"	f	class:Users.Role
 admin?	./app/models/role.rb	/^  def admin?$/;"	f	class:Role
@@ -137,6 +140,8 @@ allowed_params	./app/policies/project_user_policy.rb	/^  def allowed_params$/;"	
 allowed_params	./app/policies/user_policy.rb	/^  def allowed_params$/;"	f	class:UserPolicy
 approve	./app/models/draw.rb	/^  def approve(user)$/;"	f	class:Draw
 approve	./app/services/projects/draw_service.rb	/^    def approve$/;"	f	class:Projects
+approved?	./app/models/concerns/draws/state_machine.rb	/^      def approved?$/;"	f	class:Draws.StateMachine
+assign_reference?	./app/models/draw.rb	/^  def assign_reference?$/;"	f	class:Draw
 assign_to_organization?	./app/policies/user_policy.rb	/^  def assign_to_organization?$/;"	f	class:UserPolicy
 assign_to_project_role?	./app/policies/user_policy.rb	/^  def assign_to_project_role?$/;"	f	class:UserPolicy
 assign_to_role?	./app/policies/user_policy.rb	/^  def assign_to_role?$/;"	f	class:UserPolicy
@@ -383,6 +388,7 @@ set_project	./app/controllers/draws_controller.rb	/^  def set_project$/;"	f	clas
 set_project	./app/controllers/project_users_controller.rb	/^  def set_project$/;"	f	class:ProjectUsersController
 set_project	./app/controllers/projects_controller.rb	/^  def set_project$/;"	f	class:ProjectsController
 set_project_user	./app/controllers/project_users_controller.rb	/^  def set_project_user$/;"	f	class:ProjectUsersController
+set_reference?	./app/policies/draw_policy.rb	/^  def set_reference?$/;"	f	class:DrawPolicy
 set_user	./app/controllers/users_controller.rb	/^  def set_user$/;"	f	class:UsersController
 show	./app/controllers/draw_costs_controller.rb	/^  def show$/;"	f	class:DrawCostsController
 show	./app/controllers/draws_controller.rb	/^  def show$/;"	f	class:DrawsController

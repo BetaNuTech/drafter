@@ -1,45 +1,51 @@
-module DrawCostRequests
+module DrawCostSubmissions
   module StateMachine
     extend ActiveSupport::Concern
 
-    EXISTING_STATES = ['pending', 'submitted', 'approved']
-
     class_methods do
       def state_names
-        DrawCostRequests.aasm.states.map{|s| s.name.to_s}
+        DrawCostSubmission.aasm.states.map{|s| s.name.to_s}
       end
     end
 
     included do
       class TransitionError < StandardError; end;
 
-      include AASM
+      ACTIVE_STATES = [:pending, :submitted, :approved]
 
+      scope :active, -> { where(state: ACTIVE_STATES) }
+
+      include AASM
       aasm column: :state do
         state :pending
         state :submitted
         state :approved
         state :rejected
+        state :removed
 
         event :submit do
-          transitions from: [:pending], to: :submitted
+          transitions from: [:pending], to: :submitted,
+            guard: Proc.new{ |*args| self.valid_pending_submission? }
         end
 
         event :approve do
-          transitions from: [:submitted, :rejected], to: :approved,
-            guard: Proc.new {|*args| draw_cost_submissions.approved.any? },
+          transitions from: [:submitted], to: :approved,
             after: Proc.new {|*args|
               if args.any?
-                approve_request(*args)
+                approve_submission(*args)
               else
-                raise TransitionError.new('A Draw Cost Request must be approved by a user')
+                raise TransitionError.new('A Draw Cost Submission must be approved by a user')
               end
             }
         end
 
         event :reject do
           transitions from: [:submitted, :approved], to: :rejected,
-            after: Proc.new {|*args| reject_request }
+            after: Proc.new {|*args| reject_submission }
+        end
+
+        event :remove do
+          transitions from: [:pending, :submitted], to: :removed
         end
       end
 
@@ -61,15 +67,8 @@ module DrawCostRequests
         aasm.states(permitted: true).map(&:name)
       end
 
-      def state_css_class
-        {
-          'pending' => 'secondary',
-          'submitted' => 'warning',
-          'approved' => 'success',
-          'rejected' => 'danger'
-        }.fetch(state, 'primary')
-      end
-      
+
     end
+
   end
 end

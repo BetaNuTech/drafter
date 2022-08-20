@@ -10,6 +10,7 @@ module Draws
 
     included do
       include AASM
+      APPROVED_STATES = ['internally_approved', 'externally_approved', 'funded'].freeze
 
       aasm column: :state do
         state :pending
@@ -44,7 +45,6 @@ module Draws
         end
       end
 
-
       def trigger_event(event_name:, user: nil)
         event = event_name.to_sym
         if permitted_state_events.include?(event)
@@ -72,6 +72,10 @@ module Draws
           'externally_approved' => 'primary',
           'funded' => 'success'
         }.fetch(state, 'light')
+      end
+
+      def approved?
+        APPROVED_STATES.include?(state)
       end
 
     end

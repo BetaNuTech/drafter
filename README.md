@@ -49,6 +49,47 @@ docker-compose run test rake db:test:prepare
 * Delete data volumes: `docker volume ls | grep drafter | awk '{print $2}' | xargs docker volume rm`
 * Delete webapp image: `docker images | grep drafter-dev | awk '{print $3}' | xargs docker rm`
 
+# Testing
+
+## Creating Tests
+
+Tests are written for `rspec` and are present in the `rspec` directory.
+
+## Automatic Testing with 'Guard'
+
+The `guard` command launches a test suite which automatically runs tests when associated files are created or updated.
+
+In a dedicated terminal window, launch `guard` with the following commmand:
+
+```
+docker-compose run test bundle exec guard
+```
+
+You may enter the letter `a` then press enter to instruct `guard` to run all tests one time.
+
+Type `exit` or press `CTRL-C` to exit
+
+
+## Running Tests Manually
+
+Run the following command to run the test suite:
+
+```
+docker-compose run test bundle exec rspec
+```
+
+### Test Code Coverage
+
+Manually running the test suite will automatically generate a test coverage report.
+
+Open `http://localhost:3000/coverage/` (be sure to include the trailing slash)
+
+The `simplecov` tool automatically determines the code coverage of the test suite. After `rspec` is run, open the
+URL `http://localhost:3000/` to view an HTML report of code coverage that is output to the `coverage` folder. 
+Docker Compose is configured to store the code coverage files in a data volume mounted at `/coverage` in the test
+container and `/public/coverage` in the web container.
+
+
 # Credentials/Secrets
 
 Credentials are stored encrypted at `config/credentials/ENVIRONMENT.yml.enc`

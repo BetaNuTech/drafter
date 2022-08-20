@@ -5,7 +5,7 @@ class DrawsController < ApplicationController
   after_action :verify_authorized
 
   def index
-    authorize Draw
+    authorize Draw.new(project: @project)
     @service = Projects::DrawService.new(current_user: @current_user, project: @project)
     @draws = @service.draws
   end

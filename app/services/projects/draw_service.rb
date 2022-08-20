@@ -2,6 +2,8 @@ module Projects
   class DrawService
     attr_reader :project, :current_user, :draw, :errors
 
+    class PolicyError < StandardError; end
+
     def initialize(current_user: nil, project:, draw: nil)
       @current_user = current_user
       @project = project
@@ -20,13 +22,16 @@ module Projects
       @policy = DrawPolicy.new(current_user, @draw)
     end
 
-    def draws
-      @project.draws.order(index: :asc)
-    end
+    #def draws
+      #@project.draws.order(index: :asc)
+    #end
 
     def create(params)
+      raise PolicyError.new unless @policy.create?
+
       @draw = Draw.new(sanitize_params(params))
       @draw.project = @project
+      @draw.index = @draw.next_index
       if @draw.save
         SystemEvent.log(description: "Created new Draw '#{@draw.name}'", event_source: @project, incidental: @current_user, severity: :warn)
         add_draw_costs(@draw)
@@ -38,6 +43,8 @@ module Projects
     end
 
     def update(params)
+      raise PolicyError.new unless @policy.update?
+
       if @draw.update(sanitize_params(params))
         SystemEvent.log(description: "Updated information for Draw '#{@draw.name}'", event_source: @project, incidental: @current_user, severity: :info)
         return @draw
@@ -48,8 +55,10 @@ module Projects
     end
 
     def destroy
+      raise PolicyError.new unless @policy.destroy?
+
       @draw.destroy
-      SystemEvent.log(description: "Deleted Draw '#{@draw.name}'", event_source: @project, incidental: @current_user, severity: :danger)
+      SystemEvent.log(description: "Deleted Draw '#{@draw.name}'", event_source: @project, incidental: @current_user, severity: :warn)
       return true
     end
 
@@ -59,24 +68,6 @@ module Projects
 
     def errors?
       @errors.present?
-    end
-
-    def load_sample_costs
-      return false unless ( @draw.present? && !@draw.new_record? )
-
-      DrawCostSample.standard.each do |dcs|
-        DrawCost.create(
-          draw: @draw,
-          name: dcs.name,
-          state: :pending,
-          cost_type: dcs.cost_type
-        )
-      end
-
-      SystemEvent.log(description: "Added initial costs for '#{draw.name}'", event_source: @project, incidental: draw, severity: :info)
-
-      @draw.reload
-      @draw.draw_costs
     end
 
     private
@@ -107,7 +98,7 @@ module Projects
       if params.is_a?(ActionController::Parameters)
         params.require(:draw).permit(*allowed_params)
       else
-        params.select{|k,v| allowed_params.include?(k.to_s) }
+        params.select{|k,v| allowed_params.include?(k.to_sym) }
       end
     end
 

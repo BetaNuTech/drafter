@@ -30,6 +30,7 @@ class DrawCost < ApplicationRecord
   ### Associations
   belongs_to :draw
   has_one :project, through: :draw
+  has_many :draw_cost_requests
 
   ### Validations
   validates :approval_lead_time, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
@@ -45,6 +46,11 @@ class DrawCost < ApplicationRecord
       soft: 'info',
       finance: 'success'
     }.fetch(cost_type.to_sym)
+  end
+
+  def clean?
+    # TODO
+    true
   end
 
 end

@@ -62,6 +62,9 @@ RSpec.describe User, type: :model do
       user.save
       expect(user.profile).to be_a(UserProfile)
     end
+    it 'returns the user full_name' do
+      expect(user.full_name).to be_a(String)
+    end
   end
 
   describe 'Roles' do
@@ -69,6 +72,28 @@ RSpec.describe User, type: :model do
       user.save
       expect(user.role).to be_a(Role)
     end
+
+    it 'returns if a user is of a role type' do
+      user.role = admin_role
+      user.save
+      assert(user.admin?)
+      assert(user.administrator?)
+      refute(user.user?)
+
+      user.role = executive_role
+      user.save
+      refute(user.admin?)
+      assert(user.executive?)
+      assert(user.administrator?)
+      refute(user.user?)
+
+      user.role = user_role
+      user.save
+      refute(user.admin?)
+      refute(user.executive?)
+      assert(user.user?)
+    end
+
   end
 
   describe 'Organizations' do
@@ -78,6 +103,14 @@ RSpec.describe User, type: :model do
       user.organization = nil
       assert(user.valid?)
       assert(user.save)
+    end
+  end
+
+  describe 'Login' do
+    it 'returns if the user is deactivated' do
+      user.active = false
+      user.save
+      assert(user.deactivated?)
     end
   end
 end

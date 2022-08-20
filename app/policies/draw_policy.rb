@@ -2,7 +2,7 @@ class DrawPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       case user
-      when -> (u) { u.administrator? }
+      when -> (u) { u.admin? }
         scope
       else
         scope.where(project: user.projects)
@@ -11,11 +11,11 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def index?
-    user.administrator? || user.member?(record.project)
+    user.admin? || user.member?(record.project)
   end
 
   def new?
-    user.administrator? || user.project_management?(record.project)
+    user.admin? || user.project_management?(record.project)
   end
 
   def create?
@@ -35,15 +35,23 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.administrator?
+    user.admin? || user.project_owner?(record.project)
+  end
+
+  def set_reference?
+    record.approved?
   end
 
   def allowed_params
+    allow_params = Draw::ALLOWED_PARAMS
+    if record.approved?
+      allow_params << :reference
+    end
     case user
     when -> (u) { u.administrator? }
-      Draw::ALLOWED_PARAMS
+      allow_params
     when -> (u) { u.project_management?(record.project) }
-      Draw::ALLOWED_PARAMS
+      allow_params
     else
       []
     end

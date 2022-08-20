@@ -21,12 +21,14 @@
             <%= form.label :total, 'Total $' %>
           </div>
         </div>
-        <div class="col-sm-12 col-6">
-          <div class="form-floating mb-3 g-2">
-            <%= form.text_field :reference, class: 'form-control form-control', autofocus: true, placeholder: 'Reference Number' %>
-            <%= form.label :reference, 'Reference Number' %>
+        <% if policy(draw).set_reference? %>
+          <div class="col-sm-12 col-6">
+            <div class="form-floating mb-3 g-2">
+              <%= form.text_field :reference, class: 'form-control form-control', autofocus: true, placeholder: 'Reference Number' %>
+              <%= form.label :reference, 'Reference Number' %>
+            </div>
           </div>
-        </div>
+        <% end %>
       </div>
 
       <div class="row">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_11_193942) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_23_234025) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -62,6 +62,23 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_11_193942) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "standard"], name: "draw_cost_samples_idx"
+  end
+
+  create_table "draw_cost_submissions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "draw_cost_request_id"
+    t.uuid "approver_id"
+    t.boolean "audit", default: false, null: false
+    t.boolean "manual_approval_required", default: false, null: false
+    t.boolean "multi_invoice", default: false, null: false
+    t.boolean "ocr_approval"
+    t.date "approval_due_date"
+    t.date "approved_at"
+    t.decimal "amount", default: "0.0", null: false
+    t.string "state", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["approver_id"], name: "index_draw_cost_submissions_on_approver_id"
+    t.index ["draw_cost_request_id"], name: "index_draw_cost_submissions_on_draw_cost_request_id"
   end
 
   create_table "draw_costs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -203,6 +220,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_11_193942) do
   add_foreign_key "draw_cost_requests", "draws"
   add_foreign_key "draw_cost_requests", "organizations"
   add_foreign_key "draw_cost_requests", "users"
+  add_foreign_key "draw_cost_submissions", "draw_cost_requests"
+  add_foreign_key "draw_cost_submissions", "users", column: "approver_id"
   add_foreign_key "draw_costs", "draws"
   add_foreign_key "draws", "projects"
   add_foreign_key "project_users", "project_roles"

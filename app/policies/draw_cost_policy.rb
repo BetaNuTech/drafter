@@ -40,6 +40,17 @@ class DrawCostPolicy < ApplicationPolicy
   def destroy?
     user.administrator? || user.project_management?(project)
   end
+  
+  def approve?
+    raise 'Not implemented'
+
+    user.admin? ||
+      user.project_internal?(project)
+  end
+
+  def reject?
+    raise 'Not implemented'
+  end
 
   def allowed_params
     case user
@@ -59,4 +70,5 @@ class DrawCostPolicy < ApplicationPolicy
   def project
     draw&.project
   end
+
 end

@@ -34,8 +34,8 @@ class Draw < ApplicationRecord
   has_many :draw_costs, dependent: :destroy
 
   ### Validations
-  validates :name, presence: true, uniqueness: {scope: :project_id}
-  validates :index, presence: true, numericality: { greater_than_or_equal_to: 1}
+  validates :name, presence: true, uniqueness: {scope: :project_id}, allow_blank: false
+  validates :index, presence: true, numericality: { greater_than_or_equal_to: 1}, uniqueness: {scope: :project_id}
 
   def next_index
     return 1 unless project.present?
@@ -45,7 +45,7 @@ class Draw < ApplicationRecord
 
   def budget_variance
     # TODO from approved draw costs
-    0.0
+    123.45
   end
 
   def over_budget?
@@ -56,6 +56,11 @@ class Draw < ApplicationRecord
     self.approver = user
     self.approved_at = Time.current
     save
+  end
+
+
+  def assign_reference?
+    approved? 
   end
 
 end
