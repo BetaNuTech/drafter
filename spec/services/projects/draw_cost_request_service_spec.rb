@@ -629,7 +629,56 @@ RSpec.describe Projects::DrawCostRequestService do
       end
 
     end
-  end
+  end # Submit draw cost submission
+
+  describe 'submit draw cost request' do
+    let(:draw_cost_request) {
+      service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost: draw_cost)
+      dcr = service.create_request(valid_draw_cost_request_attributes)
+      dcs = dcr.draw_cost_submissions.first
+      dcs.update(state: :submitted, amount: 1.0)
+      dcr.reload
+      dcr
+    }
+    describe 'as developer from the same organization' do
+      it 'transitions the request to "submitted"' do
+        service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost_request: draw_cost_request)
+        service.submit_request
+        draw_cost_request.reload
+        assert(draw_cost_request.submitted?)
+      end
+      it 'transitions any pending draw cost submissions to "submitted"' do
+        draw_cost_request.draw_cost_submissions.update(state: :pending)
+        draw_cost_request.draw_cost_submissions.reload
+        expect(draw_cost_request.draw_cost_submissions.pending.count).to eq(1)
+        expect(draw_cost_request.draw_cost_submissions.submitted.count).to eq(0)
+        service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost_request: draw_cost_request)
+        service.submit_request
+        draw_cost_request.reload
+        assert(draw_cost_request.submitted?)
+        expect(draw_cost_request.draw_cost_submissions.submitted.count).to eq(1)
+      end
+    end
+
+    describe 'as an authorized user' do
+      it 'transitions the request to "submitted"' do
+        service = Projects::DrawCostRequestService.new(user: owner_user, draw_cost_request: draw_cost_request)
+        service.submit_request
+        draw_cost_request.reload
+        assert(draw_cost_request.submitted?)
+      end
+    end
+    describe 'as an unauthorized user' do
+      it 'throws an error and does not transition the request state' do
+        service = Projects::DrawCostRequestService.new(user: developer_user_other_organization, draw_cost_request: draw_cost_request)
+        expect {
+          service.submit_request
+        }.to raise_error(Projects::DrawCostRequestService::PolicyError)
+        draw_cost_request.reload
+        refute(draw_cost_request.submitted?)
+      end
+    end
+  end # Submit draw cost request
 
   describe 'approve draw cost submission' do
     xit 'is approved'

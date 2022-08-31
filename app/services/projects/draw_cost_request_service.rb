@@ -65,9 +65,26 @@ module Projects
     end
 
     def submit_request
-      # TODO
-      # submit pending request submissions having a specified amount
-      # submit request
+      raise PolicyError unless @request_policy.submit?
+      
+      @draw_cost_request.draw_cost_submissions.pending.where('amount > 0.0').each do |dcs|
+        dcs.trigger_event(event_name: 'submit', user: @user)
+        dcs.save!
+      end
+      @draw_cost_request.draw_cost_submissions.reload
+
+      unless @draw_cost_request.draw_cost_submissions.where(state: [:submitted, :approved]).any?
+        @errors << 'There was an error submitting the Draw Cost Request: missing submissions'
+        return @draw_cost_request
+      end
+
+      @draw_cost_request.trigger_event(event_name: 'submit', user: @user)
+      @draw_cost_request.save!
+      unless @draw_cost_request.submitted?
+        @errors << 'There was an error submitting the Draw Cost Request'
+      end
+
+      @draw_cost_request
     end
 
     def approve_request
@@ -78,6 +95,7 @@ module Projects
       if @draw_cost_request.draw_cost_submissions.submitted.any?
         @draw_cost_request.draw_cost_submissions.submitted.each do |dcs|
           dcs.trigger_event(event_name: :approve, user: @user)
+          dcs.save!
         end
         @draw_cost_request.draw_cost_submissions.reload
       end
@@ -85,11 +103,15 @@ module Projects
       if @draw_cost_request.draw_cost_submissions.approved.any?
         if @draw_cost_request.permitted_state_events.include?(:approve)
           @draw_cost_request.trigger_event(event_name: :approve, user: @user)
+          @draw_cost_request.save!
+          unless @draw_cost_request.approved?
+            @errors << 'There was an error approving the Draw Cost Request'
+          end
         else
-          @errors = ["The Draw Cost Request is not in an approvable state"]
+          @errors << 'The Draw Cost Request is not in an approvable state'
         end
       else
-        @errors = ["The Draw Cost Request doesn't have any approved submissions"]
+        @errors << 'The Draw Cost Request does not have any approved submissions'
       end
 
       @draw_cost_request
@@ -101,8 +123,12 @@ module Projects
       reset_errors
       if @draw_cost_request.permitted_state_events.include?(:approve)
         @draw_cost_request.trigger_event(event_name: :reject, user: @user)
+        @draw_cost_request.save!
+        unless @draw_cost_request.rejected?
+          @errors << 'There was an error rejecting the Draw Cost Request'
+        end
       else
-        @errors = ['Draw Cost is not in a rejectable state']
+        @errors << 'Draw Cost is not in a rejectable state'
       end
 
       @draw_cost_request
@@ -142,7 +168,9 @@ module Projects
     def submit_submission(submission)
       raise PolicyError.new unless submission_policy(submission).submit?
 
-      submission.trigger_event(event_name: :submit, user: @user)
+      if submission.permitted_state_events.include?(:submit)
+        submission.trigger_event(event_name: :submit, user: @user)
+      end
       submission
     end
 
@@ -160,7 +188,7 @@ module Projects
       if submission.permitted_state_events.include?(:approve)
         submission.trigger_event(event_name: :approve, user: @user)
       else
-        @errors = ['Submission is not in an approvable state']
+        @errors << 'Submission is not in an approvable state'
       end
 
       @draw_cost_request.draw_cost_submissions.reload
