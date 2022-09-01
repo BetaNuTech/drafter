@@ -305,7 +305,7 @@ RSpec.describe Projects::DrawCostRequestService do
       let(:user) { developer_user }
       it 'will update the submission' do
         submission
-        service = Projects::DrawCostRequestService.new(user: user, draw_cost: draw_cost)
+        service = Projects::DrawCostRequestService.new(user: user, draw_cost_request: draw_cost_request)
         updated_submission = nil
         expect {
           updated_submission = service.update_submission(submission: submission, params: valid_attributes)
@@ -377,8 +377,9 @@ RSpec.describe Projects::DrawCostRequestService do
       service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost: draw_cost)
       service.create_request(valid_draw_cost_request_attributes)
       submission = service.create_submission
-      # TODO: submit submission as developer
+      submission.update(state: :submitted)
       dcr = service.draw_cost_request
+      dcr.reload
       service = Projects::DrawCostRequestService.new(user: manager_user, draw_cost_request: dcr)
       service.draw_cost_request
     }
@@ -388,8 +389,7 @@ RSpec.describe Projects::DrawCostRequestService do
         let(:service) {
           draw_cost_request.state = 'submitted'
           draw_cost_request.save!
-          dcs = draw_cost_request.draw_cost_submissions.pending.first
-          dcs.update(amount: 1, state: :approved)
+          draw_cost_request.reload
           draw_cost_request.draw_cost_submissions.reload
           Projects::DrawCostRequestService.new(user: user, draw_cost_request: draw_cost_request)
         }
@@ -399,7 +399,12 @@ RSpec.describe Projects::DrawCostRequestService do
         end
 
         it 'automatically approves submitted draw cost submissions' do
-
+          expect(draw_cost_request.draw_cost_submissions.submitted.count).to eq(1)
+          expect(draw_cost_request.draw_cost_submissions.approved.count).to eq(0)
+          service.approve_request
+          draw_cost_request.reload
+          expect(draw_cost_request.draw_cost_submissions.submitted.count).to eq(0)
+          expect(draw_cost_request.draw_cost_submissions.approved.count).to eq(1)
         end
 
         it 'approves the request' do
@@ -754,21 +759,115 @@ RSpec.describe Projects::DrawCostRequestService do
     end
   end # Approve submission
 
-  describe 'add document' do
-    it 'is added'
-  end # Add Document
+  describe 'documents' do
+    let(:draw_cost_request) {
+      service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost: draw_cost)
+      dcr = service.create_request(valid_draw_cost_request_attributes)
+      dcs = dcr.draw_cost_submissions.first
+      dcs.update(state: :submitted, amount: 1.0)
+      dcr.reload
+      dcr
+    }
+    let(:file_upload) { fixture_file_upload('sample_document_1.pdf') }
+    let(:document_attributes) {
+      { documenttype: 'budget', document: file_upload }
+    }
 
-  describe 'remove document' do
-    it 'is removed'
-  end # Remove document
+    describe 'upload' do
+      describe 'by the developer' do
+        describe 'with an invalid document type' do
+          it 'does not add the document'
+        end
+        describe 'with valid attributes' do
+          it 'is added' do
+            service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost_request: draw_cost_request)
+            assert(draw_cost_request.draw_cost_documents.empty?)
+            draw_cost_document = nil
+            expect {
+              draw_cost_document = service.add_document(document_attributes)
+              draw_cost_request.draw_cost_documents.reload
+            }.to change{draw_cost_request.draw_cost_documents.count}.by(1)
+            refute(service.errors?)
+            assert(draw_cost_document.id.present?)
+            draw_cost_request.draw_cost_documents.reload
+            expect(draw_cost_request.draw_cost_documents.budget.last).to eq(draw_cost_document)
+          end
+        end
+      end # by developer
+      describe 'by an authorized user' do
+        it 'is added' do
+            service = Projects::DrawCostRequestService.new(user: owner_user, draw_cost_request: draw_cost_request)
+            assert(draw_cost_request.draw_cost_documents.empty?)
+            draw_cost_document = nil
+            expect {
+              draw_cost_document = service.add_document(document_attributes)
+              draw_cost_request.draw_cost_documents.reload
+            }.to change{draw_cost_request.draw_cost_documents.count}.by(1)
+            refute(service.errors?)
+            assert(draw_cost_document.id.present?)
+            draw_cost_request.draw_cost_documents.reload
+            expect(draw_cost_request.draw_cost_documents.budget.last).to eq(draw_cost_document)
+        end
+      end # by authorized user
+      describe 'by an unauthorized user' do
+        it 'throws an error' do
+          service = Projects::DrawCostRequestService.new(user: finance_user, draw_cost_request: draw_cost_request)
+          expect {
+            draw_cost_document = service.add_document(document_attributes)
+          }.to raise_error(Projects::DrawCostRequestService::PolicyError)
+        end
+      end # by unauthorized user
+    end # Add Document
 
-  describe 'approve document' do
-    it 'is approved'
-  end # Approve document
+    describe 'remove document' do
+      let(:draw_cost_document) {
+        service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost_request: draw_cost_request)
+        doc = service.add_document(document_attributes)
+        draw_cost_request.draw_cost_documents.reload
+        doc
+      }
+      describe 'by the developer' do
+        it 'is removed' do
+          service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost_request: draw_cost_request)
+          draw_cost_document
+          expect {
+            service.remove_document(draw_cost_document)
+            draw_cost_request.draw_cost_documents.reload
+          }.to change{draw_cost_request.draw_cost_documents.count}.by(-1)
+        end
+      end
+      describe 'by an authorized user' do
+        it 'is removed' do
+          service = Projects::DrawCostRequestService.new(user: owner_user, draw_cost_request: draw_cost_request)
+          draw_cost_document
+          expect {
+            service.remove_document(draw_cost_document)
+            draw_cost_request.draw_cost_documents.reload
+          }.to change{draw_cost_request.draw_cost_documents.count}.by(-1)
+        end
+      end
+      describe 'by an unauthorized user' do
+        it 'throws an error' do
+          service = Projects::DrawCostRequestService.new(user: finance_user, draw_cost_request: draw_cost_request)
+          draw_cost_document
+          count = DrawCostDocument.count
+          expect {
+            service.remove_document(draw_cost_document)
+            draw_cost_request.draw_cost_documents.reload
+          }.to raise_error(Projects::DrawCostRequestService::PolicyError)
+          expect(DrawCostDocument.count).to eq(count)
+        end
+      end
+    end # Remove document
 
-  describe 'reject document' do
-    it 'is rejected'
-  end # Reject document
+    describe 'approve document' do
+      it 'is approved'
+    end # Approve document
+
+    describe 'reject document' do
+      it 'is rejected'
+    end # Reject document
+  end # Documents
 
 
 end

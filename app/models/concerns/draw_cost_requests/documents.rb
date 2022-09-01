@@ -7,6 +7,18 @@ module DrawCostRequests
 
       REQUIRED_DOCUMENTS = [:budget, :application, :waiver]
 
+      def budget_attached?
+        # TODO
+      end
+
+      def application_attached?
+        # TODO
+      end
+
+      def waiver_attached?
+        # TODO
+      end
+
       def all_documents_attached?
         # TODO
       end

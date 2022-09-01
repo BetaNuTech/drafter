@@ -13,6 +13,14 @@ RUN apt-get update -qq \
     curl \
     less \
     git \
+    libvips \
+    libjpeg62-turbo-dev \
+    poppler-utils \
+    #libpoppler-dev \
+    #libpoppler-glib-dev \
+    libcairo2-dev \
+    libglib2.0-dev \
+    libgirepository1.0-dev \
   && apt-get clean \
   && rm -rf /var/cache/apt/archives/* \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \

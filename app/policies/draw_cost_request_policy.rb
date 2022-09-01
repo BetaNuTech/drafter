@@ -76,7 +76,7 @@ class DrawCostRequestPolicy < ApplicationPolicy
   end
 
   def remove_document?
-    record.user == user || add_document?
+    record.user == user || destroy?
   end
 
   def approve_document?

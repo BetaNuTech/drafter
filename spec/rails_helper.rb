@@ -13,6 +13,8 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
+ActiveStorage::Current.url_options = { host: 'example.com' }
+
 #Delayed::Worker.delay_jobs = false
 
 RSpec.configure do |config|

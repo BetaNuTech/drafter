@@ -26,6 +26,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class DrawCostDocument < ApplicationRecord
+  ALLOWED_PARAMS = [:notes, :documenttype, :document]
   OTHER_DESCRIPTION = 'Other'
   BUDGET_DESCRIPTION = 'Budget'
   APPLICATION_DESCRIPTION = 'Application and Certificate of Payment'
@@ -35,14 +36,16 @@ class DrawCostDocument < ApplicationRecord
   belongs_to :approver, class_name: 'User', optional: true
   belongs_to :draw_cost_request
   belongs_to :user, optional: true
+  has_one :organization, through: :user
   has_one_attached :document
-  # TODO: attachment variants
 
   ### Enums
   enum :documenttype, [:other, :budget, :application, :waiver]
 
+  ### Validations
+  validates :documenttype, presence: true
+
   ### Scopes
-  scope :other, -> { where(documenttype: :other) }
   scope :budget, -> { where(documenttype: :budget) }
   scope :application, -> { where(documenttype: :application) }
   scope :waiver, -> { where(documenttype: :waiver) }

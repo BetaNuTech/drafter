@@ -75,7 +75,7 @@ module Projects
         dcs.trigger_event(event_name: 'submit', user: @user)
         dcs.save!
       end
-      @draw_cost_request.draw_cost_submissions.reload
+      @draw_cost_request.reload
 
       unless @draw_cost_request.draw_cost_submissions.where(state: [:submitted, :approved]).any?
         @errors << 'There was an error submitting the Draw Cost Request: missing submissions'
@@ -101,7 +101,7 @@ module Projects
           dcs.trigger_event(event_name: :approve, user: @user)
           dcs.save!
         end
-        @draw_cost_request.draw_cost_submissions.reload
+        @draw_cost_request.reload
       end
 
       if @draw_cost_request.draw_cost_submissions.approved.any?
@@ -152,7 +152,7 @@ module Projects
 
       reset_errors
       submission = DrawCostSubmission.create(draw_cost_request: @draw_cost_request, amount: 0.0)
-      @draw_cost_request.draw_cost_submissions.reload
+      @draw_cost_request.reload
       submission
     end
 
@@ -161,7 +161,7 @@ module Projects
 
       reset_errors
       if submission.update(sanitize_submission_params(submission, params))
-        @draw_cost_request.draw_cost_submissions.reload
+        @draw_cost_request.reload if @draw_cost_request.present?
       else
         @errors = submission.errors.full_messages
       end
@@ -197,17 +197,42 @@ module Projects
         @errors << 'Submission is not in an approvable state'
       end
 
-      @draw_cost_request.draw_cost_submissions.reload
+      @draw_cost_request.reload if @draw_cost_request.present?
 
       submission
     end
 
     def add_document(params)
-      # TODO
+      raise PolicyError unless @request_policy.add_document?
+
+      reset_errors
+      override_params = { user: @user, draw_cost_request: @draw_cost_request }
+      effective_params = sanitize_document_params(params).merge(override_params)
+      document_type = effective_params[:documenttype].to_sym
+
+      unless DrawCostDocument.documenttypes.include?(document_type)
+        @errors << 'Invalid document type'
+        return nil
+      end
+
+      docs_for_deletion = @draw_cost_request.draw_cost_documents.where(documenttype: document_type).to_a
+      
+      doc = DrawCostDocument.new(effective_params)
+      if doc.save
+        docs_for_deletion.each(&:destroy)
+      else
+        @errors = doc.errors.full_messages
+      end
+
+      doc
     end
 
-    def remove_document(params)
-      # TODO
+    def remove_document(draw_cost_document)
+      raise PolicyError unless @request_policy.remove_document?
+
+      draw_cost_document.destroy
+      @draw_cost_request.reload if @draw_cost_request.present?
+      draw_cost_document
     end
 
     def approve_document(document)
@@ -248,6 +273,15 @@ module Projects
       allowed_params = submission_policy(submission).allowed_params
       if params.is_a?(ActionController::Parameters)
         params.require(:draw_cost_submission).permit(*allowed_params)
+      else
+        params.select{|k,v| allowed_params.include?(k.to_sym) }
+      end
+    end
+
+    def sanitize_document_params(params)
+      allowed_params = DrawCostDocument::ALLOWED_PARAMS
+      if params.is_a?(ActionController::Parameters)
+        params.require(:draw_cost_document).permit(*allowed_params)
       else
         params.select{|k,v| allowed_params.include?(k.to_sym) }
       end
