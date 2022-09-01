@@ -398,7 +398,7 @@ RSpec.describe Projects::DrawCostRequestService do
           service
         end
 
-        xit 'automatically approves submitted draw cost submissions' do
+        it 'automatically approves submitted draw cost submissions' do
 
         end
 
@@ -416,10 +416,10 @@ RSpec.describe Projects::DrawCostRequestService do
 
         describe 'with the finance project role' do
           describe 'if the request is clean' do
-            xit 'approves the request'
+            it 'approves the request'
           end
           describe 'if the request is not clean' do
-            xit 'does not approve the request'
+            it 'does not approve the request'
           end
         end
 
@@ -681,23 +681,93 @@ RSpec.describe Projects::DrawCostRequestService do
   end # Submit draw cost request
 
   describe 'approve draw cost submission' do
-    xit 'is approved'
+    let(:draw_cost_request) {
+      service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost: draw_cost)
+      dcr = service.create_request(valid_draw_cost_request_attributes)
+      dcr.update(state: :submitted, amount: 1.0)
+      dcs = dcr.draw_cost_submissions.first
+      dcs.update(state: :submitted, amount: 1.0)
+      dcr.reload
+      dcr
+    }
+    let(:draw_cost_submission) { draw_cost_request.draw_cost_submissions.first }
+    describe 'by an authorized user' do
+      let(:service) { Projects::DrawCostRequestService.new(user: manager_user, draw_cost_request: draw_cost_request) }
+      describe 'when the submission is pending' do
+        it 'does not change the state and the service returns errors' do
+          draw_cost_submission.update(state: :pending)
+          draw_cost_request.draw_cost_submissions.reload
+          service.approve_submission(draw_cost_submission)
+          draw_cost_submission.reload
+          assert(service.errors?)
+          assert(draw_cost_submission.pending?)
+        end
+      end
+      describe 'when the submission is submitted' do
+        it 'approves the submission' do
+          service.approve_submission(draw_cost_submission)
+          draw_cost_submission.reload
+          refute(service.errors?)
+          assert(draw_cost_submission.approved?)
+        end
+      end
+      describe 'when the submission is already approved' do
+        it 'does nothing' do
+          draw_cost_submission.update(state: :approved)
+          draw_cost_request.draw_cost_submissions.reload
+          service.approve_submission(draw_cost_submission)
+          draw_cost_submission.reload
+          refute(service.errors?)
+          assert(draw_cost_submission.approved?)
+        end
+      end
+      describe 'when the submission is rejected' do
+        it 'does not change the state and the service returns errors' do
+          draw_cost_submission.update(state: :rejected)
+          draw_cost_request.draw_cost_submissions.reload
+          service.approve_submission(draw_cost_submission)
+          draw_cost_submission.reload
+          assert(service.errors?)
+          assert(draw_cost_submission.rejected?)
+        end
+      end
+      describe 'when the submission is removed' do
+        it 'does not change the state and the service returns errors' do
+          draw_cost_submission.update(state: :removed)
+          draw_cost_request.draw_cost_submissions.reload
+          service.approve_submission(draw_cost_submission)
+          draw_cost_submission.reload
+          assert(service.errors?)
+          assert(draw_cost_submission.removed?)
+        end
+      end
+    end
+    describe 'by an unauthorized user' do
+      let(:service) { Projects::DrawCostRequestService.new(user: developer_user, draw_cost_request: draw_cost_request) }
+      it 'throws an error and does not transition the draw cost submission' do
+        expect {
+          service.approve_submission(draw_cost_submission)
+        }.to raise_error(Projects::DrawCostRequestService::PolicyError)
+        draw_cost_submission.reload
+        assert(draw_cost_submission.submitted?)
+      end
+    end
   end # Approve submission
 
   describe 'add document' do
-    xit 'is added'
+    it 'is added'
   end # Add Document
 
   describe 'remove document' do
-    xit 'is removed'
+    it 'is removed'
   end # Remove document
 
   describe 'approve document' do
-    xit 'is approved'
+    it 'is approved'
   end # Approve document
 
   describe 'reject document' do
-    xit 'is rejected'
+    it 'is rejected'
   end # Reject document
 
 

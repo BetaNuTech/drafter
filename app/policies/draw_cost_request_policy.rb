@@ -8,7 +8,6 @@ class DrawCostRequestPolicy < ApplicationPolicy
         # DrawCostRequests for the user's assigned projects
         scope.includes(:draw).where(draws: {project: user.projects})
       end
-      # TODO restrict developers to requests from their own organization
     end
   end
 
@@ -27,13 +26,17 @@ class DrawCostRequestPolicy < ApplicationPolicy
   end
 
   def show?
-    user.administrator? || user.member?(record.project)
+    user == record.user ||
+      user.admin? ||
+      user.project_internal?(record.project) ||
+      ( user.project_developer?(record.project) &&
+       user.organization_id == record.organization_id)
   end
 
   def edit?
     user == record.user ||
       user.admin? ||
-      user.project_owner?(record.project) ||
+      user.project_internal?(record.project) ||
       ( user.project_developer?(record.project) &&
        user.organization_id == record.organization_id)
   end
@@ -55,7 +58,6 @@ class DrawCostRequestPolicy < ApplicationPolicy
   def approve?
     user.admin? ||
       user.project_management?(record.project) ||
-      user.project_owner?(record.project) ||
       ( user.project_finance?(record.project) && record&.draw_cost.clean? )
   end
 

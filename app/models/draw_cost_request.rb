@@ -38,6 +38,7 @@
 
 class DrawCostRequest < ApplicationRecord
   include DrawCostRequests::StateMachine
+  include DrawCostRequests::Documents
 
   ALLOWED_PARAMS = [:amount, :description, :plan_change, :plan_change_reason]
 

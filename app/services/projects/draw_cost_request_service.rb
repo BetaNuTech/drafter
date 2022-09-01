@@ -21,6 +21,10 @@ module Projects
       @errors = []
     end
 
+    def errors?
+      @errors.present?
+    end
+
     # Return existing non-rejected request
     def create_request(params)
       raise PolicyError.new unless @request_policy.create?
@@ -183,8 +187,10 @@ module Projects
 
     def approve_submission(submission)
       raise PolicyError.new unless submission_policy(submission).approve?
+      return submission if submission.approved?
 
       reset_errors
+
       if submission.permitted_state_events.include?(:approve)
         submission.trigger_event(event_name: :approve, user: @user)
       else
@@ -210,12 +216,6 @@ module Projects
 
     def reject_document(document)
       # TODO
-    end
-
-
-
-    def errors?
-      @errors.present?
     end
 
     private
