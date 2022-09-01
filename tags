@@ -21,6 +21,7 @@ Connection	./app/channels/application_cable/connection.rb	/^  class Connection <
 CreateDelayedJobs	./db/migrate/20220714180131_create_delayed_jobs.rb	/^class CreateDelayedJobs < ActiveRecord::Migration[7.0]$/;"	c
 CreateDrawCostRequests	./db/migrate/20220811193942_create_draw_cost_requests.rb	/^class CreateDrawCostRequests < ActiveRecord::Migration[7.0]$/;"	c
 CreateDrawCostSamples	./db/migrate/20220726205329_create_draw_cost_samples.rb	/^class CreateDrawCostSamples < ActiveRecord::Migration[7.0]$/;"	c
+CreateDrawCostSubmissions	./db/migrate/20220823234025_create_draw_cost_submissions.rb	/^class CreateDrawCostSubmissions < ActiveRecord::Migration[7.0]$/;"	c
 CreateDrawCosts	./db/migrate/20220727000423_create_draw_costs.rb	/^class CreateDrawCosts < ActiveRecord::Migration[7.0]$/;"	c
 CreateDraws	./db/migrate/20220722192532_create_draws.rb	/^class CreateDraws < ActiveRecord::Migration[7.0]$/;"	c
 CreateOrganizations	./db/migrate/20220715041216_create_organizations.rb	/^class CreateOrganizations < ActiveRecord::Migration[7.0]$/;"	c
@@ -33,6 +34,7 @@ CreateUserProfiles	./db/migrate/20220630204256_create_user_profiles.rb	/^class C
 DevelopmentSeeder	./app/services/development_seeder.rb	/^class DevelopmentSeeder$/;"	c
 Devise	./app/models/concerns/users/devise.rb	/^  module Devise$/;"	m	class:Users
 DeviseCreateUsers	./db/migrate/20220629233840_devise_create_users.rb	/^class DeviseCreateUsers < ActiveRecord::Migration[7.0]$/;"	c
+Documents	./app/models/concerns/draw_cost_requests/documents.rb	/^  module Documents$/;"	m	class:DrawCostRequests
 Drafter	./config/application.rb	/^module Drafter$/;"	m
 DrafterDeviseMailer	./app/mailers/drafter_devise_mailer.rb	/^class DrafterDeviseMailer < Devise::Mailer$/;"	c
 Draw	./app/models/draw.rb	/^class Draw < ApplicationRecord$/;"	c
@@ -41,8 +43,12 @@ DrawCostPolicy	./app/policies/draw_cost_policy.rb	/^class DrawCostPolicy < Appli
 DrawCostRequest	./app/models/draw_cost_request.rb	/^class DrawCostRequest < ApplicationRecord$/;"	c
 DrawCostRequestPolicy	./app/policies/draw_cost_request_policy.rb	/^class DrawCostRequestPolicy < ApplicationPolicy$/;"	c
 DrawCostRequestService	./app/services/projects/draw_cost_request_service.rb	/^  class DrawCostRequestService$/;"	c	class:Projects
+DrawCostRequests	./app/models/concerns/draw_cost_requests/documents.rb	/^module DrawCostRequests$/;"	m
 DrawCostRequests	./app/models/concerns/draw_cost_requests/state_machine.rb	/^module DrawCostRequests$/;"	m
 DrawCostSample	./app/models/draw_cost_sample.rb	/^class DrawCostSample < ApplicationRecord$/;"	c
+DrawCostSubmission	./app/models/draw_cost_submission.rb	/^class DrawCostSubmission < ApplicationRecord$/;"	c
+DrawCostSubmissionPolicy	./app/policies/draw_cost_submission_policy.rb	/^class DrawCostSubmissionPolicy < ApplicationPolicy$/;"	c
+DrawCostSubmissions	./app/models/concerns/draw_cost_submissions/state_machine.rb	/^module DrawCostSubmissions$/;"	m
 DrawCosts	./app/models/concerns/draw_costs/state_machine.rb	/^module DrawCosts$/;"	m
 DrawCostsController	./app/controllers/draw_costs_controller.rb	/^class DrawCostsController < ApplicationController$/;"	c
 DrawPolicy	./app/policies/draw_policy.rb	/^class DrawPolicy < ApplicationPolicy$/;"	c
@@ -58,6 +64,8 @@ Membership	./app/services/projects/membership.rb	/^  class Membership$/;"	c	clas
 Organization	./app/models/organization.rb	/^class Organization < ApplicationRecord$/;"	c
 OrganizationPolicy	./app/policies/organization_policy.rb	/^class OrganizationPolicy < ApplicationPolicy$/;"	c
 OrganizationsController	./app/controllers/organizations_controller.rb	/^class OrganizationsController < ApplicationController$/;"	c
+PolicyError	./app/services/projects/draw_cost_request_service.rb	/^    class PolicyError < StandardError; end$/;"	c	class:Projects.DrawCostRequestService
+PolicyError	./app/services/projects/draw_service.rb	/^    class PolicyError < StandardError; end$/;"	c	class:Projects.DrawService
 Profile	./app/models/concerns/users/profile.rb	/^  module Profile$/;"	m	class:Users
 Project	./app/models/project.rb	/^class Project < ApplicationRecord$/;"	c
 ProjectPolicy	./app/policies/project_policy.rb	/^class ProjectPolicy < ApplicationPolicy$/;"	c
@@ -81,6 +89,7 @@ Role	./app/models/role.rb	/^class Role < ApplicationRecord$/;"	c
 Scope	./app/policies/application_policy.rb	/^  class Scope$/;"	c	class:ApplicationPolicy
 Scope	./app/policies/draw_cost_policy.rb	/^  class Scope < Scope$/;"	c	class:DrawCostPolicy
 Scope	./app/policies/draw_cost_request_policy.rb	/^  class Scope < Scope$/;"	c	class:DrawCostRequestPolicy
+Scope	./app/policies/draw_cost_submission_policy.rb	/^  class Scope < Scope$/;"	c	class:DrawCostSubmissionPolicy
 Scope	./app/policies/draw_policy.rb	/^  class Scope < Scope$/;"	c	class:DrawPolicy
 Scope	./app/policies/organization_policy.rb	/^  class Scope < Scope$/;"	c	class:OrganizationPolicy
 Scope	./app/policies/project_policy.rb	/^  class Scope < Scope$/;"	c	class:ProjectPolicy
@@ -89,10 +98,13 @@ Scope	./app/policies/user_policy.rb	/^  class Scope < Scope$/;"	c	class:UserPoli
 Seedable	./app/models/concerns/seeds/seedable.rb	/^  module Seedable$/;"	m	class:Seeds
 Seeds	./app/models/concerns/seeds/seedable.rb	/^module Seeds$/;"	m
 StateMachine	./app/models/concerns/draw_cost_requests/state_machine.rb	/^  module StateMachine$/;"	m	class:DrawCostRequests
+StateMachine	./app/models/concerns/draw_cost_submissions/state_machine.rb	/^  module StateMachine$/;"	m	class:DrawCostSubmissions
 StateMachine	./app/models/concerns/draw_costs/state_machine.rb	/^  module StateMachine$/;"	m	class:DrawCosts
 StateMachine	./app/models/concerns/draws/state_machine.rb	/^  module StateMachine$/;"	m	class:Draws
 SystemEvent	./app/models/system_event.rb	/^class SystemEvent < ApplicationRecord$/;"	c
 TestMailer	./app/mailers/test_mailer.rb	/^class TestMailer < ApplicationMailer$/;"	c
+TransitionError	./app/models/concerns/draw_cost_requests/state_machine.rb	/^      class TransitionError < StandardError; end;$/;"	c	class:DrawCostRequests.StateMachine
+TransitionError	./app/models/concerns/draw_cost_submissions/state_machine.rb	/^      class TransitionError < StandardError; end;$/;"	c	class:DrawCostSubmissions.StateMachine
 TurboDeviseUserController	./app/controllers/turbo_devise_user_controller.rb	/^class TurboDeviseUserController < ApplicationController$/;"	c
 TurboFailureApp	./config/initializers/devise.rb	/^class TurboFailureApp < Devise::FailureApp$/;"	c
 Updater	./app/services/projects/updater.rb	/^  class Updater$/;"	c	class:Projects
@@ -118,6 +130,8 @@ activate_bundler	./bin/bundle	/^  def activate_bundler$/;"	f
 activation_error_handling	./bin/bundle	/^  def activation_error_handling$/;"	f
 active_for_authentication?	./app/models/concerns/users/devise.rb	/^      def active_for_authentication?$/;"	f	class:Users.Devise
 add	./app/services/breadcrumbs.rb	/^  def add(label:, url:, active: false)$/;"	f	class:Breadcrumbs
+add_document	./app/services/projects/draw_cost_request_service.rb	/^    def add_document(params)$/;"	f	class:Projects.DrawCostRequestService
+add_document?	./app/policies/draw_cost_request_policy.rb	/^  def add_document?$/;"	f	class:DrawCostRequestPolicy
 add_draw_costs	./app/services/projects/draw_service.rb	/^    def add_draw_costs(draw)$/;"	f	class:Projects
 add_image	./app/helpers/images_helper.rb	/^  def add_image$/;"	f	class:ImagesHelper
 add_member	./app/controllers/projects_controller.rb	/^  def add_member$/;"	f	class:ProjectsController
@@ -133,6 +147,7 @@ after_confirmation_path_for	./app/controllers/users/confirmations_controller.rb	
 alert_image	./app/helpers/images_helper.rb	/^  def alert_image$/;"	f	class:ImagesHelper
 allowed_params	./app/policies/draw_cost_policy.rb	/^  def allowed_params$/;"	f	class:DrawCostPolicy
 allowed_params	./app/policies/draw_cost_request_policy.rb	/^  def allowed_params$/;"	f	class:DrawCostRequestPolicy
+allowed_params	./app/policies/draw_cost_submission_policy.rb	/^  def allowed_params$/;"	f	class:DrawCostSubmissionPolicy
 allowed_params	./app/policies/draw_policy.rb	/^  def allowed_params$/;"	f	class:DrawPolicy
 allowed_params	./app/policies/organization_policy.rb	/^  def allowed_params$/;"	f	class:OrganizationPolicy
 allowed_params	./app/policies/project_policy.rb	/^  def allowed_params$/;"	f	class:ProjectPolicy
@@ -140,6 +155,15 @@ allowed_params	./app/policies/project_user_policy.rb	/^  def allowed_params$/;"	
 allowed_params	./app/policies/user_policy.rb	/^  def allowed_params$/;"	f	class:UserPolicy
 approve	./app/models/draw.rb	/^  def approve(user)$/;"	f	class:Draw
 approve	./app/services/projects/draw_service.rb	/^    def approve$/;"	f	class:Projects
+approve?	./app/policies/draw_cost_policy.rb	/^  def approve?$/;"	f	class:DrawCostPolicy
+approve?	./app/policies/draw_cost_request_policy.rb	/^  def approve?$/;"	f	class:DrawCostRequestPolicy
+approve?	./app/policies/draw_cost_submission_policy.rb	/^  def approve?$/;"	f	class:DrawCostSubmissionPolicy
+approve_document	./app/services/projects/draw_cost_request_service.rb	/^    def approve_document(document)$/;"	f	class:Projects.DrawCostRequestService
+approve_document?	./app/policies/draw_cost_request_policy.rb	/^  def approve_document?$/;"	f	class:DrawCostRequestPolicy
+approve_request	./app/models/draw_cost_request.rb	/^  def approve_request(user)$/;"	f	class:DrawCostRequest
+approve_request	./app/services/projects/draw_cost_request_service.rb	/^    def approve_request$/;"	f	class:Projects.DrawCostRequestService
+approve_submission	./app/models/draw_cost_submission.rb	/^  def approve_submission(user)$/;"	f	class:DrawCostSubmission
+approve_submission	./app/services/projects/draw_cost_request_service.rb	/^    def approve_submission(submission)$/;"	f	class:Projects.DrawCostRequestService
 approved?	./app/models/concerns/draws/state_machine.rb	/^      def approved?$/;"	f	class:Draws.StateMachine
 assign_reference?	./app/models/draw.rb	/^  def assign_reference?$/;"	f	class:Draw
 assign_to_organization?	./app/policies/user_policy.rb	/^  def assign_to_organization?$/;"	f	class:UserPolicy
@@ -170,11 +194,14 @@ change	./db/migrate/20220722192532_create_draws.rb	/^  def change$/;"	f	class:Cr
 change	./db/migrate/20220726205329_create_draw_cost_samples.rb	/^  def change$/;"	f	class:CreateDrawCostSamples
 change	./db/migrate/20220727000423_create_draw_costs.rb	/^  def change$/;"	f	class:CreateDrawCosts
 change	./db/migrate/20220811193942_create_draw_cost_requests.rb	/^  def change$/;"	f	class:CreateDrawCostRequests
+change	./db/migrate/20220823234025_create_draw_cost_submissions.rb	/^  def change$/;"	f	class:CreateDrawCostSubmissions
 circle_check_image	./app/helpers/images_helper.rb	/^  def circle_check_image$/;"	f	class:ImagesHelper
 circle_x_image	./app/helpers/images_helper.rb	/^  def circle_x_image$/;"	f	class:ImagesHelper
+clean?	./app/models/draw_cost.rb	/^  def clean?$/;"	f	class:DrawCost
 cli_arg_version	./bin/bundle	/^  def cli_arg_version$/;"	f
 confirmation_instructions	./app/mailers/drafter_devise_mailer.rb	/^  def confirmation_instructions(record, token, opts={})$/;"	f	class:DrafterDeviseMailer
 consultant	./app/models/project_role.rb	/^  def self.consultant$/;"	F	class:ProjectRole
+consultants	./app/models/concerns/projects/users.rb	/^      def consultants$/;"	f	class:Projects.Users
 copyright_years	./app/helpers/application_helper.rb	/^  def copyright_years$/;"	f	class:ApplicationHelper
 cost_type_css_class	./app/models/draw_cost.rb	/^  def cost_type_css_class$/;"	f	class:DrawCost
 create	./app/controllers/draw_costs_controller.rb	/^  def create$/;"	f	class:DrawCostsController
@@ -188,6 +215,7 @@ create	./app/services/projects/draw_service.rb	/^    def create(params)$/;"	f	cl
 create	./app/services/projects/updater.rb	/^    def create(params)$/;"	f	class:Projects.Updater
 create?	./app/policies/draw_cost_policy.rb	/^  def create?$/;"	f	class:DrawCostPolicy
 create?	./app/policies/draw_cost_request_policy.rb	/^  def create?$/;"	f	class:DrawCostRequestPolicy
+create?	./app/policies/draw_cost_submission_policy.rb	/^  def create?$/;"	f	class:DrawCostSubmissionPolicy
 create?	./app/policies/draw_policy.rb	/^  def create?$/;"	f	class:DrawPolicy
 create?	./app/policies/organization_policy.rb	/^  def create?$/;"	f	class:OrganizationPolicy
 create?	./app/policies/project_policy.rb	/^  def create?$/;"	f	class:ProjectPolicy
@@ -197,7 +225,7 @@ create_draws	./app/services/development_seeder.rb	/^  def create_draws(project)$
 create_organizations	./app/services/development_seeder.rb	/^  def create_organizations$/;"	f	class:DevelopmentSeeder
 create_projects	./app/services/development_seeder.rb	/^  def create_projects$/;"	f	class:DevelopmentSeeder
 create_request	./app/services/projects/draw_cost_request_service.rb	/^    def create_request(params)$/;"	f	class:Projects.DrawCostRequestService
-create_submission	./app/services/projects/draw_cost_request_service.rb	/^    def create_submission$/;"	f	class:Projects.DrawCostRequestService
+create_submission	./app/services/projects/draw_cost_request_service.rb	/^    def create_submission(draw_cost_request: @draw_cost_request, params: { amount: 0.0} )$/;"	f	class:Projects.DrawCostRequestService
 create_users	./app/services/development_seeder.rb	/^  def create_users$/;"	f	class:DevelopmentSeeder
 deactivate?	./app/policies/user_policy.rb	/^  def deactivate?$/;"	f	class:UserPolicy
 deactivated?	./app/models/user.rb	/^  def deactivated?$/;"	f	class:User
@@ -210,6 +238,7 @@ destroy	./app/controllers/users_controller.rb	/^  def destroy$/;"	f	class:UsersC
 destroy	./app/services/projects/draw_service.rb	/^    def destroy$/;"	f	class:Projects
 destroy?	./app/policies/draw_cost_policy.rb	/^  def destroy?$/;"	f	class:DrawCostPolicy
 destroy?	./app/policies/draw_cost_request_policy.rb	/^  def destroy?$/;"	f	class:DrawCostRequestPolicy
+destroy?	./app/policies/draw_cost_submission_policy.rb	/^  def destroy?$/;"	f	class:DrawCostSubmissionPolicy
 destroy?	./app/policies/draw_policy.rb	/^  def destroy?$/;"	f	class:DrawPolicy
 destroy?	./app/policies/organization_policy.rb	/^  def destroy?$/;"	f	class:OrganizationPolicy
 destroy?	./app/policies/project_policy.rb	/^  def destroy?$/;"	f	class:ProjectPolicy
@@ -218,6 +247,7 @@ destroy?	./app/policies/user_policy.rb	/^  def destroy?$/;"	f	class:UserPolicy
 destroy_image	./app/helpers/images_helper.rb	/^  def destroy_image$/;"	f	class:ImagesHelper
 developer	./app/models/project_role.rb	/^  def self.developer$/;"	F	class:ProjectRole
 developer?	./app/models/project_role.rb	/^  def developer?$/;"	f	class:ProjectRole
+developers	./app/models/concerns/projects/users.rb	/^      def developers$/;"	f	class:Projects.Users
 down	./db/migrate/20220714180131_create_delayed_jobs.rb	/^  def self.down$/;"	F	class:CreateDelayedJobs
 draw	./app/policies/draw_cost_policy.rb	/^  def draw$/;"	f	class:DrawCostPolicy
 draw_cost_cost_type_options	./app/helpers/draws_helper.rb	/^  def draw_cost_cost_type_options$/;"	f
@@ -225,7 +255,6 @@ draw_cost_params	./app/controllers/draw_costs_controller.rb	/^  def draw_cost_pa
 draw_params	./app/controllers/draws_controller.rb	/^  def draw_params$/;"	f	class:DrawsController
 draw_record_scope	./app/controllers/draw_costs_controller.rb	/^  def draw_record_scope$/;"	f	class:DrawCostsController
 draw_state_badge	./app/helpers/draws_helper.rb	/^  def draw_state_badge(draw)$/;"	f	class:DrawsHelper
-draws	./app/services/projects/draw_service.rb	/^    def draws$/;"	f	class:Projects
 each	./app/services/breadcrumbs.rb	/^  def each$/;"	f	class:Breadcrumbs
 edit	./app/controllers/draw_costs_controller.rb	/^  def edit$/;"	f	class:DrawCostsController
 edit	./app/controllers/draws_controller.rb	/^  def edit$/;"	f	class:DrawsController
@@ -235,6 +264,7 @@ edit	./app/controllers/projects_controller.rb	/^  def edit$/;"	f	class:ProjectsC
 edit	./app/controllers/users_controller.rb	/^  def edit$/;"	f	class:UsersController
 edit?	./app/policies/draw_cost_policy.rb	/^  def edit?$/;"	f	class:DrawCostPolicy
 edit?	./app/policies/draw_cost_request_policy.rb	/^  def edit?$/;"	f	class:DrawCostRequestPolicy
+edit?	./app/policies/draw_cost_submission_policy.rb	/^  def edit?$/;"	f	class:DrawCostSubmissionPolicy
 edit?	./app/policies/draw_policy.rb	/^  def edit?$/;"	f	class:DrawPolicy
 edit?	./app/policies/organization_policy.rb	/^  def edit?$/;"	f	class:OrganizationPolicy
 edit?	./app/policies/project_policy.rb	/^  def edit?$/;"	f	class:ProjectPolicy
@@ -251,7 +281,9 @@ executive?	./app/models/concerns/users/role.rb	/^      def executive?$/;"	f	clas
 executive?	./app/models/role.rb	/^  def executive?$/;"	f	class:Role
 existing_request	./app/services/projects/draw_cost_request_service.rb	/^    def existing_request$/;"	f	class:Projects.DrawCostRequestService
 external?	./app/models/project_role.rb	/^  def external?$/;"	f	class:ProjectRole
+finance	./app/models/concerns/projects/users.rb	/^      def finance$/;"	f	class:Projects.Users
 finance	./app/models/project_role.rb	/^  def self.finance$/;"	F	class:ProjectRole
+finance?	./app/models/project_role.rb	/^  def finance?$/;"	f	class:ProjectRole
 format_phone	./app/models/user_profile.rb	/^  def self.format_phone(number, prefixed: false)$/;"	F	class:UserProfile
 full_datetime	./app/helpers/application_helper.rb	/^  def full_datetime(time)$/;"	f	class:ApplicationHelper
 full_name	./app/models/concerns/users/profile.rb	/^      def full_name$/;"	f	class:Users.Profile
@@ -269,6 +301,7 @@ index	./app/controllers/projects_controller.rb	/^  def index$/;"	f	class:Project
 index	./app/controllers/users_controller.rb	/^  def index$/;"	f	class:UsersController
 index?	./app/policies/draw_cost_policy.rb	/^  def index?$/;"	f	class:DrawCostPolicy
 index?	./app/policies/draw_cost_request_policy.rb	/^  def index?$/;"	f	class:DrawCostRequestPolicy
+index?	./app/policies/draw_cost_submission_policy.rb	/^  def index?$/;"	f	class:DrawCostSubmissionPolicy
 index?	./app/policies/draw_policy.rb	/^  def index?$/;"	f	class:DrawPolicy
 index?	./app/policies/home_policy.rb	/^  def index?$/;"	f	class:HomePolicy
 index?	./app/policies/organization_policy.rb	/^  def index?$/;"	f	class:OrganizationPolicy
@@ -281,7 +314,7 @@ initialize	./app/policies/application_policy.rb	/^    def initialize(user, scope
 initialize	./app/policies/application_policy.rb	/^  def initialize(user, record)$/;"	f	class:ApplicationPolicy
 initialize	./app/policies/home_policy.rb	/^  def initialize(user, _record)$/;"	f	class:HomePolicy
 initialize	./app/services/breadcrumbs.rb	/^  def initialize$/;"	f	class:Breadcrumbs
-initialize	./app/services/projects/draw_cost_request_service.rb	/^    def initialize(current_user: nil, draw:)$/;"	f	class:Projects.DrawCostRequestService
+initialize	./app/services/projects/draw_cost_request_service.rb	/^    def initialize(user: , draw_cost: nil, draw_cost_request: nil)$/;"	f	class:Projects.DrawCostRequestService
 initialize	./app/services/projects/draw_service.rb	/^    def initialize(current_user: nil, project:, draw: nil)$/;"	f	class:Projects.DrawService
 initialize	./app/services/projects/membership.rb	/^    def initialize(current_user:, project:)$/;"	f	class:Projects.Membership
 initialize	./app/services/projects/updater.rb	/^    def initialize(current_user, project)$/;"	f	class:Projects.Updater
@@ -289,7 +322,6 @@ internal?	./app/models/project_role.rb	/^  def internal?$/;"	f	class:ProjectRole
 invoked_as_script?	./bin/bundle	/^  def invoked_as_script?$/;"	f
 is_owner?	./app/policies/application_policy.rb	/^  def is_owner?$/;"	f	class:ApplicationPolicy
 load_bundler!	./bin/bundle	/^  def load_bundler!$/;"	f
-load_sample_costs	./app/services/projects/draw_service.rb	/^    def load_sample_costs$/;"	f	class:Projects
 load_seed_data	./app/models/concerns/seeds/seedable.rb	/^      def load_seed_data(yaml_path=nil)$/;"	f	class:Seeds.Seedable
 lockfile	./bin/bundle	/^  def lockfile$/;"	f
 lockfile_version	./bin/bundle	/^  def lockfile_version$/;"	f
@@ -298,6 +330,7 @@ manage_features?	./app/policies/user_policy.rb	/^  def manage_features?$/;"	f	cl
 management?	./app/models/project_role.rb	/^  def management?$/;"	f	class:ProjectRole
 manager	./app/models/project_role.rb	/^  def self.manager$/;"	F	class:ProjectRole
 manager?	./app/models/project_role.rb	/^  def manager?$/;"	f	class:ProjectRole
+managers	./app/models/concerns/projects/users.rb	/^      def managers$/;"	f	class:Projects.Users
 may_change_role?	./app/policies/user_policy.rb	/^  def may_change_role?(new_role_id=nil)$/;"	f	class:UserPolicy
 member?	./app/models/concerns/users/projects.rb	/^      def member?(project)$/;"	f	class:Users.Projects
 member_count	./app/services/projects/membership.rb	/^    def member_count$/;"	f	class:Projects.Membership
@@ -315,6 +348,7 @@ new	./app/controllers/users/confirmations_controller.rb	/^   def new$/;"	f	class
 new	./app/controllers/users_controller.rb	/^  def new$/;"	f	class:UsersController
 new?	./app/policies/draw_cost_policy.rb	/^  def new?$/;"	f	class:DrawCostPolicy
 new?	./app/policies/draw_cost_request_policy.rb	/^  def new?$/;"	f	class:DrawCostRequestPolicy
+new?	./app/policies/draw_cost_submission_policy.rb	/^  def new?$/;"	f	class:DrawCostSubmissionPolicy
 new?	./app/policies/draw_policy.rb	/^  def new?$/;"	f	class:DrawPolicy
 new?	./app/policies/organization_policy.rb	/^  def new?$/;"	f	class:OrganizationPolicy
 new?	./app/policies/project_policy.rb	/^  def new?$/;"	f	class:ProjectPolicy
@@ -334,14 +368,18 @@ owner	./app/models/project_role.rb	/^  def self.owner$/;"	F	class:ProjectRole
 owner?	./app/models/project_role.rb	/^  def owner?$/;"	f	class:ProjectRole
 owners	./app/models/concerns/projects/users.rb	/^      def owners$/;"	f	class:Projects.Users
 password_required?	./app/models/concerns/users/devise.rb	/^      def password_required?$/;"	f	class:Users.Devise
-permitted_state_events	./app/models/concerns/draw_cost_requests/state_machine.rb	/^      def permitted_state_events$/;"	f	class:DrawCostRequests.StateMachine
+permitted_state_events	./app/models/concerns/draw_cost_requests/state_machine.rb	/^      def permitted_state_events$/;"	f	class:DrawCostRequests.StateMachine.TransitionError
+permitted_state_events	./app/models/concerns/draw_cost_submissions/state_machine.rb	/^      def permitted_state_events$/;"	f	class:DrawCostSubmissions.StateMachine.TransitionError
 permitted_state_events	./app/models/concerns/draw_costs/state_machine.rb	/^      def permitted_state_events$/;"	f	class:DrawCosts.StateMachine
 permitted_state_events	./app/models/concerns/draws/state_machine.rb	/^      def permitted_state_events$/;"	f	class:Draws.StateMachine
-permitted_states	./app/models/concerns/draw_cost_requests/state_machine.rb	/^      def permitted_states$/;"	f	class:DrawCostRequests.StateMachine
+permitted_states	./app/models/concerns/draw_cost_requests/state_machine.rb	/^      def permitted_states$/;"	f	class:DrawCostRequests.StateMachine.TransitionError
+permitted_states	./app/models/concerns/draw_cost_submissions/state_machine.rb	/^      def permitted_states$/;"	f	class:DrawCostSubmissions.StateMachine.TransitionError
 permitted_states	./app/models/concerns/draw_costs/state_machine.rb	/^      def permitted_states$/;"	f	class:DrawCosts.StateMachine
 permitted_states	./app/models/concerns/draws/state_machine.rb	/^      def permitted_states$/;"	f	class:Draws.StateMachine
 project	./app/policies/draw_cost_policy.rb	/^  def project$/;"	f	class:DrawCostPolicy
+project	./app/policies/draw_cost_submission_policy.rb	/^  def project$/;"	f	class:DrawCostSubmissionPolicy
 project_developer?	./app/models/concerns/users/projects.rb	/^      def project_developer?(project)$/;"	f	class:Users.Projects
+project_finance?	./app/models/concerns/users/projects.rb	/^      def project_finance?(project)$/;"	f	class:Users.Projects
 project_internal?	./app/models/concerns/users/projects.rb	/^      def project_internal?(project)$/;"	f	class:Users.Projects
 project_management?	./app/models/concerns/users/projects.rb	/^      def project_management?(project)$/;"	f	class:Users.Projects
 project_owner?	./app/models/concerns/users/projects.rb	/^      def project_owner?(project)$/;"	f	class:Users.Projects
@@ -361,11 +399,25 @@ record_scope	./app/controllers/project_users_controller.rb	/^  def record_scope$
 record_scope	./app/controllers/projects_controller.rb	/^  def record_scope$/;"	f	class:ProjectsController
 record_scope	./app/controllers/users_controller.rb	/^  def record_scope$/;"	f	class:UsersController
 refresh_policy	./app/services/projects/updater.rb	/^    def refresh_policy$/;"	f	class:Projects.Updater
+reject?	./app/policies/draw_cost_policy.rb	/^  def reject?$/;"	f	class:DrawCostPolicy
+reject?	./app/policies/draw_cost_request_policy.rb	/^  def reject?$/;"	f	class:DrawCostRequestPolicy
+reject?	./app/policies/draw_cost_submission_policy.rb	/^  def reject?$/;"	f	class:DrawCostSubmissionPolicy
+reject_document	./app/services/projects/draw_cost_request_service.rb	/^    def reject_document(document)$/;"	f	class:Projects.DrawCostRequestService
+reject_document?	./app/policies/draw_cost_request_policy.rb	/^  def reject_document?$/;"	f	class:DrawCostRequestPolicy
+reject_request	./app/models/draw_cost_request.rb	/^  def reject_request$/;"	f	class:DrawCostRequest
+reject_request	./app/services/projects/draw_cost_request_service.rb	/^    def reject_request$/;"	f	class:Projects.DrawCostRequestService
+reject_submission	./app/models/draw_cost_submission.rb	/^  def reject_submission$/;"	f	class:DrawCostSubmission
+remove?	./app/policies/draw_cost_submission_policy.rb	/^  def remove?$/;"	f	class:DrawCostSubmissionPolicy
+remove_document	./app/services/projects/draw_cost_request_service.rb	/^    def remove_document(params)$/;"	f	class:Projects.DrawCostRequestService
+remove_document?	./app/policies/draw_cost_request_policy.rb	/^  def remove_document?$/;"	f	class:DrawCostRequestPolicy
 remove_member	./app/controllers/projects_controller.rb	/^  def remove_member$/;"	f	class:ProjectsController
 remove_member	./app/services/projects/membership.rb	/^    def remove_member(user)$/;"	f	class:Projects.Membership
 remove_member?	./app/policies/project_policy.rb	/^  def remove_member?$/;"	f	class:ProjectPolicy
+remove_submission	./app/services/projects/draw_cost_request_service.rb	/^    def remove_submission(draw_cost_submission)$/;"	f	class:Projects.DrawCostRequestService
+reset_errors	./app/services/projects/draw_cost_request_service.rb	/^    def reset_errors$/;"	f	class:Projects.DrawCostRequestService
 resolve	./app/policies/draw_cost_policy.rb	/^    def resolve$/;"	f	class:DrawCostPolicy.Scope
 resolve	./app/policies/draw_cost_request_policy.rb	/^    def resolve$/;"	f	class:DrawCostRequestPolicy.Scope
+resolve	./app/policies/draw_cost_submission_policy.rb	/^    def resolve$/;"	f	class:DrawCostSubmissionPolicy.Scope
 resolve	./app/policies/draw_policy.rb	/^    def resolve$/;"	f	class:DrawPolicy.Scope
 resolve	./app/policies/organization_policy.rb	/^    def resolve$/;"	f	class:OrganizationPolicy.Scope
 resolve	./app/policies/project_policy.rb	/^    def resolve$/;"	f	class:ProjectPolicy.Scope
@@ -376,9 +428,10 @@ role_badge_color_class	./app/helpers/application_helper.rb	/^  def role_badge_co
 role_for	./app/models/concerns/projects/users.rb	/^      def role_for(user)$/;"	f	class:Projects.Users
 role_options_for_select	./app/helpers/users_helper.rb	/^  def role_options_for_select(user)$/;"	f	class:UsersHelper
 roles_for_select	./app/policies/user_policy.rb	/^  def roles_for_select$/;"	f	class:UserPolicy
-sanitize_params	./app/services/projects/draw_cost_request_service.rb	/^    def sanitize_params(params)$/;"	f	class:Projects.DrawCostRequestService
 sanitize_params	./app/services/projects/draw_service.rb	/^    def sanitize_params(params)$/;"	f	class:Projects
 sanitize_params	./app/services/projects/updater.rb	/^    def sanitize_params(params)$/;"	f	class:Projects.Updater
+sanitize_request_params	./app/services/projects/draw_cost_request_service.rb	/^    def sanitize_request_params(params)$/;"	f	class:Projects.DrawCostRequestService
+sanitize_submission_params	./app/services/projects/draw_cost_request_service.rb	/^    def sanitize_submission_params(submission, params)$/;"	f	class:Projects.DrawCostRequestService
 set_draw	./app/controllers/draw_costs_controller.rb	/^  def set_draw$/;"	f	class:DrawCostsController
 set_draw	./app/controllers/draws_controller.rb	/^  def set_draw$/;"	f	class:DrawsController
 set_draw_cost	./app/controllers/draw_costs_controller.rb	/^  def set_draw_cost$/;"	f	class:DrawCostsController
@@ -398,6 +451,7 @@ show	./app/controllers/users/confirmations_controller.rb	/^  def show$/;"	f	clas
 show	./app/controllers/users_controller.rb	/^  def show$/;"	f	class:UsersController
 show?	./app/policies/draw_cost_policy.rb	/^  def show?$/;"	f	class:DrawCostPolicy
 show?	./app/policies/draw_cost_request_policy.rb	/^  def show?$/;"	f	class:DrawCostRequestPolicy
+show?	./app/policies/draw_cost_submission_policy.rb	/^  def show?$/;"	f	class:DrawCostSubmissionPolicy
 show?	./app/policies/draw_policy.rb	/^  def show?$/;"	f	class:DrawPolicy
 show?	./app/policies/organization_policy.rb	/^  def show?$/;"	f	class:OrganizationPolicy
 show?	./app/policies/project_policy.rb	/^  def show?$/;"	f	class:ProjectPolicy
@@ -410,18 +464,25 @@ square_check_image	./app/helpers/images_helper.rb	/^  def square_check_image$/;"
 square_check_open_image	./app/helpers/images_helper.rb	/^  def square_check_open_image$/;"	f	class:ImagesHelper
 square_x_image	./app/helpers/images_helper.rb	/^  def square_x_image$/;"	f	class:ImagesHelper
 square_x_open_image	./app/helpers/images_helper.rb	/^  def square_x_open_image$/;"	f	class:ImagesHelper
-state_css_class	./app/models/concerns/draw_cost_requests/state_machine.rb	/^      def state_css_class$/;"	f	class:DrawCostRequests.StateMachine
+state_css_class	./app/models/concerns/draw_cost_requests/state_machine.rb	/^      def state_css_class$/;"	f	class:DrawCostRequests.StateMachine.TransitionError
 state_css_class	./app/models/concerns/draw_costs/state_machine.rb	/^      def state_css_class$/;"	f	class:DrawCosts.StateMachine
 state_css_class	./app/models/concerns/draws/state_machine.rb	/^      def state_css_class$/;"	f	class:Draws.StateMachine
 state_names	./app/models/concerns/draw_cost_requests/state_machine.rb	/^      def state_names$/;"	f	class:DrawCostRequests.StateMachine
+state_names	./app/models/concerns/draw_cost_submissions/state_machine.rb	/^      def state_names$/;"	f	class:DrawCostSubmissions.StateMachine
 state_names	./app/models/concerns/draw_costs/state_machine.rb	/^      def state_names$/;"	f	class:DrawCosts.StateMachine
 state_names	./app/models/concerns/draws/state_machine.rb	/^      def state_names$/;"	f	class:Draws.StateMachine
+submission_policy	./app/services/projects/draw_cost_request_service.rb	/^    def submission_policy(submission)$/;"	f	class:Projects.DrawCostRequestService
+submit?	./app/policies/draw_cost_request_policy.rb	/^  def submit?$/;"	f	class:DrawCostRequestPolicy
+submit?	./app/policies/draw_cost_submission_policy.rb	/^  def submit?$/;"	f	class:DrawCostSubmissionPolicy
+submit_request	./app/services/projects/draw_cost_request_service.rb	/^    def submit_request$/;"	f	class:Projects.DrawCostRequestService
+submit_submission	./app/services/projects/draw_cost_request_service.rb	/^    def submit_submission(submission)$/;"	f	class:Projects.DrawCostRequestService
 switch_setting?	./app/policies/user_policy.rb	/^  def switch_setting?$/;"	f	class:UserPolicy
 system!	./bin/setup	/^def system!(*args)$/;"	f
 test_email	./app/mailers/test_mailer.rb	/^  def test_email$/;"	f	class:TestMailer
 to_a	./app/services/breadcrumbs.rb	/^  def to_a$/;"	f	class:Breadcrumbs
 to_turbo_stream	./app/controllers/turbo_devise_user_controller.rb	/^    def to_turbo_stream$/;"	f	class:TurboDeviseUserController.Responder
-trigger_event	./app/models/concerns/draw_cost_requests/state_machine.rb	/^      def trigger_event(event_name:, user: nil)$/;"	f	class:DrawCostRequests.StateMachine
+trigger_event	./app/models/concerns/draw_cost_requests/state_machine.rb	/^      def trigger_event(event_name:, user: nil)$/;"	f	class:DrawCostRequests.StateMachine.TransitionError
+trigger_event	./app/models/concerns/draw_cost_submissions/state_machine.rb	/^      def trigger_event(event_name:, user: nil)$/;"	f	class:DrawCostSubmissions.StateMachine.TransitionError
 trigger_event	./app/models/concerns/draw_costs/state_machine.rb	/^      def trigger_event(event_name:, user: nil)$/;"	f	class:DrawCosts.StateMachine
 trigger_event	./app/models/concerns/draws/state_machine.rb	/^      def trigger_event(event_name:, user: nil)$/;"	f	class:Draws.StateMachine
 up	./db/migrate/20220714180131_create_delayed_jobs.rb	/^  def self.up$/;"	F	class:CreateDelayedJobs
@@ -435,18 +496,20 @@ update	./app/services/projects/draw_service.rb	/^    def update(params)$/;"	f	cl
 update	./app/services/projects/updater.rb	/^    def update(params)$/;"	f	class:Projects.Updater
 update?	./app/policies/draw_cost_policy.rb	/^  def update?$/;"	f	class:DrawCostPolicy
 update?	./app/policies/draw_cost_request_policy.rb	/^  def update?$/;"	f	class:DrawCostRequestPolicy
+update?	./app/policies/draw_cost_submission_policy.rb	/^  def update?$/;"	f	class:DrawCostSubmissionPolicy
 update?	./app/policies/draw_policy.rb	/^  def update?$/;"	f	class:DrawPolicy
 update?	./app/policies/organization_policy.rb	/^  def update?$/;"	f	class:OrganizationPolicy
 update?	./app/policies/project_policy.rb	/^  def update?$/;"	f	class:ProjectPolicy
 update?	./app/policies/project_user_policy.rb	/^  def update?$/;"	f	class:ProjectUserPolicy
 update?	./app/policies/user_policy.rb	/^  def update?$/;"	f	class:UserPolicy
 update_member_role	./app/services/projects/membership.rb	/^    def update_member_role(user:, role: )$/;"	f	class:Projects.Membership
-update_request	./app/services/projects/draw_cost_request_service.rb	/^    def update_request(draw_cost_request)$/;"	f	class:Projects.DrawCostRequestService
-update_submission	./app/services/projects/draw_cost_request_service.rb	/^    def update_submission$/;"	f	class:Projects.DrawCostRequestService
+update_request	./app/services/projects/draw_cost_request_service.rb	/^    def update_request(params)$/;"	f	class:Projects.DrawCostRequestService
+update_submission	./app/services/projects/draw_cost_request_service.rb	/^    def update_submission(submission:, params:)$/;"	f	class:Projects.DrawCostRequestService
 user	./app/models/role.rb	/^  def self.user$/;"	F	class:Role
 user?	./app/models/concerns/users/role.rb	/^      def user?$/;"	f	class:Users.Role
 user?	./app/models/role.rb	/^  def user?$/;"	f	class:Role
 user_not_authorized	./app/controllers/application_controller.rb	/^  def user_not_authorized$/;"	f	class:ApplicationController
 user_params	./app/controllers/users_controller.rb	/^  def user_params$/;"	f	class:UsersController
 user_timezone	./app/controllers/application_controller.rb	/^  def user_timezone(&block)$/;"	f	class:ApplicationController
+valid_pending_submission?	./app/models/draw_cost_submission.rb	/^  def valid_pending_submission?$/;"	f	class:DrawCostSubmission
 warden_scope	./spec/support/request_spec_helper.rb	/^  def warden_scope(resource)$/;"	f	class:RequestSpecHelper

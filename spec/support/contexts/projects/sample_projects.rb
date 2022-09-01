@@ -41,6 +41,18 @@ RSpec.shared_context 'sample_projects' do
     project
   }
 
+  let(:sample_draw) {
+    user = sample_project.owners.first
+    service = Projects::DrawService.new(current_user: user, project: sample_project)
+    service.create({name: 'Sample Draw 1'})
+  }
+  let(:sample_draw_cost) { sample_draw.draw_costs.first }
+  let(:sample_draw_cost_request) {
+    user = sample_project.developers.first
+    service = Projects::DrawCostRequestService.new(user: user, draw_cost: sample_draw_cost)
+    service.create_request({amount: 1})
+  }
+
   before do
     sample_project
   end
