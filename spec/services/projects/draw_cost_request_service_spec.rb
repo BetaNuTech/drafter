@@ -861,11 +861,28 @@ RSpec.describe Projects::DrawCostRequestService do
     end # Remove document
 
     describe 'approve document' do
+      let(:draw_cost_document) {
+        service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost_request: draw_cost_request)
+        doc = service.add_document(document_attributes)
+        draw_cost_request.draw_cost_documents.reload
+        doc
+      }
       describe 'by an authorized user' do
-        it 'is approved'
+        it 'is approved' do
+          refute(draw_cost_document.approved?)
+          service = Projects::DrawCostRequestService.new(user: manager_user, draw_cost_request: draw_cost_request)
+          service.approve_document(draw_cost_document)
+          draw_cost_document.reload
+          assert(draw_cost_document.approved?)
+        end
       end
       describe 'by an unauthorized user' do
-        it 'throws an error'
+        it 'throws an error' do
+          service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost_request: draw_cost_request)
+          expect {
+            service.approve_document(draw_cost_document)
+          }.to raise_error(Projects::DrawCostRequestService::PolicyError)
+        end
       end
     end # Approve document
 

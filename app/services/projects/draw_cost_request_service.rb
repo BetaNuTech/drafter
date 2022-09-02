@@ -236,7 +236,10 @@ module Projects
     end
 
     def approve_document(document)
-      # TODO
+      raise PolicyError unless @request_policy.approve_document?
+
+      document.approve(@user)
+      document
     end
 
     def reject_document(document)
