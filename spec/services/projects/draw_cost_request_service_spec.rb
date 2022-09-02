@@ -861,7 +861,12 @@ RSpec.describe Projects::DrawCostRequestService do
     end # Remove document
 
     describe 'approve document' do
-      it 'is approved'
+      describe 'by an authorized user' do
+        it 'is approved'
+      end
+      describe 'by an unauthorized user' do
+        it 'throws an error'
+      end
     end # Approve document
 
     describe 'reject document' do
