@@ -772,11 +772,27 @@ RSpec.describe Projects::DrawCostRequestService do
     let(:document_attributes) {
       { documenttype: 'budget', document: file_upload }
     }
+    let(:draw_cost_document) {
+      service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost_request: draw_cost_request)
+      doc = service.add_document(document_attributes)
+      draw_cost_request.draw_cost_documents.reload
+      doc
+    }
 
     describe 'upload' do
       describe 'by the developer' do
         describe 'with an invalid document type' do
-          it 'does not add the document'
+          let(:invalid_document_attributes) { document_attributes.merge(documenttype: 'invalid')}
+          it 'does not add the document' do
+            service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost_request: draw_cost_request)
+            assert(draw_cost_request.draw_cost_documents.empty?)
+            draw_cost_document = nil
+            expect {
+              draw_cost_document = service.add_document(invalid_document_attributes)
+              draw_cost_request.draw_cost_documents.reload
+            }.to_not change{draw_cost_request.draw_cost_documents.count}
+            assert(service.errors?)
+          end
         end
         describe 'with valid attributes' do
           it 'is added' do
@@ -820,12 +836,6 @@ RSpec.describe Projects::DrawCostRequestService do
     end # Add Document
 
     describe 'remove document' do
-      let(:draw_cost_document) {
-        service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost_request: draw_cost_request)
-        doc = service.add_document(document_attributes)
-        draw_cost_request.draw_cost_documents.reload
-        doc
-      }
       describe 'by the developer' do
         it 'is removed' do
           service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost_request: draw_cost_request)
@@ -861,12 +871,6 @@ RSpec.describe Projects::DrawCostRequestService do
     end # Remove document
 
     describe 'approve document' do
-      let(:draw_cost_document) {
-        service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost_request: draw_cost_request)
-        doc = service.add_document(document_attributes)
-        draw_cost_request.draw_cost_documents.reload
-        doc
-      }
       describe 'by an authorized user' do
         it 'is approved' do
           refute(draw_cost_document.approved?)
@@ -882,12 +886,35 @@ RSpec.describe Projects::DrawCostRequestService do
           expect {
             service.approve_document(draw_cost_document)
           }.to raise_error(Projects::DrawCostRequestService::PolicyError)
+          draw_cost_document.reload
+          refute(draw_cost_document.approved?)
         end
       end
     end # Approve document
 
     describe 'reject document' do
-      it 'is rejected'
+      before do
+        draw_cost_document.approve(manager_user)
+      end
+      describe 'by an authorized user' do
+        it 'is rejected' do
+          assert(draw_cost_document.approved?)
+          service = Projects::DrawCostRequestService.new(user: manager_user, draw_cost_request: draw_cost_request)
+          service.reject_document(draw_cost_document)
+          draw_cost_document.reload
+          refute(draw_cost_document.approved?)
+        end
+      end
+      describe 'by an unauthorized user' do
+        it 'throws an error' do
+          service = Projects::DrawCostRequestService.new(user: developer_user, draw_cost_request: draw_cost_request)
+          expect {
+            service.reject_document(draw_cost_document)
+          }.to raise_error(Projects::DrawCostRequestService::PolicyError)
+          draw_cost_document.reload
+          assert(draw_cost_document.approved?)
+        end
+      end
     end # Reject document
   end # Documents
 

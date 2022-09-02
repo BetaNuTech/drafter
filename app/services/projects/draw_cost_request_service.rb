@@ -243,7 +243,10 @@ module Projects
     end
 
     def reject_document(document)
-      # TODO
+      raise PolicyError unless @request_policy.reject_document?
+
+      document.unapprove
+      document
     end
 
     private
