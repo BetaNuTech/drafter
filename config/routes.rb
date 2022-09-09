@@ -25,5 +25,6 @@ Rails.application.routes.draw do
   resources :projects do
     resources :draws
     resources :project_users
+    resources :draw_cost_requests
   end
 end

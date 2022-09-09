@@ -4,6 +4,13 @@ class DrawCostRequestPolicy < ApplicationPolicy
       case user
       when -> (u) { u.administrator? }
         scope
+      when -> (u) { u.developer? }
+        # DrawCostRequests for the user's assigned projects
+        #  belonging to the user's assigned organization
+        scope.includes(:draw).where(
+          draws: {project: user.projects},
+          organization_id: user.organization_id
+        )
       else
         # DrawCostRequests for the user's assigned projects
         scope.includes(:draw).where(draws: {project: user.projects})
