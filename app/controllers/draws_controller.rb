@@ -12,6 +12,8 @@ class DrawsController < ApplicationController
 
   def show
     authorize @draw
+    @draw_cost_requests = policy_scope(@draw.draw_cost_requests)
+
     breadcrumbs.add(label: 'Home', url: '/')
     breadcrumbs.add(label: @project.name, url: project_path(@project))
     breadcrumbs.add(label: @draw.name, url: project_draw_path(project_id: @project.id), active: true)

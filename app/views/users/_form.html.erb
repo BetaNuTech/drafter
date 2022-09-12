@@ -63,12 +63,14 @@
               <%= form.select :role_id, role_options_for_select(user), {}, { class: "form-select form-select" } %>
             </div>
           <% end %>
-          <% if policy(user).assign_to_organization? %>
             <div class="col-sm-12 col-md-6 form-group">
               <%= form.label :organization_id, 'Organization' %><br/>
+              <% if policy(user).assign_to_organization? %>
               <%= form.select :organization_id, organization_options_for_select(user), {include_blank: true}, { class: "form-select form-select" } %>
+              <% else %>
+                <b><%= user.organization&.name %></b>
+              <% end %>
             </div>
-          <% end %>
           </div>
       </fieldset>
     </div>

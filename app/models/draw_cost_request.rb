@@ -49,7 +49,7 @@ class DrawCostRequest < ApplicationRecord
   belongs_to :organization
   belongs_to :approver, class_name: 'User', optional: true
   has_one :project, through: :draw
-  has_many :draw_cost_submissions
+  has_many :draw_cost_submissions, dependent: :destroy
 
   ### Enums
   enum :alert, [:ok, :auditfail, :unclean]

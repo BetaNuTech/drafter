@@ -28,6 +28,9 @@
 require 'rails_helper'
 
 RSpec.describe DrawCostDocument, type: :model do
+  before do
+    ActiveStorage::Current.url_options = { host: 'example.com' }
+  end
   include_context 'sample_projects'
 
   let(:developer_user) { sample_project.developers.first }

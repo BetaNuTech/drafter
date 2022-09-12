@@ -13,6 +13,23 @@ module DrawCostRequests
     included do
       class TransitionError < StandardError; end;
 
+      class StateValidator < ActiveModel::Validator
+        def validate(record)
+          return false unless record.draw.present? && record.organization.present?
+
+          if record.new_record?
+            conflict = record.draw.active_requests_for?(record.organization)
+          else
+            conflict = record.active_organization_requests(record.organization).where.not(id: record.id).any?
+          end
+
+          record.errors.add(:base, 'There is already an active Request for this Draw') if conflict
+          true
+        end
+      end
+
+      validates_with StateValidator
+
       include AASM
 
       aasm column: :state do

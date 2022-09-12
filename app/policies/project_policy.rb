@@ -27,7 +27,7 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def show?
-    user.administrator? || user.project_internal?(record)
+    user.administrator? || user.member?(record)
   end
 
   def edit?

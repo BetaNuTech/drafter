@@ -16,6 +16,8 @@ RSpec.shared_context "draw_cost_request_service" do
   let(:non_project_user) { create(:user, role: user_role) }
   let(:valid_draw_cost_request_attributes) {
     {
+      draw_id: draw.id,
+      draw_cost_id: draw_cost.id,
       amount: 12345.67,
       description: 'Test description',
       plan_change: true,
@@ -24,6 +26,8 @@ RSpec.shared_context "draw_cost_request_service" do
   }
   let(:invalid_draw_cost_request_attributes) {
     {
+      draw_id: draw.id,
+      draw_cost_id: draw_cost.id,
       amount: nil,
       description: 'Invalid draw cost request',
     }

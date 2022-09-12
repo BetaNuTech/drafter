@@ -3,9 +3,11 @@
     <h1>Projects</h1>
   </div>
 
-  <div class="col-sm-6 col-md-3 col-auto">
-    <%= link_to('Create Project', new_project_path, class: 'btn btn btn-success') %>
-  </div>
+  <% if policy(Project).new? %>
+    <div class="col-sm-6 col-md-3 col-auto">
+      <%= link_to('Create Project', new_project_path, class: 'btn btn btn-success') %>
+    </div>
+  <% end %>
 </div>
 
 <div class="row">

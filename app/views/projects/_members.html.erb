@@ -9,7 +9,7 @@
       <%= link_to('Select Member', new_project_project_user_path(project_id: project.id),
                   { class: 'btn btn-sm btn-primary',
                     data: { 'turbo_frame': dom_id(ProjectUser.new(project: project)) }
-                  }) %>
+                  }) if policy(ProjectUser).new? %>
     </h5>
   <div class="card-body">
     <div class="row g-1">

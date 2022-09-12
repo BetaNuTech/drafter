@@ -32,6 +32,7 @@ class Draw < ApplicationRecord
   ### Associations
   belongs_to :project
   has_many :draw_costs, dependent: :destroy
+  has_many :draw_cost_requests, through: :draw_costs
 
   ### Validations
   validates :name, presence: true, uniqueness: {scope: :project_id}, allow_blank: false
@@ -58,9 +59,24 @@ class Draw < ApplicationRecord
     save
   end
 
-
   def assign_reference?
     approved? 
+  end
+
+  def active_organization_requests(organization)
+    draw_cost_requests.where(draw: self, organization: organization, state: DrawCostRequest::EXISTING_STATES)
+  end
+
+  def active_requests_for?(obj)
+    org = case obj
+          when Organization
+            obj
+          when User
+            obj.organization
+          else
+            raise 'Invalid object for query'
+          end
+    active_organization_requests(org).any?
   end
 
 end

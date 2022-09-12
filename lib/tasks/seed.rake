@@ -57,7 +57,8 @@ namespace :db do
 
     desc "Development"
     task :development => :environment do
-      DevelopmentSeeder.new.call
+      service = DevelopmentSeeder.new
+      service.call
     end
 
   end # namespace seed

@@ -3,9 +3,14 @@ class DevelopmentSeeder
 
   def call
     puts " *** Seeding development data"
+    return unless Rails.env.development?
+
     create_organizations
     create_users
+    create_draws
+    create_requests
   end
+
 
   private
 
@@ -53,7 +58,29 @@ class DevelopmentSeeder
     create_draws(@project1)
   end
 
-  def create_draws(project)
-    puts " *** TODO: Draws seeder"
+  def create_draws(project=nil)
+    project ||= Project.first
+    puts "=== Creating Draws"
+    Draw.create(
+      project: project,
+      name: 'Test Draw 1',
+      total: 1234567
+    )
+  end
+
+  def create_requests(project=nil)
+
+    project ||= Project.first
+    create_draws(project) if project.draws.empty?
+
+    unless  (user = project.developers.first).present?
+      user = create(:user, role: Role.user )
+      project.add_user(user: , role: ProjectRole.developer)
+      user.reload
+    end
+
+    draw = project.draws.first
+    draw_cost = draw.draw_costs.first
+    create(:draw_cost_request, draw_cost:, draw:, organization: user.organization, user:)
   end
 end

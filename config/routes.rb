@@ -21,10 +21,13 @@ Rails.application.routes.draw do
   resources :users
   resources :draws do
     resources :draw_costs
+    resources :draw_cost_requests
   end
   resources :projects do
     resources :draws
     resources :project_users
+  end
+  resources :draw_costs do
     resources :draw_cost_requests
   end
 end

@@ -7,5 +7,6 @@ FactoryBot.define do
     profile { build(:user_profile)}
     role { Role.user }
     organization
+    confirmed_at { Time.current }
   end
 end

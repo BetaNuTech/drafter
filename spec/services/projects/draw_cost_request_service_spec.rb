@@ -48,6 +48,17 @@ RSpec.describe Projects::DrawCostRequestService do
   describe 'creating a draw cost request' do
     let(:valid_attributes) { valid_draw_cost_request_attributes }
     let(:invalid_attributes) { invalid_draw_cost_request_attributes }
+    describe 'initializing the service with a draw' do
+      it 'should create a draw cost request' do
+        user = developer_user
+        service = Projects::DrawCostRequestService.new( user: user, draw: draw)
+        dcr = nil
+        expect {
+          dcr = service.create_request(valid_attributes)
+        }.to change{DrawCostRequest.count}
+        refute service.errors?
+      end
+    end
     describe "without an existing draw cost request for the draw and user's organization" do
       describe 'as an admin' do
         it 'should create a draw cost request' do
@@ -499,6 +510,7 @@ RSpec.describe Projects::DrawCostRequestService do
         }
 
         before do
+          DrawCostRequest.destroy_all
           service
         end
 

@@ -40,7 +40,14 @@ require 'rails_helper'
 RSpec.describe DrawCostRequest, type: :model do
   include_context 'sample_projects'
 
-  let(:draw_cost) { create(:draw_cost, draw: sample_project.draws.first) }
+  let(:draw) {
+    sample_project.draws.reload
+    sample_project.draws.first
+  }
+  let(:draw_cost) { 
+    sample_project.draws.reload
+    create(:draw_cost, draw: )
+  }
 
   describe 'initialization' do
     it 'creates a draw cost request' do
@@ -83,6 +90,17 @@ RSpec.describe DrawCostRequest, type: :model do
           expect(draw_cost_request.state).to eq('submitted')
         end
       end
+    end
+    describe 'State validation' do
+      let(:user) { sample_project.developers.first }
+      let(:organization) { user.organization }
+      it 'prevents creation of duplicate requests by an organization within a draw' do
+        dcr1 = create(:draw_cost_request, user:, organization:, draw_cost: ,draw:, state: 'submitted', approver_id: nil, approved_at: nil)
+        draw_cost.project.reload
+        dcr2 = build(:draw_cost_request, user:, organization:, draw_cost: , draw:, state: 'submitted', approver_id: nil, approved_at: nil)
+        refute(dcr2.save)
+      end
+
     end
   end
 

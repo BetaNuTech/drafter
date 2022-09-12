@@ -17,10 +17,10 @@
       </span>
       <br/>
       <span>
-        <%= link_to(image_tag(edit_image), edit_project_project_user_path(project_id: project_user.project.id, id: project_user.id), class: 'action-link')%>
+        <%= link_to(image_tag(edit_image), edit_project_project_user_path(project_id: project_user.project.id, id: project_user.id), class: 'action-link') if policy(project_user).edit? %>
         <%= link_to(image_tag(destroy_image), project_project_user_path(project_id: project_user.project.id, id: project_user.id),
                     data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
-                    class: 'action-link') %>
+                    class: 'action-link') if policy(project_user).destroy? %>
       </span>
     </div>
   </div>

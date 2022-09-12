@@ -4,7 +4,7 @@ class DrawCostRequestPolicy < ApplicationPolicy
       case user
       when -> (u) { u.administrator? }
         scope
-      when -> (u) { u.developer? }
+      when -> (u) { u.user? }
         # DrawCostRequests for the user's assigned projects
         #  belonging to the user's assigned organization
         scope.includes(:draw).where(
@@ -23,9 +23,10 @@ class DrawCostRequestPolicy < ApplicationPolicy
   end
 
   def new?
-    user.admin? ||
-      user.project_owner?(record.project) ||
-      user.project_developer?(record.project)
+    !record.draw.active_requests_for?(record.organization) &&
+      ( user.admin? ||
+        user.project_owner?(record.project) ||
+        user.project_developer?(record.project) )
   end
 
   def create?

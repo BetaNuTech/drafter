@@ -9,4 +9,9 @@ module DrawsHelper
   def draw_cost_cost_type_options
     DrawCost.cost_types.to_a.map{|ct| [ct[0].capitalize, ct[0]]}
   end
+
+  def draw_cost_options(project: nil, draw_cost:)
+    draw_costs = ( project || draw_cost&.project )&.draw_costs&.order(name: :asc) || []
+    options_from_collection_for_select( draw_costs, 'id', 'name', draw_cost&.id)
+  end
 end
