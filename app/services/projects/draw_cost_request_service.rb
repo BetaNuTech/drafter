@@ -7,6 +7,7 @@ module Projects
     def initialize(user:, draw: nil, draw_cost: nil, draw_cost_request: nil)
       @user = user
       @organization = @user.organization
+
       if draw_cost_request.present?
         @draw_cost_request = draw_cost_request
         @draw_cost = @draw_cost_request.draw_cost
@@ -14,7 +15,7 @@ module Projects
       elsif draw_cost.present?
         @draw_cost = draw_cost
         @draw = @draw_cost.draw
-        @draw_cost_request = DrawCostRequest.new(draw: @draw, draw_cost: @draw_cost)
+        @draw_cost_request = DrawCostRequest.new(draw: @draw, draw_cost: @draw_cost, user: @user, organization: @organization)
       elsif draw.present?
         @draw = draw
         @draw_cost = nil
@@ -22,6 +23,7 @@ module Projects
       end
       @project = @draw.project
       @request_policy = DrawCostRequestPolicy.new(@user, @draw_cost_request)
+
       raise PolicyError.new unless @request_policy.index?
       @errors = []
     end
@@ -32,8 +34,6 @@ module Projects
 
     # Return existing non-rejected request
     def create_request(params)
-      raise PolicyError.new unless @request_policy.create?
-
       params_draw_cost_id = params.dig(:draw_cost_request, :draw_cost_id) || params.fetch(:draw_cost_id, nil)
       if @draw_cost.nil? && params_draw_cost_id.present?
         @draw_cost = @draw.draw_costs.find(params_draw_cost_id)
@@ -44,6 +44,8 @@ module Projects
       if existing_dcr.present?
         @draw_cost_request = existing_dcr
       else
+        raise PolicyError.new unless @request_policy.create?
+
         override_params = {
           draw_cost: @draw_cost,
           draw: @draw,
@@ -62,6 +64,8 @@ module Projects
       end
 
       return @draw_cost_request if @draw_cost_request.draw_cost_submissions.any?
+
+      raise PolicyError.new unless @request_policy.create?
 
       create_submission
       @draw_cost_request.reload
@@ -161,7 +165,7 @@ module Projects
       return approved_submission if approved_submission.present?
 
       reset_errors
-      submission = DrawCostSubmission.create(draw_cost_request: @draw_cost_request, amount: 0.0)
+      submission = DrawCostSubmission.create(draw_cost_request: @draw_cost_request, amount: @draw_cost_request.amount)
       @draw_cost_request.reload
       submission
     end

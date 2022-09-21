@@ -42,8 +42,6 @@ class DrawCostPolicy < ApplicationPolicy
   end
   
   def approve?
-    raise 'Not implemented'
-
     user.admin? ||
       user.project_internal?(project)
   end

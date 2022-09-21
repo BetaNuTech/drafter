@@ -23,10 +23,9 @@ class DrawCostRequestPolicy < ApplicationPolicy
   end
 
   def new?
-    !record.draw.active_requests_for?(record.organization) &&
-      ( user.admin? ||
-        user.project_owner?(record.project) ||
-        user.project_developer?(record.project) )
+    user.admin? ||
+      user.project_owner?(record.project) ||
+      user.project_developer?(record.project)
   end
 
   def create?

@@ -20,7 +20,7 @@ module DrawCostRequests
           if record.new_record?
             conflict = record.draw.active_requests_for?(record.organization)
           else
-            conflict = record.active_organization_requests(record.organization).where.not(id: record.id).any?
+            conflict = record.draw.active_organization_requests(record.organization).where.not(id: record.id).any?
           end
 
           record.errors.add(:base, 'There is already an active Request for this Draw') if conflict

@@ -34,13 +34,22 @@ class DrawCostRequestsController < ApplicationController
 
   def show
     authorize @draw_cost_request
-    # TODO: view
   end
 
   def edit
     authorize @draw_cost_request
     service = Projects::DrawCostRequestService.new(user: @current_user, draw_cost_request: @draw_cost_request)
-    # TODO: view
+  end
+
+  def update
+    authorize @draw_cost_request
+    service = Projects::DrawCostRequestService.new(user: @current_user, draw_cost_request: @draw_cost_request)
+    service.update_request(params)
+    if service.errors?
+      render :edit, status: :unprocessable_entity
+    else
+      redirect_to project_draw_path(project_id: service.project.id, id: service.draw.id)
+    end
   end
 
   def destroy

@@ -70,6 +70,7 @@ class DevelopmentSeeder
 
   def create_requests(project=nil)
 
+    create_projects
     project ||= Project.first
     create_draws(project) if project.draws.empty?
 

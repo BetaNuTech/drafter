@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   resources :draws do
     resources :draw_costs
     resources :draw_cost_requests
+    resources :draw_cost_submissions
   end
   resources :projects do
     resources :draws

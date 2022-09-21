@@ -33,6 +33,7 @@ class Draw < ApplicationRecord
   belongs_to :project
   has_many :draw_costs, dependent: :destroy
   has_many :draw_cost_requests, through: :draw_costs
+  has_many :draw_cost_submissions, through: :draw_cost_requests
 
   ### Validations
   validates :name, presence: true, uniqueness: {scope: :project_id}, allow_blank: false
@@ -74,7 +75,7 @@ class Draw < ApplicationRecord
           when User
             obj.organization
           else
-            raise 'Invalid object for query'
+            return false
           end
     active_organization_requests(org).any?
   end

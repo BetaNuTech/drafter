@@ -34,6 +34,10 @@ module ApplicationHelper
     time&.strftime("%m/%d/%Y at %l:%M %p")
   end
 
+  def short_date(time)
+    time&.strftime("%m/%d/%Y")
+  end
+
   def breadcrumbs_tag
     return '' unless defined?(@breadcrumbs)
 

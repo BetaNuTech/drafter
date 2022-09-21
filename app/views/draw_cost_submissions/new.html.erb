@@ -1,0 +1,9 @@
+<%= turbo_frame_tag @draw_cost_submission do %>
+  <div id="<%= draw_cost_submission.id %>" class="draw_cost_submission_card card text-center p-1 m-1 d-inline-flex justify-content-evenly" > 
+    <img class="card_upload_image"></img>
+    <div class="card_upload_button"><%= image_tag upload_image %></div>
+    <div class="card-body">
+      <%= render 'form', { draw_cost_submission: draw_cost_submission}
+    </div>
+  </div>
+<% end %>

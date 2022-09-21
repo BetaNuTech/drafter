@@ -50,4 +50,8 @@ module ImagesHelper
   def square_x_open_image
     'icons/x-square.svg'
   end
+
+  def upload_image
+    'icons/cloud-upload-fill.svg'
+  end
 end

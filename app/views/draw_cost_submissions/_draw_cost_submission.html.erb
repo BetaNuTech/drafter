@@ -1,0 +1,21 @@
+<%= turbo_frame_tag draw_cost_submission do %>
+  <div id="<%= draw_cost_submission.id %>" class="card draw_cost_submission_card text-center p-1 m-1 d-inline-flex justify-content-evenly" >
+    <img class="card_upload_image"></img>
+    <div class="card_upload_button"><%= image_tag upload_image %></div>
+    <div class="card-body">
+      <span><%= number_to_currency draw_cost_submission.amount %></span><br/>
+      <% if policy(draw_cost_submission.draw_cost).approve? %>
+        OCR <%= image_tag(circle_check_image) %><br/>
+        <%= image_tag square_check_image %>
+        &nbsp;
+        <%= image_tag square_x_open_image, style: 'opacity: 0.2;' %>
+        <br/>
+      <% end %>
+      <small>
+        <%= short_date draw_cost_submission.updated_at %>
+      </small>
+      <br/>
+      <span class="badge rounded-pill bg-info"><%= draw_cost_submission.state %></span>
+    </div>
+  </div>
+<% end %>

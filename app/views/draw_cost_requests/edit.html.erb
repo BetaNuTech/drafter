@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col">
+    <h1>Update Draw Request for '<%= @draw_cost_request.project.name %>'</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <%= turbo_frame_tag @draw_cost_request do %>
+      <%= render 'form', { draw: @draw, draw_cost_request: @draw_cost_request } %>
+    <% end %>
+  </div>
+</div>
