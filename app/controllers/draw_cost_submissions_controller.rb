@@ -3,8 +3,9 @@ class DrawCostSubmissionsController < ApplicationController
   before_action :set_draw, only: %[new create]
   after_action :verify_authorized
 
+  # GET #index disabled
   def index
-    # TODO
+    raise ActiveRecord::RecordNotFound
   end
 
   def new
@@ -32,13 +33,20 @@ class DrawCostSubmissionsController < ApplicationController
   end
 
   private
+  
+  def draw_scope
+    DrawPolicy::Scope.new(@current_user, Draw).resolve
+  end
 
   def set_draw
-    @draw = DrawPolicy::Scope.new(@current_user, Draw).resolve.
-      find(params[:draw_id])
+    @draw = draw_scope.find(params[:draw_id])
   end
 
   def record_scope
-    # TODO
+    policy_scope(DrawCostSubmission)
+  end
+
+  def set_draw_cost_submission
+    @draw_cost_submission = record_scope.find(params[:id])
   end
 end

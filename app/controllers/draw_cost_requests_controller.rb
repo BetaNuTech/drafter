@@ -1,7 +1,7 @@
 class DrawCostRequestsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_draw, only: %i[new create]
-  before_action :set_draw_cost_request, only: %i[ show edit update destroy ]
+  before_action :set_draw_cost_request, only: %i[ show edit update destroy add_document remove_document]
   before_action :set_project, only: %i[new create show edit update]
   after_action :verify_authorized
 
@@ -57,6 +57,32 @@ class DrawCostRequestsController < ApplicationController
     @draw = @draw_cost_request.draw
     @draw_cost_request.destroy
     redirect_to draw_path(draw: @draw), notice: 'Removed Draw Cost Request'
+  end
+
+  # TODO: TURBO update view 
+  def add_document
+    # params: { draw_cost_document: { documenttype: String, notes: String, document: File } }
+    authorize @draw_cost_request
+    @service = Projects::DrawCostRequestService.new(user: @current_user, draw_cost_request: @draw_cost_request)
+    @service.add_document(params[:draw_cost_document])
+    respond_to do |format|
+      if @service.errors?
+        render :edit, status: :unprocessable_entity
+      else
+        format.html { redirect_to project_draws_path(project_id: @service.project.id, id: @service.draw.id), notice: "Draw document added" }
+      end
+    end
+  end
+
+  # TODO: TURBO update view 
+  def remove_document
+    authorize @draw_cost_request
+    @service = Projects::DrawCostRequestService.new(user: @current_user, draw_cost_request: @draw_cost_request)
+    @draw_cost_document = @draw_cost_request.draw_cost_documents.find(params[:draw_cost_document_id])
+    @service.remove_document(@draw_cost_document)
+    respond_to do |format|
+      format.html { redirect_to project_draws_path(project_id: @service.project.id, id: @service.draw.id), notice: "Draw document removed" }
+    end
   end
 
   private

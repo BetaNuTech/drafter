@@ -1,7 +1,9 @@
 <div id="<%= draw_cost_submission.id %>" class="card draw_cost_submission_card text-center p-1 m-1 d-inline-flex justify-content-evenly">
-  <%= form_with(model: draw_cost_submission, url: '#') do |form| %>
+<%= form_with(model: draw_cost_submission, url: '#') do |form| %>
     <img class="card_upload_image"></img>
-    <div class="card_upload_button"><%= image_tag upload_image %></div>
+    <div class="card_upload_button">
+      <%= image_tag upload_image %>
+    </div>
     <div class="card-body">
       <div class="form-floating">
         <%= form.number_field :amount, { class: 'form-control'} %>
