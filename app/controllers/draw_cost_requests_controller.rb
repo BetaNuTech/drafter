@@ -67,7 +67,9 @@ class DrawCostRequestsController < ApplicationController
     @service.add_document(params[:draw_cost_document])
     respond_to do |format|
       if @service.errors?
-        render :edit, status: :unprocessable_entity
+        format.html {
+          render :edit, status: :unprocessable_entity
+        }
       else
         format.html { redirect_to project_draws_path(project_id: @service.project.id, id: @service.draw.id), notice: "Draw document added" }
       end

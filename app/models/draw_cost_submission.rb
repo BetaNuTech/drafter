@@ -38,6 +38,7 @@ class DrawCostSubmission < ApplicationRecord
   has_one :project, through: :draw, autosave: false
   belongs_to :approver, class_name: 'User', optional: true
   has_one :user, through: :draw_cost_request
+  has_one_attached :document
 
   ### Validations
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0.0 }

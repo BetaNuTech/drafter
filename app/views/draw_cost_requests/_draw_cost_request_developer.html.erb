@@ -22,12 +22,7 @@
     </div>
     <div class="col-sm-12 col-md-10 p-2 bg-light border border-start-0 border-2 border-secondary">
       <div class="row">
-        <div class="col">
-
-          <%= turbo_frame_tag 'new_draw_cost_submission' do %>
-            <%= render partial: 'draw_cost_submissions/new', locals: {draw_cost_submission: DrawCostSubmission.new(draw_cost_request: draw_cost_request) } %>
-          <% end %>
-
+        <div class="col d-inline-flex justify-content-center">
           <% draw_cost_request.draw_cost_submissions.each do |draw_cost_submission| %>
             <%= render partial: 'draw_cost_submissions/draw_cost_submission', locals: {draw_cost_submission: } %>
           <% end %>
@@ -41,11 +36,15 @@
           <% end %>
 
           <%= render partial: 'draw_cost_requests/new_document', locals: {documenttype: :other, draw_cost_request: draw_cost_request} %>
+          
         </div>
       </div>
-      <div class="row">
-        <div class="col">
           <hr/>
+      <div class="row">
+        <div class="col d-inline-flex justify-content-center">
+          <%= turbo_frame_tag 'new_draw_cost_submission' do %>
+            <%= render partial: 'draw_cost_submissions/new', locals: {draw_cost_submission: DrawCostSubmission.new(draw_cost_request: draw_cost_request) } %>
+          <% end %>
 
         </div>
       </div>

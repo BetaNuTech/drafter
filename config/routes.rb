@@ -22,7 +22,6 @@ Rails.application.routes.draw do
   resources :draws do
     resources :draw_costs
     resources :draw_cost_requests
-    resources :draw_cost_submissions
   end
   resources :projects do
     resources :draws
@@ -33,5 +32,8 @@ Rails.application.routes.draw do
       post :add_document, to: 'draw_cost_requests#add_document'
       post :remove_document, to: 'draw_cost_requests#remove_document'
     end
+  end
+  resources :draw_cost_requests do
+    resources :draw_cost_submissions
   end
 end

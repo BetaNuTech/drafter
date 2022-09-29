@@ -1,6 +1,6 @@
 class DrawCostSubmissionsController < ApplicationController
   before_action :authenticate_user
-  before_action :set_draw, only: %[new create]
+  before_action :set_draw_cost_request
   after_action :verify_authorized
 
   # GET #index disabled
@@ -9,11 +9,13 @@ class DrawCostSubmissionsController < ApplicationController
   end
 
   def new
-    # TODO
+    @draw_cost_submission = DrawCostSubmission.new(draw_cost_request: @draw_cost_request)
+    authorize @draw_cost_submission 
   end
 
   def create
-    # TODO
+    @draw_cost_submission = DrawCostSubmission.new(draw_cost_request: @draw_cost_request)
+    authorize @draw_cost_submission
   end
 
   def show
@@ -34,16 +36,16 @@ class DrawCostSubmissionsController < ApplicationController
 
   private
   
-  def draw_scope
-    DrawPolicy::Scope.new(@current_user, Draw).resolve
+  def draw_cost_request_scope
+    DrawCostRequestPolicy::Scope.new(@current_user, DrawCostRequest).resolve
   end
 
-  def set_draw
-    @draw = draw_scope.find(params[:draw_id])
+  def set_draw_cost_request
+    @draw_cost_request = draw_cost_request_scope.find(params[:draw_cost_request_id])
   end
 
   def record_scope
-    policy_scope(DrawCostSubmission)
+    policy_scope(@draw_cost_request.draw_cost_submissions)
   end
 
   def set_draw_cost_submission
