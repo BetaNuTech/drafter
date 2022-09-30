@@ -1,14 +1,16 @@
 <div id="<%= draw_cost_submission.id %>" class="card text-center p-1 m-1 d-inline-flex justify-content-center">
-  <h4>Add Invoice</h4>
-  <%= form_for(:draw_cost_submission,
-                 url: draw_cost_request_draw_cost_submission_path(draw_cost_request_id: draw_cost_submission.draw_cost_request_id),
-                 method: :post,
-                 multipart: true) do |form| %>
-    <img class="card_upload_image"></img>
-    <div class="card_upload_button">
-      <%= image_tag upload_image %>
-      <%= form.file_field :document %>
-    </div>
+  <%= form_for(:draw_cost_submission, url: draw_cost_request_draw_cost_submission_path(draw_cost_request_id: draw_cost_submission.draw_cost_request_id), method: :patch, multipart: true) do |form| %>
+    <% if draw_cost_submission.document.attached? %>
+      <div class="card_upload_image">
+        <%= image_tag draw_cost_submission.document.preview(resize_to_limit: [200,200]) %>
+      </div>
+    <% else %>
+      <div class="card_upload_image">
+      </div>
+      <div class="card_upload_button">
+        <%= form.file_field :document %>
+      </div>
+    <% end %>
     <div class="card-body">
       <div class="form-floating">
         <%= form.number_field :amount, { class: 'form-control'} %>

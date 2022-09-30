@@ -29,13 +29,13 @@
 
           <% DrawCostRequest::REQUIRED_DOCUMENTS.each do |doctype| %>
             <% if draw_cost_request.document_attached?(doctype) %>
-              <%= render partial: 'draw_cost_requests/document', locals: {documenttype: doctype, draw_cost_request: draw_cost_request} %>
+              <%= render partial: 'draw_cost_requests/document', locals: {documenttype: doctype, draw_cost_document: draw_cost_request.draw_cost_documents.new(documenttype: doctype), draw_cost_request: draw_cost_request} %>
             <% else %>
-              <%= render partial: 'draw_cost_requests/new_document', locals: {documenttype: doctype, draw_cost_request: draw_cost_request} %>
+              <%= render partial: 'draw_cost_requests/new_document', locals: {documenttype: doctype, draw_cost_document: draw_cost_request.draw_cost_documents.new(documenttype: doctype), draw_cost_request: draw_cost_request} %>
             <% end %>
           <% end %>
 
-          <%= render partial: 'draw_cost_requests/new_document', locals: {documenttype: :other, draw_cost_request: draw_cost_request} %>
+          <%= render partial: 'draw_cost_requests/new_document', locals: {documenttype: :other, draw_cost_request: draw_cost_request, draw_cost_document: draw_cost_request.draw_cost_documents.new(documenttype: 'other')} %>
           
         </div>
       </div>

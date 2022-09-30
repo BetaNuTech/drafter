@@ -106,7 +106,7 @@ class DrawCostRequestsController < ApplicationController
   end
 
   def set_draw_cost_request
-    @draw_cost_request = record_scope.find(params[:id])
+    @draw_cost_request = record_scope.find(params[:draw_cost_request_id] || params[:id])
   end
 
   def draw_cost_request_params

@@ -1,7 +1,15 @@
 <%= turbo_frame_tag draw_cost_submission do %>
   <div id="<%= draw_cost_submission.id %>" class="card draw_cost_submission_card text-center p-1 m-1 d-inline-flex justify-content-evenly" >
-    <img class="card_upload_image"></img>
-    <div class="card_upload_button"><%= image_tag upload_image %></div>
+    <div class="card_upload_image">
+      <% if draw_cost_submission.document.attached? %>
+        <%= image_tag draw_cost_submission.document.preview(resize_to_fit: [100,100]), class: 'align-middle' %>
+      <% end %>
+    </div>
+    <div class="card_upload_button">
+      <% unless draw_cost_submission.document.attached? %>
+        <%= image_tag upload_image %>
+      <% end %>
+    </div>
     <div class="card-body">
       <span><%= number_to_currency draw_cost_submission.amount %></span><br/>
       <% if policy(draw_cost_submission.draw_cost).approve? %>
@@ -16,6 +24,7 @@
       </small>
       <br/>
       <span class="badge rounded-pill bg-info"><%= draw_cost_submission.state %></span>
+      <%= link_to('Edit', edit_draw_cost_request_draw_cost_submission_path(draw_cost_request_id: draw_cost_submission.draw_cost_request_id, id: draw_cost_submission.id), class: 'btn btn-sm btn-primary m-1') if policy(draw_cost_submission).edit? %>
     </div>
   </div>
 <% end %>

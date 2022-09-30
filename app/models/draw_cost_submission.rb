@@ -29,7 +29,7 @@
 class DrawCostSubmission < ApplicationRecord
   include DrawCostSubmissions::StateMachine
 
-  ALLOWED_PARAMS = [:amount]
+  ALLOWED_PARAMS = [:amount, :document]
 
   ### Associations
   belongs_to :draw_cost_request

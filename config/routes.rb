@@ -18,22 +18,24 @@ Rails.application.routes.draw do
   get '/about', to: 'home#about', as: :about
 
   resources :organizations
+
   resources :users
-  resources :draws do
-    resources :draw_costs
-    resources :draw_cost_requests
-  end
+
   resources :projects do
     resources :draws
     resources :project_users
   end
-  resources :draw_costs do
-    resources :draw_cost_requests do
-      post :add_document, to: 'draw_cost_requests#add_document'
-      post :remove_document, to: 'draw_cost_requests#remove_document'
-    end
+
+  resources :draws do
+    resources :draw_costs
+    resources :draw_cost_requests
   end
+
+  resources :draw_costs
+
   resources :draw_cost_requests do
+    post :add_document, to: 'draw_cost_requests#add_document'
+    post :remove_document, to: 'draw_cost_requests#remove_document'
     resources :draw_cost_submissions
   end
 end

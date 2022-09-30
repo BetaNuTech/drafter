@@ -7,9 +7,9 @@ class DrawCostSubmissionPolicy < ApplicationPolicy
       when -> (u) { u.executive? }
         scope
       else
-        scope.includes(draws: [:draw_costs]).where(
+        scope.includes(draw_cost_request: { draw_cost: [:draw] }).where(
           draws: {project: user.projects},
-          organization_id: user.organization_id
+          draw_cost_requests: { organization_id: user.organization_id }
         )
       end
     end
