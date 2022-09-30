@@ -60,4 +60,14 @@ module ApplicationHelper
     end
   end
 
+  def preview_document(document:, resize:)
+    return '' unless document.attached?
+
+    if document.previewable?
+      document.preview(resize_to_fit: resize)
+    else
+      document.variant(resize_to_fit: resize)
+    end
+  end
+
 end

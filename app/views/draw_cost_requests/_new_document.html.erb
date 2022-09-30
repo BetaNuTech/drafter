@@ -1,16 +1,22 @@
-<div class="card draw_cost_request_card text-center p-1 m-1 d-inline-flex " >
+<div class="draw_cost_request_card d-flex flex-column justify-content-evently text-center m-1 shadow-sm" >
   <%= form_with(model: draw_cost_document,
                 url: draw_cost_request_add_document_path(draw_cost_request_id: draw_cost_request.id) ) do |form| %>
-    <img class="card_upload_image"></img>
-    <div class="card_upload_button">
-      <%= image_tag upload_image %>
-      <%= file_field_tag :document %>
+    <div class="preview_container">
+
     </div>
-    <div class="card-body">
+    <div class="card_upload_button">
+      <%= label_tag :document, style: 'display: block;' do %>
+        <%= image_tag(upload_image, class: 'upload_image') %>
+        <%= file_field_tag :document, { class: 'visually-hidden' } %>
+      <% end %>
+    </div>
+    <div class="body">
       <p class="upload_document_description">
         Upload <%= documenttype.to_s.capitalize %>
         Document
       </p>
+    </div>
+    <div class="actions align-items-end">
       <%= submit_tag 'Submit', class: 'btn btn-sm btn-success' %>
     </div>
   <% end %>

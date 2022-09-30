@@ -1,33 +1,32 @@
-div.card_upload_button {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  top: 60px;
-  left: 42px;
-}
-
-div.card_upload_button img {
-  width: 30px;
-  height: 30px;
-}
-
-.card_upload_image {
-  width: 100%;
-  height: 10em;
-  margin: 0px auto;
-  border: 1px #ccc;
-}
-
-img.card_upload_image_pending {
-  border: 2px dotted green;
-}
-
 p.upload_document_description {
   font-size: 1em;
   line-height: 1.1em;
   color: lightgray;
 }
 
-div.draw_cost_submission_card, div.draw_cost_request_card {
-  width: 8em;
+div.draw_cost_request_card {
+  width: 200px;
+  min-height: 20em;
+  padding: 1em;
+  border: 1px solid #ccc;
+
+  div.preview_container {
+    margin: 1em;
+  }
+
+  div.card_upload_button {
+    padding: 1em;
+  }
+
+  div.body { }
+
+  img.upload_image {
+    width: 30px;
+    height: 30px;
+    opacity: 0.6;
+  }
+  img.upload_image:hover {
+    opacity: 1;
+  }
 }
+
