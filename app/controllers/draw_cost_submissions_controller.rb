@@ -17,6 +17,13 @@ class DrawCostSubmissionsController < ApplicationController
   def create
     auth_obj = DrawCostSubmission.new(draw_cost_request: @draw_cost_request)
     authorize auth_obj
+    service = Projects::DrawCostRequestService.new(user: @current_user, draw_cost_request: @draw_cost_request)
+    @draw_cost_submission = service.create_submission(draw_cost_request: @draw_cost_request, params: params[:draw_cost_submission])
+    if service.errors?
+      render :edit, status: :unprocessable_entity
+    else
+      redirect_to draw_cost_request_draw_cost_submission_path(draw_cost_request_id: @draw_cost_request.id, draw_cost_submission_id: @draw_cost_submission.id)
+    end
   end
 
   def show
