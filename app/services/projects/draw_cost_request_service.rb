@@ -67,7 +67,7 @@ module Projects
 
       raise PolicyError.new unless @request_policy.create?
 
-      create_submission
+      #create_submission
       @draw_cost_request.reload
       @draw_cost_request
     end
@@ -155,18 +155,14 @@ module Projects
     def create_submission(draw_cost_request: @draw_cost_request, params: { amount: 0.0} )
       raise PolicyError.new unless @request_policy.create?
 
-      pending_submission = @draw_cost_request.draw_cost_submissions.pending.order(created_at: :desc).first
-      return pending_submission if pending_submission.present?
-
-      submitted_submission = @draw_cost_request.draw_cost_submissions.submitted.order(created_at: :desc).first
-      return submitted_submission if submitted_submission.present?
-
-      approved_submission = @draw_cost_request.draw_cost_submissions.approved.order(created_at: :desc).first
-      return approved_submission if approved_submission.present?
-
       reset_errors
-      submission = DrawCostSubmission.create(draw_cost_request: @draw_cost_request, amount: @draw_cost_request.amount)
-      @draw_cost_request.reload
+      submission = DrawCostSubmission.new(params)
+      submission.draw_cost_request = @draw_cost_request
+      if submission.save
+        @draw_cost_request.reload
+      else
+        @errors = submission.errors.full_messages
+      end
       submission
     end
 

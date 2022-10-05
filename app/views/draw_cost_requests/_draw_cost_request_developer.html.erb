@@ -26,11 +26,24 @@
     <div class="col-sm-12 col-md-10 p-2 bg-light border border-start-0 border-2 border-secondary">
 
       <div class="row">
-        <div class="col d-flex flex-wrap p-2">
-          <%= turbo_frame_tag 'new_draw_cost_submission' do %>
-            <%= render partial: 'draw_cost_submissions/new', locals: {draw_cost_submission: DrawCostSubmission.new(draw_cost_request: draw_cost_request) } %>
-          <% end %>
+        <% draw_cost_submission = DrawCostSubmission.new(draw_cost_request: draw_cost_request) %>
+          <div class="col d-flex flex-wrap p-2">
+            <%= turbo_frame_tag draw_cost_submission do %>
+              <%= render partial: 'draw_cost_submissions/new', locals: {draw_cost_submission:  } %>
+            <% end %>
+          </div>
+      </div>
 
+      <div class="row">
+        <div class="col d-flex flex-wrap p-2">
+          <% draw_cost_request.draw_cost_submissions.each do |draw_cost_submission| %>
+            <%= render partial: 'draw_cost_submissions/draw_cost_submission', locals: {draw_cost_submission: } %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col d-flex flex-wrap p-2">
           <% DrawCostRequest::REQUIRED_DOCUMENTS.each do |doctype| %>
             <% if draw_cost_request.document_attached?(doctype) %>
               <%= render partial: 'draw_cost_requests/document', locals: {documenttype: doctype, draw_cost_document: draw_cost_request.draw_cost_documents.new(documenttype: doctype), draw_cost_request: draw_cost_request} %>
@@ -38,13 +51,10 @@
               <%= render partial: 'draw_cost_requests/new_document', locals: {documenttype: doctype, draw_cost_document: draw_cost_request.draw_cost_documents.new(documenttype: doctype), draw_cost_request: draw_cost_request} %>
             <% end %>
           <% end %>
-
-          <% draw_cost_request.draw_cost_submissions.each do |draw_cost_submission| %>
-            <%= render partial: 'draw_cost_submissions/draw_cost_submission', locals: {draw_cost_submission: } %>
-          <% end %>
           
         </div>
       </div>
+
 
     </div>
     <!-- END submissions -->

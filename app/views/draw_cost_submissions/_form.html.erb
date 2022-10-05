@@ -1,9 +1,14 @@
-<div id="<%= draw_cost_submission.id %>" class="draw_cost_request_card d-flex flex-column justify-content-evenly text-center m-1 shadow-sm">
-  <%= form_for(:draw_cost_submission, url: draw_cost_request_draw_cost_submission_path(draw_cost_request_id: draw_cost_submission.draw_cost_request_id), method: :patch, multipart: true) do |form| %>
-    <% if draw_cost_submission.id.present? %>
-      <h4>Edit Submission</h4>
+<div id="<%= dom_id(draw_cost_submission) %>" class="draw_cost_request_card d-flex flex-column justify-content-evenly text-center m-1 shadow-sm">
+  <% if draw_cost_submission.new_record? %>
+    <% form_url = draw_cost_request_draw_cost_submissions_path(draw_cost_request_id: draw_cost_submission.draw_cost_request_id) %>
+  <% else %>
+    <% form_url = draw_cost_request_draw_cost_submission_path(draw_cost_request_id: draw_cost_submission.draw_cost_request_id, draw_cost_submission_id: draw_cost_submission.id) %>
+  <% end %>
+  <%= form_with(model: draw_cost_submission, url: form_url, multipart: true) do |form| %>
+    <% if draw_cost_submission.new_record? %>
+      <h4>Upload Invoice</h4>
     <% else %>
-      <h4>New Submission</h4>
+      <h4>Update Invoice</h4>
     <% end %>
 
     <hr/>

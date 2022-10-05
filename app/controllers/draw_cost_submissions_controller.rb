@@ -18,26 +18,27 @@ class DrawCostSubmissionsController < ApplicationController
     auth_obj = DrawCostSubmission.new(draw_cost_request: @draw_cost_request)
     authorize auth_obj
     service = Projects::DrawCostRequestService.new(user: @current_user, draw_cost_request: @draw_cost_request)
-    @draw_cost_submission = service.create_submission(draw_cost_request: @draw_cost_request, params: params[:draw_cost_submission])
+    @draw_cost_submission = service.create_submission(draw_cost_request: @draw_cost_request, params: draw_cost_submission_params)
     if service.errors?
-      render :edit, status: :unprocessable_entity
+      render :new, status: :unprocessable_entity
     else
-      redirect_to draw_cost_request_draw_cost_submission_path(draw_cost_request_id: @draw_cost_request.id, draw_cost_submission_id: @draw_cost_submission.id)
+      respond_to do |format|
+        format.html { redirect_to draw_cost_request_draw_cost_submission_url(draw_cost_request_id: @draw_cost_request.id, id: @draw_cost_submission.id) }
+        format.turbo_stream
+      end
     end
   end
 
   def show
-    # TODO
     authorize @draw_cost_submission 
   end
 
   def edit
-    # TODO
     authorize @draw_cost_submission 
   end
 
   def update
-    # TODO
+    # TODO: update totals on page
     authorize @draw_cost_submission 
     service = Projects::DrawCostRequestService.new(user: @current_user, draw_cost_request: @draw_cost_request)
     @draw_cost_submission = service.update_submission(submission: @draw_cost_submission, params: params)
@@ -67,11 +68,12 @@ class DrawCostSubmissionsController < ApplicationController
   end
 
   def set_draw_cost_submission
-    @draw_cost_submission = record_scope.find(params[:id])
+    @draw_cost_submission = record_scope.find(params[:id] || params[:draw_cost_submission_id])
   end
 
   def draw_cost_submission_params
-    allowed_params = policy(@draw_cost_submission||DrawCostSubmission).allowed_params
+    new_draw_cost_submission = DrawCostSubmission.new(draw_cost_request: @draw_cost_request)
+    allowed_params = policy(@draw_cost_submission||new_draw_cost_submission).allowed_params
     params.require(:draw_cost_submission).permit(*allowed_params)
   end
 end

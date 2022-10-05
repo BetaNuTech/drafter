@@ -1,0 +1,2 @@
+<%= turbo_stream.append dom_id(@draw_cost_request, 'draw_cost_submissions'), @draw_cost_submission %>
+<%= turbo_stream.update dom_id(DrawCostSubmission.new), partial: 'draw_cost_submissions/new' %>
