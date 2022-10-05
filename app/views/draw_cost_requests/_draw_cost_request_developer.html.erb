@@ -19,8 +19,12 @@
           <% end %>
           <p class="text-center">
             <button class="btn btn-success m-1" >Submit</button><br/>
-            <%= link_to 'Edit', edit_draw_draw_cost_request_path(draw_id: draw_cost_request.draw.id, id: draw_cost_request.id), class: 'btn btn-sm btn-primary m-0', data: {turbo_frame: dom_id(draw_cost_request) } %>
-            <%= link_to 'Delete', draw_draw_cost_request_path(draw_id: draw_cost_request.draw.id, id: draw_cost_request.id), class: 'btn btn-sm btn-danger m-0', data: { turbo_confirm: 'Are you sure?', turbo_method: :delete, turbo_frame: '_top'} %>
+            <%= link_to('Edit', edit_draw_draw_cost_request_path(draw_id: draw_cost_request.draw.id, id: draw_cost_request.id),
+                        class: 'btn btn-sm btn-primary m-0',
+                        data: {turbo_frame: dom_id(draw_cost_request) }) if policy(draw_cost_request).edit? %>
+            <%= link_to('Delete', draw_draw_cost_request_path(draw_id: draw_cost_request.draw.id, id: draw_cost_request.id),
+                        class: 'btn btn-sm btn-danger m-0',
+                        data: { turbo_confirm: 'Are you sure?', turbo_method: :delete, turbo_frame: '_top'}) if policy(draw_cost_request).destroy? %>
           </p>
         </div>
       </div>
@@ -38,7 +42,7 @@
     <div class="col-sm-12 col-md-9 p-2 bg-light border border-start-0 border-2 border-secondary">
 
       <%= turbo_frame_tag dom_id(draw_cost_request, 'draw_cost_submissions') do %>
-        <%= render partial: 'draw_cost_requests/draw_cost_submissions', locals: {draw_cost_submissions: draw_cost_request.draw_cost_submissions} %>
+        <%= render partial: 'draw_cost_requests/draw_cost_submissions', locals: {draw_cost_submissions: draw_cost_request.draw_cost_submissions.visible} %>
       <% end %>
 
       <div class="row">

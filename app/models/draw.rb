@@ -80,4 +80,19 @@ class Draw < ApplicationRecord
     active_organization_requests(org).any?
   end
 
+  def provisional_request_total_for(organization)
+    draw_cost_requests.
+      visible.
+      where(organization: organization).
+      map(&:provisional_total).
+      sum
+  end
+
+  def request_total_for(organization)
+    draw_cost_requests.
+      approved.
+      where(organization: organization).
+      sum(:total)
+  end
+
 end

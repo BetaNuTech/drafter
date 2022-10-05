@@ -13,6 +13,8 @@ class DrawsController < ApplicationController
   def show
     authorize @draw
     @draw_cost_requests = policy_scope(@draw.draw_cost_requests)
+    @total_cost = @draw_cost_requests.map(&:provisional_total).sum
+    @difference_to_amounts = @draw_cost_requests.map(&:difference_to_amount).sum
 
     breadcrumbs.add(label: 'Home', url: '/')
     breadcrumbs.add(label: @project.name, url: project_path(@project))

@@ -24,6 +24,9 @@ class DrawCostSubmissionsController < ApplicationController
       render :new, status: :unprocessable_entity
     else
       @draw_cost_request.draw_cost_submissions.reload
+      @draw = service.draw
+      @draw_total_cost = service.draw_requests_total_costs
+      @draw_difference_to_amount = service.draw_requests_difference_to_amounts
       respond_to do |format|
         format.html { redirect_to draw_cost_request_draw_cost_submission_url(draw_cost_request_id: @draw_cost_request.id, id: @draw_cost_submission.id) }
         format.turbo_stream
@@ -52,7 +55,17 @@ class DrawCostSubmissionsController < ApplicationController
   end
 
   def destroy
-    # TODO
+    # TODO: update totals on page
+    authorize @draw_cost_submission 
+    service = Projects::DrawCostRequestService.new(user: @current_user, draw_cost_request: @draw_cost_request)
+    service.remove_submission(@draw_cost_submission)
+    @draw = service.draw
+    @draw_total_cost = service.draw_requests_total_costs
+    @draw_difference_to_amount = service.draw_requests_difference_to_amounts
+    respond_to do |format|
+      format.html { redirect_to redirect_to draw_cost_request_draw_cost_submission_path(draw_cost_request_id: @draw_cost_request.id, draw_cost_submission_id: @draw_cost_submission.id) }
+      format.turbo_stream
+    end
   end
 
   private

@@ -68,4 +68,12 @@ class DrawCostRequest < ApplicationRecord
     self.approved_at = nil
     self.save
   end
+
+  def provisional_total
+    draw_cost_submissions.visible.sum(:amount)
+  end
+
+  def difference_to_amount
+    provisional_total - amount
+  end
 end

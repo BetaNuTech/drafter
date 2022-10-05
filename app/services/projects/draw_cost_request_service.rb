@@ -1,6 +1,6 @@
 module Projects
   class DrawCostRequestService
-    attr_reader :project, :current_user, :user, :draw, :draw_cost, :organization, :draw_cost_request, :errors
+    attr_reader :project, :user, :draw, :draw_cost, :organization, :draw_cost_request, :errors
 
     class PolicyError < StandardError; end
 
@@ -160,6 +160,7 @@ module Projects
       submission.draw_cost_request = @draw_cost_request
       if submission.save
         @draw_cost_request.reload
+        @draw.reload
       else
         @errors = submission.errors.full_messages
       end
@@ -264,6 +265,18 @@ module Projects
         where(organization: @organization, state: DrawCostRequest::EXISTING_STATES).
         order(created_at: :asc).
         limit(1).first
+    end
+
+    def visible_draw_requests
+      DrawCostRequestPolicy::Scope.new(@user, @draw.draw_cost_requests).resolve
+    end
+
+    def draw_requests_total_costs
+      visible_draw_requests.map(&:provisional_total).sum
+    end
+
+    def draw_requests_difference_to_amounts
+      visible_draw_requests.map(&:difference_to_amount).sum
     end
 
     private

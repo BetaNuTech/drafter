@@ -27,7 +27,7 @@
     </div>
     <div class="actions align-items-end">
       <%= link_to('Edit', edit_draw_cost_request_draw_cost_submission_path(draw_cost_request_id: draw_cost_submission.draw_cost_request_id, id: draw_cost_submission.id), class: 'btn btn-sm btn-primary m-1') if policy(draw_cost_submission).edit? %>
-      <%= link_to('Remove', '#', class: 'btn btn-sm btn-danger') %>
+      <%= link_to('Remove', draw_cost_request_draw_cost_submission_path(draw_cost_request_id: draw_cost_submission.draw_cost_request_id, id: draw_cost_submission.id), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: 'btn btn-sm btn-danger') %>
     </div>
   </div>
 <% end %>

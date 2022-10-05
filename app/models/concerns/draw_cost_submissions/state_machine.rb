@@ -11,9 +11,11 @@ module DrawCostSubmissions
     included do
       class TransitionError < StandardError; end;
 
-      ACTIVE_STATES = [:pending, :submitted, :approved]
+      ACTIVE_STATES = %i[pending submitted approved].freeze
+      DISPLAYED_STATES = %i[pending submitted approved rejected].freeze
 
       scope :active, -> { where(state: ACTIVE_STATES) }
+      scope :visible, -> { where(state: DISPLAYED_STATES) }
 
       include AASM
       aasm column: :state do

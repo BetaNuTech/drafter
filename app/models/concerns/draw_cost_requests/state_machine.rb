@@ -30,6 +30,7 @@ module DrawCostRequests
 
       validates_with StateValidator
 
+
       include AASM
 
       aasm column: :state do

@@ -1,0 +1,3 @@
+<%= turbo_stream.remove @draw_cost_submission %>
+<%= turbo_stream.replace dom_id(@draw, 'total_cost'), number_to_currency(@draw_total_cost) %>
+<%= turbo_stream.replace dom_id(@draw, 'total_cost_difference'), number_to_currency(@draw_difference_to_amount) %>
