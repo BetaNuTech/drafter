@@ -17,12 +17,14 @@
         <%= image_tag preview_document(document: draw_cost_submission.document, resize: [150,150]) %>
       <% end %>
     </div>
-    <div class="card_upload_button">
-      <%= form.label :document, style: 'display: block;' do %>
-        <%= image_tag(upload_image, class: 'upload_image') %>
-        <%= form.file_field :document, class: 'visually-hidden' %>
-      <% end %>
-    </div>
+    <% if draw_cost_submission.new_record? %>
+      <div class="card_upload_button">
+        <%= form.label :document, style: 'display: block;' do %>
+          <%= image_tag(upload_image, class: 'upload_image') %>
+          <%= form.file_field :document, class: 'visually-hidden' %>
+        <% end %>
+      </div>
+    <% end %>
     <div class="body">
       <div class="form-floating">
         <%= form.number_field :amount, { class: 'form-control'} %>
