@@ -19,9 +19,11 @@ class DrawCostSubmissionsController < ApplicationController
     authorize auth_obj
     service = Projects::DrawCostRequestService.new(user: @current_user, draw_cost_request: @draw_cost_request)
     @draw_cost_submission = service.create_submission(draw_cost_request: @draw_cost_request, params: draw_cost_submission_params)
+    @new_draw_cost_submission = DrawCostSubmission.new(draw_cost_request: @draw_cost_request)
     if service.errors?
       render :new, status: :unprocessable_entity
     else
+      @draw_cost_request.draw_cost_submissions.reload
       respond_to do |format|
         format.html { redirect_to draw_cost_request_draw_cost_submission_url(draw_cost_request_id: @draw_cost_request.id, id: @draw_cost_submission.id) }
         format.turbo_stream

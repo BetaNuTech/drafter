@@ -1,0 +1,7 @@
+<div class="row">
+  <div class="col d-flex flex-wrap p-2">
+    <% draw_cost_submissions.each do |draw_cost_submission| %>
+      <%= render partial: 'draw_cost_submissions/draw_cost_submission', locals: {draw_cost_submission: } %>
+    <% end %>
+  </div>
+</div>

@@ -4,27 +4,26 @@
       <%= draw_cost_request.state.titleize %>
     </div>
 
-    <div class="col-sm-12 col-md-2 p-2 bg-light border border-end-0 border-2 border-secondary">
-      <h5 style="line-height: 0.9em; margin-bottom: 0;"><%= draw_cost_request.draw_cost.name %></h5>  
-      <p>
-        <b>Amount:</b>
-        <%= number_to_currency draw_cost_request.amount %>
-      </p>
-      <% if draw_cost_request.plan_change? %>
-        <p>
-          <span class="badge rounded-pill bg-warning" data-toggle="tooltip" data-placement="top" title="<%= draw_cost_request.plan_change_reason %>">Plan Change</span>
-        </p>
-      <% end %>
-      <p class="text-center">
-        <button class="btn btn-success m-1" >Submit</button><br/>
-        <%= link_to 'Edit', edit_draw_draw_cost_request_path(draw_id: draw_cost_request.draw.id, id: draw_cost_request.id), class: 'btn btn-sm btn-primary m-0', data: {turbo_frame: dom_id(draw_cost_request) } %>
-        <%= link_to 'Delete', draw_draw_cost_request_path(draw_id: draw_cost_request.draw.id, id: draw_cost_request.id), class: 'btn btn-sm btn-danger m-0', data: { turbo_confirm: 'Are you sure?', turbo_method: :delete, turbo_frame: '_top'} %>
-      </p>
-    </div>
-
-    <!-- Submissions -->
-    <div class="col-sm-12 col-md-10 p-2 bg-light border border-start-0 border-2 border-secondary">
-
+    <div class="col-sm-12 col-md-3 p-2 bg-light border border-end-0 border-2 border-secondary">
+      <div class="row">
+        <div class="col">
+          <h5 style="line-height: 0.9em; margin-bottom: 0;"><%= draw_cost_request.draw_cost.name %></h5>  
+          <p>
+            <b>Amount:</b>
+            <%= number_to_currency draw_cost_request.amount %>
+          </p>
+          <% if draw_cost_request.plan_change? %>
+            <p>
+              <span class="badge rounded-pill bg-warning" data-toggle="tooltip" data-placement="top" title="<%= draw_cost_request.plan_change_reason %>">Plan Change</span>
+            </p>
+          <% end %>
+          <p class="text-center">
+            <button class="btn btn-success m-1" >Submit</button><br/>
+            <%= link_to 'Edit', edit_draw_draw_cost_request_path(draw_id: draw_cost_request.draw.id, id: draw_cost_request.id), class: 'btn btn-sm btn-primary m-0', data: {turbo_frame: dom_id(draw_cost_request) } %>
+            <%= link_to 'Delete', draw_draw_cost_request_path(draw_id: draw_cost_request.draw.id, id: draw_cost_request.id), class: 'btn btn-sm btn-danger m-0', data: { turbo_confirm: 'Are you sure?', turbo_method: :delete, turbo_frame: '_top'} %>
+          </p>
+        </div>
+      </div>
       <div class="row">
         <% draw_cost_submission = DrawCostSubmission.new(draw_cost_request: draw_cost_request) %>
           <div class="col d-flex flex-wrap p-2">
@@ -33,14 +32,14 @@
             <% end %>
           </div>
       </div>
+    </div>
 
-      <div class="row">
-        <div class="col d-flex flex-wrap p-2">
-          <% draw_cost_request.draw_cost_submissions.each do |draw_cost_submission| %>
-            <%= render partial: 'draw_cost_submissions/draw_cost_submission', locals: {draw_cost_submission: } %>
-          <% end %>
-        </div>
-      </div>
+    <!-- Submissions -->
+    <div class="col-sm-12 col-md-9 p-2 bg-light border border-start-0 border-2 border-secondary">
+
+      <%= turbo_frame_tag dom_id(draw_cost_request, 'draw_cost_submissions') do %>
+        <%= render partial: 'draw_cost_requests/draw_cost_submissions', locals: {draw_cost_submissions: draw_cost_request.draw_cost_submissions} %>
+      <% end %>
 
       <div class="row">
         <div class="col d-flex flex-wrap p-2">

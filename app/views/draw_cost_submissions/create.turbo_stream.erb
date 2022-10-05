@@ -1,2 +1,2 @@
-<%= turbo_stream.append dom_id(@draw_cost_request, 'draw_cost_submissions'), @draw_cost_submission %>
-<%= turbo_stream.update dom_id(DrawCostSubmission.new), partial: 'draw_cost_submissions/new' %>
+<%= turbo_stream.replace dom_id(@draw_cost_request, 'draw_cost_submissions'), partial: 'draw_cost_requests/draw_cost_submissions', locals: {draw_cost_submissions: @draw_cost_request.draw_cost_submissions} %>
+<%= turbo_stream.update( dom_id(@new_draw_cost_submission), partial: 'draw_cost_submissions/new', locals: {draw_cost_submission: @new_draw_cost_submission} ) %>
