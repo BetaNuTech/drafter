@@ -229,6 +229,7 @@ module Projects
       docs_for_deletion = @draw_cost_request.draw_cost_documents.where(documenttype: document_type).to_a
       
       doc = DrawCostDocument.new(effective_params)
+
       if doc.save
         docs_for_deletion.each(&:destroy)
       else

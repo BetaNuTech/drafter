@@ -64,7 +64,7 @@ class DrawCostRequestsController < ApplicationController
     # params: { draw_cost_document: { documenttype: String, notes: String, document: File } }
     authorize @draw_cost_request
     @service = Projects::DrawCostRequestService.new(user: @current_user, draw_cost_request: @draw_cost_request)
-    @service.add_document(params[:draw_cost_document])
+    @service.add_document(params)
     respond_to do |format|
       if @service.errors?
         format.html {
