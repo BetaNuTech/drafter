@@ -39,35 +39,26 @@ module Projects
         @draw_cost = @draw.draw_costs.find(params_draw_cost_id)
       end
 
-      reset_errors
-      existing_dcr = existing_request
-      if existing_dcr.present?
-        @draw_cost_request = existing_dcr
-      else
-        raise PolicyError.new unless @request_policy.create?
-
-        override_params = {
-          draw_cost: @draw_cost,
-          draw: @draw,
-          user: @user,
-          organization: @organization,
-          state: 'pending',
-          audit: false,
-          approval_due_date: Date.current + [ @draw_cost.approval_lead_time, 15 ].min.days
-        }
-        effective_params = sanitize_request_params(params).merge(override_params)
-        @draw_cost_request = DrawCostRequest.new(effective_params)
-        unless @draw_cost_request.save
-          @errors = @draw_cost_request.errors.full_messages
-          return @draw_cost_request
-        end
-      end
-
-      return @draw_cost_request if @draw_cost_request.draw_cost_submissions.any?
-
       raise PolicyError.new unless @request_policy.create?
 
-      #create_submission
+      reset_errors
+
+      override_params = {
+        draw_cost: @draw_cost,
+        draw: @draw,
+        user: @user,
+        organization: @organization,
+        state: 'pending',
+        audit: false,
+        approval_due_date: Date.current + [ @draw_cost.approval_lead_time, 15 ].min.days
+      }
+      effective_params = sanitize_request_params(params).merge(override_params)
+      @draw_cost_request = DrawCostRequest.new(effective_params)
+      unless @draw_cost_request.save
+        @errors = @draw_cost_request.errors.full_messages
+        return @draw_cost_request
+      end
+
       @draw_cost_request.reload
       @draw_cost_request
     end

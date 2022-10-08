@@ -2,7 +2,9 @@
   <div id="<%= draw_cost_submission.id %>" class="draw_cost_request_card d-flex flex-column justify-content-evenly text-center m-1 shadow-sm" >
     <div class="preview_container">
       <% if draw_cost_submission.document.attached? %>
-        <%= image_tag preview_document(document: draw_cost_submission.document, resize: [150,150]), class: 'align-middle' %>
+        <%= link_to(rails_blob_path(draw_cost_submission.document), target: '_blank') do %>
+          <%= image_tag preview_document(document: draw_cost_submission.document, resize: [150,150]), class: 'align-middle' %>
+        <% end %>
       <% end %>
     </div>
     <div class="card_upload_button">

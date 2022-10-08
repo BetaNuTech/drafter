@@ -82,3 +82,8 @@
       :cost_type: finance
       :approval_lead_time: 0
       :standard: true
+    - :name: Other
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+

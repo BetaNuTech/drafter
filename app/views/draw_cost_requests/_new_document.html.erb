@@ -1,6 +1,7 @@
 <div class="draw_cost_request_card d-flex flex-column justify-content-evently text-center m-1 shadow-sm" >
   <%= form_with(model: draw_cost_document,
-                url: draw_cost_request_add_document_path(draw_cost_request_id: draw_cost_request.id, multipart: true) ) do |form| %>
+                url: draw_cost_request_add_document_path(draw_cost_request_id: draw_cost_request.id), multipart: true ) do |form| %>
+    <%= form.hidden_field :documenttype %>
     <div class="preview_container">
 
     </div>

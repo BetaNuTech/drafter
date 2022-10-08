@@ -22,6 +22,12 @@ module DrawCostRequests
       def documents_pending_approval
         draw_cost_documents.where(approved_at: nil)
       end
+
+      def document_for(doctype)
+        return false unless REQUIRED_DOCUMENTS.include?(doctype.to_sym)
+
+        draw_cost_documents.public_send(doctype).order(created_at: :desc).first
+      end
     end
   end
 end
