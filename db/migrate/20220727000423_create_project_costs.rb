@@ -1,7 +1,7 @@
-class CreateDrawCosts < ActiveRecord::Migration[7.0]
+class CreateProjectCosts < ActiveRecord::Migration[7.0]
   def change
-    create_table :draw_costs, id: :uuid do |t|
-      t.references :draw, null: false, foreign_key: true, type: :uuid
+    create_table :project_costs, id: :uuid do |t|
+      t.references :project, null: false, foreign_key: true, type: :uuid
       t.integer :cost_type, null: false
       t.string :name, null: false
       t.string :state, null: false, default: 'pending'
@@ -11,6 +11,6 @@ class CreateDrawCosts < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_index :draw_costs, [:draw_id, :state], name: 'draw_costs_idx'
+    add_index :project_costs, [:project_id, :state], name: 'project_costs_project_idx'
   end
 end

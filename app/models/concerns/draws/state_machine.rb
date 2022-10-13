@@ -11,37 +11,40 @@ module Draws
     included do
       include AASM
       APPROVED_STATES = ['internally_approved', 'externally_approved', 'funded'].freeze
+      VISIBLE_STATES = %i{ pending submitted internally_approved externally_approved funded }.freeze
+
+      scope :visible, -> { where(state: VISIBLE_STATES) }
 
       aasm column: :state do
         state :pending
-        state :in_progress
         state :submitted
         state :internally_approved
         state :externally_approved
         state :funded
-
-        event :start do
-          transitions from: [:pending], to: :in_progress
-        end
+        state :withdrawn
 
         event :submit do
-          transitions from: [:in_progress], to: :submitted
+          transitions from: :in_progress, to: :submitted
         end
 
         event :approve_internal do
-          transitions from: [:submitted], to: :internally_approved
+          transitions from: :submitted, to: :internally_approved
         end
 
         event :approve_external do
-          transitions from: [:submitted], to: :externally_approved
+          transitions from: :internally_approved, to: :externally_approved
         end
 
         event :reject do
-          transitions from: [:internally_approved, :externally_approved], to: :submitted
+          transitions from: %i{ internally_approved externally_approved }, to: :submitted
+        end
+
+        event :withdraw do
+          transitions from: %i{ pending submitted }, to: :withdrawn
         end
 
         event :fund do
-          transitions from: [:externally_approved], to: :funded
+          transitions from: :externally_approved, to: :funded
         end
       end
 

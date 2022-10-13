@@ -37,6 +37,10 @@ module Users
         project_role(project)&.developer?
       end
 
+      def project_consultant?(project)
+        project_role(project)&.consultant?
+      end
+
     end
   end
 end

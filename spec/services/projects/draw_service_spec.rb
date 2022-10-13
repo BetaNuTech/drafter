@@ -1,176 +1,111 @@
 require 'rails_helper'
 
+RSpec.describe DrawService do
+  include_context 'draw_service'
 
-RSpec.describe Projects::DrawService do
-  include_context 'users'
-  include_context 'sample_projects'
-
-  let(:project) { sample_project }
-  let(:user) { project.owners.first }
-  let(:draw) { project.draws.first }
-  let(:admin_user) { create(:user, role: admin_role) }
-  let(:owner_user) { project.owners.first }
-  let(:manager_user) { project.managers.first }
-  let(:developer_user) { project.developers.first }
-  let(:non_project_user) { create(:user, role: user_role) }
-  let(:valid_attributes) { { name: 'Test Draw', notes: 'Test notes' } }
-  let(:invalid_attributes) { { name: nil, notes: 'Test notes' } }
+  let(:valid_draw_attributes) {
+    {
+      amount: 1234.56,
+      name: 'Draw 1',
+      notes: 'Draw notes for test here'
+    }
+  }
+  let(:invalid_draw_attributes) {
+    {
+      amount: -1,
+      name: 'Draw 1',
+      notes: 'Draw notes for test here'
+    }
+  }
 
   describe 'initialization' do
-    it 'should initialize the service without a draw' do
-      service = Projects::DrawService.new(current_user: user, project: project)
+    it 'creates a service object' do
+      service = DrawService.new(user: developer_user, project: project)
     end
-    it 'should initialize the service with a draw' do
-      service = Projects::DrawService.new(current_user: user, project: project, draw: draw)
-      expect(service.draw).to eq(draw)
+    it 'initializes a new draw if none is provided' do
+      service = DrawService.new(user: developer_user, project: project)
+      expect(service.draw).to be_a(Draw)
+      assert(service.draw.new_record?)
+      expect(service.draw.project).to eq(project)
+      expect(service.draw.user).to eq(developer_user)
+      expect(service.draw.organization).to eq(developer_user.organization)
     end
-    it 'should initialize the service with a draw id' do
-      service = Projects::DrawService.new(current_user: user, project: project, draw: draw.id)
-      expect(service.draw).to eq(draw)
-    end
-
-  end
+  end # initialize
 
   describe 'creating a draw' do
-
-    describe 'by project management' do
-      it 'should create a new draw if provided valid attributes' do
-        user = owner_user
-        service = Projects::DrawService.new(current_user: user, project: project)
+    describe 'as a project developer' do
+      it 'creates and returns a new draw' do
+        service = DrawService.new(user: developer_user, project: project)
+        draw = nil
         expect {
-          service.create(valid_attributes)
+          draw = service.create(valid_draw_attributes)
         }.to change{Draw.count}
         refute(service.errors?)
+        expect(draw.project).to eq(project)
+        expect(draw.user).to eq(developer_user)
+        expect(draw.organization).to eq(developer_user.organization)
+        expect(draw.amount).to eq(valid_draw_attributes[:amount])
+        expect(draw.name).to eq(valid_draw_attributes[:name])
+        expect(draw.notes).to eq(valid_draw_attributes[:notes])
       end
-      it 'should not create a new draw if not provided valid attributes' do
-        user = owner_user
-        service = Projects::DrawService.new(current_user: user, project: project)
+    end
+    describe 'as a non-authorized user' do
+      it 'does not create a draw' do
+        service = DrawService.new(user: consultant_user, project: project)
         expect {
-          service.create(invalid_attributes)
-          project.reload
+          draw = service.create(valid_draw_attributes) rescue nil
         }.to_not change{Draw.count}
-        assert(service.errors?)
+        expect {
+          draw = service.create(valid_draw_attributes)
+        }.to raise_error(DrawService::PolicyError)
       end
     end
-    describe 'by an unprivileged project user' do
-      it 'should not create a new draw if provided valid attributes' do
-        user = developer_user
-        service = Projects::DrawService.new(current_user: user, project: project)
-        expect {
-          service.create(valid_attributes)
-        }.to raise_error Projects::DrawService::PolicyError
-      end
-    end
-    describe 'by a user not assigned to the project' do
-      it 'should not create a new draw if provided valid attributes' do
-        user = create(:user, role: user_role)
-        service = Projects::DrawService.new(current_user: user, project: project)
-        expect {
-          service.create(valid_attributes)
-        }.to raise_error Projects::DrawService::PolicyError
-
-        user = create(:user, role: executive_role)
-        service = Projects::DrawService.new(current_user: user, project: project)
-        expect {
-          service.create(valid_attributes)
-        }.to raise_error Projects::DrawService::PolicyError
-      end
-    end 
-  end # Create draw
+  end # create
 
   describe 'updating a draw' do
-    let(:valid_updated_attributes) { { name: 'New Test Name'} }
-    let(:invalid_updated_attributes) { { name: ''} }
-    describe 'by an admin' do
-      it 'should update the draw' do
-        service = Projects::DrawService.new(current_user: admin_user, project: project, draw: draw)
-        service.update(valid_updated_attributes)
-        draw.reload
-        expect(draw.name).to eq(valid_updated_attributes[:name])
-      end
+    describe 'as a developer' do
+      let(:user) {developer_user}
+      let(:draw) { sample_draw }
+      let(:project) { sample_project }
+      let(:valid_attrs) { {amount: 444.1, name: 'New name', notes: 'New notes'} }
+      let(:invalid_attrs) { {amount: -444.1, name: 'New name', notes: 'New notes'} }
 
-      describe 'with invalid attributes' do
-        it 'should not update the draw' do
-          service = Projects::DrawService.new(current_user: admin_user, project: project, draw: draw)
-          original_name = draw.name
-          service.update(invalid_updated_attributes)
+      before(:each) { sample_project; sample_draw }
+
+      describe 'with valid attributes' do
+        it 'updates the draw' do
+          service = DrawService.new(user:, project:, draw:)
+          service.update(valid_attrs)
+          refute(service.errors?)
           draw.reload
-          expect(draw.name).to eq(original_name)
+          expect(draw.amount).to eq(valid_attrs[:amount])
+          expect(draw.name).to eq(valid_attrs[:name])
+          expect(draw.notes).to eq(valid_attrs[:notes])
+        end
+      end
+      describe 'with invalid attributes' do
+        it 'does not change the draw' do
+          service = DrawService.new(user:, project:, draw:)
+          old_amount = draw.amount
+          service.update(invalid_attrs)
+          assert(service.errors?)
+          draw.reload
+          expect(draw.amount).to eq(old_amount)
         end
       end
     end
-    describe 'by project management' do
-      it 'should update the draw' do
-        service = Projects::DrawService.new(current_user: manager_user, project: project, draw: draw)
-        service.update(valid_updated_attributes)
-        draw.reload
-        expect(draw.name).to eq(valid_updated_attributes[:name])
-      end
-    end
-    describe 'by an unprivileged project user' do
-      it 'should not update the draw' do
-        service = Projects::DrawService.new(current_user: developer_user, project: project, draw: draw)
-        expect {
-          service.update(valid_updated_attributes)
-        }.to raise_error Projects::DrawService::PolicyError
-      end
-    end
-    describe 'by user not assigned to the project' do
-      it 'should not update the draw' do
-        service = Projects::DrawService.new(current_user: non_project_user, project: project, draw: draw)
-        expect {
-          service.update(valid_updated_attributes)
-        }.to raise_error Projects::DrawService::PolicyError
-      end
-    end
-  end
+  end # update
 
-  describe 'destroying a draw' do
-    describe 'by an admin' do
-      it 'should destroy the draw' do
-        service = Projects::DrawService.new(current_user: admin_user, project: project, draw: draw)
-        expect {
-          service.destroy
-        }.to change{Draw.count}
+  describe 'withdrawing a draw' do
+    describe 'as the project developer' do
+      it 'transitions the draw to "withdrawn"' do
+        service = DrawService.new(user:, project:, draw:)
+        assert(draw.pending?)
+        service.withdraw
+        draw.reload
+        assert(draw.withdrawn?)
       end
     end
-    describe 'by the project owner' do
-      it 'should destroy the draw' do
-        service = Projects::DrawService.new(current_user: owner_user, project: project, draw: draw)
-        expect {
-          service.destroy
-        }.to change{Draw.count}
-      end
-    end
-    describe 'by a manager' do
-      it 'should not destroy the draw' do
-        service = Projects::DrawService.new(current_user: manager_user, project: project, draw: draw)
-        draw_count = Draw.count
-        expect {
-          service.destroy
-        }.to raise_error Projects::DrawService::PolicyError
-        expect(Draw.count).to eq(draw_count)
-      end
-    end
-    describe 'by an unprivileged project user' do
-      it 'should not destroy the draw' do
-        service = Projects::DrawService.new(current_user: developer_user, project: project, draw: draw)
-        draw_count = Draw.count
-        expect {
-          service.destroy
-        }.to raise_error Projects::DrawService::PolicyError
-        expect(Draw.count).to eq(draw_count)
-      end
-    end
-    describe 'by a user not assigned to the project' do
-      it 'should not destroy the draw' do
-        service = Projects::DrawService.new(current_user: non_project_user, project: project, draw: draw)
-        draw_count = Draw.count
-        expect {
-          service.destroy
-        }.to raise_error Projects::DrawService::PolicyError
-        expect(Draw.count).to eq(draw_count)
-      end
-    end
-  end # Destroy draw
+  end # withdraw
+  
 end

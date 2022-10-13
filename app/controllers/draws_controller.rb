@@ -8,13 +8,16 @@ class DrawsController < ApplicationController
     authorize Draw.new(project: @project)
     @service = Projects::DrawService.new(current_user: @current_user, project: @project)
     @draws = @service.draws
+    breadcrumbs.add(label: 'Home', url: '/')
+    breadcrumbs.add(label: @project.name, url: project_path(@project))
+    breadcrumbs.add(label: 'Draws', url: project_draws_path(@project))
   end
 
   def show
     authorize @draw
-    @draw_cost_requests = policy_scope(@draw.draw_cost_requests)
-    @total_cost = @draw_cost_requests.map(&:provisional_total).sum
-    @difference_to_amounts = @draw_cost_requests.map(&:difference_to_amount).sum
+    #@draw_cost_requests = policy_scope(@draw.draw_cost_requests)
+    #@total_cost = @draw_cost_requests.map(&:provisional_total).sum
+    #@difference_to_amounts = @draw_cost_requests.map(&:difference_to_amount).sum
 
     breadcrumbs.add(label: 'Home', url: '/')
     breadcrumbs.add(label: @project.name, url: project_path(@project))
@@ -22,7 +25,7 @@ class DrawsController < ApplicationController
   end
 
   def new
-    @service = Projects::DrawService.new(current_user: @current_user, project: @project)
+    @service = DrawService.new(user: @current_user, project: @project)
     authorize @service.draw
     breadcrumbs.add(label: 'Home', url: '/')
     breadcrumbs.add(label: @project.name, url: project_path(@project))
@@ -30,7 +33,7 @@ class DrawsController < ApplicationController
   end
 
   def edit
-    @service = Projects::DrawService.new(current_user: @current_user, project: @project, draw: @draw)
+    @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
     authorize @service.draw
     breadcrumbs.add(label: 'Home', url: '/')
     breadcrumbs.add(label: @project.name, url: project_path(@project))
@@ -38,38 +41,44 @@ class DrawsController < ApplicationController
   end
 
   def create
-    @service = Projects::DrawService.new(current_user: @current_user, project: @project)
+    @service = DrawService.new(user: @current_user, project: @project)
     authorize @service.draw
-    if @service.create(params)
+    @draw = @service.create(params[:draw])
+    if @service.errors?
+      render :new, status: :unprocessable_entity
+    else
       respond_to do |format|
-        format.html { redirect_to project_draw_path(project_id: @service.project, id: @service.draw.id), notice: 'Created new draw'}
+        format.html { redirect_to project_draw_path(project_id: @project, id: @draw.id), notice: 'Created new draw'}
         format.turbo_stream
       end
-    else
-      render :new, status: :unprocessable_entity
     end
     
   end
 
   def update
-    @service = Projects::DrawService.new(current_user: @current_user, project: @project, draw: @draw)
-    authorize @service.draw
+    authorize @draw
+    @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
+    @draw = @service.update(params[:draw])
     respond_to do |format|
-      if @service.update(params)
-        format.html { redirect_to project_draws_path(project_id: @service.project.id, id: @service.draw.id), notice: "Draw was successfully updated." }
+      if @service.errors?
+        format.html {
+          render :edit, status: :unprocessable_entity
+        }
       else
-        render :edit, status: :unprocessable_entity
+        format.html { redirect_to project_draws_path(project_id: @service.project.id, id: @service.draw.id), notice: "Draw was successfully updated." }
+        format.turbo_stream
       end
     end
   end
 
   def destroy
-    @service = Projects::DrawService.new(current_user: @current_user, project: @project, draw: @draw)
-    authorize @service.draw
+    authorize @draw
+    @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
 
-    if @service.destroy
+    # Withdraw Draw (soft delete)
+    if @service.withdraw
       respond_to do |format|
-        format.html { redirect_to draws_url, notice: "Draw was successfully destroyed." }
+        format.html { redirect_to project_path(id: @project.id), notice: "Draw was removed." }
         format.turbo_stream
       end
     else

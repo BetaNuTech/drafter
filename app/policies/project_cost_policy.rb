@@ -1,4 +1,4 @@
-class DrawCostPolicy < ApplicationPolicy
+class ProjectCostPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       case user
@@ -7,8 +7,7 @@ class DrawCostPolicy < ApplicationPolicy
       when -> (u) { u.executive? }
         scope
       else
-        scope.includes(:draws).
-          where(draws: { project_id: user.projects.pluck(:id) })
+        scope.where(project_id: user.projects.pluck(:id))
       end
     end
   end
@@ -38,7 +37,8 @@ class DrawCostPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.administrator? || user.project_management?(project)
+    record.draw_costs.empty? &&
+    ( user.administrator? || user.project_management?(project) )
   end
   
   def approve?
@@ -53,9 +53,9 @@ class DrawCostPolicy < ApplicationPolicy
   def allowed_params
     case user
     when -> (u) { u.administrator? }
-      DrawCost::ALLOWED_PARAMS
+      ProjectCost::ALLOWED_PARAMS
     when -> (u) { u.project_management?(record.project) }
-      DrawCost::ALLOWED_PARAMS
+      ProjectCost::ALLOWED_PARAMS
     else
       []
     end

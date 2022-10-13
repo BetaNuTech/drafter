@@ -33,24 +33,25 @@ RSpec.shared_context 'sample_projects' do
     add_project_user(user: project_developer2, project: project, role: developer_project_role)
 
     # Add Draws 
-    DrawCostSample.load_seed_data
-    draw_service = Projects::DrawService.new(current_user: project_owner, project: project)
-    draw_service.create({name: 'Test Draw 1'})
+    ProjectCostSample.load_seed_data
+    user = project.developers.first
+    draw_service = DrawService.new(user:, project: )
+    draw_service.create({name: 'Test Draw', amount: 123456.0})
 
     project.reload
     project
   }
 
   let(:sample_draw) {
-    user = sample_project.owners.first
-    service = Projects::DrawService.new(current_user: user, project: sample_project)
-    service.create({name: 'Sample Draw 1'})
+    user = project.developers.first
+    draw_service = DrawService.new(user: , project: )
+    draw_service.create({name: 'Test Draw 2', amount: 123456.0})
   }
   let(:sample_draw_cost) { sample_draw.draw_costs.first }
   let(:sample_draw_cost_request) {
-    user = sample_project.developers.first
-    service = Projects::DrawCostRequestService.new(user: user, draw_cost: sample_draw_cost)
-    service.create_request({amount: 1})
+    #user = sample_project.developers.first
+    #service = Projects::DrawCostRequestService.new(user: user, draw_cost: sample_draw_cost)
+    #service.create_request({amount: 1})
   }
 
   before do

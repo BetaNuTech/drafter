@@ -5,7 +5,7 @@ class DrawPolicy < ApplicationPolicy
       when -> (u) { u.admin? }
         scope
       else
-        scope.where(project: user.projects)
+        scope.where(project: user.projects, organization: user.organization)
       end
     end
   end
@@ -15,7 +15,9 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def new?
-    user.admin? || user.project_management?(record.project)
+    user.admin? ||
+      user.project_developer?(record.project) ||
+      user.project_management?(record.project) 
   end
 
   def create?
@@ -23,7 +25,11 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def show?
-    user.admin? || user.member?(record.project)
+    user.admin? ||
+      user.project_management?(record.project) ||
+      ( record.organization.present? &&
+          user.organization == record.organization &&
+          user.member?(record.project) )
   end
 
   def edit?
@@ -35,11 +41,23 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.admin? || user.project_owner?(record.project)
+    user.admin? ||
+      user.project_owner?(record.project) ||
+      ( record.permitted_state_events.include?(:withdraw) &&
+        user.project_developer?(record.project) &&
+        own_organization? )
+  end
+
+  def withdraw?
+    destroy?
   end
 
   def set_reference?
     record.approved?
+  end
+
+  def own_organization?
+    user.organization == record.organization
   end
 
   def new_request?(organization)
@@ -51,16 +69,17 @@ class DrawPolicy < ApplicationPolicy
 
   def allowed_params
     allow_params = Draw::ALLOWED_PARAMS
-    if record.approved?
-      allow_params << :reference
-    end
     case user
     when -> (u) { u.administrator? }
+      allow_params << :organization_id
+      allow_params << :reference if record.approved?
       allow_params
     when -> (u) { u.project_management?(record.project) }
+      allow_params << :organization_id
+      allow_params << :reference if record.approved?
       allow_params
     else
-      []
+      allow_params
     end
   end
 end

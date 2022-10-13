@@ -10,29 +10,31 @@
         <%= draw_state_badge(draw) %>
       </small>
     </h3>
-    <div class="card-action-buttons">
-      <%= link_to(image_tag(edit_image),
-                  edit_project_draw_path(project_id: draw.project_id, id: draw.id),
-                  class: 'action-link',
-                  data: { 'turbo_frame': draw }) if policy(draw).edit? %>
-      <%= link_to(image_tag(destroy_image), project_draw_path(project_id: draw.project.id, id: draw.id),
-                  class: 'action-link',
-                  data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }) if policy(draw).destroy? %>
+    <div class="card-action-buttons" style="right: 40px;">
     </div>
     <div class="row row-cols-1 row-cols-md-2 g2">
       <div class="col col-md-8">
         <div class="card-text">
           <!-- additional information here -->
-          <em>
-            <b>Reference #:</b> <%= draw.reference %>
-          </em>
+          <% if @current_user.project_internal?(draw.project) %>
+            <em><b>Reference #:</b> <%= draw.reference %></em>
+          <% end %>
           <p>
             <%= draw.notes %>
+          </p>
+          <p>
+            <%= link_to('Edit',
+                        edit_project_draw_path(project_id: draw.project_id, id: draw.id),
+                        class: 'btn btn-sm btn-primary',
+                        data: { 'turbo_frame': draw }) if policy(draw).edit? %>
+            <%= link_to('Withdraw', project_draw_path(project_id: draw.project.id, id: draw.id),
+                        class: 'btn btn-sm btn-danger',
+                        data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }) if policy(draw).withdraw? %>
           </p>
         </div>
       </div>
       <div class="col col-md-4">
-        <b><%= number_to_currency(draw.total) %></b><br/>
+        <b><%= number_to_currency(draw.amount) %></b><br/>
         <span class="badge round-pill bg-<%= draw.over_budget? ? 'danger' : 'success' %> "><%= number_to_currency(draw.budget_variance) %></span>
       </div>
     </div>

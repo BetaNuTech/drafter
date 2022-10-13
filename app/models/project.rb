@@ -20,9 +20,22 @@ class Project < ApplicationRecord
   ### Associations
   has_many :system_events, as: :event_source, dependent: :destroy
   has_many :draws, dependent: :destroy
-  has_many :draw_costs, through: :draws
-  has_many :draw_cost_requests, through: :draws
+  has_many :project_costs
+  #has_many :invoices, through: :draws
 
   ### Validations
   validates :name, presence: true
+
+  def draws_visible_to(user)
+    case user
+    when user.admin?
+      draws
+    when user.project_internal?(self)
+      draws
+    when user.project_consultant?(self)
+      draws.visible
+    else
+      draws.where(organization: user.organization).visible
+    end
+  end
 end

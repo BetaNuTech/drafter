@@ -1,4 +1,4 @@
-RSpec.shared_context "draw_cost_request_service" do
+RSpec.shared_context "draw_service" do
   include_context 'users'
   include_context 'sample_projects'
 

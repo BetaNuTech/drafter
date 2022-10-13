@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: draw_cost_samples
+# Table name: project_cost_samples
 #
 #  id                 :uuid             not null, primary key
 #  approval_lead_time :integer
@@ -12,9 +12,9 @@
 #
 # Indexes
 #
-#  draw_cost_samples_idx  (name,standard)
+#  project_cost_samples_idx  (name,standard)
 #
-class DrawCostSample < ApplicationRecord
+class ProjectCostSample < ApplicationRecord
   include Seeds::Seedable
 
   COST_TYPES = %w{land hard soft finance}

@@ -1,8 +1,8 @@
 <div class="row p-2">
   <div class="col">
-    <%= form_with(model: draw_cost, url: [draw_cost.draw, draw_cost], class: 'form-floating') do |form| %>
-      <%= turbo_frame_tag dom_id(draw_cost, 'errors') do %>
-        <%= render partial: 'shared/object_errors', locals: { object: draw_cost } %>
+    <%= form_with(model: project_cost, url: [project_cost.project, project_cost], class: 'form-floating') do |form| %>
+      <%= turbo_frame_tag dom_id(project_cost, 'errors') do %>
+        <%= render partial: 'shared/object_errors', locals: { object: project_cost } %>
       <% end %>
 
       <div class="row row-cols-1">
@@ -17,7 +17,7 @@
       <div class="row">
         <div class="col-sm-12 col-md-4">
           <div class="form-floating mb-3 g-2">
-            <%= form.select(:cost_type, options_for_select(draw_cost_cost_type_options, draw_cost.cost_type), {}, {class: 'form-select'}) %>
+            <%= form.select(:cost_type, options_for_select(project_cost_cost_type_options, project_cost.cost_type), {}, {class: 'form-select'}) %>
             <%= form.label :cost_type, 'Cost Type' %>
           </div>
         </div>

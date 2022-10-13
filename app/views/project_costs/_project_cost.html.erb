@@ -1,0 +1,25 @@
+<%= turbo_frame_tag project_cost do %>
+  <div id="<%= dom_id(project_cost) %>" class="card project-card">
+    <div class="card-body">
+      <h3 class="card-title">
+        <%= project_cost.name %>
+        <small>
+          <span class="badge bg-<%= project_cost.cost_type_css_class %>">
+            <%= project_cost.cost_type %>
+          </span>
+        </small>
+      </h3>
+      <div class="card-action-buttons">
+        <%= link_to('Edit', edit_project_project_cost_path(project_id: project_cost.project_id, id: project_cost.id), class: 'btn btn-sm btn-primary', data: { turbo_frame: project_cost }) if policy(project_cost).edit? %>
+        <%= link_to('Delete', project_project_cost_path(project_id: project_cost.project, id: project_cost.id), class: 'btn btn-sm btn-danger', data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }) if policy(project_cost).destroy? %>
+      </div>
+      <div class="card-text">
+        <p>
+          <b>Budget:</b> <%= number_to_currency(project_cost.total) %>
+          <br/>
+          <b>Approval Lead Time:</b> <%= project_cost.approval_lead_time %> days
+        </p>
+      </div>
+    </div>
+  </div>
+<% end %>

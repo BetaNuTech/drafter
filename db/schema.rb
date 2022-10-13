@@ -58,98 +58,90 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_01_195346) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "draw_cost_documents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "draw_costs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "draw_id", null: false
+    t.uuid "project_cost_id", null: false
+    t.uuid "approver_id"
+    t.uuid "plan_change_approver_id"
+    t.decimal "total", default: "0.0", null: false
+    t.decimal "contingency", default: "0.0", null: false
+    t.string "state", default: "pending", null: false
+    t.datetime "approved_at"
+    t.boolean "plan_change", default: false, null: false
+    t.datetime "plan_change_approved_at"
+    t.text "plan_change_desc"
+    t.text "plan_change_approved_by_desc"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["approver_id"], name: "index_draw_costs_on_approver_id"
+    t.index ["draw_id", "project_cost_id", "approver_id"], name: "draw_costs_assoc_idx"
+    t.index ["draw_id", "state"], name: "draw_costs_draw_state_idx"
+    t.index ["draw_id"], name: "index_draw_costs_on_draw_id"
+    t.index ["plan_change_approver_id"], name: "index_draw_costs_on_plan_change_approver_id"
+    t.index ["project_cost_id"], name: "index_draw_costs_on_project_cost_id"
+  end
+
+  create_table "draw_documents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
-    t.uuid "draw_cost_request_id", null: false
+    t.uuid "draw_id", null: false
+    t.uuid "approver_id"
     t.text "notes"
     t.integer "documenttype", default: 0, null: false
     t.date "approval_due_date"
     t.datetime "approved_at"
-    t.uuid "approver_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["approver_id"], name: "index_draw_cost_documents_on_approver_id"
-    t.index ["draw_cost_request_id"], name: "index_draw_cost_documents_on_draw_cost_request_id"
-    t.index ["user_id"], name: "index_draw_cost_documents_on_user_id"
-  end
-
-  create_table "draw_cost_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "draw_id", null: false
-    t.uuid "draw_cost_id", null: false
-    t.uuid "user_id", null: false
-    t.uuid "organization_id", null: false
-    t.string "state", default: "pending", null: false
-    t.decimal "amount", default: "0.0", null: false
-    t.decimal "total", default: "0.0", null: false
-    t.text "description"
-    t.boolean "plan_change", default: false, null: false
-    t.text "plan_change_reason"
-    t.integer "alert", default: 0, null: false
-    t.boolean "audit", default: false, null: false
-    t.date "approval_due_date"
-    t.uuid "approver_id"
-    t.datetime "approved_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["draw_cost_id"], name: "index_draw_cost_requests_on_draw_cost_id"
-    t.index ["draw_id"], name: "index_draw_cost_requests_on_draw_id"
-    t.index ["organization_id"], name: "index_draw_cost_requests_on_organization_id"
-    t.index ["user_id"], name: "index_draw_cost_requests_on_user_id"
-  end
-
-  create_table "draw_cost_samples", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.integer "cost_type", null: false
-    t.integer "approval_lead_time"
-    t.boolean "standard", default: true, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["name", "standard"], name: "draw_cost_samples_idx"
-  end
-
-  create_table "draw_cost_submissions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "draw_cost_request_id"
-    t.uuid "approver_id"
-    t.boolean "audit", default: false, null: false
-    t.boolean "manual_approval_required", default: false, null: false
-    t.boolean "multi_invoice", default: false, null: false
-    t.boolean "ocr_approval"
-    t.date "approval_due_date"
-    t.date "approved_at"
-    t.decimal "amount", default: "0.0", null: false
-    t.string "state", default: "pending", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["approver_id"], name: "index_draw_cost_submissions_on_approver_id"
-    t.index ["draw_cost_request_id"], name: "index_draw_cost_submissions_on_draw_cost_request_id"
-  end
-
-  create_table "draw_costs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "draw_id", null: false
-    t.integer "cost_type", null: false
-    t.string "name", null: false
-    t.string "state", default: "pending", null: false
-    t.integer "approval_lead_time", default: 0, null: false
-    t.decimal "total", default: "0.0", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["draw_id", "state"], name: "draw_costs_idx"
-    t.index ["draw_id"], name: "index_draw_costs_on_draw_id"
+    t.index ["approver_id"], name: "index_draw_documents_on_approver_id"
+    t.index ["documenttype"], name: "index_draw_documents_on_documenttype"
+    t.index ["draw_id", "user_id"], name: "draw_documents_assoc_idx"
+    t.index ["draw_id"], name: "index_draw_documents_on_draw_id"
+    t.index ["user_id"], name: "index_draw_documents_on_user_id"
   end
 
   create_table "draws", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "project_id", null: false
-    t.integer "index", default: 1, null: false
+    t.uuid "user_id", null: false
+    t.uuid "organization_id", null: false
+    t.uuid "approver_id"
     t.string "name", null: false
+    t.integer "index", default: 1, null: false
+    t.decimal "amount", default: "0.0", null: false
     t.string "state", default: "pending", null: false
     t.string "reference"
-    t.decimal "total"
-    t.uuid "approver"
+    t.datetime "approved_at"
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["project_id", "index"], name: "index_draws_on_project_id_and_index", unique: true
+    t.index ["approver_id"], name: "index_draws_on_approver_id"
+    t.index ["organization_id"], name: "index_draws_on_organization_id"
+    t.index ["project_id", "organization_id", "index"], name: "index_draws_on_project_id_and_organization_id_and_index", unique: true
+    t.index ["project_id", "user_id", "organization_id", "approver_id", "state"], name: "draws_assoc_idx"
     t.index ["project_id"], name: "index_draws_on_project_id"
+    t.index ["user_id"], name: "index_draws_on_user_id"
+  end
+
+  create_table "invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "draw_cost_id"
+    t.uuid "user_id"
+    t.uuid "approver_id"
+    t.string "state", default: "pending", null: false
+    t.string "description"
+    t.decimal "amount", default: "0.0", null: false
+    t.boolean "manual_approval_required", default: true, null: false
+    t.boolean "audit", default: false, null: false
+    t.boolean "multi_invoice"
+    t.datetime "approved_at"
+    t.string "approved_by_desc"
+    t.decimal "ocr_amount"
+    t.datetime "ocr_processed"
+    t.json "ocr_data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["approver_id"], name: "index_invoices_on_approver_id"
+    t.index ["draw_cost_id", "user_id", "approver_id"], name: "invoices_assoc_idx"
+    t.index ["draw_cost_id"], name: "index_invoices_on_draw_cost_id"
+    t.index ["state", "audit", "manual_approval_required", "ocr_processed"], name: "invoices_state_idx"
+    t.index ["user_id"], name: "index_invoices_on_user_id"
   end
 
   create_table "organizations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -157,6 +149,29 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_01_195346) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "project_cost_samples", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "cost_type", null: false
+    t.integer "approval_lead_time"
+    t.boolean "standard", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "standard"], name: "project_cost_samples_idx"
+  end
+
+  create_table "project_costs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.integer "cost_type", null: false
+    t.string "name", null: false
+    t.string "state", default: "pending", null: false
+    t.integer "approval_lead_time", default: 0, null: false
+    t.decimal "total", default: "0.0", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id", "state"], name: "project_costs_project_idx"
+    t.index ["project_id"], name: "index_project_costs_on_project_id"
   end
 
   create_table "project_roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -261,17 +276,21 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_01_195346) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "draw_cost_documents", "draw_cost_requests"
-  add_foreign_key "draw_cost_documents", "users"
-  add_foreign_key "draw_cost_documents", "users", column: "approver_id"
-  add_foreign_key "draw_cost_requests", "draw_costs"
-  add_foreign_key "draw_cost_requests", "draws"
-  add_foreign_key "draw_cost_requests", "organizations"
-  add_foreign_key "draw_cost_requests", "users"
-  add_foreign_key "draw_cost_submissions", "draw_cost_requests"
-  add_foreign_key "draw_cost_submissions", "users", column: "approver_id"
   add_foreign_key "draw_costs", "draws"
+  add_foreign_key "draw_costs", "project_costs"
+  add_foreign_key "draw_costs", "users", column: "approver_id"
+  add_foreign_key "draw_costs", "users", column: "plan_change_approver_id"
+  add_foreign_key "draw_documents", "draws"
+  add_foreign_key "draw_documents", "users"
+  add_foreign_key "draw_documents", "users", column: "approver_id"
+  add_foreign_key "draws", "organizations"
   add_foreign_key "draws", "projects"
+  add_foreign_key "draws", "users"
+  add_foreign_key "draws", "users", column: "approver_id"
+  add_foreign_key "invoices", "draw_costs"
+  add_foreign_key "invoices", "users"
+  add_foreign_key "invoices", "users", column: "approver_id"
+  add_foreign_key "project_costs", "projects"
   add_foreign_key "project_users", "project_roles"
   add_foreign_key "project_users", "projects"
   add_foreign_key "project_users", "users"

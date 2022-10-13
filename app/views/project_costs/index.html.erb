@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col">
+    <%= link_to('Add Project Cost', new_project_project_cost_path(project_id: @project.id), data: {turbo_frame: dom_id(@new_project_cost) }, class: 'btn btn-success') %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <%= turbo_frame_tag @new_project_cost %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <%= turbo_frame_tag 'project_costs' do %>
+      <%= render @project.project_costs.order(name: :asc) %>
+    <% end %>
+  </div>
+</div>

@@ -1,10 +1,10 @@
-module DrawCosts
+module ProjectCosts
   module StateMachine
     extend ActiveSupport::Concern
 
     class_methods do
       def state_names
-        Draw.aasm.states.map{|s| s.name.to_s}
+        ProjectCost.aasm.states.map{|s| s.name.to_s}
       end
     end
 

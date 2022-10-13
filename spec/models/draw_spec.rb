@@ -2,26 +2,36 @@
 #
 # Table name: draws
 #
-#  id         :uuid             not null, primary key
-#  approver   :uuid
-#  index      :integer          default(1), not null
-#  name       :string           not null
-#  notes      :text
-#  reference  :string
-#  state      :string           default("pending"), not null
-#  total      :decimal(, )
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  project_id :uuid             not null
+#  id              :uuid             not null, primary key
+#  amount          :decimal(, )      default(0.0), not null
+#  approved_at     :datetime
+#  index           :integer          default(1), not null
+#  name            :string           not null
+#  notes           :text
+#  reference       :string
+#  state           :string           default("pending"), not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  approver_id     :uuid
+#  organization_id :uuid             not null
+#  project_id      :uuid             not null
+#  user_id         :uuid             not null
 #
 # Indexes
 #
-#  index_draws_on_project_id            (project_id)
-#  index_draws_on_project_id_and_index  (project_id,index) UNIQUE
+#  draws_assoc_idx                                          (project_id,user_id,organization_id,approver_id,state)
+#  index_draws_on_approver_id                               (approver_id)
+#  index_draws_on_organization_id                           (organization_id)
+#  index_draws_on_project_id                                (project_id)
+#  index_draws_on_project_id_and_organization_id_and_index  (project_id,organization_id,index) UNIQUE
+#  index_draws_on_user_id                                   (user_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (approver_id => users.id)
+#  fk_rails_...  (organization_id => organizations.id)
 #  fk_rails_...  (project_id => projects.id)
+#  fk_rails_...  (user_id => users.id)
 #
 require 'rails_helper'
 

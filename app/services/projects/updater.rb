@@ -17,6 +17,7 @@ module Projects
       @project = Project.new(sanitize_params(params))
       if @project.save
         SystemEvent.log(description: 'Created new project', event_source: @project, incidental: @current_user, severity: :warn)
+        add_project_costs(@project)
         return @project
       else
         record_errors
@@ -51,6 +52,19 @@ module Projects
     end
 
     private
+
+    def add_project_costs(project)
+      ProjectCostSample.standard.order(cost_type: :asc, name: :asc).each do |sample|
+        project.project_costs.create(
+          cost_type: sample.cost_type,
+          name: sample.name,
+          approval_lead_time: sample.approval_lead_time,
+          total: 0.0,
+          state: 'pending'
+        )
+      end
+      @project.project_costs.reload
+    end
 
     def refresh_policy
       @policy = ProjectPolicy.new(@current_user, @project)

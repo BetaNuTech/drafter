@@ -16,5 +16,5 @@ Rake::Task["db:seed:project_roles"].invoke
 puts "===== Seeding Users"
 Rake::Task["db:seed:users"].invoke
 
-puts "===== Seeding Draw Cost Samples"
-Rake::Task["db:seed:draw_cost_samples"].invoke
+puts "===== Seeding Project Cost Samples"
+Rake::Task["db:seed:project_cost_samples"].invoke

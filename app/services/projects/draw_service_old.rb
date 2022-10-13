@@ -1,5 +1,5 @@
 module Projects
-  class DrawService
+  class DrawServiceOld
     attr_reader :project, :current_user, :draw, :errors
 
     class PolicyError < StandardError; end

@@ -1,31 +1,33 @@
 # == Schema Information
 #
-# Table name: draw_cost_documents
+# Table name: draw_documents
 #
-#  id                   :uuid             not null, primary key
-#  approval_due_date    :date
-#  approved_at          :datetime
-#  documenttype         :integer          default("other"), not null
-#  notes                :text
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  approver_id          :uuid
-#  draw_cost_request_id :uuid             not null
-#  user_id              :uuid
+#  id                :uuid             not null, primary key
+#  approval_due_date :date
+#  approved_at       :datetime
+#  documenttype      :integer          default("other"), not null
+#  notes             :text
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  approver_id       :uuid
+#  draw_id           :uuid             not null
+#  user_id           :uuid
 #
 # Indexes
 #
-#  index_draw_cost_documents_on_approver_id           (approver_id)
-#  index_draw_cost_documents_on_draw_cost_request_id  (draw_cost_request_id)
-#  index_draw_cost_documents_on_user_id               (user_id)
+#  draw_documents_assoc_idx              (draw_id,user_id)
+#  index_draw_documents_on_approver_id   (approver_id)
+#  index_draw_documents_on_documenttype  (documenttype)
+#  index_draw_documents_on_draw_id       (draw_id)
+#  index_draw_documents_on_user_id       (user_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (approver_id => users.id)
-#  fk_rails_...  (draw_cost_request_id => draw_cost_requests.id)
+#  fk_rails_...  (draw_id => draws.id)
 #  fk_rails_...  (user_id => users.id)
 #
-class DrawCostDocument < ApplicationRecord
+class DrawDocument < ApplicationRecord
   ALLOWED_PARAMS = [:notes, :documenttype, :document]
   OTHER_DESCRIPTION = 'Other'
   BUDGET_DESCRIPTION = 'Budget'
@@ -34,7 +36,7 @@ class DrawCostDocument < ApplicationRecord
 
   ### Associations
   belongs_to :approver, class_name: 'User', optional: true
-  belongs_to :draw_cost_request
+  belongs_to :draw
   belongs_to :user, optional: true
   has_one :organization, through: :user
   has_one_attached :document

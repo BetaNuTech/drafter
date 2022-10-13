@@ -51,8 +51,8 @@ namespace :db do
     end
 
     desc "Seed Draw Cost Samples"
-    task :draw_cost_samples => :environment do
-      DrawCostSample.load_seed_data
+    task :project_cost_samples => :environment do
+      ProjectCostSample.load_seed_data
     end
 
     desc "Development"

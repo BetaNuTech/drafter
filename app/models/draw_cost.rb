@@ -2,55 +2,44 @@
 #
 # Table name: draw_costs
 #
-#  id                 :uuid             not null, primary key
-#  approval_lead_time :integer          default(0), not null
-#  cost_type          :integer          not null
-#  name               :string           not null
-#  state              :string           default("pending"), not null
-#  total              :decimal(, )      default(0.0), not null
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  draw_id            :uuid             not null
+#  id                           :uuid             not null, primary key
+#  approved_at                  :datetime
+#  contingency                  :decimal(, )      default(0.0), not null
+#  plan_change                  :boolean          default(FALSE), not null
+#  plan_change_approved_at      :datetime
+#  plan_change_approved_by_desc :text
+#  plan_change_desc             :text
+#  state                        :string           default("pending"), not null
+#  total                        :decimal(, )      default(0.0), not null
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
+#  approver_id                  :uuid
+#  draw_id                      :uuid             not null
+#  plan_change_approver_id      :uuid
+#  project_cost_id              :uuid             not null
 #
 # Indexes
 #
-#  draw_costs_idx               (draw_id,state)
-#  index_draw_costs_on_draw_id  (draw_id)
+#  draw_costs_assoc_idx                         (draw_id,project_cost_id,approver_id)
+#  draw_costs_draw_state_idx                    (draw_id,state)
+#  index_draw_costs_on_approver_id              (approver_id)
+#  index_draw_costs_on_draw_id                  (draw_id)
+#  index_draw_costs_on_plan_change_approver_id  (plan_change_approver_id)
+#  index_draw_costs_on_project_cost_id          (project_cost_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (approver_id => users.id)
 #  fk_rails_...  (draw_id => draws.id)
+#  fk_rails_...  (plan_change_approver_id => users.id)
+#  fk_rails_...  (project_cost_id => project_costs.id)
 #
 class DrawCost < ApplicationRecord
-  include DrawCosts::StateMachine
-
-  ALLOWED_PARAMS = [:id, :approval_lead_time, :cost_type, :name, :total]
-  enum :cost_type, [:land, :hard, :soft, :finance]
   
   ### Associations
+  belongs_to :approver, class_name: 'User'
   belongs_to :draw
-  has_one :project, through: :draw
-  has_many :draw_cost_requests, dependent: :destroy
-
-  ### Validations
-  validates :approval_lead_time, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  validates :cost_type, presence: true
-  validates :name, presence: true
-  validates :state, presence: true
-  validates :total, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
-
-  def cost_type_css_class
-    {
-      land: 'secondary',
-      hard: 'primary',
-      soft: 'info',
-      finance: 'success'
-    }.fetch(cost_type.to_sym)
-  end
-
-  def clean?
-    # TODO
-    true
-  end
+  belongs_to :plan_change_approver, class_name: 'User'
+  belongs_to :project_cost
 
 end
