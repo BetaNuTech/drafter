@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
   resources :draws do
     resources :invoices
+    resources :draw_costs
   end
 
   resources :organizations

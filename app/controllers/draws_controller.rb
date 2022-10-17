@@ -10,7 +10,7 @@ class DrawsController < ApplicationController
     @draws = @service.draws
     breadcrumbs.add(label: 'Home', url: '/')
     breadcrumbs.add(label: @project.name, url: project_path(@project))
-    breadcrumbs.add(label: 'Draws', url: project_draws_path(@project))
+    breadcrumbs.add(label: 'Draws')
   end
 
   def show
@@ -18,9 +18,9 @@ class DrawsController < ApplicationController
     #@draw_cost_requests = policy_scope(@draw.draw_cost_requests)
     #@total_cost = @draw_cost_requests.map(&:provisional_total).sum
     #@difference_to_amounts = @draw_cost_requests.map(&:difference_to_amount).sum
-
     breadcrumbs.add(label: 'Home', url: '/')
     breadcrumbs.add(label: @project.name, url: project_path(@project))
+    breadcrumbs.add(label: 'Draws' )
     breadcrumbs.add(label: @draw.name, url: project_draw_path(project_id: @project.id), active: true)
   end
 
@@ -48,7 +48,7 @@ class DrawsController < ApplicationController
       render :new, status: :unprocessable_entity
     else
       respond_to do |format|
-        format.html { redirect_to project_draw_path(project_id: @project, id: @draw.id), notice: 'Created new draw'}
+        format.html { redirect_to project_draw_path(project_id: @project, id: @draw.id), notice: 'created new draw'}
         format.turbo_stream
       end
     end

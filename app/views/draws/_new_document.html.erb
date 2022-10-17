@@ -1,14 +1,14 @@
 <div class="draw_cost_request_card d-flex flex-column justify-content-evently text-center m-1 shadow-sm" >
-  <%= form_with(model: draw_cost_document,
-                url: draw_cost_request_add_document_path(draw_cost_request_id: draw_cost_request.id), multipart: true ) do |form| %>
+  <%= form_with(model: draw_document,
+                url: draw_add_draw_document_path(draw_id: draw.id), multipart: true ) do |form| %>
     <%= form.hidden_field :documenttype %>
     <div class="preview_container">
 
     </div>
     <div class="card_upload_button">
-      <%= label_tag  'draw_cost_document[document]', style: 'display: block;' do %>
+      <%= label_tag  'draw_document[document]', style: 'display: block;' do %>
         <%= image_tag(upload_image, class: 'upload_image') %>
-        <%= file_field_tag 'draw_cost_document[document]', { class: 'visually-hidden' } %>
+        <%= file_field_tag 'draw_document[document]', { class: 'visually-hidden' } %>
       <% end %>
     </div>
     <div class="body">

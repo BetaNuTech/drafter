@@ -15,7 +15,7 @@ class Project < ApplicationRecord
   include Projects::Users
 
   ### Params
-  ALLOWED_PARAMS = [:id, :name, :description, :budget].freeze
+  ALLOWED_PARAMS = [:name, :description, :budget].freeze
 
   ### Associations
   has_many :system_events, as: :event_source, dependent: :destroy

@@ -30,6 +30,7 @@ class DrawService
     @draw.organization ||= @organization
     @draw.index = @draw.next_index
     if @draw.save
+      SystemEvent.log(description: "Added Draw '#{@draw.name}' for Project '#{@draw.project.name}'", event_source: @draw.project, incidental: @current_user, severity: :warn)
       @project.draws.reload
     else
       @errors = @draw.errors.full_messages

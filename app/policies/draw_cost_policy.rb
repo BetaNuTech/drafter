@@ -1,8 +1,8 @@
-class DrawCostRequestPolicy < ApplicationPolicy
+class DrawCostPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       case user
-      when -> (u) { u.administrator? }
+      when -> (u) { u.admin? }
         scope
       when -> (u) { u.user? }
         # DrawCostRequests for the user's assigned projects
@@ -19,7 +19,7 @@ class DrawCostRequestPolicy < ApplicationPolicy
   end
 
   def index?
-    user.administrator? || user.member?(record.project)
+    user.admin? || user.member?(record.project)
   end
 
   def new?
@@ -33,19 +33,17 @@ class DrawCostRequestPolicy < ApplicationPolicy
   end
 
   def show?
-    user == record.user ||
-      user.admin? ||
+    user.admin? ||
       user.project_internal?(record.project) ||
       ( user.project_developer?(record.project) &&
-       user.organization_id == record.organization_id)
+       user.organization_id == record.organization.id)
   end
 
   def edit?
-    user == record.user ||
-      user.admin? ||
+    user.admin? ||
       user.project_internal?(record.project) ||
       ( user.project_developer?(record.project) &&
-       user.organization_id == record.organization_id)
+       user.organization_id == record.organization.id)
   end
 
   def update?
@@ -57,8 +55,7 @@ class DrawCostRequestPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user == record.user ||
-      user.admin? ||
+    user.admin? ||
       user.project_owner?(record.project)
   end
 
@@ -77,13 +74,10 @@ class DrawCostRequestPolicy < ApplicationPolicy
 
   def add_document?
     user.admin? ||
-      user.project_developer?(record.project) ||
+      ( user.project_developer?(record.project) &&
+       user.organization_id == record.organization.id)
       user.project_management?(record.project) ||
       user.project_owner?(record.project)
-  end
-
-  def remove_document?
-    record.user == user || destroy?
   end
 
   def approve_document?
@@ -99,11 +93,11 @@ class DrawCostRequestPolicy < ApplicationPolicy
   def allowed_params
     case user
     when -> (u) { u.admin? }
-      DrawCostRequest::ALLOWED_PARAMS
+      DrawCost::ALLOWED_PARAMS
     when -> (u) { u.project_owner?(record.project) }
-      DrawCostRequest::ALLOWED_PARAMS
-    when -> (u) { u.project_developer?(record.project) }
-      DrawCostRequest::ALLOWED_PARAMS
+      DrawCost::ALLOWED_PARAMS
+    when -> (u) { ( u.project_developer?(record.project) && u.organization_id == record.organization.id) }
+      DrawCost::ALLOWED_PARAMS
     else
       []
     end

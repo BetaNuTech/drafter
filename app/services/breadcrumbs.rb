@@ -6,7 +6,7 @@ class Breadcrumbs
     @list = []
   end
 
-  def add(label:, url:, active: false)
+  def add(label:, url: nil, active: false)
     @list << BreadCrumb.new(label, url, active)
   end
 

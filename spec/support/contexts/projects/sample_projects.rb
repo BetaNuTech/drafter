@@ -8,13 +8,17 @@ RSpec.shared_context 'sample_projects' do
   include_context 'project_roles'
 
   let(:sample_project) {
-    project = create(:project)
+
+    project_owner = create(:user, role: executive_role)
+
+    ProjectCostSample.load_seed_data
+    project_service = Projects::Updater.new(project_owner, Project.new)
+    project = project_service.create({name: 'test project'})
 
     # Other Organization
     other_organization = create(:organization)
 
     # Add Users
-    project_owner = create(:user, role: executive_role)
     add_project_user(user: project_owner, project: project, role: owner_project_role)
 
     project_manager = create(:user, role: executive_role)
@@ -33,7 +37,6 @@ RSpec.shared_context 'sample_projects' do
     add_project_user(user: project_developer2, project: project, role: developer_project_role)
 
     # Add Draws 
-    ProjectCostSample.load_seed_data
     user = project.developers.first
     draw_service = DrawService.new(user:, project: )
     draw_service.create({name: 'Test Draw', amount: 123456.0})
@@ -52,6 +55,9 @@ RSpec.shared_context 'sample_projects' do
     #user = sample_project.developers.first
     #service = Projects::DrawCostRequestService.new(user: user, draw_cost: sample_draw_cost)
     #service.create_request({amount: 1})
+  }
+  let(:sample_project_cost) {
+    sample_project.project_costs.all.sample
   }
 
   before do

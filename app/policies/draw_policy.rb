@@ -61,10 +61,9 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def new_request?(organization)
-    !record.active_requests_for?(organization) &&
-      ( user.admin? ||
-        user.project_owner?(record.project) ||
-        user.project_developer?(record.project) )
+    ( user.admin? ||
+      user.project_owner?(record.project) ||
+      user.project_developer?(record.project) )
   end
 
   def allowed_params

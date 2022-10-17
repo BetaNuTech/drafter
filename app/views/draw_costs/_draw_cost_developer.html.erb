@@ -1,0 +1,32 @@
+<%= turbo_frame_tag draw_cost do %>
+  <div class="row p-3 d-flex justify-content-center">
+    <div class="position-absolute top-10 start-50 translate-middle border border-1 border-secondary bg-<%= draw_cost.state_css_class %> text-white text-center" style="width: 10rem">
+      <%= draw_cost.state.titleize %>
+    </div>
+
+    <div class="col p-2 bg-light border border-2 border-secondary">
+      <div class="row">
+        <div class="col-3"> <!-- Draw cost left col -->
+          <h5 style="line-height: 0.9em; margin-bottom: 0;"><%= draw_cost.project_cost&.name %></h5>  
+          <p>
+            <b>Total:</b>
+            <%= number_to_currency draw_cost.total %>
+          </p>
+          <% if draw_cost.plan_change? %>
+            <p>
+              <span class="badge rounded-pill bg-warning" data-toggle="tooltip" data-placement="top" title="<%= draw_cost.plan_change_desc %>">Plan Change</span>
+            </p>
+          <% end %>
+          <%= link_to('Edit', edit_draw_draw_cost_path(draw_id: draw_cost.draw_id, id: draw_cost.id), class: 'btn btn-sm btn-primary', data: {turbo_frame: dom_id(draw_cost)} ) if policy(draw_cost).edit? %>
+        </div> <!-- END Draw cost left col -->
+
+        <div class="col-9"> <!-- right col -- invoices -->
+          <%= turbo_frame_tag [draw_cost, 'invoices'] %>
+          Invoices Here
+        </div> <!-- end invoices -->
+
+      </div>
+    </div>
+
+  </div>
+<% end %>

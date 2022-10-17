@@ -10,8 +10,8 @@ module DrawsHelper
     ProjectCost.cost_types.to_a.map{|ct| [ct[0].capitalize, ct[0]]}
   end
 
-  def prohect_cost_options(project: nil, draw_cost:)
+  def project_cost_options(project: nil, project_cost:)
     project_costs = ( project || project_cost&.project )&.project_costs&.order(name: :asc) || []
-    options_from_collection_for_select( draw_costs, 'id', 'name', project_cost&.id)
+    options_from_collection_for_select(project_costs, 'id', 'name', project_cost&.id)
   end
 end

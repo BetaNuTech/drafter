@@ -1,0 +1,51 @@
+<% if draw_cost.new_record? %>
+  <% form_url = draw_draw_costs_path(draw_id: draw_cost.draw_id) %>
+<% else %>
+  <% form_url = draw_draw_cost_path(draw_id: draw_cost.draw_id, id: draw_cost.id) %>
+<% end %>
+<%= form_with(model: draw_cost, url: form_url, multipart: true, data: { turbo_frame: :_top}) do |form| %>
+  <%= turbo_frame_tag dom_id(draw_cost, 'errors') do %>
+    <%= render partial: 'shared/object_errors', locals: { object: draw_cost } %>
+  <% end %>
+
+  <div class="row">
+    <div class="col">
+      <div class="form-floating mb-3 g-2">
+        <%= form.select :project_cost_id, project_cost_options(project: form.object.project, project_cost: form.object.project_cost),{ include_blank: true }, { class: 'form-select', autofocus: true } %>
+        <%= form.label :project_cost_id, 'Project Cost Category' %>
+      </div>  
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <div class="form-floating mb-3 g-2">
+        <%= form.number_field :total, class: 'form-control form-control-lg', placeholder: '$', step: 0.01 %>
+        <%= form.label :total, 'Total $' %>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="form-floating mb-3 g-2">
+        <%= form.number_field :contingency, class: 'form-control form-control-lg', placeholder: '$', step: 0.01 %>
+        <%= form.label :contingency, 'Contingency $' %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-2">
+      <div class="form-check">
+        <%= form.check_box :plan_change, class: 'form-check-input' %>
+        <%= form.label :plan_change, 'Plan change?' %>
+      </div>
+    </div>
+    <div class="col-10">
+      <div class="form-floating mb-3 g2">
+        <%= form.text_field :plan_change_desc, class: 'form-control' %>
+        <%= form.label :plan_change_desc, 'Plan Change Description' %>
+      </div>
+    </div>
+  </div>
+
+  <%= form.submit 'Submit', class: 'btn btn-success m-1' %>
+  <%= link_to 'Cancel', :back, class: "btn btn-sm btn-light", data: { turbo_frame: :_top } %>
+</div>
+<% end %>

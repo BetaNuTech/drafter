@@ -1,37 +1,52 @@
 <div class="row">
   <div class="col">
-    <h1><%= @draw.name %></h1>
+    <h1><%= draw.name %></h1>
+      <%= link_to('Edit Draw',
+                    edit_project_draw_path(project_id: draw.project_id, id: draw.id),
+                    class: 'btn btn-sm btn-primary', data: {turbo_frame: dom_id(draw)}) if policy(draw).edit? %>
   </div>
 </div>
 
-<div class="row px-2">
-  <div class="col">
-    <h2 class="text-center">
-      Total Cost:
-      <%= turbo_frame_tag('total_cost', @draw) do %>
-        <%= number_to_currency @total_cost %>
-      <% end %>
-    </h2>
-    <%= turbo_frame_tag 'draw_cost_requests' do %>
-      <% if @draw_cost_requests.none? %>
-        <%= turbo_frame_tag 'new_draw_cost_request' do %>
-          <%= link_to('Start New Draw Request',
-                        new_draw_draw_cost_request_path(draw_id: @draw.id),
-                        class: 'btn btn-success', data: {'turbo_frame': 'new_draw_cost_request'}) if policy(@draw).new_request?(@current_user.organization) %>
-        <% end %>
-      <% else %>
-        <%= turbo_frame_tag 'draw_cost_requests' do %>
-          <%= render @draw_cost_requests %>
-        <% end %>
-      <% end %>
-    <% end %>
-    <% if @draw_cost_requests.any? %>
+<%= turbo_frame_tag draw do %>
+  <div class="row px-2">
+    <div class="col">
       <h2 class="text-center">
-        Difference to Amount:
-        <%= turbo_frame_tag('total_cost_difference', @draw) do %>
-          <%= number_to_currency @difference_to_amounts %>
+        Total Cost:
+        <%= turbo_frame_tag('total_cost', draw) do %>
+          <%#= number_to_currency @total_cost %>
         <% end %>
       </h2>
-    <% end %>
+    </div>
   </div>
-</div>
+
+  <div class="row">
+    <div class="col p-2">
+      <%= turbo_frame_tag 'new_draw_cost' do %>
+        <%= link_to('Add Draw Cost',
+                      new_draw_draw_cost_path(draw_id: draw.id),
+                      class: 'btn btn-primary', data: {turbo_frame: 'new_draw_cost'}) if policy(draw).new? %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <%= turbo_frame_tag 'draw_costs' do %>
+        <%= render @draw.draw_costs %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <% if @draw.draw_costs.any? %>
+        <h2 class="text-center">
+          Difference to Amount:
+          <%#= turbo_frame_tag('total_cost_difference', @draw) do %>
+            <%#= number_to_currency @difference_to_amounts %>
+          <%# end %>
+        </h2>
+      <% end %>
+    </div>
+  </div>
+<% end %>

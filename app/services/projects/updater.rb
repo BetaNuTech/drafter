@@ -1,6 +1,6 @@
 module Projects
   class Updater
-    attr_reader :project, :current_user
+    attr_reader :project, :current_user, :errors
 
     def initialize(current_user, project)
       @project = project
@@ -83,7 +83,7 @@ module Projects
       if params.is_a?(ActionController::Parameters)
         params.require(:project).permit(*allowed_params)
       else
-        params.select{|k,v| allowed_params.include?(k.to_s) }
+        params.select{|k,v| allowed_params.map(&:to_sym).include?(k.to_sym) }
       end
     end
 

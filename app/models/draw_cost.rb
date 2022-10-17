@@ -35,11 +35,17 @@
 #  fk_rails_...  (project_cost_id => project_costs.id)
 #
 class DrawCost < ApplicationRecord
+  ### Concerns
+  include DrawCosts::StateMachine
+
+  ALLOWED_PARAMS = %i{project_cost_id total contingency plan_change plan_change_desc}.freeze
   
   ### Associations
-  belongs_to :approver, class_name: 'User'
   belongs_to :draw
-  belongs_to :plan_change_approver, class_name: 'User'
   belongs_to :project_cost
+  belongs_to :approver, class_name: 'User', optional: true
+  belongs_to :plan_change_approver, class_name: 'User', optional: true
+  has_one :project, through: :draw
+  has_one :organization, through: :draw
 
 end

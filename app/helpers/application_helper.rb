@@ -49,7 +49,7 @@ module ApplicationHelper
           options = {class: classes.join(' ')}
           options['aria-current'] = 'page' if crumb.active
           concat(content_tag(:li, options) do
-            if crumb.active
+            if crumb.active || !crumb.url.present?
               crumb.label
             else
               link_to(crumb.label, crumb.url, {turbo_frame: '_top'})
