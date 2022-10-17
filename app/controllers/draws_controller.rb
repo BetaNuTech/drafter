@@ -1,7 +1,7 @@
 class DrawsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_project
-  before_action :set_draw, only: %i[ show edit update destroy ]
+  before_action :set_draw, except: %i[index new]
   after_action :verify_authorized
 
   def index
@@ -72,6 +72,21 @@ class DrawsController < ApplicationController
   end
 
   def destroy
+    authorize @draw
+    @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
+
+    # Withdraw Draw (soft delete)
+    if @service.withdraw
+      respond_to do |format|
+        format.html { redirect_to project_path(id: @project.id), notice: "Draw was removed." }
+        format.turbo_stream
+      end
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def approve_internal
     authorize @draw
     @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
 

@@ -1,5 +1,5 @@
 module Projects
-  class DrawCostRequestService
+  class DrawCostRequestServiceDefunct
     attr_reader :project, :user, :draw, :draw_cost, :organization, :draw_cost_request, :errors
 
     class PolicyError < StandardError; end

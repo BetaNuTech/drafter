@@ -63,6 +63,32 @@ class DrawService
     end
   end
 
+  def approve_internal?
+    raise PolicyError unless @draw_policy.approve_internal?
+
+    if @draw.permitted_state_events.include?(:approve)
+      @draw.trigger_event(event_name: :approve_internal, user: @user)
+      @draw.reload
+      @project.draws.reload
+      return true
+    else
+      return false
+    end
+  end
+
+  def reject_internal?
+    raise PolicyError unless @draw_policy.reject_internal?
+
+    if @draw.permitted_state_events.include?(:reject)
+      @draw.trigger_event(event_name: :reject_internal, user: @user)
+      @draw.reload
+      @project.draws.reload
+      return true
+    else
+      return false
+    end
+  end
+
   def draws
     DrawPolicy::Scope.new(@user, @project.draws).resolve
   end

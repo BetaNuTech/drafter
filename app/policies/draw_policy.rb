@@ -56,6 +56,13 @@ class DrawPolicy < ApplicationPolicy
     record.approved?
   end
 
+  def approve_internal?
+    raise 'TODO'
+    user.admin? ||
+      user.project_internal?(record.project)
+    # TODO invoices approved?
+  end
+
   def own_organization?
     user.organization == record.organization
   end
@@ -71,11 +78,14 @@ class DrawPolicy < ApplicationPolicy
     case user
     when -> (u) { u.administrator? }
       allow_params << :organization_id
-      allow_params << :reference if record.approved?
+      allow_params << :reference if record.funded?
       allow_params
     when -> (u) { u.project_management?(record.project) }
       allow_params << :organization_id
-      allow_params << :reference if record.approved?
+      allow_params << :reference if record.funded?
+      allow_params
+    when -> (u) { u.project_finance?(record.project) }
+      allow_params << :reference if record.funded?
       allow_params
     else
       allow_params

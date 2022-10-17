@@ -27,7 +27,10 @@ Rails.application.routes.draw do
   resources :projects do
     resources :project_costs
     resources :project_users
-    resources :draws
+    resources :draws do
+      post 'approve_internal', to: 'draws#approve_internal'
+      post 'reject_internal', to: 'draws#reject_internal'
+    end
   end
 
   resources :users
