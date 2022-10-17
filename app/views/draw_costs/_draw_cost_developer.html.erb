@@ -18,6 +18,7 @@
             </p>
           <% end %>
           <%= link_to('Edit', edit_draw_draw_cost_path(draw_id: draw_cost.draw_id, id: draw_cost.id), class: 'btn btn-sm btn-primary', data: {turbo_frame: dom_id(draw_cost)} ) if policy(draw_cost).edit? %>
+          <%= link_to('Withdraw', draw_draw_cost_path(draw_id: draw_cost.draw_id, id: draw_cost.id), class: 'btn btn-sm btn-danger', data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} ) if policy(draw_cost).withdraw? %>
         </div> <!-- END Draw cost left col -->
 
         <div class="col-9"> <!-- right col -- invoices -->

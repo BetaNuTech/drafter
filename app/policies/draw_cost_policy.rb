@@ -56,7 +56,13 @@ class DrawCostPolicy < ApplicationPolicy
 
   def destroy?
     user.admin? ||
-      user.project_owner?(record.project)
+      user.project_owner?(record.project) ||
+      ( user.project_developer?(record.project) &&
+       user.organization_id == record.organization.id)
+  end
+
+  def withdraw?
+    destroy?
   end
 
   def approve?

@@ -45,6 +45,19 @@ class DrawCostsController < ApplicationController
     end
   end
 
+  def destroy
+    authorize @draw_cost
+    @service = DrawCostService.new(user: @current_user, draw: @draw, draw_cost: @draw_cost)
+    @service.withdraw
+
+    respond_to do |format|
+      format.html {
+        redirect_to project_draw_path(project_id: @service.project.id, id: @service.draw.id), notice: 'Removed Draw Cost'
+      }
+      format.turbo_links
+    end
+  end
+
   private
 
   def draw_record_scope

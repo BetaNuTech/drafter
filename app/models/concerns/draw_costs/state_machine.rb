@@ -11,6 +11,9 @@ module DrawCosts
     included do
       class TransitionError < StandardError; end;
 
+      VISIBLE_STATES = %i{pending submitted approved rejected}
+      scope :visible, -> { where(state: VISIBLE_STATES) }
+
       include AASM
 
       aasm column: :state do
@@ -18,6 +21,7 @@ module DrawCosts
         state :submitted
         state :approved
         state :rejected
+        state :withdrawn
 
         event :submit do
           transitions from: [:pending], to: :submitted
@@ -38,6 +42,10 @@ module DrawCosts
         event :reject do
           transitions from: [:submitted, :approved], to: :rejected,
             after: Proc.new {|*args| reject_request }
+        end
+
+        event :withdraw do
+          transitions from: [:pending, :submitted], to: :withdrawn
         end
       end
 

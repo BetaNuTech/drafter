@@ -44,6 +44,13 @@ class DrawCostService
     end
   end
 
+  def withdraw
+    raise PolicyError.new unless @draw_cost_policy.destroy?
+
+    SystemEvent.log(description: "Removed #{@draw_cost.project_cost.name} Cost for Draw '#{@draw.name}'", event_source: @draw.project, incidental: @current_user, severity: :warn)
+    @draw_cost.withdraw!
+  end
+
   private
 
   def reset_errors

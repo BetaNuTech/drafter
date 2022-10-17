@@ -32,7 +32,7 @@
   <div class="row">
     <div class="col">
       <%= turbo_frame_tag 'draw_costs' do %>
-        <%= render @draw.draw_costs %>
+        <%= render @draw.draw_costs.visible %>
       <% end %>
     </div>
   </div>
