@@ -54,7 +54,7 @@ class DrawService
     raise PolicyError unless @draw_policy.withdraw?
 
     if @draw.permitted_state_events.include?(:withdraw)
-      @draw.withdraw!
+      @draw.trigger_event(event_name: :withdraw, user: @user)
       @draw.reload
       @project.draws.reload
       return true

@@ -47,9 +47,11 @@ class DrawCost < ApplicationRecord
   belongs_to :plan_change_approver, class_name: 'User', optional: true
   has_one :project, through: :draw
   has_one :organization, through: :draw
+  has_many :invoices, dependent: :destroy
 
   ### Validations
   validates :total, presence: true, numericality: { greater_than_or_equal_to: 0.0}
   validates :project_cost_id, presence: true, uniqueness: {scope: [:draw_id]}, allow_blank: false
+  validates :state, presence: true
 
 end

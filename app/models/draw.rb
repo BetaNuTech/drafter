@@ -54,6 +54,7 @@ class Draw < ApplicationRecord
   validates :name, presence: true, uniqueness: {scope: [:organization_id, :project_id ]}, allow_blank: false
   validates :index, presence: true, numericality: { greater_than_or_equal_to: 1}, uniqueness: {scope: [ :project_id, :organization_id ]}
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0.0}
+  validates :state, presence: true
 
   def next_index
     return 1 unless project.present?
