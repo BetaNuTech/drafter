@@ -31,7 +31,7 @@ module Projects
       end
 
       def available_users
-        current_members = users.pluck(&:id)
+        current_members = users.pluck(:id)
         User.active.where.not(id: current_members).ordered_by_name
       end
 
