@@ -4,7 +4,6 @@
 #
 #  id          :uuid             not null, primary key
 #  active      :boolean          default(TRUE), not null
-#  budget      :decimal(, )      default(0.0), not null
 #  description :text
 #  name        :string           not null
 #  created_at  :datetime         not null

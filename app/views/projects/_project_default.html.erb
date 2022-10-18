@@ -10,8 +10,6 @@
       </div>
       <div class="card-text">
         <p>
-          <b>Budget:</b> <%= number_to_currency(project.budget) %>
-          <br/>
           <%= project.description %>
         </p>
         <%= link_to('Project Costs', project_project_costs_path(project_id: project.id), class: 'btn btn-primary', data: {turbo_frame: :_top})%>
