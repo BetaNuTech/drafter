@@ -4,7 +4,6 @@
 #
 #  id          :uuid             not null, primary key
 #  appsettings :jsonb
-#  company     :string
 #  first_name  :string
 #  last_name   :string
 #  name_prefix :string

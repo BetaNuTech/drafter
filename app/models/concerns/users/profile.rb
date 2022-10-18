@@ -16,7 +16,6 @@ module Users
       delegate :last_name, to: :profile, allow_nil: true
       delegate :name_suffix, to: :profile, allow_nil: true
       delegate :title, to: :profile, allow_nil: true
-      delegate :company, to: :profile, allow_nil: true
       delegate :notes, to: :profile, allow_nil: true
       delegate :phone, to: :profile, allow_nil: true
 

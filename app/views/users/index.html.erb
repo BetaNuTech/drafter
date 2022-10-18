@@ -15,7 +15,7 @@
         <tr>
           <th scope="col">Status</th>
           <th scope="col">Name</th>
-          <th scope="col">Company/Title</th>
+          <th scope="col">Title</th>
           <th scope="col">Contact</th>
           <th scope="col">Actions</th>
         </tr>
@@ -48,10 +48,6 @@
           </td>
           <td>
             <span class="text-nowrap"><em><%= user.title %></em></span> 
-            <% if user.company.present? %>
-              <br/>
-              <span><%= user.company %></span>
-            <% end %>
           </td>
           <td class="nowrap">
             <% if user.organization.present? %>
