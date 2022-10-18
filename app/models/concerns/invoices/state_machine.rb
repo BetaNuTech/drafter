@@ -10,6 +10,8 @@ module Invoices
 
     included do
 
+      scope :visible, -> { where.not(state: :removed) }
+
       include AASM
 
       aasm column: :state do

@@ -1,4 +1,5 @@
 class DrawCostService
+  class PolicyError < StandardError; end
 
   attr_reader :user, :draw, :draw_cost, :project, :organization, :errors
 

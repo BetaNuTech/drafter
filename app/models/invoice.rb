@@ -35,7 +35,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Invoice < ApplicationRecord
-  ALLOWED_PARAMS = %i{amount description}
+  ALLOWED_PARAMS = %i{amount description document}
   
   ### Concerns
   include Invoices::StateMachine
@@ -45,12 +45,12 @@ class Invoice < ApplicationRecord
   belongs_to :approver, optional: true
   belongs_to :user
   has_one :project, through: :draw_cost
-  has_one :organization, through: :draw_cost
   has_one_attached :document
 
   ### Validations
-  validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0.0}
+  validates :amount, presence: true, numericality: { greater_than: 0.0}
   validates :state, presence: true
 
+  delegate :organization, to: :draw_cost
 
 end

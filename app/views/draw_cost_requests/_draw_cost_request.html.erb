@@ -1,8 +1,0 @@
-<%= turbo_frame_tag draw_cost_request do %>
-  <% case @current_user.project_role(draw_cost_request.project) %>
-  <% when ProjectRole.developer %>
-    <%= render partial: 'draw_cost_requests/draw_cost_request_developer', locals: {draw_cost_request: draw_cost_request} %>
-  <% else %>
-    <%= render partial: 'draw_cost_requests/draw_cost_request_default', locals: {draw_cost_request: draw_cost_request} %>
-  <% end %>
-<% end %>

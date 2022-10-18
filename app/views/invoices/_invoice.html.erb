@@ -1,0 +1,21 @@
+  <%= turbo_frame_tag invoice do %>
+<div id="<%= dom_id(invoice) %>" class="invoice_card d-flex flex-column justify-content-evenly text-center m-1 shadow-sm">
+    <h4>Invoice</h4>
+    <% if invoice.document.attached? %>
+      <div class="preview_container">
+        <%= link_to(rails_blob_path(invoice.document), target: '_blank') do %>
+          <%= image_tag preview_document(document: invoice.document, resize: [150,150]), class: 'align-middle' %>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="body">
+      <small><%= short_date invoice.updated_at %></small><br/>
+      <strong><%= number_to_currency invoice.amount %></strong><br/>
+      <p style="line-height: 1em;"><%= truncate invoice.description, length: 60 %></p>
+    </div>
+    <div class="actions align-items-end">
+      <%= link_to('Edit', edit_draw_cost_invoice_path(draw_cost_id: invoice.draw_cost_id, id: invoice.id), class: 'btn btn-sm btn-primary m-1') if policy(invoice).edit? %>
+      <%= link_to('Remove', draw_cost_invoice_path(draw_cost_id: invoice.draw_cost_id, id: invoice.id), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: 'btn btn-sm btn-danger') %>
+    </div>
+</div>
+  <% end %>

@@ -1,0 +1,66 @@
+p.upload_document_description {
+  font-size: 1em;
+  line-height: 1.1em;
+  color: lightgray;
+}
+
+div.draw_cost_request_card {
+  width: 200px;
+  height: 22em;
+  padding: 1em;
+  border: 1px solid #ccc;
+
+  div.preview_container {
+    margin: 1em;
+  }
+
+  div.card_upload_button {
+    padding: 1em;
+  }
+
+  div.body { }
+
+  img.upload_image {
+    width: 30px;
+    height: 30px;
+    opacity: 0.6;
+  }
+  img.upload_image:hover {
+    opacity: 1;
+  }
+}
+
+div.invoice_form {
+  width: 400px !important;
+}
+
+div.invoice_card {
+  width: 200px;
+  height: 22em;
+  padding: 1em;
+  border: 1px solid #ccc;
+
+  div.preview_container {
+    margin: 1em;
+  }
+
+  div.card_upload_button {
+    padding: 1em;
+  }
+
+  div.body { }
+
+  img.upload_image {
+    width: 30px;
+    height: 30px;
+    opacity: 0.6;
+  }
+  img.upload_image:hover {
+    opacity: 1;
+  }
+}
+
+div.invoice_form {
+  width: 400px !important;
+  height: auto !important;
+}

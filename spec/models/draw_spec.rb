@@ -37,6 +37,8 @@ require 'rails_helper'
 
 RSpec.describe Draw, type: :model do
   include_context 'projects'
+  include_context 'sample_projects'
+  include_context 'organizations'
 
   describe 'initialization' do
     it 'creates a new draw' do
@@ -47,19 +49,20 @@ RSpec.describe Draw, type: :model do
   end
 
   describe 'naming/index' do
-    it 'has a unique index for a given project' do
-      draw1 = create(:draw, project: project1, index: 1)
-      draw2 = build(:draw, project: project1, index: 1)
+    it 'has a unique index for a given project and organization' do
+      draw1 = create(:draw, project: project1, index: 1, organization: organization1)
+      draw2 = build(:draw, project: project1, index: 1, organization: organization1)
       refute(draw2.save)
       draw2.index = 2
       assert(draw2.save)
     end
 
     it 'returns the next draw number' do
-      draw1 = create(:draw, project: project1, index: 1)
-      draw2 = create(:draw, project: project1, index: 2)
-      draw3 = build(:draw, project: project1)
+      draw1 = create(:draw, project: sample_project, index: 1, organization: organization1)
+      draw2 = create(:draw, project: sample_project, index: 2, organization: organization1)
+      draw3 = Draw.new(amount: 123.45, project: sample_project, organization: organization1, user: sample_project.developers.first )
       expect(draw3.next_index).to eq(3)
+      expect(draw3.index).to eq(3)
     end
   end
 

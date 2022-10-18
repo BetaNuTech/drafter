@@ -1,0 +1,51 @@
+<div id="<%= dom_id(invoice) %>" class="invoice_card invoice_form  d-flex flex-column justify-content-evenly text-center m-1 shadow-sm" data-controller="invoice-form">
+  <% if invoice.new_record? %>
+    <% form_url = draw_cost_invoices_path(draw_cost_id: invoice.draw_cost_id) %>
+  <% else %>
+    <% form_url = draw_cost_invoice_path(draw_cost_id: invoice.draw_cost_id, id: invoice.id) %>
+  <% end %>
+  <%= form_with(model: invoice, url: form_url, multipart: true) do |form| %>
+    <% if invoice.new_record? %>
+      <h4>Upload Invoice</h4>
+    <% else %>
+      <h4>Update Invoice</h4>
+    <% end %>
+    <hr/>
+    <% if invoice.document.attached? %>
+      <div class="preview_container">
+          <%= image_tag preview_document(document: invoice.document, resize: [150,150]) %>
+      </div>
+    <% end %>
+    <% if invoice.new_record? %>
+      <div class="card_upload_button">
+        <%= form.label :document, style: 'display: block;' do %>
+          <span id="select_pdf">
+            <%= image_tag(uploaded_image, class: 'upload_image d-none', id: 'image_uploaded_icon', data: {invoice_form_target: 'file_selected_image'}) %>
+            <span data-invoice-form-target="file_upload_prompt">
+              <%= image_tag(upload_image, class: 'upload_image') %><br/>
+              Select PDF...
+            </span>
+          </span>
+          <%= form.file_field :document, class: 'visually-hidden', data: { action: 'change->invoice-form#file_changed', invoice_form_target:  'file_field' }  %>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="body">
+      <%= turbo_frame_tag dom_id(invoice, 'errors') do %>
+        <%= render partial: 'shared/object_errors', locals: { object: invoice } %>
+      <% end %>
+      <div class="form-floating">
+        <%= form.number_field :amount, { class: 'form-control', data: { invoice_form_target: 'amount_field', action: 'input->invoice-form#amount_changed' }} %>
+        <%= form.label :amount, 'Amount $' %>
+      </div>
+      <div class="form-floating pt-2">
+        <%= form.text_field :description, { class: 'form-control'} %>
+        <%= form.label :description %>
+      </div>
+    </div>
+    <div class="actions align-items-end">
+      <%= form.submit 'Submit', class: 'btn btn-sm btn-success m-1', data: {invoice_form_target: 'submit_button'}, disabled: :disabled %>
+      <%= link_to('Cancel', :back, class: 'btn btn-sm btn-light' ) %>
+    </div>
+  <% end %>
+</div>

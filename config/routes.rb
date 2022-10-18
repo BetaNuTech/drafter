@@ -35,6 +35,10 @@ Rails.application.routes.draw do
 
   resources :users
 
+  resources :draw_costs do
+    resources :invoices
+  end
+
   #resources :draw_cost_requests do
     #post :add_document, to: 'draw_cost_requests#add_document'
     #post :remove_document, to: 'draw_cost_requests#remove_document'

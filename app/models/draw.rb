@@ -56,6 +56,9 @@ class Draw < ApplicationRecord
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0.0}
   validates :state, presence: true
 
+  ### Callbacks
+  after_initialize :assign_index
+
   def next_index
     return 1 unless project.present?
 
@@ -113,6 +116,11 @@ class Draw < ApplicationRecord
       #where(organization: organization).
       #sum(:total)
     0.0
+  end
+
+  def assign_index
+    _next_index = next_index
+    self.index = _next_index unless self.index >= _next_index
   end
 
 end

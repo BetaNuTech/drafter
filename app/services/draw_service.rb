@@ -1,7 +1,7 @@
 class DrawService
   class PolicyError < StandardError; end
 
-  attr_reader :user, :draw, :project, :organization, :errors, :draw_policy
+  attr_reader :user, :draw, :project, :organization, :errors, :policy
 
   def initialize(user:, project: nil, draw: nil)
     raise ActiveRecord::RecordNotFound unless (project.present? || draw.present?)
@@ -11,9 +11,9 @@ class DrawService
     @project = project || draw&.project
     @organization = @user.organization
     @draw = draw || project.draws.new(organization: @organization, user: @user)
-    @draw_policy = DrawPolicy.new(@user, @draw)
+    @policy = DrawPolicy.new(@user, @draw)
 
-    raise PolicyError.new unless @draw_policy.index?
+    raise PolicyError.new unless @policy.index?
   end
 
   def errors?
@@ -21,16 +21,16 @@ class DrawService
   end
 
   def create(params)
-    raise PolicyError.new unless @draw_policy.create?
+    raise PolicyError.new unless @policy.create?
 
     reset_errors
 
-    @draw = @project.draws.new(sanitize_draw_params(params))
+    @draw = @project.draws.new(sanitize_params(params))
     @draw.user = @user
     @draw.organization ||= @organization
     @draw.index = @draw.next_index
     if @draw.save
-      SystemEvent.log(description: "Added Draw '#{@draw.name}' for Project '#{@draw.project.name}'", event_source: @draw.project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Added Draw '#{@draw.name}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
       @project.draws.reload
     else
       @errors = @draw.errors.full_messages
@@ -39,11 +39,11 @@ class DrawService
   end
 
   def update(params)
-    raise PolicyError unless @draw_policy.update?
+    raise PolicyError unless @policy.update?
 
     reset_errors
 
-    unless @draw.update(sanitize_draw_params(params))
+    unless @draw.update(sanitize_params(params))
       @errors = @draw.errors.full_messages
     end
 
@@ -51,7 +51,7 @@ class DrawService
   end
 
   def withdraw
-    raise PolicyError unless @draw_policy.withdraw?
+    raise PolicyError unless @policy.withdraw?
 
     if @draw.permitted_state_events.include?(:withdraw)
       @draw.trigger_event(event_name: :withdraw, user: @user)
@@ -64,7 +64,7 @@ class DrawService
   end
 
   def approve_internal?
-    raise PolicyError unless @draw_policy.approve_internal?
+    raise PolicyError unless @policy.approve_internal?
 
     if @draw.permitted_state_events.include?(:approve)
       @draw.trigger_event(event_name: :approve_internal, user: @user)
@@ -77,7 +77,7 @@ class DrawService
   end
 
   def reject_internal?
-    raise PolicyError unless @draw_policy.reject_internal?
+    raise PolicyError unless @policy.reject_internal?
 
     if @draw.permitted_state_events.include?(:reject)
       @draw.trigger_event(event_name: :reject_internal, user: @user)
@@ -99,8 +99,8 @@ class DrawService
     @errors = []
   end
 
-  def sanitize_draw_params(params)
-    allowed_params = @draw_policy.allowed_params
+  def sanitize_params(params)
+    allowed_params = @policy.allowed_params
     if params.is_a?(ActionController::Parameters)
       params.permit(*allowed_params)
     else

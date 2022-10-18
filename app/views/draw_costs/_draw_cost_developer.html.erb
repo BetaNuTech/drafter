@@ -4,29 +4,29 @@
       <%= draw_cost.state.titleize %>
     </div>
 
-    <div class="col p-2 bg-light border border-2 border-secondary">
+    <div class="col p-4 bg-light border border-2 border-secondary">
       <div class="row">
+        <div class="col d-flex justify-content-evenly">
+          <%= render partial: 'draw_costs/add_invoice_button', locals: { draw_cost: draw_cost } %>
+        </div>
+      </div>
+
+      <div class="row"> <!-- Main section -->
         <div class="col-3"> <!-- Draw cost left col -->
           <h5 style="line-height: 0.9em; margin-bottom: 0;"><%= draw_cost.project_cost&.name %></h5>  
           <p>
             <b>Total:</b>
-            <%= number_to_currency draw_cost.total %>
+            <%= number_to_currency draw_cost.invoice_total %>
           </p>
-          <% if draw_cost.plan_change? %>
-            <p>
-              <span class="badge rounded-pill bg-warning" data-toggle="tooltip" data-placement="top" title="<%= draw_cost.plan_change_desc %>">Plan Change</span>
-            </p>
-          <% end %>
           <%= link_to('Edit', edit_draw_draw_cost_path(draw_id: draw_cost.draw_id, id: draw_cost.id), class: 'btn btn-sm btn-primary', data: {turbo_frame: dom_id(draw_cost)} ) if policy(draw_cost).edit? %>
           <%= link_to('Withdraw', draw_draw_cost_path(draw_id: draw_cost.draw_id, id: draw_cost.id), class: 'btn btn-sm btn-danger', data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} ) if policy(draw_cost).withdraw? %>
         </div> <!-- END Draw cost left col -->
 
-        <div class="col-9"> <!-- right col -- invoices -->
-          <%= turbo_frame_tag [draw_cost, 'invoices'] %>
-          Invoices Here
+        <div class="col-9 d-flex flex-wrap p-2"> <!-- right col -- invoices -->
+          <%= render draw_cost.invoices.visible %>
         </div> <!-- end invoices -->
+      </div> <!-- end Main section -->
 
-      </div>
     </div>
 
   </div>

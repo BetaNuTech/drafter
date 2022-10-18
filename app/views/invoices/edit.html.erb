@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col">
+    <h1>Edit Invoice for '<%= @draw_cost.project_cost.name %>'</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <%= turbo_frame_tag @invoice do %>
+      <%= render 'form', invoice: @invoice %>
+    <% end %>
+  </div>
+</div>

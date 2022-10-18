@@ -32,6 +32,19 @@ RSpec.describe DrawsController, type: :controller do
     end
   end
 
+  describe '#show' do
+    describe 'as the project developer' do
+      let(:user) { developer_user }
+      let(:draw) { sample_draw }
+
+      it 'should render the show template' do
+        sign_in user
+        get :show, params: {id: draw.id, project_id: project.id }
+        expect(response).to render_template(:show)
+      end
+    end
+  end
+
   describe '#edit' do
     describe 'as the project developer' do
       let(:user) { developer_user }

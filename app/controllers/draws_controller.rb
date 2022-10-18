@@ -1,7 +1,7 @@
 class DrawsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_project
-  before_action :set_draw, except: %i[index new]
+  before_action :set_draw, except: %i[index new create]
   after_action :verify_authorized
 
   def index

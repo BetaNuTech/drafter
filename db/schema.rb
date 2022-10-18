@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_18_041101) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_19_173638) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -62,22 +62,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_041101) do
     t.uuid "draw_id", null: false
     t.uuid "project_cost_id", null: false
     t.uuid "approver_id"
-    t.uuid "plan_change_approver_id"
     t.decimal "total", default: "0.0", null: false
-    t.decimal "contingency", default: "0.0", null: false
     t.string "state", default: "pending", null: false
     t.datetime "approved_at"
-    t.boolean "plan_change", default: false, null: false
-    t.datetime "plan_change_approved_at"
-    t.text "plan_change_desc"
-    t.text "plan_change_approved_by_desc"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["approver_id"], name: "index_draw_costs_on_approver_id"
     t.index ["draw_id", "project_cost_id", "approver_id"], name: "draw_costs_assoc_idx"
     t.index ["draw_id", "state"], name: "draw_costs_draw_state_idx"
     t.index ["draw_id"], name: "index_draw_costs_on_draw_id"
-    t.index ["plan_change_approver_id"], name: "index_draw_costs_on_plan_change_approver_id"
     t.index ["project_cost_id"], name: "index_draw_costs_on_project_cost_id"
   end
 
@@ -277,7 +269,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_041101) do
   add_foreign_key "draw_costs", "draws"
   add_foreign_key "draw_costs", "project_costs"
   add_foreign_key "draw_costs", "users", column: "approver_id"
-  add_foreign_key "draw_costs", "users", column: "plan_change_approver_id"
   add_foreign_key "draw_documents", "draws"
   add_foreign_key "draw_documents", "users"
   add_foreign_key "draw_documents", "users", column: "approver_id"

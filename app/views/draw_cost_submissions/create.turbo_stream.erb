@@ -1,4 +1,0 @@
-<%= turbo_stream.replace dom_id(@draw_cost_request, 'draw_cost_submissions'), partial: 'draw_cost_requests/draw_cost_submissions', locals: {draw_cost_submissions: @draw_cost_request.draw_cost_submissions.visible} %>
-<%= turbo_stream.replace dom_id(@draw, 'total_cost'), number_to_currency(@draw_total_cost) %>
-<%= turbo_stream.replace dom_id(@draw, 'total_cost_differnce'), number_to_currency(@draw_difference_to_amount) %>
-<%= turbo_stream.update( dom_id(@new_draw_cost_submission), partial: 'draw_cost_submissions/new', locals: {draw_cost_submission: @new_draw_cost_submission} ) %>

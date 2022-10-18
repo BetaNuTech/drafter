@@ -34,7 +34,7 @@ class InvoicePolicy < ApplicationPolicy
       user.project_management?(record.project) ||
       user.project_finance?(record.project) ||
       ( user.project_developer?(record.project) &&
-        record.draw_cost_request.organization == user.organization)
+        record.organization == user.organization)
   end
 
   def edit?
@@ -44,7 +44,7 @@ class InvoicePolicy < ApplicationPolicy
       user.project_management?(record.project) ||
       user.project_finance?(record.project) ||
       ( user.project_developer?(record.project) &&
-        record.draw_cost_request.organization == user.organization)
+        record.organization == user.organization)
   end
 
   def update?
@@ -79,11 +79,11 @@ class InvoicePolicy < ApplicationPolicy
   def allowed_params
     case user
     when -> (u) { u.admin? }
-      DrawCostSubmission::ALLOWED_PARAMS + [:multi_invoice]
+      Invoice::ALLOWED_PARAMS + [:multi_invoice]
     when -> (u) { u.project_owner?(record.project) }
-      DrawCostSubmission::ALLOWED_PARAM + [:multi_invoice]
+      Invoice::ALLOWED_PARAM + [:multi_invoice]
     when -> (u) { u.project_developer?(record.project) }
-      DrawCostSubmission::ALLOWED_PARAMS
+      Invoice::ALLOWED_PARAMS
     else
       []
     end

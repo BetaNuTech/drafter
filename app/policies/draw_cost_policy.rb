@@ -8,8 +8,8 @@ class DrawCostPolicy < ApplicationPolicy
         # DrawCostRequests for the user's assigned projects
         #  belonging to the user's assigned organization
         scope.includes(:draw).where(
-          draws: {project: user.projects},
-          organization_id: user.organization_id
+          draws: { project: user.projects,
+                   organization_id: user.organization_id }
         )
       else
         # DrawCostRequests for the user's assigned projects

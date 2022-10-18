@@ -54,4 +54,8 @@ module ImagesHelper
   def upload_image
     'icons/cloud-upload-fill.svg'
   end
+
+  def uploaded_image
+    'icons/cloud-check-fill'
+  end
 end

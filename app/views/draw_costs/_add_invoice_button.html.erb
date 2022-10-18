@@ -1,0 +1,3 @@
+<%= turbo_frame_tag 'new_invoice' do %>
+  <%= link_to('Add Invoice', new_draw_cost_invoice_path(draw_cost_id: draw_cost.id), class: 'btn btn-primary', data: {turbo_frame: 'new_invoice'}) %>
+<% end %>
