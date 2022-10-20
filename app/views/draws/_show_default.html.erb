@@ -1,22 +1,49 @@
 <div class="row">
   <div class="col">
-    <%= render @draw %>
+    <h1><%= draw.name %></h1>
+      <%= link_to('Edit Draw',
+                    edit_project_draw_path(project_id: draw.project_id, id: draw.id),
+                    class: 'btn btn-sm btn-primary', data: {turbo_frame: dom_id(draw)}) if policy(draw).edit? %>
   </div>
 </div>
 
-<% if policy(DrawCost.new(project: @project)).new? %>
-<div class="row">
-  <div class="col">
-      <%= link_to('Add Draw Cost', new_draw_draw_cost_path(draw_id: @draw.id), class: 'btn btn-primary', data: {'turbo_frame': dom_id(DrawCost.new)}) %>
-    <%= turbo_frame_tag dom_id(DrawCost.new) %>
+<%= turbo_frame_tag draw do %>
+  <div class="row px-2">
+    <div class="col">
+      <h2 class="text-center">
+        Total Cost:
+        <%= turbo_frame_tag('total_cost', draw) do %>
+          <%#= number_to_currency @total_cost %>
+        <% end %>
+      </h2>
+    </div>
   </div>
-</div>
+
+  <div class="row">
+    <div class="col p-2">
+      <%= turbo_frame_tag 'new_draw_cost' do %>
+        <%= link_to('Add Draw Cost',
+                      new_draw_draw_cost_path(draw_id: draw.id),
+                      class: 'btn btn-primary', data: {turbo_frame: 'new_draw_cost'}) if policy(DrawCost.new(draw: draw)).new? %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <%= turbo_frame_tag 'draw_costs' do %>
+        <%= render @draw.draw_costs.visible %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <% if @draw.draw_costs.any? %>
+        <h2 class="text-center">
+          Difference to Amount:
+        </h2>
+      <% end %>
+    </div>
+  </div>
 <% end %>
-
-<div class="row px-2">
-  <div class="col">
-    <%= turbo_frame_tag 'draw_costs' do %>
-      <%= render @draw.draw_costs %>
-    <% end %>
-  </div>
-</div>
