@@ -19,8 +19,7 @@ class Project < ApplicationRecord
   ### Associations
   has_many :system_events, as: :event_source, dependent: :destroy
   has_many :draws, dependent: :destroy
-  has_many :project_costs
-  #has_many :invoices, through: :draws
+  has_many :project_costs, dependent: :destroy
 
   ### Validations
   validates :name, presence: true
@@ -36,5 +35,9 @@ class Project < ApplicationRecord
     else
       draws.where(organization: user.organization).visible
     end
+  end
+
+  def allow_new_draw?(organization)
+    draws.pending.for_organization(organization).none?
   end
 end

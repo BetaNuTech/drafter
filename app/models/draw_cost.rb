@@ -29,7 +29,7 @@ class DrawCost < ApplicationRecord
   ### Concerns
   include DrawCosts::StateMachine
 
-  ALLOWED_PARAMS = %i{project_cost_id total plan_change plan_change_desc}.freeze
+  ALLOWED_PARAMS = %i{project_cost_id total}.freeze
   
   ### Associations
   belongs_to :draw

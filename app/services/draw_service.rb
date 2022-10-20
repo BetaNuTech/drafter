@@ -10,7 +10,7 @@ class DrawService
     @user = user
     @project = project || draw&.project
     @organization = @user.organization
-    @draw = draw || project.draws.new(organization: @organization, user: @user)
+    @draw = draw || Draw.new(project: @project, organization: @organization, user: @user)
     @policy = DrawPolicy.new(@user, @draw)
 
     raise PolicyError.new unless @policy.index?
@@ -24,13 +24,11 @@ class DrawService
     raise PolicyError.new unless @policy.create?
 
     reset_errors
-
-    @draw = @project.draws.new(sanitize_params(params))
-    @draw.user = @user
-    @draw.organization ||= @organization
-    @draw.index = @draw.next_index
+    @project.draws.reload
+    @draw = Draw.new(project: @project, user: @user, organization: @organization)
+    @draw.attributes = sanitize_params(params)
     if @draw.save
-      SystemEvent.log(description: "Added Draw '#{@draw.name}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Added Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
       @project.draws.reload
     else
       @errors = @draw.errors.full_messages

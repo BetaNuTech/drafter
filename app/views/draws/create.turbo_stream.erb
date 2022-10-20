@@ -1,2 +1,2 @@
+<%= turbo_stream.update 'new_draw', '' %>
 <%= turbo_stream.prepend dom_id(@service.draw.project, 'draws'), @service.draw %>
-<%= turbo_stream.update dom_id(Draw.new), '' %>

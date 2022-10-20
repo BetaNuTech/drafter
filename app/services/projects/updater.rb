@@ -51,20 +51,22 @@ module Projects
       @errors.present?
     end
 
-    private
-
     def add_project_costs(project)
-      ProjectCostSample.standard.order(cost_type: :asc, name: :asc).each do |sample|
-        project.project_costs.create(
-          cost_type: sample.cost_type,
+      ProjectCostSample.standard.each do |sample|
+        project_cost = @project.project_costs.where(name: sample.name).first || ProjectCost.new(project: @project)
+        project_cost.attributes = {
           name: sample.name,
+          cost_type: sample.cost_type,
           approval_lead_time: sample.approval_lead_time,
-          total: 0.0,
-          state: 'pending'
-        )
+          drawable: sample.drawable,
+          change_requestable: sample.change_requestable
+        }
+        project_cost.save
       end
       @project.project_costs.reload
     end
+
+    private
 
     def refresh_policy
       @policy = ProjectPolicy.new(@current_user, @project)

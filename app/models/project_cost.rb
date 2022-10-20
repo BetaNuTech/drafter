@@ -4,7 +4,9 @@
 #
 #  id                 :uuid             not null, primary key
 #  approval_lead_time :integer          default(0), not null
+#  change_requestable :boolean          default(TRUE)
 #  cost_type          :integer          not null
+#  drawable           :boolean          default(TRUE)
 #  name               :string           not null
 #  state              :string           default("pending"), not null
 #  total              :decimal(, )      default(0.0), not null
@@ -14,8 +16,9 @@
 #
 # Indexes
 #
-#  draw_costs_project_idx             (project_id,state)
 #  index_project_costs_on_project_id  (project_id)
+#  project_costs_drawable_idx         (drawable,change_requestable)
+#  project_costs_project_idx          (project_id,state)
 #
 # Foreign Keys
 #
@@ -37,6 +40,10 @@ class ProjectCost < ApplicationRecord
   validates :name, presence: true
   validates :state, presence: true
   validates :total, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
+
+  ### Scopes
+  scope :drawable, -> { where(drawable: true) }
+  scope :change_requestable, -> { where(change_requestable: true) }
 
   def cost_type_css_class
     {

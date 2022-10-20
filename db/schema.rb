@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_19_173638) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_20_191457) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -95,7 +95,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_173638) do
     t.uuid "user_id", null: false
     t.uuid "organization_id", null: false
     t.uuid "approver_id"
-    t.string "name", null: false
     t.integer "index", default: 1, null: false
     t.decimal "amount", default: "0.0", null: false
     t.string "state", default: "pending", null: false
@@ -106,7 +105,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_173638) do
     t.datetime "updated_at", null: false
     t.index ["approver_id"], name: "index_draws_on_approver_id"
     t.index ["organization_id"], name: "index_draws_on_organization_id"
-    t.index ["project_id", "organization_id", "index"], name: "index_draws_on_project_id_and_organization_id_and_index", unique: true
     t.index ["project_id", "user_id", "organization_id", "approver_id", "state"], name: "draws_assoc_idx"
     t.index ["project_id"], name: "index_draws_on_project_id"
     t.index ["user_id"], name: "index_draws_on_user_id"
@@ -150,7 +148,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_173638) do
     t.boolean "standard", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name", "standard"], name: "project_cost_samples_idx"
+    t.boolean "drawable", default: true
+    t.boolean "change_requestable", default: true
+    t.index ["drawable", "change_requestable", "standard", "name"], name: "project_cost_samples_idx"
   end
 
   create_table "project_costs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -162,7 +162,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_173638) do
     t.decimal "total", default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["project_id", "state"], name: "draw_costs_project_idx"
+    t.boolean "drawable", default: true
+    t.boolean "change_requestable", default: true
+    t.index ["drawable", "change_requestable"], name: "project_costs_drawable_idx"
+    t.index ["project_id", "state"], name: "project_costs_project_idx"
     t.index ["project_id"], name: "index_project_costs_on_project_id"
   end
 

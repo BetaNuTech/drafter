@@ -15,9 +15,12 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def new?
-    user.admin? ||
-      user.project_developer?(record.project) ||
-      user.project_management?(record.project) 
+    record.project.allow_new_draw?(user.organization) &&
+      (
+        user.admin? ||
+          user.project_developer?(record.project) ||
+          user.project_management?(record.project) 
+      )
   end
 
   def create?

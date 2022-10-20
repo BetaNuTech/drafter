@@ -6,7 +6,6 @@
 #  amount          :decimal(, )      default(0.0), not null
 #  approved_at     :datetime
 #  index           :integer          default(1), not null
-#  name            :string           not null
 #  notes           :text
 #  reference       :string
 #  state           :string           default("pending"), not null
@@ -19,12 +18,11 @@
 #
 # Indexes
 #
-#  draws_assoc_idx                                          (project_id,user_id,organization_id,approver_id,state)
-#  index_draws_on_approver_id                               (approver_id)
-#  index_draws_on_organization_id                           (organization_id)
-#  index_draws_on_project_id                                (project_id)
-#  index_draws_on_project_id_and_organization_id_and_index  (project_id,organization_id,index) UNIQUE
-#  index_draws_on_user_id                                   (user_id)
+#  draws_assoc_idx                 (project_id,user_id,organization_id,approver_id,state)
+#  index_draws_on_approver_id      (approver_id)
+#  index_draws_on_organization_id  (organization_id)
+#  index_draws_on_project_id       (project_id)
+#  index_draws_on_user_id          (user_id)
 #
 # Foreign Keys
 #

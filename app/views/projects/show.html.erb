@@ -8,8 +8,9 @@
 
 <div class="row">
   <div class="col">
-    <%= link_to('Create Draw', new_project_draw_path(project_id: @project.id), class: 'btn btn-primary', data: {turbo_frame: dom_id(Draw.new)}) if policy(Draw.new(project: @project)).new? %>
-    <%= turbo_frame_tag dom_id(Draw.new) %>
+    <%= turbo_frame_tag 'new_draw' do %>
+      <%= render partial: 'projects/new_draw_button', locals: {project: @project} %>
+    <% end %>
   </div>
 </div>
 

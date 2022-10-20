@@ -1,2 +1,2 @@
 <%= turbo_stream.remove @service.draw %>
-<%= turbo_stream.update Draw.new(project: @project), "" %>
+<%= turbo_stream.update 'new_draw', partial: 'projects/new_draw_button', locals: {project: @project} %>

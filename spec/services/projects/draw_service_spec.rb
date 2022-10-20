@@ -6,14 +6,12 @@ RSpec.describe DrawService do
   let(:valid_draw_attributes) {
     {
       amount: 1234.56,
-      name: 'Draw 1',
       notes: 'Draw notes for test here'
     }
   }
   let(:invalid_draw_attributes) {
     {
       amount: -1,
-      name: 'Draw 1',
       notes: 'Draw notes for test here'
     }
   }
@@ -39,13 +37,13 @@ RSpec.describe DrawService do
         draw = nil
         expect {
           draw = service.create(valid_draw_attributes)
+          binding.pry if service.errors?; true
         }.to change{Draw.count}
         refute(service.errors?)
         expect(draw.project).to eq(project)
         expect(draw.user).to eq(developer_user)
         expect(draw.organization).to eq(developer_user.organization)
         expect(draw.amount).to eq(valid_draw_attributes[:amount])
-        expect(draw.name).to eq(valid_draw_attributes[:name])
         expect(draw.notes).to eq(valid_draw_attributes[:notes])
       end
     end
@@ -67,8 +65,8 @@ RSpec.describe DrawService do
       let(:user) {developer_user}
       let(:draw) { sample_draw }
       let(:project) { sample_project }
-      let(:valid_attrs) { {amount: 444.1, name: 'New name', notes: 'New notes'} }
-      let(:invalid_attrs) { {amount: -444.1, name: 'New name', notes: 'New notes'} }
+      let(:valid_attrs) { {amount: 444.1, notes: 'New notes'} }
+      let(:invalid_attrs) { {amount: -444.1, notes: 'New notes'} }
 
       before(:each) { sample_project; sample_draw }
 
@@ -79,7 +77,6 @@ RSpec.describe DrawService do
           refute(service.errors?)
           draw.reload
           expect(draw.amount).to eq(valid_attrs[:amount])
-          expect(draw.name).to eq(valid_attrs[:name])
           expect(draw.notes).to eq(valid_attrs[:notes])
         end
       end

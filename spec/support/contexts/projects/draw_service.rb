@@ -20,8 +20,6 @@ RSpec.shared_context "draw_service" do
       draw_cost_id: draw_cost.id,
       amount: 12345.67,
       description: 'Test description',
-      plan_change: true,
-      plan_change_reason: 'Test reason'
     }
   }
   let(:invalid_draw_cost_request_attributes) {

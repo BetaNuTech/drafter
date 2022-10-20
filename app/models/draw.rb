@@ -6,7 +6,6 @@
 #  amount          :decimal(, )      default(0.0), not null
 #  approved_at     :datetime
 #  index           :integer          default(1), not null
-#  name            :string           not null
 #  notes           :text
 #  reference       :string
 #  state           :string           default("pending"), not null
@@ -19,12 +18,11 @@
 #
 # Indexes
 #
-#  draws_assoc_idx                                          (project_id,user_id,organization_id,approver_id,state)
-#  index_draws_on_approver_id                               (approver_id)
-#  index_draws_on_organization_id                           (organization_id)
-#  index_draws_on_project_id                                (project_id)
-#  index_draws_on_project_id_and_organization_id_and_index  (project_id,organization_id,index) UNIQUE
-#  index_draws_on_user_id                                   (user_id)
+#  draws_assoc_idx                 (project_id,user_id,organization_id,approver_id,state)
+#  index_draws_on_approver_id      (approver_id)
+#  index_draws_on_organization_id  (organization_id)
+#  index_draws_on_project_id       (project_id)
+#  index_draws_on_user_id          (user_id)
 #
 # Foreign Keys
 #
@@ -37,7 +35,7 @@ class Draw < ApplicationRecord
   include Draws::StateMachine
 
   ### Params
-  ALLOWED_PARAMS = [:name, :amount, :notes ]
+  ALLOWED_PARAMS = [:amount, :notes ]
 
   ### Scopes
   scope :for_organization, -> (organization) { where(organization: organization) }
@@ -51,18 +49,21 @@ class Draw < ApplicationRecord
   has_many :draw_documents, dependent: :destroy
 
   ### Validations
-  validates :name, presence: true, uniqueness: {scope: [:organization_id, :project_id ]}, allow_blank: false
-  validates :index, presence: true, numericality: { greater_than_or_equal_to: 1}, uniqueness: {scope: [ :project_id, :organization_id ]}
+  validates :index, presence: true, numericality: { greater_than_or_equal_to: 1}
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0.0}
   validates :state, presence: true
 
   ### Callbacks
   after_initialize :assign_index
 
+  def name
+    "Draw ##{index}"
+  end
+
   def next_index
     return 1 unless project.present?
 
-   (project.draws.for_organization(organization).pluck(:index).sort.last || 0) + 1
+   (project.draws.for_organization(organization).visible.pluck(:index).sort.last || 0) + 1
   end
 
   def budget_variance
@@ -119,8 +120,10 @@ class Draw < ApplicationRecord
   end
 
   def assign_index
-    _next_index = next_index
-    self.index = _next_index unless self.index >= _next_index
+    if new_record?
+      _next_index = next_index
+      self.index = _next_index unless self.index >= _next_index
+    end
   end
 
 end

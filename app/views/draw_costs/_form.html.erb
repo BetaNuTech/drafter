@@ -24,20 +24,6 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-2">
-      <div class="form-check">
-        <%= form.check_box :plan_change, class: 'form-check-input' %>
-        <%= form.label :plan_change, 'Plan change?' %>
-      </div>
-    </div>
-    <div class="col-10">
-      <div class="form-floating mb-3 g2">
-        <%= form.text_field :plan_change_desc, class: 'form-control' %>
-        <%= form.label :plan_change_desc, 'Plan Change Description' %>
-      </div>
-    </div>
-  </div>
 
   <%= form.submit 'Submit', class: 'btn btn-success m-1' %>
   <%= link_to 'Cancel', :back, class: "btn btn-sm btn-light", data: { turbo_frame: :_top } %>

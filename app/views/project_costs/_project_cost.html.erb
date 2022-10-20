@@ -17,7 +17,11 @@
         <p>
           <b>Budget:</b> <%= number_to_currency(project_cost.total) %>
           <br/>
-          <b>Approval Lead Time:</b> <%= project_cost.approval_lead_time %> days
+          <b>Approval Lead Time:</b> <%= project_cost.approval_lead_time > 0 ? "#{project_cost.approval_lead_time} days" : 'None' %>
+          <br/>
+          <b>Drawable?:</b> <%= project_cost.drawable? ? 'Yes' : 'No' %>
+          <br/>
+          <b>Change Request Funding Source?:</b> <%= project_cost.change_requestable? ? 'Yes' : 'No' %>
         </p>
       </div>
     </div>
