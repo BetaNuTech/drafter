@@ -15,24 +15,8 @@
 
 <div class="row px-2">
   <div class="col">
-  <% if current_user.project_developer?(@project) %>
-    <h2 class="text-center">Total Cost: <%= number_to_currency @draw_cost_requests.sum(:total) %></h2>
-    <h3>Costs</h3>
-    <%= turbo_frame_tag 'draw_cost_requests' do %>
-      <%= render @draw_cost_requests %>
-      <% if @draw_cost_requests.none? %>
-        <p>None</p>
-      <% else %>
-        <%= turbo_frame_tag 'draw_cost_requests' do %>
-          <%= render @draw_cost_requests %>
-        <% end %>
-      <% end %>
-    <% end %>
-    <h2 class="text-center">Difference to Total: $<%= 'TODO' %></h2>
-  <% else %>
     <%= turbo_frame_tag 'draw_costs' do %>
       <%= render @draw.draw_costs %>
     <% end %>
-  <% end %>
   </div>
 </div>

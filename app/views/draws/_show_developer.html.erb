@@ -24,7 +24,7 @@
       <%= turbo_frame_tag 'new_draw_cost' do %>
         <%= link_to('Add Draw Cost',
                       new_draw_draw_cost_path(draw_id: draw.id),
-                      class: 'btn btn-primary', data: {turbo_frame: 'new_draw_cost'}) if policy(draw).new? %>
+                      class: 'btn btn-primary', data: {turbo_frame: 'new_draw_cost'}) if policy(DrawCost.new(draw: draw)).new? %>
       <% end %>
     </div>
   </div>
