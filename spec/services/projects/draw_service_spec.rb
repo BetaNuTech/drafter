@@ -31,13 +31,13 @@ RSpec.describe DrawService do
   end # initialize
 
   describe 'creating a draw' do
+    before(:each) { Draw.destroy_all }
     describe 'as a project developer' do
       it 'creates and returns a new draw' do
         service = DrawService.new(user: developer_user, project: project)
         draw = nil
         expect {
           draw = service.create(valid_draw_attributes)
-          binding.pry if service.errors?; true
         }.to change{Draw.count}
         refute(service.errors?)
         expect(draw.project).to eq(project)
@@ -49,6 +49,8 @@ RSpec.describe DrawService do
     end
     describe 'as a non-authorized user' do
       it 'does not create a draw' do
+        consultant_user.organization = nil
+        consultant_user.save!
         service = DrawService.new(user: consultant_user, project: project)
         expect {
           draw = service.create(valid_draw_attributes) rescue nil
@@ -62,13 +64,13 @@ RSpec.describe DrawService do
 
   describe 'updating a draw' do
     describe 'as a developer' do
-      let(:user) {developer_user}
-      let(:draw) { sample_draw }
+      let(:user) {sample_project.developers.first}
+      let(:draw) { sample_project.draws.first }
       let(:project) { sample_project }
       let(:valid_attrs) { {amount: 444.1, notes: 'New notes'} }
       let(:invalid_attrs) { {amount: -444.1, notes: 'New notes'} }
 
-      before(:each) { sample_project; sample_draw }
+      #before(:each) { sample_project; draw }
 
       describe 'with valid attributes' do
         it 'updates the draw' do

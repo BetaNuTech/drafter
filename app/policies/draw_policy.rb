@@ -36,7 +36,11 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def edit?
-    new?
+    user.admin? ||
+      user.project_management?(record.project) ||
+      ( record.organization.present? &&
+          user.organization == record.organization &&
+          user.member?(record.project) )
   end
 
   def update?

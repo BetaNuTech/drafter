@@ -6,12 +6,14 @@ RSpec.describe DrawsController, type: :controller do
 
   let(:valid_draw_attributes) { { amount: 1234.56, name: 'Draw 1', notes: 'Draw notes for test here' } }
 
-  before(:each) { sample_project }
+  let(:project) { sample_project }
+  before(:each) { project }
 
   describe '#new' do
     describe 'as a developer' do
-      let(:user) { developer_user }
+      let(:user) { sample_project.developers.first }
       it 'should display the new draw form' do
+        Draw.destroy_all
         sign_in user
         get :new, params: { project_id: project.id }
         expect(response).to render_template(:new)
@@ -21,8 +23,9 @@ RSpec.describe DrawsController, type: :controller do
 
   describe '#create' do
     describe 'as a developer' do
-      let(:user) { developer_user }
+      let(:user) { project.developers.first }
       it 'should create a new draw for the project' do
+        Draw.destroy_all
         sign_in user
         expect {
           post :create, params: {draw: valid_draw_attributes, project_id: project.id}
@@ -34,7 +37,7 @@ RSpec.describe DrawsController, type: :controller do
 
   describe '#show' do
     describe 'as the project developer' do
-      let(:user) { developer_user }
+      let(:user) { project.developers.first }
       let(:draw) { sample_draw }
 
       it 'should render the show template' do

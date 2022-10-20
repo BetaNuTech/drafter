@@ -39,16 +39,17 @@ RSpec.shared_context 'sample_projects' do
     # Add Draws 
     user = project.developers.first
     draw_service = DrawService.new(user:, project: )
-    draw_service.create({name: 'Test Draw', amount: 123456.0})
+    draw_service.create({amount: 123456.0})
 
     project.reload
     project
   }
 
   let(:sample_draw) {
-    user = sample_project.developers.first
-    draw_service = DrawService.new(user: , project: sample_project )
-    draw_service.create({name: 'Test Draw 2', amount: 123456.0})
+    sample_project.draws.first
+    #user = sample_project.developers.first
+    #draw_service = DrawService.new(user: , project: sample_project )
+    #draw_service.create({ amount: 123456.0})
   }
   let(:sample_draw_cost) { 
     sample_draw.draw_costs.create!(total: 123.45, draw: sample_draw, project_cost: sample_project_cost)

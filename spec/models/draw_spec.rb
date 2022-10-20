@@ -47,14 +47,6 @@ RSpec.describe Draw, type: :model do
   end
 
   describe 'naming/index' do
-    it 'has a unique index for a given project and organization' do
-      draw1 = create(:draw, project: project1, index: 1, organization: organization1)
-      draw2 = build(:draw, project: project1, index: 1, organization: organization1)
-      refute(draw2.save)
-      draw2.index = 2
-      assert(draw2.save)
-    end
-
     it 'returns the next draw number' do
       draw1 = create(:draw, project: sample_project, index: 1, organization: organization1)
       draw2 = create(:draw, project: sample_project, index: 2, organization: organization1)
