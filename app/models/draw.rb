@@ -38,7 +38,7 @@ class Draw < ApplicationRecord
     def validate(record)
       return false unless record.organization.present? && record.project.present?
 
-      skope = record.project.draws.where(organization: record.organization, state: Draw::VISIBLE_STATES, index: record.index)
+      skope = record.project.draws.where(state: Draw::VISIBLE_STATES, index: record.index)
       conflict = record.new_record? ? skope.any? : skope.where.not(id: record.id).any?
       record.errors.add(:index, 'There is already a Draw with this number') if conflict
       true
