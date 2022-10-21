@@ -1,1 +1,2 @@
+<%= turbo_stream.update dom_id(@draw_cost.draw, :total_cost), number_to_currency(@draw_cost.draw.draw_cost_total) %>
 <%= turbo_stream.replace @draw_cost %>

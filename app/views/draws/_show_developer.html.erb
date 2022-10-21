@@ -12,8 +12,8 @@
     <div class="col">
       <h2 class="text-center">
         Total Cost:
-        <%= turbo_frame_tag('total_cost', draw) do %>
-          <%#= number_to_currency @total_cost %>
+        <%= turbo_frame_tag(:total_cost, draw) do %>
+          <%= number_to_currency draw.draw_cost_total %>
         <% end %>
       </h2>
     </div>

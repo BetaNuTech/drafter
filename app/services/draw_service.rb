@@ -29,6 +29,7 @@ class DrawService
     @draw.attributes = sanitize_params(params)
     if @draw.save
       SystemEvent.log(description: "Added Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      @project.draws.reload
     else
       @errors = @draw.errors.full_messages
     end
@@ -43,6 +44,7 @@ class DrawService
     unless @draw.update(sanitize_params(params))
       @errors = @draw.errors.full_messages
     end
+    @project.draws.reload
 
     @draw
   end
@@ -53,6 +55,7 @@ class DrawService
     if @draw.permitted_state_events.include?(:withdraw)
       @draw.trigger_event(event_name: :withdraw, user: @user)
       SystemEvent.log(description: "Removed Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      @project.draws.reload
       return true
     else
       return false
@@ -65,6 +68,7 @@ class DrawService
     if @draw.permitted_state_events.include?(:approve)
       @draw.trigger_event(event_name: :approve_internal, user: @user)
       SystemEvent.log(description: "Internally Approved Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      @project.draws.reload
       return true
     else
       return false

@@ -16,6 +16,7 @@ class InvoicesController < ApplicationController
     if @service.errors?
       render :new, status: :unprocessable_entity
     else
+      @draw_cost.draw.draw_costs.reload
       respond_to do |format|
         format.html { redirect_to draw_draw_cost_path(draw_id: @draw_cost.draw_id, id: @draw_cost.id), notice: 'Uploaded Invoice'}
         format.turbo_stream
@@ -38,6 +39,7 @@ class InvoicesController < ApplicationController
     if @service.errors?
       render :new, status: :unprocessable_entity
     else
+      @draw_cost.draw.draw_costs.reload
       respond_to do |format|
         format.html { redirect_to draw_cost_invoice_path(draw_cost_id: @draw_cost.id, id: @invoice.id)}
         format.turbo_stream
@@ -49,6 +51,7 @@ class InvoicesController < ApplicationController
     authorize @invoice
     @service = InvoiceService.new(user: @current_user, draw_cost: @draw_cost, invoice: @invoice)
     @service.remove
+    @draw_cost.draw.draw_costs.reload
     respond_to do |format|
       format.html { redirect_to draw_draw_cost_path(draw_id: @draw_cost.draw_id, id: @draw_cost.id)}
       format.turbo_stream

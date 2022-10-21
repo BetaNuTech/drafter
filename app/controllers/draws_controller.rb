@@ -77,6 +77,7 @@ class DrawsController < ApplicationController
 
     # Withdraw Draw (soft delete)
     if @service.withdraw
+      #@draw_cost.draw.draw_costs.reload
       respond_to do |format|
         format.html { redirect_to project_path(id: @project.id), notice: "Draw was removed." }
         format.turbo_stream

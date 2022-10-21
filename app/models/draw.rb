@@ -67,7 +67,13 @@ class Draw < ApplicationRecord
   end
 
   def draw_cost_total
-    draw_costs.sum(:total)
+    #draw_costs.sum(:total)
+    draw_cost_invoices_total
+  end
+
+  def draw_cost_invoices_total
+    draw_costs.reload
+    draw_costs.visible.map(&:invoice_total).sum
   end
 
   def budget_variance

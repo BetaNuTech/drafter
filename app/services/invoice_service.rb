@@ -53,6 +53,7 @@ class InvoiceService
     @invoice.trigger_event(event_name: :remove, user: @user)
     if @invoice.removed?
       SystemEvent.log(description: "Removed Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      @draw_cost.invoices.reload
     else
       @errors << 'Error removing invoice'
     end

@@ -42,7 +42,7 @@ class DrawCost < ApplicationRecord
 
   ### Validations
   validates :total, presence: true, numericality: { greater_than_or_equal_to: 0.0}
-  validates :project_cost_id, presence: true, uniqueness: {scope: [:draw_id]}, allow_blank: false
+  validates :project_cost_id, presence: true
   validates :state, presence: true
 
   def invoice_total

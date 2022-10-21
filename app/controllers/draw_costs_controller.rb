@@ -51,9 +51,8 @@ class DrawCostsController < ApplicationController
     @service.withdraw
 
     respond_to do |format|
-      format.html {
-        redirect_to project_draw_path(project_id: @service.project.id, id: @service.draw.id), notice: 'Removed Draw Cost'
-      }
+      @draw_cost.draw.draw_costs.reload
+      format.html { redirect_to project_draw_path(project_id: @service.project.id, id: @service.draw.id), notice: 'Removed Draw Cost' }
       format.turbo_stream
     end
   end

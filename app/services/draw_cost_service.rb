@@ -50,6 +50,7 @@ class DrawCostService
 
     SystemEvent.log(description: "Removed #{@draw_cost.project_cost.name} Cost for Draw '#{@draw.name}'", event_source: @draw.project, incidental: @current_user, severity: :warn)
     @draw_cost.withdraw!
+    @draw_cost.draw.draw_costs.reload
   end
 
   private
