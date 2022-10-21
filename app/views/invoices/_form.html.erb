@@ -35,7 +35,7 @@
         <%= render partial: 'shared/object_errors', locals: { object: invoice } %>
       <% end %>
       <div class="form-floating">
-        <%= form.number_field :amount, { class: 'form-control', data: { invoice_form_target: 'amount_field', action: 'input->invoice-form#amount_changed' }} %>
+        <%= form.number_field :amount, { class: 'form-control', step: 0.01, data: { invoice_form_target: 'amount_field', action: 'input->invoice-form#amount_changed' }} %>
         <%= form.label :amount, 'Amount $' %>
       </div>
       <div class="form-floating pt-2">
