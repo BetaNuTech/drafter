@@ -33,6 +33,7 @@ class ProjectCost < ApplicationRecord
   ### Associations
   belongs_to :project
   has_many :draw_costs
+  has_many :invoices, through: :draw_costs
 
   ### Validations
   validates :approval_lead_time, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
@@ -52,6 +53,10 @@ class ProjectCost < ApplicationRecord
       soft: 'info',
       finance: 'success'
     }.fetch(cost_type.to_sym)
+  end
+
+  def budget_balance
+
   end
 
 end

@@ -1,5 +1,8 @@
-  <%= turbo_frame_tag invoice do %>
-<div id="<%= dom_id(invoice) %>" class="invoice_card d-flex flex-column justify-content-evenly text-center m-1 shadow-sm">
+<%= turbo_frame_tag invoice do %>
+  <div id="<%= dom_id(invoice) %>" class="invoice_card d-flex flex-column justify-content-evenly text-center m-1 shadow-sm mt-3" style="position: relative;">
+    <div class="position-absolute start-50 translate-middle border border-1 border-<%= invoice.state_css_class %> bg-<%= invoice.state_css_class %> text-white text-center" style="width: 8rem; top: 0;">
+      <%= invoice.state.titleize %>
+    </div>
     <h4>Invoice</h4>
     <% if invoice.document.attached? %>
       <div class="preview_container">
@@ -10,12 +13,12 @@
     <% end %>
     <div class="body">
       <small><%= short_date invoice.updated_at %></small><br/>
-      <strong><%= number_to_currency invoice.amount %></strong><br/>
-      <p style="line-height: 1em;"><%= truncate invoice.description, length: 60 %></p>
+      <span class="badge bg-success"><%= number_to_currency invoice.amount %></span><br/>
+      <p style="line-height: 1em; padding: 0.5em;"><%= truncate invoice.description, length: 60 %></p>
     </div>
     <div class="actions align-items-end">
       <%= link_to('Edit', edit_draw_cost_invoice_path(draw_cost_id: invoice.draw_cost_id, id: invoice.id), class: 'btn btn-sm btn-primary m-1') if policy(invoice).edit? %>
       <%= link_to('Remove', draw_cost_invoice_path(draw_cost_id: invoice.draw_cost_id, id: invoice.id), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: 'btn btn-sm btn-danger') %>
     </div>
-</div>
-  <% end %>
+  </div>
+<% end %>

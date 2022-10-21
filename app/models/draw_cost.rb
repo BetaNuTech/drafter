@@ -49,4 +49,12 @@ class DrawCost < ApplicationRecord
     invoices.visible.sum(:amount)
   end
 
+  def project_cost_balance
+    total - invoices.sum(:amount)
+  end
+
+  def over_budget?
+    project_cost_balance < 0
+  end
+
 end

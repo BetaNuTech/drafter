@@ -9,13 +9,19 @@
 
 <%= turbo_frame_tag draw do %>
   <div class="row px-2">
-    <div class="col">
-      <h2 class="text-center">
-        Total Cost:
+    <div class="col border bg-light m-2 p-2">
+      <h3 class="text-center">
+        This Draw Total:
         <%= turbo_frame_tag(:total_cost, draw) do %>
           <%= number_to_currency draw.draw_cost_total %>
         <% end %>
-      </h2>
+      </h3>
+      <h4 class="text-center">
+        Project Budget:
+        <%= turbo_frame_tag(:total_cost, draw.project) do %>
+          <%= number_to_currency draw.project.budget_total %>
+        <% end %>
+      </h4>
     </div>
   </div>
 
@@ -33,16 +39,6 @@
     <div class="col">
       <%= turbo_frame_tag('draw_costs', draw) do %>
         <%= render @draw.draw_costs.visible %>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col">
-      <% if @draw.draw_costs.any? %>
-        <h2 class="text-center">
-          Difference to Amount:
-        </h2>
       <% end %>
     </div>
   </div>

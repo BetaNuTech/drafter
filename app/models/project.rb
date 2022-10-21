@@ -40,4 +40,8 @@ class Project < ApplicationRecord
   def allow_new_draw?(organization)
     draws.pending.for_organization(organization).none?
   end
+
+  def budget_total
+    project_costs.sum(:total)
+  end
 end
