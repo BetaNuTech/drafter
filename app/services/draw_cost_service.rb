@@ -53,6 +53,21 @@ class DrawCostService
     @draw_cost.draw.draw_costs.reload
   end
 
+  def submit
+    raise PolicyError.new unless @draw_cost_policy.submit?
+
+    @draw_cost.transaction do
+      @draw_cost.trigger_event(event_name: :submit, user: @user)
+    end
+    if @draw_cost.submitted?
+      SystemEvent.log(description: "Submitted Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      @draw.draw_costs.reload
+    else
+      @errors << 'Error submitting invoice'
+    end
+    @draw_cost.draw.draw_costs.reload
+  end
+
   private
 
   def reset_errors

@@ -1,7 +1,7 @@
 class DrawCostsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_draw
-  before_action :set_draw_cost, only: %i[ show edit update destroy ]
+  before_action :set_draw_cost, except: %i[index new create]
   after_action :verify_authorized
 
   def index
@@ -57,6 +57,18 @@ class DrawCostsController < ApplicationController
     end
   end
 
+  def submit
+    authorize @draw_cost
+    @service = DrawCostService.new(user: @current_user, draw: @draw, draw_cost: @draw_cost)
+    @service.submit
+
+    respond_to do |format|
+      @draw_cost.draw.draw_costs.reload
+      format.html { redirect_to project_draw_path(project_id: @service.project.id, id: @service.draw.id), notice: 'Submitted Draw Cost' }
+      format.turbo_stream
+    end
+  end
+
   private
 
   def draw_record_scope
@@ -72,7 +84,7 @@ class DrawCostsController < ApplicationController
   end
 
   def set_draw_cost
-    @draw_cost = record_scope.find(params[:id])
+    @draw_cost = record_scope.find(params[:id] || params[:draw_cost_id])
   end
   
 end

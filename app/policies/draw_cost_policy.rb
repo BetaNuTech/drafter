@@ -4,6 +4,8 @@ class DrawCostPolicy < ApplicationPolicy
       case user
       when -> (u) { u.admin? }
         scope
+      when -> (u) { u.executive? }
+        scope
       when -> (u) { u.user? }
         # DrawCostRequests for the user's assigned projects
         #  belonging to the user's assigned organization
@@ -40,10 +42,13 @@ class DrawCostPolicy < ApplicationPolicy
   end
 
   def edit?
-    user.admin? ||
-      user.project_internal?(record.project) ||
-      ( user.project_developer?(record.project) &&
-       user.organization_id == record.organization.id)
+    record.draw.allow_draw_cost_changes? &&
+    record.pending? &&
+      ( user.admin? ||
+        user.project_internal?(record.project) ||
+        ( user.project_developer?(record.project) &&
+         user.organization_id == record.organization.id)
+      )
   end
 
   def update?
@@ -51,14 +56,16 @@ class DrawCostPolicy < ApplicationPolicy
   end
 
   def submit?
-    edit?
+    record.draw.allow_draw_cost_changes? &&
+    record.pending? && edit?
   end
 
   def destroy?
-    user.admin? ||
+    record.draw.allow_draw_cost_changes? &&
+    ( user.admin? ||
       user.project_owner?(record.project) ||
       ( user.project_developer?(record.project) &&
-       user.organization_id == record.organization.id)
+       user.organization_id == record.organization.id) )
   end
 
   def withdraw?

@@ -17,12 +17,8 @@ Rails.application.routes.draw do
 
   get '/about', to: 'home#about', as: :about
 
-  resources :draws do
-    resources :invoices
-    resources :draw_costs
-  end
-
   resources :organizations
+  resources :users
 
   resources :projects do
     resources :project_costs
@@ -33,15 +29,16 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users
-
-  resources :draw_costs do
-    resources :invoices
+  resources :draws do
+    resources :draw_costs do
+      post 'submit', to: 'draw_costs#submit'
+    end
   end
 
-  #resources :draw_cost_requests do
-    #post :add_document, to: 'draw_cost_requests#add_document'
-    #post :remove_document, to: 'draw_cost_requests#remove_document'
-    #resources :draw_cost_submissions
-  #end
+  resources :draw_costs do
+    resources :invoices do
+      post 'submit', to: 'invoices#submit'
+    end
+  end
+
 end

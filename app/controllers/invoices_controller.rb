@@ -1,7 +1,7 @@
 class InvoicesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_draw_cost
-  before_action :set_invoice, only: %i[ show edit update destroy ]
+  before_action :set_invoice, except: %i[index new create]
   after_action :verify_authorized
 
   def new
@@ -58,6 +58,17 @@ class InvoicesController < ApplicationController
     end
   end
 
+  def submit
+    authorize @invoice
+    @service = InvoiceService.new(user: @current_user, draw_cost: @draw_cost, invoice: @invoice)
+    @service.submit
+    @draw_cost.draw.draw_costs.reload
+    respond_to do |format|
+      format.html { redirect_to draw_draw_cost_path(draw_id: @draw_cost.draw_id, id: @draw_cost.id)}
+      format.turbo_stream
+    end
+  end
+
   private
 
   def draw_cost_scope
@@ -73,6 +84,6 @@ class InvoicesController < ApplicationController
   end
 
   def set_invoice
-    @invoice = record_scope.find(params[:id])
+    @invoice = record_scope.find(params[:id] || params[:invoice_id])
   end
 end

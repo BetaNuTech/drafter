@@ -59,6 +59,18 @@ class InvoiceService
     end
   end
 
+  def submit
+    raise PolicyError.new unless @policy.remove?
+
+    @invoice.trigger_event(event_name: :submit, user: @user)
+    if @invoice.submitted?
+      SystemEvent.log(description: "Submitted Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      @draw_cost.invoices.reload
+    else
+      @errors << 'Error submitting invoice'
+    end
+  end
+
   private
 
   def reset_errors

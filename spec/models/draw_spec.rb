@@ -47,6 +47,7 @@ RSpec.describe Draw, type: :model do
   end
 
   describe 'naming/index' do
+    before(:each) { Draw.destroy_all }
     it 'returns the next draw number' do
       draw1 = create(:draw, project: sample_project, index: 1, organization: organization1)
       draw2 = create(:draw, project: sample_project, index: 2, organization: organization1)

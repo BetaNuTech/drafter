@@ -19,9 +19,11 @@ class InvoicePolicy < ApplicationPolicy
   end
 
   def new?
-    user.admin? ||
-      user.project_owner?(record.project) ||
-      user.project_developer?(record.project)
+    record&.draw_cost&.allow_invoice_changes? &&
+      ( user.admin? ||
+       user.project_owner?(record.project) ||
+       user.project_developer?(record.project)
+      ) 
   end
 
   def create?
@@ -38,13 +40,16 @@ class InvoicePolicy < ApplicationPolicy
   end
 
   def edit?
-    user == record.user ||
-      user.admin? ||
-      user.project_owner?(record.project) ||
-      user.project_management?(record.project) ||
-      user.project_finance?(record.project) ||
-      ( user.project_developer?(record.project) &&
-        record.organization == user.organization)
+    record&.draw_cost&.allow_invoice_changes? &&
+      record.pending? && (
+      user == record.user ||
+        user.admin? ||
+        user.project_owner?(record.project) ||
+        user.project_management?(record.project) ||
+        user.project_finance?(record.project) ||
+        ( user.project_developer?(record.project) &&
+          record.organization == user.organization)
+      )
   end
 
   def update?
@@ -52,20 +57,23 @@ class InvoicePolicy < ApplicationPolicy
   end
   
   def destroy?
-    user == record.user ||
+    record&.draw_cost&.allow_invoice_changes? &&
+    ( user == record.user ||
       user.admin? ||
-      user.project_owner?(record.project)
-  end
-
-  def submit?
-    edit?
+      user.project_owner?(record.project) )
   end
 
   def remove?
     destroy?
   end
 
+  def submit?
+    record.pending? && edit?
+  end
+
   def approve?
+    # TODO: invoice processing and remove submitted? condition below
+    ( record.submitted? || record.processed? ) &&
     user.admin? ||
       user.project_owner?(record.project) ||
       user.project_management?(record.project) ||
@@ -73,6 +81,8 @@ class InvoicePolicy < ApplicationPolicy
   end
 
   def reject?
+    # TODO: invoice processing and remove submitted? condition below
+    ( record.submitted? || record.processed? ) &&
     approve?
   end
 

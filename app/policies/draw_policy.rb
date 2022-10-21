@@ -4,6 +4,8 @@ class DrawPolicy < ApplicationPolicy
       case user
       when -> (u) { u.admin? }
         scope
+      when -> (u) { u.executive? }
+        scope
       else
         scope.where(project: user.projects, organization: user.organization)
       end

@@ -12,6 +12,7 @@ module Draws
       include AASM
       APPROVED_STATES = ['internally_approved', 'externally_approved', 'funded'].freeze
       VISIBLE_STATES = %i{ pending submitted internally_approved externally_approved funded }.freeze
+      ALLOW_DRAW_COST_CHANGE_STATES = %{pending}
 
       scope :visible, -> { where(state: VISIBLE_STATES) }
 
@@ -79,6 +80,10 @@ module Draws
 
       def approved?
         APPROVED_STATES.include?(state)
+      end
+
+      def allow_draw_cost_changes?
+        ALLOW_DRAW_COST_CHANGE_STATES.include?(state)
       end
 
     end
