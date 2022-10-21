@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="col col-md-4">
-        <b><%= number_to_currency(draw.amount) %></b><br/>
+        <b><%= number_to_currency(draw.draw_cost_total) %></b><br/>
         <span class="badge round-pill bg-<%= draw.over_budget? ? 'danger' : 'success' %> "><%= number_to_currency(draw.budget_variance) %></span>
       </div>
     </div>

@@ -66,8 +66,13 @@ class Draw < ApplicationRecord
    (project.draws.for_organization(organization).visible.pluck(:index).sort.last || 0) + 1
   end
 
+  def draw_cost_total
+    draw_costs.sum(:total)
+  end
+
   def budget_variance
-    draw_costs.sum(:total) - amount
+    # TODO
+    0.0
   end
 
   def over_budget?

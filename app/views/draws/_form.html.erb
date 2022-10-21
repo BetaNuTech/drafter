@@ -14,12 +14,6 @@
       </div>
 
       <div class="row">
-        <div class="col-sm-12 col-6">
-          <div class="form-floating mb-3 g-2">
-            <%= form.number_field :amount, class: 'form-control form-control', autofocus: true, placeholder: 'Amount $', step: 0.01 %>
-            <%= form.label :amount, 'Total $' %>
-          </div>
-        </div>
         <% if policy(draw).set_reference? %>
           <div class="col-sm-12 col-6">
             <div class="form-floating mb-3 g-2">
