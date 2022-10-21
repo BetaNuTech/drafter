@@ -34,6 +34,17 @@
 class Draw < ApplicationRecord
   include Draws::StateMachine
 
+  class IndexValidator < ActiveModel::Validator
+    def validate(record)
+      return false unless record.organization.present? && record.project.present?
+
+      skope = record.project.draws.where(organization: record.organization, state: Draw::VISIBLE_STATES, index: record.index)
+      conflict = record.new_record? ? skope.any? : skope.where.not(id: record.id).any?
+      record.errors.add(:index, 'There is already a Draw with this number') if conflict
+      true
+    end
+  end
+
   ### Params
   ALLOWED_PARAMS = [:amount, :notes ]
 
@@ -49,6 +60,7 @@ class Draw < ApplicationRecord
   has_many :draw_documents, dependent: :destroy
 
   ### Validations
+  validates_with IndexValidator
   validates :index, presence: true, numericality: { greater_than_or_equal_to: 1}
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0.0}
   validates :state, presence: true

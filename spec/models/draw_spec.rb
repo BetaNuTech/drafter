@@ -54,6 +54,16 @@ RSpec.describe Draw, type: :model do
       expect(draw3.next_index).to eq(3)
       expect(draw3.index).to eq(3)
     end
+    it 'prevents creation of a draw with the same index as another visible draw for this project' do
+      draw1 = create(:draw, project: sample_project, index: 1, organization: organization1)
+      draw2 = create(:draw, project: sample_project, index: 2, organization: organization1)
+      draw3 = Draw.new(amount: 123.45, project: sample_project, organization: organization1, user: sample_project.developers.first )
+      draw3.index = 2
+      refute(draw3.save)
+      draw2.state = 'withdrawn'
+      draw2.save!
+      assert(draw3.save)
+    end
   end
 
   describe 'budget' do
