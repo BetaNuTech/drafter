@@ -38,17 +38,14 @@ class DrawCostPolicy < ApplicationPolicy
   def show?
     user.admin? ||
       user.project_internal?(record.project) ||
-      ( user.project_developer?(record.project) &&
-       user.organization_id == record.organization.id)
+      user.project_developer?(record.project)
   end
 
   def edit?
     record.draw.allow_draw_cost_changes? &&
       ( user.admin? ||
         user.project_internal?(record.project) ||
-        ( user.project_developer?(record.project) &&
-         user.organization_id == record.organization.id)
-      )
+         user.project_developer?(record.project) )
   end
 
   def update?

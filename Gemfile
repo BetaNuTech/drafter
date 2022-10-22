@@ -23,7 +23,7 @@ gem 'net-pop', require: false
 gem 'net-smtp', require: false
 gem 'pg'
 gem 'pg_search'
-gem 'puma', '~> 6.0'
+gem 'puma', '~> 5.0'
 gem 'pundit'
 gem 'rails'
 gem 'redis'

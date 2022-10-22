@@ -86,7 +86,7 @@ module Draws
       end
 
       def allow_draw_cost_changes?
-        ALLOW_DRAW_COST_CHANGE_STATES.include?(state)
+        ALLOW_DRAW_COST_CHANGE_STATES.include?(state.to_sym)
       end
 
       def submit_draw_costs(user)
