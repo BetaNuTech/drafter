@@ -25,9 +25,10 @@ class DrawCostPolicy < ApplicationPolicy
   end
 
   def new?
-    user.admin? ||
-      user.project_owner?(record.project) ||
-      user.project_developer?(record.project)
+    record.draw.allow_draw_cost_changes? &&
+      ( user.admin? ||
+        user.project_owner?(record.project) ||
+        user.project_developer?(record.project) )
   end
 
   def create?
@@ -43,7 +44,6 @@ class DrawCostPolicy < ApplicationPolicy
 
   def edit?
     record.draw.allow_draw_cost_changes? &&
-    record.pending? &&
       ( user.admin? ||
         user.project_internal?(record.project) ||
         ( user.project_developer?(record.project) &&
@@ -56,8 +56,8 @@ class DrawCostPolicy < ApplicationPolicy
   end
 
   def submit?
-    record.draw.allow_draw_cost_changes? &&
-    record.pending? && edit?
+    record.permitted_state_events.include?(:submit) &&
+      edit?
   end
 
   def destroy?
@@ -69,6 +69,7 @@ class DrawCostPolicy < ApplicationPolicy
   end
 
   def withdraw?
+    record.permitted_state_events.include?(:withdraw) &&
     destroy?
   end
 

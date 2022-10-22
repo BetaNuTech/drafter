@@ -30,9 +30,20 @@ require 'rails_helper'
 RSpec.describe DrawCost, type: :model do
   include_context 'sample_projects'
 
+  let(:user) { sample_project.developers.first }
+  let(:uploaded_file) {Rack::Test::UploadedFile.new("#{Rails.root}/spec/fixtures/files/sample_document_1.pdf", 'application/pdf')}
+  let(:draw) { sample_project.draws.first}
+  let(:draw_cost) {
+    create(:draw_cost, draw: draw, project_cost: sample_project.project_costs.first, total: 12345.67, state: 'pending')
+  }
+  let(:invoices) {
+    draw_cost.invoices.create!(amount: '1234.56', description: 'Test invoice 1', document: uploaded_file, user:)
+    draw_cost.invoices.create!(amount: '1234.56', description: 'Test invoice 1', document: uploaded_file, user:)
+    draw_cost.invoices
+  }
+
   describe 'initialization' do
     it 'creates a DrawCost' do
-      draw = sample_project.draws.first
       draw_cost = build(:draw_cost, draw: draw, project_cost: sample_project.project_costs.first)
       assert(draw_cost.save)
     end
@@ -42,6 +53,26 @@ RSpec.describe DrawCost, type: :model do
     it 'returns the css class for the cost type' do
       draw_cost = build(:draw_cost, draw: sample_project.draws.first)
       expect(draw_cost.state_css_class).to eq('secondary')
+    end
+  end
+
+  describe 'state machine' do
+    describe 'submission' do
+      it 'will not transition to submitted if there are no invoices' do
+        assert(draw_cost.pending?)
+        draw_cost.trigger_event(event_name: :submit, user: )
+        draw_cost.save
+        draw_cost.reload
+        refute(draw_cost.submitted?)
+      end
+      it 'automatically submits pending invoices' do
+        invoices
+        draw_cost.reload
+        draw_cost.trigger_event(event_name: :submit, user: )
+        draw_cost.save
+        draw_cost.reload
+        assert(draw_cost.submitted?)
+      end
     end
   end
   

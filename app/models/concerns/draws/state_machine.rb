@@ -10,9 +10,9 @@ module Draws
 
     included do
       include AASM
-      APPROVED_STATES = ['internally_approved', 'externally_approved', 'funded'].freeze
-      VISIBLE_STATES = %i{ pending submitted internally_approved externally_approved funded }.freeze
-      ALLOW_DRAW_COST_CHANGE_STATES = %{pending}
+      APPROVED_STATES = %i{ internally_approved externally_approved funded }.freeze
+      VISIBLE_STATES = %i{ pending submitted internally_approved externally_approved funded rejected }.freeze
+      ALLOW_DRAW_COST_CHANGE_STATES = %i{pending}
 
       scope :visible, -> { where(state: VISIBLE_STATES) }
 
@@ -22,10 +22,13 @@ module Draws
         state :internally_approved
         state :externally_approved
         state :funded
+        state :rejected
         state :withdrawn
 
         event :submit do
-          transitions from: :in_progress, to: :submitted
+          transitions from: :in_progress, to: :submitted,
+            guard: Proc.new {|*args| draws.any? },
+            after: Proc.new {|*args| submit_draw_costs(*args) }
         end
 
         event :approve_internal do
@@ -37,7 +40,7 @@ module Draws
         end
 
         event :reject do
-          transitions from: %i{ internally_approved externally_approved }, to: :submitted
+          transitions from: %i{ internally_approved externally_approved }, to: :rejected
         end
 
         event :withdraw do
@@ -84,6 +87,13 @@ module Draws
 
       def allow_draw_cost_changes?
         ALLOW_DRAW_COST_CHANGE_STATES.include?(state)
+      end
+
+      def submit_draw_costs(user)
+        draw_costs.reload
+        draw_costs.pending.each do |draw_cost|
+          draw_cost.trigger_event(event_name: :submit, user: user)
+        end
       end
 
     end

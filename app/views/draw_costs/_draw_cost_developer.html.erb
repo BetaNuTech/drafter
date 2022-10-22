@@ -1,6 +1,6 @@
 <%= turbo_frame_tag draw_cost do %>
   <div class="row p-3 d-flex justify-content-center">
-    <div class="position-absolute top-10 start-50 translate-middle border border-1 border-secondary bg-<%= draw_cost.state_css_class %> text-white text-center" style="width: 10rem">
+    <div class="position-absolute top-10 start-50 translate-middle border border-1 bg-<%= draw_cost.state_css_class %> text-white text-center" style="width: 10rem">
       <%= draw_cost.state.titleize %>
     </div>
 

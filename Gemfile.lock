@@ -443,7 +443,7 @@ DEPENDENCIES
   pry-byebug
   pry-doc
   pry-stack_explorer
-  puma
+  puma (~> 6.0)
   pundit
   rack-mini-profiler
   rails

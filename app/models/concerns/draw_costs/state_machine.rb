@@ -25,12 +25,9 @@ module DrawCosts
         state :withdrawn
 
         event :submit do
-          transitions from: [:pending], to: :submitted,
-            before: Proc.new{|user|
-              invoices.pending.each do |invoice|
-                invoice.trigger_event(event_name: :submit, user: user)
-              end
-          }
+          transitions from: [:pending], to: :submitted, 
+            guard: Proc.new { |*args| invoices.any?},
+            after: Proc.new { |*args| submit_invoices(*args)}
         end
 
         event :approve do
@@ -86,7 +83,13 @@ module DrawCosts
         draw.allow_draw_cost_changes? &&
           ALLOW_INVOICE_CHANGE_STATES.include?(state)
       end
-      
+
+      def submit_invoices(user)
+        invoices.reload
+        invoices.pending.each do |invoice|
+          invoice.trigger_event(event_name: :submit, user: user)
+        end
+      end
     end
   end
 end

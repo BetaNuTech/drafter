@@ -30,7 +30,7 @@ class DrawCost < ApplicationRecord
   include DrawCosts::StateMachine
 
   ALLOWED_PARAMS = %i{project_cost_id total}.freeze
-  
+
   ### Associations
   belongs_to :draw
   belongs_to :project_cost
@@ -56,5 +56,4 @@ class DrawCost < ApplicationRecord
   def over_budget?
     project_cost_balance < 0
   end
-
 end
