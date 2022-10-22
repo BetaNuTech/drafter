@@ -37,8 +37,8 @@ class Project < ApplicationRecord
     end
   end
 
-  def allow_new_draw?(organization)
-    draws.pending.for_organization(organization).none?
+  def allow_new_draw?
+    draws.pending.none?
   end
 
   def budget_total

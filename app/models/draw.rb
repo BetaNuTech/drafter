@@ -36,7 +36,7 @@ class Draw < ApplicationRecord
 
   class IndexValidator < ActiveModel::Validator
     def validate(record)
-      return false unless record.organization.present? && record.project.present?
+      return false unless record.project.present?
 
       skope = record.project.draws.where(state: Draw::VISIBLE_STATES, index: record.index)
       conflict = record.new_record? ? skope.any? : skope.where.not(id: record.id).any?

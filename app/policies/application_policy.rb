@@ -19,4 +19,8 @@ class ApplicationPolicy
   def is_owner?
     record&.user == user
   end
+
+  def privileged_user?
+    user.admin? || user.executive?
+  end
 end

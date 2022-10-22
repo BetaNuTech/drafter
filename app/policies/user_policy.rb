@@ -66,7 +66,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def impersonate?
-    !record.deactivated? && user.administrator? && !record.administrator?
+    !record.deactivated? && ( user.administrator? ) && !record.administrator?
   end
 
   def assign_to_role?
