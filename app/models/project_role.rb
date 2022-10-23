@@ -17,11 +17,11 @@ class ProjectRole < ApplicationRecord
   OWNER_ROLE = :owner
   MANAGER_ROLE = :manager
   FINANCE_ROLE = :finance
-  CONSULTANT_ROLE = :consultant
+  INVESTOR_ROLE = :investor
   DEVELOPER_ROLE = :developer
-  HIERARCHY = [OWNER_ROLE, MANAGER_ROLE, FINANCE_ROLE, CONSULTANT_ROLE, DEVELOPER_ROLE]
+  HIERARCHY = [OWNER_ROLE, MANAGER_ROLE, FINANCE_ROLE, INVESTOR_ROLE, DEVELOPER_ROLE]
   MANAGER_ROLES = [OWNER_ROLE, MANAGER_ROLE]
-  INTERNAL_ROLES = [OWNER_ROLE, MANAGER_ROLE, FINANCE_ROLE, CONSULTANT_ROLE]
+  INTERNAL_ROLES = [OWNER_ROLE, MANAGER_ROLE, FINANCE_ROLE, INVESTOR_ROLE]
   EXTERNAL_ROLES = [DEVELOPER_ROLE]
 
   include Comparable
@@ -46,8 +46,8 @@ class ProjectRole < ApplicationRecord
     ProjectRole.where(slug: FINANCE_ROLE).first
   end
 
-  def self.consultant
-    ProjectRole.where(slug: CONSULTANT_ROLE).first
+  def self.investor
+    ProjectRole.where(slug: INVESTOR_ROLE).first
   end
 
   def self.developer
@@ -70,8 +70,8 @@ class ProjectRole < ApplicationRecord
     slug == DEVELOPER_ROLE.to_s
   end
 
-  def consultant?
-    slug == CONSULTANT_ROLE.to_s
+  def investor?
+    slug == INVESTOR_ROLE.to_s
   end
 
   def management?

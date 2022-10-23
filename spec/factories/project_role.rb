@@ -22,10 +22,10 @@ FactoryBot.define do
       description { 'finance role' }
     end
 
-    factory :consultant_project_role do
-      name { 'Consultant' }
-      slug { 'consultant' }
-      description { 'consultant role' }
+    factory :investor_project_role do
+      name { 'investor' }
+      slug { 'investor' }
+      description { 'investor role' }
     end
 
     factory :developer_project_role do

@@ -10,7 +10,7 @@ RSpec.shared_context "draw_service" do
   let(:owner_user) { project.owners.first }
   let(:manager_user) { project.managers.first }
   let(:finance_user) { project.finance.first }
-  let(:consultant_user) { project.consultants.first }
+  let(:investor_user) { project.investors.first }
   let(:developer_user) { project.developers.first }
   let(:developer_user_other_organization) { project.developers.select{|u| u.organization_id != developer_user.organization_id}.first }
   let(:non_project_user) { create(:user, role: user_role) }

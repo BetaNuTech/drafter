@@ -30,7 +30,7 @@ class Project < ApplicationRecord
       draws
     when user.project_internal?(self)
       draws
-    when user.project_consultant?(self)
+    when user.project_investor?(self)
       draws.visible
     else
       draws.where(organization: user.organization).visible

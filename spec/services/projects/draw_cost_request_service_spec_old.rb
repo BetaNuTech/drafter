@@ -33,8 +33,8 @@ RSpec.describe Projects::DrawCostRequestService do
           user = developer_user
           service = Projects::DrawCostRequestService.new(user: user, draw_cost: draw_cost)
         end
-        it 'allows project consultants' do
-          user = consultant_user
+        it 'allows project investors' do
+          user = investor_user
           service = Projects::DrawCostRequestService.new(user: user, draw_cost: draw_cost)
         end
         it 'allows project finance' do
@@ -92,9 +92,9 @@ RSpec.describe Projects::DrawCostRequestService do
           }.to raise_error(Projects::DrawCostRequestService::PolicyError)
         end
       end
-      describe 'as a consultant' do
+      describe 'as a investor' do
         it 'should not create a draw cost request' do
-          user = consultant_user
+          user = investor_user
           service = Projects::DrawCostRequestService.new(user: user, draw_cost: draw_cost)
           dcr = nil
           expect {
@@ -221,7 +221,7 @@ RSpec.describe Projects::DrawCostRequestService do
     end
     describe 'with an unauthorized user' do
       it 'should raise an error' do
-        user = consultant_user
+        user = investor_user
         service = Projects::DrawCostRequestService.new(user: user, draw_cost_request: existing_request)
         old_amount = existing_request.amount
         expect {
@@ -314,7 +314,7 @@ RSpec.describe Projects::DrawCostRequestService do
     end # Updating a submission
 
     describe 'with an unauthorized user' do
-      let(:user) { consultant_user }
+      let(:user) { investor_user }
       it 'will throw an error instead of updating the record' do
         draw_cost_request
         service = Projects::DrawCostRequestService.new(user: user, draw_cost: draw_cost)
@@ -343,7 +343,7 @@ RSpec.describe Projects::DrawCostRequestService do
     describe 'with an unauthorized user' do
       it 'should not change the submission state' do
         expect(submission.state).to eq('pending')
-        user = consultant_user
+        user = investor_user
         service = Projects::DrawCostRequestService.new(user: user, draw_cost_request: draw_cost_request)
         expect {
           service.remove_submission(submission)

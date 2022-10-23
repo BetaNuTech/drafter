@@ -27,8 +27,8 @@ RSpec.shared_context 'sample_projects' do
     project_finance = create(:user, role: user_role)
     add_project_user(user: project_finance, project: project, role: finance_project_role)
 
-    project_consultant = create(:user, role: user_role)
-    add_project_user(user: project_consultant, project: project, role: consultant_project_role)
+    project_investor = create(:user, role: user_role)
+    add_project_user(user: project_investor, project: project, role: investor_project_role)
 
     project_developer = create(:user, role: user_role)
     add_project_user(user: project_developer, project: project, role: developer_project_role)

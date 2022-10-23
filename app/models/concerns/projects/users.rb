@@ -22,8 +22,8 @@ module Projects
         project_users.includes(:user).where(project_role_id: ProjectRole.finance.id).map(&:user)
       end
 
-      def consultants
-        project_users.includes(:user).where(project_role_id: ProjectRole.consultant.id).map(&:user)
+      def investors
+        project_users.includes(:user).where(project_role_id: ProjectRole.investor.id).map(&:user)
       end
 
       def developers
