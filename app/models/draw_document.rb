@@ -37,6 +37,7 @@ class DrawDocument < ApplicationRecord
   ### Associations
   belongs_to :approver, class_name: 'User', optional: true
   belongs_to :draw
+  has_one :project, through: :draw
   belongs_to :user, optional: true
   has_one :organization, through: :user
   has_one_attached :document

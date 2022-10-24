@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     resources :draw_costs do
       post 'submit', to: 'draw_costs#submit'
     end
+    resources :draw_documents
   end
 
   resources :draw_costs do
