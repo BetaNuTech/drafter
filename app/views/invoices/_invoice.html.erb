@@ -21,7 +21,7 @@
     <div class="actions align-items-end">
       <%#= link_to('Submit', draw_cost_invoice_submit_path(draw_cost_id: invoice.draw_cost_id, invoice_id: invoice.id), data: {turbo_method: :post, turbo_confirm: 'Are you sure?'}, class: 'btn btn-sm btn-success m-1') if policy(invoice).submit? %>
       <%= link_to('Edit', edit_draw_cost_invoice_path(draw_cost_id: invoice.draw_cost_id, id: invoice.id), class: 'btn btn-sm btn-primary m-1') if policy(invoice).edit? %>
-      <%= link_to('Remove', draw_cost_invoice_path(draw_cost_id: invoice.draw_cost_id, id: invoice.id), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: 'btn btn-sm btn-danger') %>
+      <%= link_to('Remove', draw_cost_invoice_path(draw_cost_id: invoice.draw_cost_id, id: invoice.id), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: 'btn btn-sm btn-danger') if policy(invoice).remove? %>
     </div>
   </div>
 <% end %>

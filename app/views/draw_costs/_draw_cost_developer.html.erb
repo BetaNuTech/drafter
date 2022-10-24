@@ -4,7 +4,7 @@
       <%= draw_cost.state.titleize %>
     </div>
 
-    <div class="col p-4 bg-light border border-2 border-<%= draw_cost.state_css_class %>">
+    <div class="col p-4 shadow bg-light border border-2 border-<%= draw_cost.state_css_class %>">
       <div class="row">
         <div class="col d-flex justify-content-evenly">
           <%= render partial: 'draw_costs/add_invoice_button', locals: { draw_cost: draw_cost } %>
@@ -15,12 +15,12 @@
         <div class="col-4"> <!-- Draw cost left col -->
           <h5 style="border-bottom: 1px solid gray;"><%= draw_cost.project_cost&.name %></h5>  
           <p>
-            <b>Estimated Total:</b>
+            <b>Est. Draw Cost Total:</b>
             <span class="badge bg-success">
               <%= number_to_currency draw_cost.total %>
             </span>
             <br/>
-            <b>Invoice Total:</b>
+            <b>Invoices Total:</b>
             <span class="badge bg-success">
               <%= number_to_currency draw_cost.invoice_total %>
             </span>
@@ -36,7 +36,11 @@
         </div> <!-- END Draw cost left col -->
 
         <div class="col-8 d-flex flex-wrap p-2"> <!-- right col -- invoices -->
-          <%= render draw_cost.invoices.visible %>
+          <% if draw_cost.invoices.any? && policy(draw_cost.invoices.first).show? %>
+            <%= render draw_cost.invoices.visible %>
+          <% else %>
+            <em>None to Display</em>            
+          <% end %>
         </div> <!-- end invoices -->
       </div> <!-- end Main section -->
 

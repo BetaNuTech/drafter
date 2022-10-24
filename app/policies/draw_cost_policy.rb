@@ -21,12 +21,12 @@ class DrawCostPolicy < ApplicationPolicy
   end
 
   def index?
-    user.admin? || user.member?(record.project)
+    privileged_user? || user.member?(record.project)
   end
 
   def new?
     record.draw.allow_draw_cost_changes? &&
-      ( user.admin? ||
+      ( privileged_user? ||
         user.project_owner?(record.project) ||
         user.project_developer?(record.project) )
   end
@@ -36,14 +36,14 @@ class DrawCostPolicy < ApplicationPolicy
   end
 
   def show?
-    user.admin? ||
+    privileged_user? ||
       user.project_internal?(record.project) ||
       user.project_developer?(record.project)
   end
 
   def edit?
     record.draw.allow_draw_cost_changes? &&
-      ( user.admin? ||
+      ( privileged_user? ||
         user.project_internal?(record.project) ||
          user.project_developer?(record.project) )
   end
@@ -59,7 +59,7 @@ class DrawCostPolicy < ApplicationPolicy
 
   def destroy?
     record.draw.allow_draw_cost_changes? &&
-    ( user.admin? ||
+    ( privileged_user? ||
       user.project_owner?(record.project) ||
       ( user.project_developer?(record.project) &&
        user.organization_id == record.organization.id) )
@@ -71,20 +71,20 @@ class DrawCostPolicy < ApplicationPolicy
   end
 
   def approve?
-    user.admin? ||
+    privileged_user? ||
       user.project_management?(record.project) ||
       ( user.project_finance?(record.project) && record&.draw_cost.clean? )
   end
 
   def reject?
-    user.admin? ||
+    privileged_user? ||
       user.project_management?(record.project) ||
       user.project_owner?(record.project) ||
       user.project_finance?(record.project)
   end
 
   def add_document?
-    user.admin? ||
+    privileged_user? ||
       ( user.project_developer?(record.project) &&
        user.organization_id == record.organization.id)
       user.project_management?(record.project) ||
@@ -92,7 +92,7 @@ class DrawCostPolicy < ApplicationPolicy
   end
 
   def approve_document?
-    user.admin? ||
+    privileged_user? ||
       user.project_management?(record.project) ||
       user.project_owner?(record.project)
   end

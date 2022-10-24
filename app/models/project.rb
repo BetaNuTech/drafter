@@ -44,4 +44,14 @@ class Project < ApplicationRecord
   def budget_total
     project_costs.sum(:total)
   end
+
+  def sorted_members
+    members = project_users.includes(:project_role, :user).to_a
+    out = []
+    ProjectRole::HIERARCHY.each do |role|
+      out << members.select{|member| member.project_role.slug == role.to_s }.
+        sort_by{|member| member.user.name }
+    end
+    out.flatten
+  end
 end

@@ -62,6 +62,19 @@ class DrawService
     end
   end
 
+  def submit
+    raise PolicyError unless @policy.submit?
+
+    if @draw.permitted_state_events.include?(:submit)
+      @draw.trigger_event(event_name: :submit, user: @user)
+      SystemEvent.log(description: "Submitted Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      @project.draws.reload
+      return true
+    else
+      return false
+    end
+  end
+
   def approve_internal?
     raise PolicyError unless @policy.approve_internal?
 

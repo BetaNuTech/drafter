@@ -13,11 +13,11 @@ class ProjectCostPolicy < ApplicationPolicy
   end
 
   def index?
-    user.administrator? || user.project_internal?(project)
+    privileged_user? || user.project_internal?(project)
   end
 
   def new?
-    user.administrator? || user.project_management?(project)
+    privileged_user? || user.project_management?(project)
   end
 
   def create?
@@ -25,11 +25,11 @@ class ProjectCostPolicy < ApplicationPolicy
   end
 
   def show?
-    user.administrator? || user.project_internal?(project)
+    privileged_user? || user.project_internal?(project)
   end
 
   def edit?
-    user.administrator? || user.project_management?(project)
+    privileged_user? || user.project_management?(project)
   end
 
   def update?
@@ -38,7 +38,7 @@ class ProjectCostPolicy < ApplicationPolicy
 
   def destroy?
     record.draw_costs.empty? &&
-    ( user.administrator? || user.project_management?(project) )
+    ( privileged_user? || user.project_management?(project) )
   end
   
   def approve?

@@ -52,6 +52,13 @@ class DrawPolicy < ApplicationPolicy
     destroy?
   end
 
+  def submit?
+    record.permitted_state_events.include?(:submit) &&
+      ( privileged_user? ||
+        user.project_owner?(record.project) ||
+        user.project_developer?(record.project) )
+  end
+
   def set_reference?
     record.approved?
   end
