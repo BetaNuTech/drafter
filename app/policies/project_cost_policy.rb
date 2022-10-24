@@ -52,7 +52,9 @@ class ProjectCostPolicy < ApplicationPolicy
 
   def allowed_params
     case user
-    when -> (u) { u.administrator? }
+    when -> (u) { u.admin? }
+      ProjectCost::ALLOWED_PARAMS
+    when -> (u) { u.executive? }
       ProjectCost::ALLOWED_PARAMS
     when -> (u) { u.project_management?(record.project) }
       ProjectCost::ALLOWED_PARAMS
