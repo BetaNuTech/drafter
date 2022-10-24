@@ -16,7 +16,8 @@ class DrawCostSubmissionPolicy < ApplicationPolicy
   end
 
   def index?
-    user.administrator? || user.member?(record.project)
+    privileged_user? ||
+      user.member?(record.project)
   end
 
   def new?
@@ -31,7 +32,7 @@ class DrawCostSubmissionPolicy < ApplicationPolicy
 
   def show?
     user == record.user ||
-      user.admin? ||
+      privileged_user? ||
       user.project_owner?(record.project) ||
       user.project_management?(record.project) ||
       user.project_finance?(record.project) ||
@@ -41,7 +42,7 @@ class DrawCostSubmissionPolicy < ApplicationPolicy
 
   def edit?
     user == record.user ||
-      user.admin? ||
+      privileged_user? ||
       user.project_owner?(record.project) ||
       user.project_management?(record.project) ||
       user.project_finance?(record.project) ||
@@ -55,7 +56,7 @@ class DrawCostSubmissionPolicy < ApplicationPolicy
   
   def destroy?
     user == record.user ||
-      user.admin? ||
+      privileged_user? ||
       user.project_owner?(record.project)
   end
   
@@ -69,7 +70,7 @@ class DrawCostSubmissionPolicy < ApplicationPolicy
   end
 
   def approve?
-    user.admin? ||
+    privileged_user? ||
       user.project_owner?(record.project) ||
       user.project_management?(record.project) ||
       user.project_finance?(record.project)
@@ -82,6 +83,8 @@ class DrawCostSubmissionPolicy < ApplicationPolicy
   def allowed_params
     case user
     when -> (u) { u.admin? }
+      Invoice::ALLOWED_PARAMS + [:multi_invoice]
+    when -> (u) { u.executive? }
       Invoice::ALLOWED_PARAMS + [:multi_invoice]
     when -> (u) { u.project_owner?(record.project) }
       Invoice::ALLOWED_PARAM + [:multi_invoice]
