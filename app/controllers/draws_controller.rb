@@ -86,6 +86,14 @@ class DrawsController < ApplicationController
     end
   end
 
+  def add_document
+
+  end
+
+  def remove_document
+
+  end
+
   def approve_internal
     authorize @draw
     @service = DrawService.new(user: @current_user, project: @project, draw: @draw)

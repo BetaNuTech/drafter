@@ -76,6 +76,23 @@ class DrawPolicy < ApplicationPolicy
       user.project_developer?(record.project) )
   end
 
+  def add_document?
+    ( privileged_user? ||
+      user.project_owner?(record.project) ||
+      user.project_developer?(record.project) )
+  end
+
+  def remove_document?
+    ( privileged_user? ||
+      record.user == user ||
+      user.project_owner?(record.project) ||
+      user.project_developer?(record.project) )
+  end
+
+  def approve_document?
+    raise 'TODO'
+  end
+
   def allowed_params
     allow_params = Draw::ALLOWED_PARAMS
     case user
