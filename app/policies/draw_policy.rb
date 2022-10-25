@@ -70,12 +70,6 @@ class DrawPolicy < ApplicationPolicy
     # TODO invoices approved?
   end
 
-  def new_request?(organization)
-    ( privileged_user? ||
-      user.project_owner?(record.project) ||
-      user.project_developer?(record.project) )
-  end
-
   def add_document?
     ( privileged_user? ||
       user.project_owner?(record.project) ||
