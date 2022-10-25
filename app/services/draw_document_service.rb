@@ -10,7 +10,37 @@ class DrawDocumentService
     @project = @draw.project
     @organization = @draw.organization
     @draw_document = draw_document || DrawDocument.new(draw: @draw, user: @user)
-    @draw_document_policy = DrawDocumentPolicy.new(@user, @draw_document)
+    @policy = DrawDocumentPolicy.new(@user, @draw_document)
+  end
+
+  def errors?
+    @errors.any?
+  end
+
+  def create(params)
+    raise PolicyError.new unless @policy.create?
+
+    reset_errors
+
+    @draw_document = DrawDocument.new(sanitize_draw_document_params(params))
+    @draw_document.draw = @draw
+    @draw_document.user = @user
+    if @draw_document.save
+      SystemEvent.log(description: "Added #{@draw_document.description} Document for Draw '#{@draw.index}'", event_source: @project, incidental: @current_user, severity: :warn)
+      @draw.draw_documents.reload
+    else
+      @errors = @draw_document.errors.full_messages
+    end
+      @draw_document
+  end
+
+  def remove(document)
+    raise PolicyError.new unless @policy.destroy?
+
+    @draw_document.destroy
+      SystemEvent.log(description: "Added Document for Draw '#{@draw.index}'", event_source: @project, incidental: @current_user, severity: :warn)
+    @draw.draw_documents.reload
+    true
   end
 
   private
