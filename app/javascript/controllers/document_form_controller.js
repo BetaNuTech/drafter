@@ -5,7 +5,7 @@ export default class extends Controller {
 
   connect() {
     const submit_button_el = this.submit_buttonTarget
-    if this.file_present() {
+    if ( this.file_present() ) {
       submit_button_el.removeAttribute('disabled')
     }
   }
@@ -14,7 +14,7 @@ export default class extends Controller {
     const upload_image_el = this.file_upload_promptTarget
     const selected_image_el = this.file_selected_imageTarget
     const submit_button_el = this.submit_buttonTarget
-    if this.file_present() {
+    if ( this.file_present() ) {
       upload_image_el.classList.add('d-none')
       selected_image_el.classList.remove('d-none')
       submit_button_el.removeAttribute('disabled')

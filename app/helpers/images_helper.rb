@@ -14,7 +14,7 @@ module ImagesHelper
     square_x_image: 'x-square-fill.svg',
     square_x_open: 'x-square.svg',
     upload: 'cloud-upload-fill.svg',
-    uploaded: 'cloud-check-fill.svg'
+    uploaded: 'cloud-check-fill.svg',
   }.freeze
 
   # Render SVG icon inline: inline_icon(icon: :icon_name, size: 30, fill: :black, opacity: 1.0, html: {id: })
@@ -25,6 +25,9 @@ module ImagesHelper
         opacity: 1.0
       }.merge(icon_args)
     style = "height: #{args[:size]}px; width: #{args[:size]}px, fill: #{args[:fill]}, opacity: #{args[:opacity]}" 
+    if icon_args.dig(:html, :style).present?
+      style << "; " + icon_args[:html][:style]
+    end
     svg_data = load_icon(args[:icon]).sub('<svg ', "<svg style=\"#{style}\" ").sub('fill="currentColor"',"fill=\"#{args[:fill]}\"")
     base64_data = Base64.encode64(svg_data)
     content_args = args.fetch(:html,{}).merge({ style:, escape: false, src: "data:image/svg+xml;base64, " + base64_data })
