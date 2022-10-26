@@ -1,0 +1,48 @@
+<div id="<%= dom_id(document) %>" class="document_card document_form  d-flex flex-column justify-content-evenly text-center m-1 shadow-sm" data-controller="document-form">
+  <% if document.new_record? %>
+    <% form_url = draw_cost_documents_path(draw_cost_id: document.draw_cost_id) %>
+  <% else %>
+    <% form_url = draw_cost_document_path(draw_cost_id: document.draw_cost_id, id: document.id) %>
+  <% end %>
+  <%= form_with(model: document, url: form_url, multipart: true) do |form| %>
+    <% if document.new_record? %>
+      <h4>Upload Document</h4>
+    <% else %>
+      <h4>Update Document</h4>
+    <% end %>
+    <hr/>
+    <div class="preview_container" data-document-form-target='document' data-hasdocument="<%= document.document.attached? %>" >
+        <% if document.document.attached? %>
+          <%= image_tag preview_document(document: document.document, resize: [150,150]) %>
+        <% end %>
+      </div>
+    <% if document.new_record? %>
+      <div class="card_upload_button">
+        <%= form.label :document, style: 'display: block;' do %>
+          <span id="select_pdf">
+            <%= inline_icon(icon: :uploaded, fill: :green, html: {class: 'upload_image d-none', id: 'image_uploaded_icon', data: {document_form_target: 'file_selected_image'}}) %>
+            <span data-document-form-target="file_upload_prompt">
+              <%= inline_icon(icon: :upload, fill: :black, html: {class: 'upload_image'}) %>
+              <br/>
+              Select PDF...
+            </span>
+          </span>
+          <%= form.file_field :document, class: 'visually-hidden', data: { action: 'change->document-form#file_changed', document_form_target:  'file_field' }  %>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="body">
+      <%= turbo_frame_tag dom_id(document, 'errors') do %>
+        <%= render partial: 'shared/object_errors', locals: { object: document } %>
+      <% end %>
+      <div class="form-floating pt-2">
+        <%= form.text_field :description, { class: 'form-control'} %>
+        <%= form.label :description, 'Optional Description' %>
+      </div>
+    </div>
+    <div class="actions align-items-end">
+      <%= form.submit 'Submit', class: 'btn btn-sm btn-success m-1', data: {document_form_target: 'submit_button'}, disabled: :disabled %>
+      <%= link_to('Cancel', :back, class: 'btn btn-sm btn-light' ) %>
+    </div>
+  <% end %>
+</div>

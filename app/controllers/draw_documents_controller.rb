@@ -49,7 +49,6 @@ class DrawDocumentsController < ApplicationController
     @service.remove
   end
 
-
   private
 
   def draw_record_scope
