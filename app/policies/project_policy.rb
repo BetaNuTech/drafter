@@ -2,9 +2,7 @@ class ProjectPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       case user
-      when -> (u) { u.admin? }
-        scope
-      when -> (u) { u.executive? }
+      when -> (u) { u.admin? || u.executive? }
         scope
       else
         user.projects
@@ -15,11 +13,11 @@ class ProjectPolicy < ApplicationPolicy
   def index?
     return false unless user
 
-    user.administrator?
+    privileged_user?
   end
 
   def new?
-    user.administrator?
+    privileged_user?
   end
 
   def create?
@@ -27,11 +25,11 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def show?
-    user.administrator? || user.member?(record)
+    privileged_user? || user.member?(record)
   end
 
   def edit?
-    user.administrator? || user.project_management?(record)
+    privileged_user? || user.project_owner?(record)
   end
 
   def update?
@@ -39,11 +37,11 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.administrator?
+    privileged_user? || user.project_owner?(record)
   end
 
   def add_member?
-    edit?
+    edit? || user.project_management?(record)
   end
 
   def remove_member?
@@ -52,7 +50,7 @@ class ProjectPolicy < ApplicationPolicy
 
   def allowed_params
     case user
-    when ->(u) { u.administrator? }
+    when ->(u) { u.admin? || u.executive? }
       Project::ALLOWED_PARAMS
     when -> (u) { u.project_manager?(record) }
       Project::ALLOWED_PARAMS

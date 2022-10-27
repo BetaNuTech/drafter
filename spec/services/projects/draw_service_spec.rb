@@ -49,9 +49,9 @@ RSpec.describe DrawService do
     end
     describe 'as a non-authorized user' do
       it 'does not create a draw' do
-        consultant_user.organization = nil
-        consultant_user.save!
-        service = DrawService.new(user: consultant_user, project: project)
+        investor_user.organization = nil
+        investor_user.save!
+        service = DrawService.new(user: investor_user, project: project)
         expect {
           draw = service.create(valid_draw_attributes) rescue nil
         }.to_not change{Draw.count}

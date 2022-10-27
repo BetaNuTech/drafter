@@ -1,0 +1,52 @@
+<div id="<%= dom_id(draw_document) %>" class="draw_document_card draw_document_form  d-flex flex-column justify-content-evenly text-center m-1 shadow-sm" data-controller="document-form">
+  <% if draw_document.new_record? %>
+    <% form_url = draw_draw_documents_path(draw_id: draw_document.draw_id) %>
+  <% else %>
+    <% form_url = draw_draw_document_path(draw_id: draw_document.draw_id, id: draw_document.id) %>
+  <% end %>
+  <%= form_with(model: draw_document, url: form_url, multipart: true) do |form| %>
+    <% if draw_document.new_record? %>
+      <h4>Upload Document</h4>
+    <% else %>
+      <h4>Update Document</h4>
+    <% end %>
+    <hr/>
+    <div class="preview_container" data-document-form-target='document' data-hasdocument="<%= draw_document.document.attached? %>" >
+        <% if draw_document.document.attached? %>
+          <%= image_tag preview_document(document: draw_document.document, resize: [150,150]) %>
+        <% end %>
+      </div>
+    <% if draw_document.new_record? %>
+      <div class="card_upload_button">
+        <%= form.label :document, style: 'display: block;' do %>
+          <span id="select_pdf">
+            <%= inline_icon(icon: :uploaded, fill: :green, html: {class: 'upload_image d-none', id: 'image_uploaded_icon', data: {document_form_target: 'file_selected_image'}}) %>
+            <span data-document-form-target="file_upload_prompt">
+              <%= inline_icon(icon: :upload, fill: :black, html: {class: 'upload_image'}) %>
+              <br/>
+              Select PDF...
+            </span>
+          </span>
+          <%= form.file_field :document, class: 'visually-hidden', data: { action: 'change->document-form#file_changed', document_form_target:  'file_field' }  %>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="body">
+      <%= turbo_frame_tag dom_id(draw_document, 'errors') do %>
+        <%= render partial: 'shared/object_errors', locals: { object: draw_document } %>
+      <% end %>
+      <div class="form-floating pt-2">
+        <%= form.select :documenttype, draw_document_documenttype_options(draw: draw_document.draw, draw_document: draw_document), {}, { class: 'form-control'} %>
+        <%= form.label :documenttype, 'Document Type' %>
+      </div>
+      <div class="form-floating pt-2">
+        <%= form.text_field :notes, { class: 'form-control'} %>
+        <%= form.label :notes, 'Optional Description' %>
+      </div>
+    </div>
+    <div class="actions align-items-end">
+      <%= form.submit 'Submit', class: 'btn btn-sm btn-success m-1', data: {document_form_target: 'submit_button'}, disabled: :disabled %>
+      <%= link_to('Cancel', :back, class: 'btn btn-sm btn-light' ) %>
+    </div>
+  <% end %>
+</div>

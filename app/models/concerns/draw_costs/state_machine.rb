@@ -11,7 +11,7 @@ module DrawCosts
     included do
       class TransitionError < StandardError; end;
 
-      ALLOW_INVOICE_CHANGE_STATES = %{pending}
+      ALLOW_INVOICE_CHANGE_STATES = %i{pending}
       VISIBLE_STATES = %i{pending submitted approved rejected}
       scope :visible, -> { where(state: VISIBLE_STATES) }
 
@@ -25,12 +25,9 @@ module DrawCosts
         state :withdrawn
 
         event :submit do
-          transitions from: [:pending], to: :submitted,
-            before: Proc.new{|user|
-              invoices.pending.each do |invoice|
-                invoice.trigger_event(event_name: :submit, user: user)
-              end
-          }
+          transitions from: [:pending], to: :submitted, 
+            guard: Proc.new { |*args| invoices.any?},
+            after: Proc.new { |*args| submit_invoices(*args)}
         end
 
         event :approve do
@@ -84,9 +81,15 @@ module DrawCosts
 
       def allow_invoice_changes?
         draw.allow_draw_cost_changes? &&
-          ALLOW_INVOICE_CHANGE_STATES.include?(state)
+          ALLOW_INVOICE_CHANGE_STATES.include?(state.to_sym)
       end
-      
+
+      def submit_invoices(user)
+        invoices.reload
+        invoices.pending.each do |invoice|
+          invoice.trigger_event(event_name: :submit, user: user)
+        end
+      end
     end
   end
 end

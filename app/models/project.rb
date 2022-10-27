@@ -30,18 +30,37 @@ class Project < ApplicationRecord
       draws
     when user.project_internal?(self)
       draws
-    when user.project_consultant?(self)
+    when user.project_investor?(self)
       draws.visible
     else
       draws.where(organization: user.organization).visible
     end
   end
 
-  def allow_new_draw?(organization)
-    draws.pending.for_organization(organization).none?
+  def allow_new_draw?
+    draws.pending.none?
   end
 
   def budget_total
     project_costs.sum(:total)
+  end
+
+  def draw_total
+    draws.map(&:draw_cost_total).sum
+  end
+
+  # TODO: account for change requests
+  def total_contract_remaining
+    budget_total - draw_total
+  end
+
+  def sorted_members
+    members = project_users.includes(:project_role, :user).to_a
+    out = []
+    ProjectRole::HIERARCHY.each do |role|
+      out << members.select{|member| member.project_role.slug == role.to_s }.
+        sort_by{|member| member.user.name }
+    end
+    out.flatten
   end
 end

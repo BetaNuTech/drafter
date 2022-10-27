@@ -20,7 +20,7 @@
     <div class="row g-1">
       <div class="col">
         <%= turbo_frame_tag 'project_users' do %>
-          <% render partial: 'project_users/project_user', collection: project.project_users %>
+          <% render partial: 'project_users/project_user', collection: project.sorted_members%>
         <% end %>
       </div>
     </div>

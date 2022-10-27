@@ -62,6 +62,19 @@ class DrawService
     end
   end
 
+  def submit
+    raise PolicyError unless @policy.submit?
+
+    if @draw.permitted_state_events.include?(:submit)
+      @draw.trigger_event(event_name: :submit, user: @user)
+      SystemEvent.log(description: "Submitted Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      @project.draws.reload
+      return true
+    else
+      return false
+    end
+  end
+
   def approve_internal?
     raise PolicyError unless @policy.approve_internal?
 
@@ -87,6 +100,28 @@ class DrawService
     end
   end
 
+  def add_document(params)
+    raise PolicyError unless @policy.add_document?
+
+    reset_errors
+
+    document = DrawDocument.new(sanitize_document_params(params))
+    document.draw = @draw
+    document.user = @user
+    if document.save
+      SystemEvent.log(description: "#{document.documenttype} Document added for Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      @draw.draw_documents.reload 
+      document
+    else
+      @errors = document.errors.full_messages
+      document
+    end
+  end
+
+  def remove_document(document)
+    raise 'TODO'
+  end
+
   def draws
     DrawPolicy::Scope.new(@user, @project.draws).resolve
   end
@@ -99,6 +134,15 @@ class DrawService
 
   def sanitize_params(params)
     allowed_params = @policy.allowed_params
+    if params.is_a?(ActionController::Parameters)
+      params.permit(*allowed_params)
+    else
+      params.select{|k,v| allowed_params.include?(k.to_sym) }
+    end
+  end
+
+  def sanitize_document_params(params)
+    allowed_params = DrawDocument::ALLOWED_PARAMS
     if params.is_a?(ActionController::Parameters)
       params.permit(*allowed_params)
     else

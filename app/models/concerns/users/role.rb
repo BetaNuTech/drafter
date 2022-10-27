@@ -15,6 +15,7 @@ module Users
       end
 
       def administrator?
+        raise 'DEPRECATED'
         admin? || executive?
       end
 

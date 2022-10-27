@@ -2,27 +2,23 @@ class DrawPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       case user
-      when -> (u) { u.admin? }
-        scope
-      when -> (u) { u.executive? }
+      when -> (u) { u.admin? || u.executive? }
         scope
       else
-        scope.where(project: user.projects, organization: user.organization)
+        scope.where(project: user.projects)
       end
     end
   end
 
   def index?
-    user.admin? || user.member?(record.project)
+    privileged_user? || user.member?(record.project)
   end
 
   def new?
-    record.project.allow_new_draw?(user.organization) &&
-      (
-        user.admin? ||
-          user.project_developer?(record.project) ||
-          user.project_management?(record.project) 
-      )
+    record.project.allow_new_draw? &&
+      ( privileged_user? ||
+        user.project_developer?(record.project) ||
+        user.project_management?(record.project) )
   end
 
   def create?
@@ -30,19 +26,15 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def show?
-    user.admin? ||
-      user.project_management?(record.project) ||
-      ( record.organization.present? &&
-          user.organization == record.organization &&
-          user.member?(record.project) )
+    privileged_user? ||
+      user.member?(record.project) 
   end
 
   def edit?
-    user.admin? ||
+    privileged_user? ||
       user.project_management?(record.project) ||
-      ( record.organization.present? &&
-          user.organization == record.organization &&
-          user.member?(record.project) )
+      ( ( record.pending? || record.rejected? ) &&
+          user.project_developer?(record.project) ) 
   end
 
   def update?
@@ -50,15 +42,21 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.admin? ||
-      user.project_owner?(record.project) ||
-      ( record.permitted_state_events.include?(:withdraw) &&
-        user.project_developer?(record.project) &&
-        own_organization? )
+    record.permitted_state_events.include?(:withdraw) &&
+      ( privileged_user? ||
+        user.project_owner?(record.project) ||
+        user.project_developer?(record.project) )
   end
 
   def withdraw?
     destroy?
+  end
+
+  def submit?
+    record.permitted_state_events.include?(:submit) &&
+      ( privileged_user? ||
+        user.project_owner?(record.project) ||
+        user.project_developer?(record.project) )
   end
 
   def set_reference?
@@ -67,25 +65,32 @@ class DrawPolicy < ApplicationPolicy
 
   def approve_internal?
     raise 'TODO'
-    user.admin? ||
+    privileged_user? ||
       user.project_internal?(record.project)
     # TODO invoices approved?
   end
 
-  def own_organization?
-    user.organization == record.organization
-  end
-
-  def new_request?(organization)
-    ( user.admin? ||
+  def add_document?
+    ( privileged_user? ||
       user.project_owner?(record.project) ||
       user.project_developer?(record.project) )
+  end
+
+  def remove_document?
+    ( privileged_user? ||
+      record.user == user ||
+      user.project_owner?(record.project) ||
+      user.project_developer?(record.project) )
+  end
+
+  def approve_document?
+    raise 'TODO'
   end
 
   def allowed_params
     allow_params = Draw::ALLOWED_PARAMS
     case user
-    when -> (u) { u.administrator? }
+    when -> (u) { u.admin? || u.executive? }
       allow_params << :organization_id
       allow_params << :reference if record.funded?
       allow_params

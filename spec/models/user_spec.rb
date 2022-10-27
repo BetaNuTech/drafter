@@ -77,14 +77,12 @@ RSpec.describe User, type: :model do
       user.role = admin_role
       user.save
       assert(user.admin?)
-      assert(user.administrator?)
       refute(user.user?)
 
       user.role = executive_role
       user.save
       refute(user.admin?)
       assert(user.executive?)
-      assert(user.administrator?)
       refute(user.user?)
 
       user.role = user_role

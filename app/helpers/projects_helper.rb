@@ -4,7 +4,7 @@ module ProjectsHelper
       owner: 'danger',
       manager: 'warning',
       finance: 'success',
-      consultant: 'info',
+      investor: 'info',
       developer: 'primary'
     }.fetch(role.slug.to_sym, :developer)
   end

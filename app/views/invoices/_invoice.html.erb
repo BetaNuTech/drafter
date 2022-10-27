@@ -1,8 +1,10 @@
 <%= turbo_frame_tag invoice do %>
-  <div id="<%= dom_id(invoice) %>" class="invoice_card d-flex flex-column justify-content-evenly text-center m-1 shadow-sm mt-3" style="position: relative;">
-    <div class="position-absolute start-50 translate-middle border border-1 border-<%= invoice.state_css_class %> bg-<%= invoice.state_css_class %> text-white text-center" style="width: 8rem; top: 0;">
-      <%= invoice.state.titleize %>
-    </div>
+  <div id="<%= dom_id(invoice) %>" class="invoice_card d-flex flex-column justify-content-evenly text-center m-1 shadow-sm mt-3" style="position: relative;" data-controller="invoice-card">
+    <% unless invoice.pending? %>
+      <div class="position-absolute start-50 translate-middle border border-1 border-<%= invoice.state_css_class %> bg-<%= invoice.state_css_class %> text-white text-center" style="width: 8rem; top: 0;">
+        <%= invoice.state.titleize %>
+      </div>
+  <% end %>
     <h4>Invoice</h4>
     <% if invoice.document.attached? %>
       <div class="preview_container">
@@ -14,12 +16,15 @@
     <div class="body">
       <small><%= short_date invoice.updated_at %></small><br/>
       <span class="badge bg-success"><%= number_to_currency invoice.amount %></span><br/>
-      <p style="line-height: 1em; padding: 0.5em;"><%= truncate invoice.description, length: 60 %></p>
+      <% icon_attrs = invoice.description.present? ? {fill: :blue, opacity: 1.0, description: invoice.description } : {fill: :lightgray, opacity: 0.1, description: ''} %>
+      <%= inline_icon(icon: :info, size: 35, fill: icon_attrs[:fill], opacity: icon_attrs[:opacity],
+                      html: { id: dom_id(invoice, 'description_popover') ,class: "invoice_description_popover p-1", style: "cursor: pointer",
+                              data: { bs_toggle: :popover, bs_placement: :bottom, bs_content: icon_attrs[:description], bs_trigger: 'click hover' } } ) %>
     </div>
     <div class="actions align-items-end">
-      <%= link_to('Submit', draw_cost_invoice_submit_path(draw_cost_id: invoice.draw_cost_id, invoice_id: invoice.id), data: {turbo_method: :post, turbo_confirm: 'Are you sure?'}, class: 'btn btn-sm btn-success m-1') if policy(invoice).submit? %>
       <%= link_to('Edit', edit_draw_cost_invoice_path(draw_cost_id: invoice.draw_cost_id, id: invoice.id), class: 'btn btn-sm btn-primary m-1') if policy(invoice).edit? %>
-      <%= link_to('Remove', draw_cost_invoice_path(draw_cost_id: invoice.draw_cost_id, id: invoice.id), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: 'btn btn-sm btn-danger') %>
+      <%= link_to('Remove', draw_cost_invoice_path(draw_cost_id: invoice.draw_cost_id, id: invoice.id), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: 'btn btn-sm btn-danger') if policy(invoice).remove? %>
     </div>
   </div>
 <% end %>
+

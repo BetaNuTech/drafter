@@ -34,8 +34,8 @@ div.invoice_form {
   width: 400px !important;
 }
 
-div.invoice_card {
-  width: 240px;
+div.invoice_card, div.draw_document_card {
+  width: 200px;
   height: 24em;
   padding: 1em;
   border: 1px solid #ccc;
@@ -60,7 +60,7 @@ div.invoice_card {
   }
 }
 
-div.invoice_form {
+div.invoice_form, div.draw_document_form {
   width: 400px !important;
   height: auto !important;
 }

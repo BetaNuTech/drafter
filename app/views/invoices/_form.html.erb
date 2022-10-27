@@ -20,9 +20,10 @@
       <div class="card_upload_button">
         <%= form.label :document, style: 'display: block;' do %>
           <span id="select_pdf">
-            <%= image_tag(uploaded_image, class: 'upload_image d-none', id: 'image_uploaded_icon', data: {invoice_form_target: 'file_selected_image'}) %>
+            <%= inline_icon(icon: :uploaded, fill: :green, html: {class: 'upload_image d-none', id: 'image_uploaded_icon', data: {invoice_form_target: 'file_selected_image'}}) %>
             <span data-invoice-form-target="file_upload_prompt">
-              <%= image_tag(upload_image, class: 'upload_image') %><br/>
+              <%= inline_icon(icon: :upload, fill: :black, html: {class: 'upload_image'}) %>
+              <br/>
               Select PDF...
             </span>
           </span>

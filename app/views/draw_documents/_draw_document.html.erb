@@ -1,0 +1,23 @@
+<%= turbo_frame_tag draw_document do %>
+  <div id="<%= dom_id(draw_document) %>" class="draw_document_card d-flex flex-column justify-content-evenly text-center m-1 shadow-sm mt-3" style="position: relative;" data-controller="draw_document-card">
+    <h4><%= draw_document.documenttype.capitalize %> Document</h4>
+    <% if draw_document.document.attached? %>
+      <div class="preview_container">
+        <%= link_to(rails_blob_path(draw_document.document), target: '_blank') do %>
+          <%= image_tag preview_document(document: draw_document.document, resize: [150,150]), class: 'align-middle' %>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="body">
+      <small><%= short_date draw_document.updated_at %></small><br/>
+      <% icon_attrs = draw_document.notes.present? ? {fill: :blue, opacity: 1.0, description: draw_document.notes } : {fill: :lightgray, opacity: 0.1, description: ''} %>
+      <%= inline_icon(icon: :info, size: 35, fill: icon_attrs[:fill], opacity: icon_attrs[:opacity],
+                      html: { id: dom_id(draw_document, 'description_popover') ,class: "draw_document_description_popover p-1", style: "cursor: pointer",
+                              data: { bs_toggle: :popover, bs_placement: :bottom, bs_content: icon_attrs[:description], bs_trigger: 'click hover' } } ) %>
+    </div>
+    <div class="actions align-items-end">
+      <%= link_to('Remove', draw_draw_document_path(draw_id: draw_document.draw_id, id: draw_document.id), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: 'btn btn-sm btn-danger') if policy(draw_document).destroy? %>
+    </div>
+  </div>
+<% end %>
+

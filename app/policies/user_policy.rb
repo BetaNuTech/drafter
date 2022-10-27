@@ -66,7 +66,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def impersonate?
-    !record.deactivated? && user.administrator? && !record.administrator?
+    !record.deactivated? && ( user.admin? ) && !record.admin?
   end
 
   def assign_to_role?
@@ -115,7 +115,7 @@ class UserPolicy < ApplicationPolicy
     when nil
       valid_user_params = []
       valid_user_profile_params = []
-    when ->(u) { u.administrator? }
+    when ->(u) { u.admin? }
       # All valid fields allowed
       # Allow setting feature flags
       valid_user_params = valid_user_params + [:active, :role_id, :organization_id]
@@ -151,7 +151,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def manage_features?
-    user&.administrator?
+    user&.admin?
   end
 
   def roles_for_select

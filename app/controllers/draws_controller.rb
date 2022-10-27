@@ -20,7 +20,6 @@ class DrawsController < ApplicationController
     #@difference_to_amounts = @draw_cost_requests.map(&:difference_to_amount).sum
     breadcrumbs.add(label: 'Home', url: '/')
     breadcrumbs.add(label: @project.name, url: project_path(@project))
-    breadcrumbs.add(label: 'Draws' )
     breadcrumbs.add(label: @draw.name, url: project_draw_path(project_id: @project.id), active: true)
   end
 
@@ -85,6 +84,14 @@ class DrawsController < ApplicationController
     else
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def add_document
+
+  end
+
+  def remove_document
+
   end
 
   def approve_internal
