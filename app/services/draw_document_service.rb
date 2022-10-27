@@ -9,7 +9,7 @@ class DrawDocumentService
     @errors = []
     @project = @draw.project
     @organization = @draw.organization
-    @draw_document = draw_document || DrawDocument.new(draw: @draw, user: @user)
+    @draw_document = draw_document || DrawDocument.new(draw: @draw, user: @user, notes: nil)
     @policy = DrawDocumentPolicy.new(@user, @draw_document)
   end
 
@@ -34,11 +34,12 @@ class DrawDocumentService
       @draw_document
   end
 
-  def remove(document)
+  def remove
     raise PolicyError.new unless @policy.destroy?
 
+    document_type = @draw_document.documenttype.capitalize
     @draw_document.destroy
-      SystemEvent.log(description: "Added Document for Draw '#{@draw.index}'", event_source: @project, incidental: @current_user, severity: :warn)
+    SystemEvent.log(description: "Removed #{document_type} Document for Draw '#{@draw.index}'", event_source: @project, incidental: @current_user, severity: :warn)
     @draw.draw_documents.reload
     true
   end
@@ -50,7 +51,7 @@ class DrawDocumentService
   end
 
   def sanitize_draw_document_params(params)
-    allowed_params = @draw_document_policy.allowed_params
+    allowed_params = @policy.allowed_params
     if params.is_a?(ActionController::Parameters)
       params.permit(*allowed_params)
     else

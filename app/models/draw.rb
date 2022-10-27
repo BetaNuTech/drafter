@@ -107,46 +107,15 @@ class Draw < ApplicationRecord
     approved? 
   end
 
-  def active_organization_requests(organization)
-    #draw_costs.where(draw: self, organization: organization, state: DrawCost::EXISTING_STATES)
-    []
-  end
-
-  def active_requests_for?(obj)
-    #org = case obj
-          #when Organization
-            #obj
-          #when User
-            #obj.organization
-          #else
-            #return false
-          #end
-    #active_organization_requests(org).any?
-    []
-  end
-
-  def provisional_request_total_for(organization)
-    #draw_costs.
-      #visible.
-      #where(organization: organization).
-      #map(&:provisional_total).
-      #sum
-    0.0
-  end
-
-  def request_total_for(organization)
-    #draw_costs.
-      #approved.
-      #where(organization: organization).
-      #sum(:total)
-    0.0
-  end
-
   def assign_index
     if new_record?
       _next_index = next_index
       self.index = _next_index unless self.index >= _next_index
     end
+  end
+
+  def remaining_documents
+    ( ['other'] + ( DrawDocument.documenttypes.keys.map(&:to_s) - draw_documents.pluck(:documenttype) ) ).uniq
   end
 
 end

@@ -56,21 +56,6 @@ class DrawDocumentPolicy < ApplicationPolicy
   end
 
   def allowed_params
-    allow_params = Draw::ALLOWED_PARAMS
-    case user
-    when -> (u) { u.admin? || u.executive? }
-      allow_params << :organization_id
-      allow_params << :reference if record.funded?
-      allow_params
-    when -> (u) { u.project_management?(record.project) }
-      allow_params << :organization_id
-      allow_params << :reference if record.funded?
-      allow_params
-    when -> (u) { u.project_finance?(record.project) }
-      allow_params << :reference if record.funded?
-      allow_params
-    else
-      allow_params
-    end
+    DrawDocument::ALLOWED_PARAMS
   end
 end

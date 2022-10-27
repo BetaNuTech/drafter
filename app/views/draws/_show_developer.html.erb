@@ -13,30 +13,34 @@
           <%= number_to_currency draw.draw_cost_total %>
         <% end %>
       </h3>
-      <h4 class="text-center">
-        Project Budget:
-        <%= turbo_frame_tag(:total_cost, draw.project) do %>
-          <%= number_to_currency draw.project.budget_total %>
-        <% end %>
-      </h4>
     </div>
   </div>
 
   <div class="row">
     <div class="col p-2">
-      <%= turbo_frame_tag 'new_draw_cost' do %>
-        <%= link_to('Add Draw Cost',
-                      new_draw_draw_cost_path(draw_id: draw.id),
-                      class: 'btn btn-primary', data: {turbo_frame: dom_id(draw, 'new_draw_cost' )}) if policy(DrawCost.new(draw: draw)).new? %>
-      <% end %>
       <%= link_to('Submit','#') if policy(draw).submit? %>
     </div>
   </div>
 
   <div class="row">
-    <div class="col">
+    <div class="col m-2 p-3 border shadow">
+      <h3 class="text-center">Costs</h3>
+      <%= turbo_frame_tag 'new_draw_cost' do %>
+        <%= link_to('Add Draw Cost',
+                      new_draw_draw_cost_path(draw_id: draw.id),
+                      class: 'btn btn-primary', data: {turbo_frame: dom_id(draw, 'new_draw_cost' )}) if policy(DrawCost.new(draw: draw)).new? %>
+      <% end %>
       <%= turbo_frame_tag('draw_costs', draw) do %>
         <%= render @draw.draw_costs.visible %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col m-2 p-3 border shadow">
+      <h3 class="text-center">Documents</h3>
+      <%= turbo_frame_tag :draw_documents, draw do %>
+        <%= render partial: 'draw_documents', locals: {draw: draw} %>
       <% end %>
     </div>
   </div>

@@ -19,4 +19,9 @@ module DrawsHelper
     project_costs = ( project || project_cost&.project )&.project_costs&.change_requestable&.order(name: :asc) || []
     options_from_collection_for_select(project_costs, 'id', 'name', change_order_project_cost&.id)
   end
+
+  def draw_document_documenttype_options(draw:, draw_document:)
+    documenttypes =  draw.remaining_documents.inject({}){|memo, obj| memo[obj.capitalize] = obj; memo}
+    options_for_select(documenttypes, draw_document.documenttype)
+  end
 end
