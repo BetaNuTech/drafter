@@ -45,6 +45,15 @@ class Project < ApplicationRecord
     project_costs.sum(:total)
   end
 
+  def draw_total
+    draws.map(&:draw_cost_total).sum
+  end
+
+  # TODO: account for change requests
+  def total_contract_remaining
+    budget_total - draw_total
+  end
+
   def sorted_members
     members = project_users.includes(:project_role, :user).to_a
     out = []
