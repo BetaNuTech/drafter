@@ -2,19 +2,22 @@
 #
 # Table name: project_cost_samples
 #
-#  id                 :uuid             not null, primary key
-#  approval_lead_time :integer
-#  change_requestable :boolean          default(TRUE)
-#  cost_type          :integer          not null
-#  drawable           :boolean          default(TRUE)
-#  name               :string           not null
-#  standard           :boolean          default(TRUE), not null
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
+#  id                     :uuid             not null, primary key
+#  approval_lead_time     :integer
+#  change_request_allowed :boolean          default(TRUE)
+#  change_requestable     :boolean          default(TRUE)
+#  cost_type              :integer          not null
+#  drawable               :boolean          default(TRUE)
+#  initial_draw_only      :boolean          default(FALSE)
+#  name                   :string           not null
+#  standard               :boolean          default(TRUE), not null
+#  total                  :decimal(, )      default(0.0), not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
 #
 # Indexes
 #
-#  project_cost_samples_idx  (drawable,change_requestable,standard,name)
+#  project_cost_samples_idx  (standard,name)
 #
 class ProjectCostSample < ApplicationRecord
   include Seeds::Seedable
@@ -30,6 +33,4 @@ class ProjectCostSample < ApplicationRecord
 
   ### Scopes
   scope :standard, -> { where(standard: true) }
-  scope :drawable, -> { where(drawable: true) }
-  scope :change_requestable, -> { where(change_requestable: true) }
 end

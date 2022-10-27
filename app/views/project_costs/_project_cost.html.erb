@@ -21,7 +21,11 @@
           <br/>
           <b>Drawable?:</b> <%= project_cost.drawable? ? 'Yes' : 'No' %>
           <br/>
+          <b>Change Request Allowed?:</b> <%= project_cost.change_request_allowed? ? 'Yes' : 'No' %>
+          <br/>
           <b>Change Request Funding Source?:</b> <%= project_cost.change_requestable? ? 'Yes' : 'No' %>
+          <br/>
+          <b>Initial Draw Only?:</b> <%= project_cost.initial_draw_only? ? 'Yes' : 'No' %>
         </p>
       </div>
     </div>

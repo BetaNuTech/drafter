@@ -2,129 +2,201 @@
   :version: 1
   :key: :name
   :data:
+    - :name: Other
+      :cost_type: soft
+      :approval_lead_time: 0
+      :standard: true
+      :drawable: false
+      :change_requestable: false
+      :initial_draw_only: true
+      :change_request_allowed: false
+      :total: 2500.00
     - :name: Land
       :cost_type: land
       :approval_lead_time: 0
       :standard: true
       :drawable: false
       :change_requestable: false
+      :initial_draw_only: false
+      :change_request_allowed: false
+      :total: 0.00
     - :name: Building Cost
       :cost_type: hard
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Architectural & Engineering Design
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: 3rd Party Reports
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Impact/Tap Fees/Permit Fees
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Insurance BR & GL
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Community Improvements & Offsite Improvements
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Real Estate Taxes
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Advertising & Marketing
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Project Related Business Expenses
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Legal & Closing
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Owner's Contingency
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Development Fee
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Equity Fee & DD
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: FF & E
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Bank Inspection Fees
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Operating Deficit
       :cost_type: finance
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Capitalized Interest
       :cost_type: finance
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Bank Loan Fees
       :cost_type: finance
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Title & Recording
       :cost_type: finance
       :approval_lead_time: 0
       :standard: true
       :drawable: true
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
     - :name: Contingency
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
       :drawable: false
       :change_requestable: true
+      :initial_draw_only: false
+      :change_request_allowed: true
+      :total: 0.00
