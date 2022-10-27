@@ -1,0 +1,21 @@
+<p class="p-2 border border-dark" style="background: #ddd;">
+  <b>Tot. Contract Remaining:</b>
+  <span class="badge bg-success">
+    <%= number_to_currency draw_cost.project.total_contract_remaining %>
+  </span>
+  <br/>
+  <b>Est. Draw Cost Total:</b>
+  <span class="badge bg-success">
+    <%= number_to_currency draw_cost.total %>
+  </span>
+  <br/>
+  <b>Invoices Total:</b>
+  <span class="badge bg-success">
+    <%= number_to_currency draw_cost.invoice_total %>
+  </span>
+  <br/>
+  <b>Remaining:</b>
+  <span class="badge bg-<%= draw_cost.over_budget? ? 'danger' : 'success' %>">
+    <%= number_to_currency draw_cost.project_cost_balance %>
+  </span>
+</p>

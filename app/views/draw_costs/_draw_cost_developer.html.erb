@@ -14,28 +14,9 @@
       <div class="row"> <!-- Main section -->
         <div class="col-4"> <!-- Draw cost left col -->
           <h5 style="border-bottom: 1px solid gray;"><%= draw_cost.project_cost&.name %></h5>  
-          <p class="p-2 border border-dark" style="background: #ddd;">
-            <b>Tot. Contract Remaining:</b>
-            <span class="badge bg-success">
-              <%= number_to_currency draw_cost.project.total_contract_remaining %>
-            </span>
-            <br/>
-            <b>Est. Draw Cost Total:</b>
-            <span class="badge bg-success">
-              <%= number_to_currency draw_cost.total %>
-            </span>
-            <br/>
-            <b>Invoices Total:</b>
-            <span class="badge bg-success">
-              <%= number_to_currency draw_cost.invoice_total %>
-            </span>
-            <br/>
-            <b>Remaining:</b>
-            <span class="badge bg-<%= draw_cost.over_budget? ? 'danger' : 'success' %>">
-              <%= number_to_currency draw_cost.project_cost_balance %>
-            </span>
-          </p>
-          <%#= link_to('Submit', draw_draw_cost_submit_path(draw_id: draw_cost.draw_id, draw_cost_id: draw_cost.id), data: {turbo_method: :post, turbo_confirm: 'Are you sure?'}, class: 'btn btn-sm btn-success m-1') if policy(draw_cost).submit? %>
+          <%= turbo_frame_tag :summary_amounts, draw_cost do %>
+            <%= render partial: 'draw_costs/summary_amounts', locals: { draw_cost: draw_cost } %>
+          <% end %>
           <%= link_to('Edit', edit_draw_draw_cost_path(draw_id: draw_cost.draw_id, id: draw_cost.id), class: 'btn btn-sm btn-primary', data: {turbo_frame: dom_id(draw_cost)} ) if policy(draw_cost).edit? %>
           <%= link_to('Withdraw', draw_draw_cost_path(draw_id: draw_cost.draw_id, id: draw_cost.id), class: 'btn btn-sm btn-danger', data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} ) if policy(draw_cost).withdraw? %>
         </div> <!-- END Draw cost left col -->

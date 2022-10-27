@@ -2,8 +2,8 @@
   <div class="col">
     <h1>
       <%= draw.name %>
-      <%= turbo_frame_tag :submit_button, draw do %>
-        <%= render partial: 'draws/submit_button', locals: { draw: draw } %>
+      <% if draw.state != 'pending' %>
+        <span class="badge bg-<%= draw.state_css_class %>"><%= draw.state %></span>    
       <% end %>
     </h1>
   </div>
@@ -11,8 +11,8 @@
 
 <%= turbo_frame_tag draw do %>
   <div class="row px-2">
-    <div class="col border bg-light m-2 p-2">
-      <h3 class="text-center">
+    <div class="col border bg-light m-2 p-2 text-center">
+      <h3>
         <%= draw.name %> Total:
         <%= turbo_frame_tag(:total_cost, draw) do %>
           <%= number_to_currency draw.draw_cost_total %>
@@ -22,6 +22,9 @@
         <% end %>
         of 3 Required Documents
       </h3>
+      <%= turbo_frame_tag :submit_button, draw do %>
+        <%= render partial: 'draws/submit_button', locals: { draw: draw } %>
+      <% end %>
     </div>
   </div>
 

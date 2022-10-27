@@ -1,1 +1,2 @@
 <%= turbo_stream.replace @draw_cost %>
+<%= turbo_stream.update dom_id(@draw_cost.draw, :submit_button), partial: 'draws/submit_button', locals: { draw: @draw_cost.draw } %>

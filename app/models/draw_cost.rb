@@ -50,7 +50,7 @@ class DrawCost < ApplicationRecord
   end
 
   def project_cost_balance
-    total - invoices.sum(:amount)
+    total - invoice_total
   end
 
   def over_budget?

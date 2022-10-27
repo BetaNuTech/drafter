@@ -86,12 +86,8 @@ class DrawsController < ApplicationController
     end
   end
 
-  def add_document
-
-  end
-
-  def remove_document
-
+  def submit
+    authorize @draw
   end
 
   def approve_internal
