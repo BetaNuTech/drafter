@@ -96,7 +96,7 @@ module DrawCosts
       end
 
       def allow_submit?
-        invoice_total > 0.0
+        draw_cost_balance == 0.0
       end
 
       def allow_approve?
