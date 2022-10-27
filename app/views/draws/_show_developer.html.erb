@@ -28,6 +28,14 @@
     </div>
   </div>
 
+  <div class="row">
+    <div class="col m-2 p-3 border shadow">
+      <h3 class="text-center">Documents</h3>
+      <%= turbo_frame_tag :draw_documents, draw do %>
+        <%= render partial: 'draw_documents', locals: {draw: draw} %>
+      <% end %>
+    </div>
+  </div>
 
   <div class="row">
     <div class="col m-2 p-3 border shadow">
@@ -43,12 +51,4 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col m-2 p-3 border shadow">
-      <h3 class="text-center">Documents</h3>
-      <%= turbo_frame_tag :draw_documents, draw do %>
-        <%= render partial: 'draw_documents', locals: {draw: draw} %>
-      <% end %>
-    </div>
-  </div>
 <% end %>
