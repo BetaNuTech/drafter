@@ -26,13 +26,13 @@ module DrawCosts
 
         event :submit do
           transitions from: [:pending], to: :submitted, 
-            guard: Proc.new { |*args| invoices.any?},
-            after: Proc.new { |*args| submit_invoices(*args)}
+            guard: :allow_submit?,
+            after: Proc.new { |*args| after_submit(*args)}
         end
 
         event :approve do
           transitions from: [:submitted, :rejected], to: :approved,
-            guard: Proc.new {|*args| invoices.approved.any? },
+            guard: :allow_approve?,
             after: Proc.new {|*args|
               if args.any?
                 approve_request(*args)
@@ -89,6 +89,18 @@ module DrawCosts
         invoices.pending.each do |invoice|
           invoice.trigger_event(event_name: :submit, user: user)
         end
+      end
+
+      def after_submit(user)
+        submit_invoices(user)
+      end
+
+      def allow_submit?
+        invoice_total > 0.0
+      end
+
+      def allow_approve?
+        invoices.submitted.none? && invoices.pending.any?
       end
     end
   end

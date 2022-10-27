@@ -33,6 +33,7 @@
 #
 class Draw < ApplicationRecord
   include Draws::StateMachine
+  include Draws::DrawDocuments
 
   class IndexValidator < ActiveModel::Validator
     def validate(record)
@@ -57,7 +58,6 @@ class Draw < ApplicationRecord
   belongs_to :user
   belongs_to :approver, class_name: 'User', optional: true
   has_many :draw_costs, dependent: :destroy
-  has_many :draw_documents, dependent: :destroy
 
   ### Validations
   validates_with IndexValidator
@@ -79,7 +79,6 @@ class Draw < ApplicationRecord
   end
 
   def draw_cost_total
-    #draw_costs.sum(:total)
     draw_cost_invoices_total
   end
 
@@ -89,8 +88,7 @@ class Draw < ApplicationRecord
   end
 
   def budget_variance
-    # TODO
-    0.0
+    draw_cost_total - draw_cost_invoices_total
   end
 
   def over_budget?
@@ -112,10 +110,6 @@ class Draw < ApplicationRecord
       _next_index = next_index
       self.index = _next_index unless self.index >= _next_index
     end
-  end
-
-  def remaining_documents
-    ( ['other'] + ( DrawDocument.documenttypes.keys.map(&:to_s) - draw_documents.pluck(:documenttype) ) ).uniq
   end
 
 end

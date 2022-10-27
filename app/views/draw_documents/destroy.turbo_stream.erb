@@ -1,1 +1,2 @@
 <%= turbo_stream.remove @draw_document %>
+<%= turbo_stream.update dom_id(@draw, :submitted_documents), @draw.required_documents.count %>

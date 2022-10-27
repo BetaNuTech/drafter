@@ -28,11 +28,12 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class DrawDocument < ApplicationRecord
-  ALLOWED_PARAMS = [:notes, :documenttype, :document]
+  ALLOWED_PARAMS = %i{notes documenttype document}.freeze
   OTHER_DESCRIPTION = 'Other'
   BUDGET_DESCRIPTION = 'Budget'
   APPLICATION_DESCRIPTION = 'Application and Certificate of Payment'
   WAIVER_DESCRIPTION = 'Waiver of Lien'
+  REQUIRED_DOCUMENTTYPES = %i{budget application waiver}.freeze
 
   ### Associations
   belongs_to :approver, class_name: 'User', optional: true
@@ -46,7 +47,7 @@ class DrawDocument < ApplicationRecord
   enum :documenttype, [:other, :budget, :application, :waiver]
 
   ### Validations
-  validates :documenttype, presence: true
+  validates :documenttype, presence: true, uniqueness: { scope: :draw_id }
 
   ### Scopes
   scope :budget, -> { where(documenttype: :budget) }

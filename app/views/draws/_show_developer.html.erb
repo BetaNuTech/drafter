@@ -1,6 +1,11 @@
 <div class="row">
   <div class="col">
-    <h1><%= draw.name %></h1>
+    <h1>
+      <%= draw.name %>
+      <%= turbo_frame_tag :submit_button, draw do %>
+        <%= render partial: 'draws/submit_button', locals: { draw: draw } %>
+      <% end %>
+    </h1>
   </div>
 </div>
 
@@ -11,16 +16,15 @@
         <%= draw.name %> Total:
         <%= turbo_frame_tag(:total_cost, draw) do %>
           <%= number_to_currency draw.draw_cost_total %>
+        <% end %><br/>
+        <%= turbo_frame_tag(:submitted_documents, draw) do %>
+          <%= draw.required_documents.count %>
         <% end %>
+        of 3 Required Documents
       </h3>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col p-2">
-      <%= link_to('Submit','#') if policy(draw).submit? %>
-    </div>
-  </div>
 
   <div class="row">
     <div class="col m-2 p-3 border shadow">

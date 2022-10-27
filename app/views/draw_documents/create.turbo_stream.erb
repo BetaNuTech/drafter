@@ -1,1 +1,2 @@
 <%= turbo_stream.replace dom_id( @draw, :draw_documents ), partial: 'draws/draw_documents', locals: {draw: @draw} %>
+<%= turbo_stream.update dom_id(@draw, :submitted_documents), @draw.required_documents.count %>

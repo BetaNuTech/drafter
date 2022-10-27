@@ -34,6 +34,7 @@ class DrawDocumentsController < ApplicationController
     authorize @draw_document
     @service = DrawDocumentService.new(draw: @draw, draw_document: @draw_document, user: @current_user)
     @service.remove
+    @draw.draw_documents.reload
   end
 
   private
