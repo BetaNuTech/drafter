@@ -86,7 +86,7 @@ class DrawCostPolicy < ApplicationPolicy
   def add_document?
     privileged_user? ||
       ( user.project_developer?(record.project) &&
-       user.organization_id == record.organization.id)
+       user.organization_id == record.organization.id) ||
       user.project_management?(record.project) ||
       user.project_owner?(record.project)
   end

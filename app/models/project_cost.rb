@@ -46,6 +46,7 @@ class ProjectCost < ApplicationRecord
 
   ### Scopes
   scope :drawable, -> { where(drawable: true) }
+  scope :drawable_and_non_initial, -> { where(drawable: true, initial_draw_only: false) }
   scope :change_requestable, -> { where(change_requestable: true) }
   scope :change_request_allowed, -> { where(change_request_allowed: true) }
   scope :initial_draw_only, -> { where(initial_draw_only: true) }
