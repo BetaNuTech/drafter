@@ -48,11 +48,26 @@ class DrawDocumentPolicy < ApplicationPolicy
         user.project_developer?(record.project) )
   end
 
-  def approve_internal?
-    raise 'TODO'
-    privileged_user? ||
-      user.project_internal?(record.project)
-    # TODO invoices approved?
+  def approvals?
+    user.admin? ||
+      user.project_owner?(record.project) ||
+      user.project_management?(record.project) ||
+      user.project_finance?(record.project)
+  end
+
+  # TODO: add draw document state machine
+  def approve?
+    approvals?
+
+    #record.permitted_state_events.include?(:approve) &&
+      #approvals?
+  end
+
+  # TODO: add draw document state machine
+  def reject?
+    approvals?
+    #record.permitted_state_events.include?(:reject) &&
+      #approvals?
   end
 
   def allowed_params
