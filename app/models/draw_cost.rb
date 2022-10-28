@@ -46,7 +46,7 @@ class DrawCost < ApplicationRecord
   validates :state, presence: true
 
   def invoice_total
-    invoices.visible.sum(:amount)
+    invoices.totalable.sum(:amount)
   end
 
   def draw_cost_balance

@@ -60,4 +60,8 @@ class User < ApplicationRecord
     !active?
   end
 
+  def full_role_desc(project)
+    "#{name}: #{role.name} User and #{project_role(project)&.name || 'UNROLED'} for '#{project.name}'"
+  end
+
 end

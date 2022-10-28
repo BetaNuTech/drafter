@@ -10,8 +10,7 @@ class DrawCostPolicy < ApplicationPolicy
         # DrawCostRequests for the user's assigned projects
         #  belonging to the user's assigned organization
         scope.includes(:draw).where(
-          draws: { project: user.projects,
-                   organization_id: user.organization_id }
+          draws: { project: user.projects }
         )
       else
         # DrawCostRequests for the user's assigned projects
@@ -70,10 +69,21 @@ class DrawCostPolicy < ApplicationPolicy
     destroy?
   end
 
-  def approve?
-    privileged_user? ||
+  def approvals?
+    user.admin? ||
+      user.project_owner?(record.project) ||
       user.project_management?(record.project) ||
       ( user.project_finance?(record.project) && record&.draw_cost.clean? )
+  end
+
+  def approve?
+    record.permitted_state_events.include?(:approve) &&
+      approvals?
+  end
+
+  def reject?
+    record.permitted_state_events.include?(:reject) &&
+      approvals?
   end
 
   def reject?

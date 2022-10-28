@@ -63,17 +63,29 @@ class DrawCostService
       SystemEvent.log(description: "Submitted Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
       @draw.draw_costs.reload
     else
-      @errors << 'Error submitting invoice'
+      @errors << 'Error submitting Draw Cost'
     end
     @draw_cost.draw.draw_costs.reload
   end
 
-  # TODO
   def approve
-    return false
+    raise PolicyError.new(user_role_desc + ' cannot approve draw cost') unless @draw_cost_policy.approve?
+
+    @draw_cost.trigger_event(event_name: :approve, user: @user)
+    if @draw_cost.submitted?
+      SystemEvent.log(description: "Approved Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      @draw.draw_costs.reload
+    else
+      @errors << 'Error approving Draw Cost'
+    end
+    @draw_cost.draw.draw_costs.reload
   end
 
   private
+
+  def user_role_desc
+    @user.full_role_desc(@project)
+  end
 
   def reset_errors
     @errors = []

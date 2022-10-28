@@ -32,14 +32,7 @@ module DrawCosts
 
         event :approve do
           transitions from: [:submitted, :rejected], to: :approved,
-            guard: :allow_approve?,
-            after: Proc.new {|*args|
-              if args.any?
-                approve_request(*args)
-              else
-                raise TransitionError.new('An Invoice must be approved by a user')
-              end
-            }
+            guard: :allow_approve?
         end
 
         event :reject do
@@ -100,7 +93,7 @@ module DrawCosts
       end
 
       def allow_approve?
-        invoices.submitted.none? && invoices.pending.any?
+        invoices.where(state: %i{submitted approved}).any? && invoices.pending.none?
       end
     end
   end

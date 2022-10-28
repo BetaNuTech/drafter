@@ -66,6 +66,9 @@ RSpec.describe DrawCost, type: :model do
         refute(draw_cost.submitted?)
       end
       it 'automatically submits pending invoices' do
+        draw_cost.state = 'submitted'
+        draw_cost.save!
+
         invoices
         draw_cost.reload
         draw_cost.trigger_event(event_name: :submit, user: )

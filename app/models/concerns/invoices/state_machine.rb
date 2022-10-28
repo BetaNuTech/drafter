@@ -11,6 +11,7 @@ module Invoices
     included do
 
       scope :visible, -> { where.not(state: :removed) }
+      scope :totalable, -> { where.not(state: %i{removed rejected}) }
 
       include AASM
 

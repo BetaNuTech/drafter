@@ -81,7 +81,7 @@ class InvoiceService
       return false
     end
 
-    @invoice.trigger_event(event_name: 'approve', user: @user)
+    @invoice.trigger_event(event_name: :approve, user: @user)
     if @invoice.approved?
       @invoice.approved_at = Time.current
       @invoice.approver = @user
@@ -110,10 +110,7 @@ class InvoiceService
 
   private
 
-  # TODO: DrawCost approval
   def auto_approve_draw_cost
-    return true #STUB
-
     @draw_cost.invoices.reload
     if @draw_cost.invoices.visible.count == @draw_cost.invoices.approved.count
       service = DrawCostService.new(draw: @draw_cost.draw, draw_cost: @draw_cost, user: @user)

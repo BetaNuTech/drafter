@@ -81,42 +81,47 @@ RSpec.describe InvoicesController, type: :controller do
   end
 
   describe '#approve' do
-    let(:invoice) { draw_cost.invoices.create!(amount: 123.45, user: user, state: :submitted) }
-    let(:invoice2) { draw_cost.invoices.create!(amount: 123.45, user: user, state: :submitted) }
+    let(:invoice) { submitted_draw_cost.invoices.create!(amount: 123.45, user: user, state: :submitted) }
+    let(:invoice2) { submitted_draw_cost.invoices.create!(amount: 123.45, user: user, state: :submitted) }
+    let(:submitted_draw_cost) {
+      draw_cost.state = 'submitted'
+      draw_cost.save!
+      draw_cost
+    }
     describe 'as a manager' do
       let(:user) { sample_project.managers.first }
       it 'should approve the invoice' do
         assert(invoice.submitted?)
         sign_in user
-        post :approve, params: {draw_cost_id: draw_cost.id, invoice_id: invoice.id}
+        post :approve, params: {draw_cost_id: submitted_draw_cost.id, invoice_id: invoice.id}
         expect(response).to be_redirect
         invoice.reload
         assert(invoice.approved?)
         expect(invoice.approver).to eq(user)
       end
-      #it 'will approve the draw cost if all invoices are approved' do
-        #draw_cost.state = 'submitted'
-        #draw_cost.save
-        #invoice.state = 'approved'
+      it 'will approve the draw cost if all invoices are approved' do
+        invoice.state = 'approved'
+        invoice.save
+        submitted_draw_cost.reload
 
-        #assert(invoice.submitted?)
-        #assert(invoice2.submitted?)
-        #assert(draw_cost.submitted?)
+        assert(invoice.approved?)
+        assert(invoice2.submitted?)
+        assert(submitted_draw_cost.submitted?)
 
-
-        #post :approve, params: {draw_cost_id: draw_cost.id, invoice_id: invoice2.id}
-        #invoice2.reload
-        #draw_cost.reload
-        #assert(invoice2.approved?)
-        #assert(draw_cost.approved?)
-      #end
+        sign_in user
+        post :approve, params: {draw_cost_id: submitted_draw_cost.id, invoice_id: invoice2.id}
+        invoice2.reload
+        submitted_draw_cost.reload
+        assert(invoice2.approved?)
+        assert(submitted_draw_cost.approved?)
+      end
     end
     describe 'as a developer' do
       let(:user) { sample_project.developers.first }
       it 'should not approve the invoice' do
         assert(invoice.submitted?)
         sign_in user
-        post :approve, params: {draw_cost_id: draw_cost.id, invoice_id: invoice.id}
+        post :approve, params: {draw_cost_id: submitted_draw_cost.id, invoice_id: invoice.id}
         expect(response).to be_redirect
         invoice.reload
         refute(invoice.approved?)
