@@ -1,11 +1,13 @@
 <div class="row">
   <div class="col">
-    <h1>
+    <h1 style="display: inline;">
       <%= draw.name %>
-      <% if draw.state != 'pending' %>
-        <span class="badge bg-<%= draw.state_css_class %>"><%= draw.state %></span>    
-      <% end %>
     </h1>
+    <% if draw.state != 'pending' %>
+      <p class="badge bg-<%= draw.state_css_class %>" style="position: relative; top: -0.75em;">
+        <%= draw.state %>
+      </p>    
+    <% end %>
   </div>
 </div>
 

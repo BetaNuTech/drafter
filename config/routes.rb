@@ -26,11 +26,11 @@ Rails.application.routes.draw do
     resources :draws do
       post 'approve_internal', to: 'draws#approve_internal'
       post 'reject_internal', to: 'draws#reject_internal'
+      post 'submit', to: 'draws#submit'
     end
   end
 
   resources :draws do
-    post 'submit', to: 'draws#submit'
     resources :draw_costs do
       post 'submit', to: 'draw_costs#submit'
     end

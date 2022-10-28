@@ -92,4 +92,46 @@ RSpec.describe DrawsController, type: :controller do
 
   end #destroy
 
+  describe '#submit' do
+    describe 'as the project developer' do
+      let(:user) { developer_user }
+      describe 'with a fully populated draw' do
+        let(:draw) {
+          sample_draw
+          sample_draw_cost
+          invoice_service = InvoiceService.new(user: user, draw_cost: sample_draw_cost)
+          invoice_service.create(amount: sample_draw_cost.total, description: 'Sample invoice')
+          sample_draw_cost.reload
+          DrawDocument.documenttypes.keys.each do |ddt|
+            doc_service = DrawDocumentService.new(draw: sample_draw, user: user)
+            doc_service.create({documenttype: ddt, notes: "#{ddt} document note"})
+          end
+          sample_draw.reload
+          sample_draw
+        }
+        it 'should submit the draw and dependent draw costs' do
+          assert(draw.draw_costs.all?(&:pending?))
+          sign_in user
+          post :submit, params: {project_id: draw.project_id, draw_id: draw.id }
+          expect(response).to be_redirect
+          draw.reload
+          assert(draw.submitted?)
+          assert(draw.draw_costs.all?(&:submitted?))
+        end
+      end
+      describe 'with a partially populated draw' do
+        it 'should not allow transition to submitted' do
+          draw.draw_documents.destroy_all
+          draw.reload
+          sign_in user
+          post :submit, params: {project_id: draw.project_id, draw_id: draw.id }
+          expect(response).to be_redirect
+          draw.reload
+          assert(draw.pending?)
+          assert(draw.draw_costs.all?(&:pending?))
+        end
+      end
+    end
+  end
+
 end

@@ -1,1 +1,1 @@
-<%= link_to('Submit','#', class: 'btn btn-success') if policy(draw).submit? %>
+<%= link_to('Submit', project_draw_submit_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-success', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).submit? %>

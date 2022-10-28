@@ -82,12 +82,19 @@ class DrawsController < ApplicationController
         format.turbo_stream
       end
     else
-      render :edit, status: :unprocessable_entity
+      render :show, status: :unprocessable_entity
     end
   end
 
   def submit
     authorize @draw
+    @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
+
+    if @service.submit
+      redirect_to project_path(id: @project.id), notice: "Draw was submitted."
+    else
+      render :show, status: :unprocessable_entity
+    end
   end
 
   def approve_internal
@@ -101,7 +108,7 @@ class DrawsController < ApplicationController
         format.turbo_stream
       end
     else
-      render :edit, status: :unprocessable_entity
+      render :show, status: :unprocessable_entity
     end
   end
 
@@ -113,7 +120,7 @@ class DrawsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_draw
-    @draw = record_scope.find(params[:id])
+    @draw = record_scope.find(params[:id] || params[:draw_id])
   end
 
   # Only allow a list of trusted parameters through.
