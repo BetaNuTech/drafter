@@ -58,6 +58,7 @@ class Draw < ApplicationRecord
   belongs_to :user
   belongs_to :approver, class_name: 'User', optional: true
   has_many :draw_costs, dependent: :destroy
+  has_many :invoices, through: :draw_costs
 
   ### Validations
   validates_with IndexValidator

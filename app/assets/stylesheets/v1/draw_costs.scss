@@ -64,3 +64,14 @@ div.invoice_form, div.draw_document_form {
   width: 400px !important;
   height: auto !important;
 }
+
+div.document_approvals_button {
+  height: 50px;
+  width: 50px;
+  opacity: 0.3;
+  cursor: pointer;
+}
+
+div.document_approvals_button:hover { 
+  opacity: 1.0;
+}

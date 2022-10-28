@@ -23,7 +23,7 @@
 
         <div class="col-8 d-flex flex-wrap p-2"> <!-- right col -- invoices -->
           <% if draw_cost.invoices.any? && policy(draw_cost.invoices.first).show? %>
-            <%= render draw_cost.invoices.visible %>
+            <%= render draw_cost.invoices.visible.order(created_at: :desc) %>
           <% else %>
             <em>No Invoices to Display</em>            
           <% end %>

@@ -40,6 +40,8 @@ Rails.application.routes.draw do
   resources :draw_costs do
     resources :invoices do
       post 'submit', to: 'invoices#submit'
+      post 'approve', to: 'invoices#approve'
+      post 'reject', to: 'invoices#reject'
     end
   end
 

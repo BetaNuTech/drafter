@@ -68,6 +68,11 @@ class DrawCostService
     @draw_cost.draw.draw_costs.reload
   end
 
+  # TODO
+  def approve
+    return false
+  end
+
   private
 
   def reset_errors

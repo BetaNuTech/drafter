@@ -36,7 +36,7 @@ module Invoices
         end
 
         event :approve do
-          transitions from: [:processed], to: :approved
+          transitions from: [:submitted, :processed], to: :approved
         end
 
         event :reject do

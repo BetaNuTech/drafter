@@ -26,7 +26,7 @@ class InvoiceService
     @invoice.draw_cost = @draw_cost
     @invoice.user = @user
     if @invoice.save
-      SystemEvent.log(description: "Added Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Added an Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
       @draw_cost.invoices.reload
     else
       @errors = @invoice.errors.full_messages
@@ -52,7 +52,7 @@ class InvoiceService
 
     @invoice.trigger_event(event_name: :remove, user: @user)
     if @invoice.removed?
-      SystemEvent.log(description: "Removed Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Removed an Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
       @draw_cost.invoices.reload
     else
       @errors << 'Error removing invoice'
@@ -64,14 +64,62 @@ class InvoiceService
 
     @invoice.trigger_event(event_name: :submit, user: @user)
     if @invoice.submitted?
-      SystemEvent.log(description: "Submitted Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Submitted an Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
       @draw_cost.invoices.reload
     else
       @errors << 'Error submitting invoice'
     end
   end
 
+  def approve
+    raise PolicyError.new unless @policy.approve?
+
+    reset_errors
+
+    unless @invoice.permitted_state_events.include?(:approve)
+      @errors << 'Cannot approve invoice at this time'
+      return false
+    end
+
+    @invoice.trigger_event(event_name: 'approve', user: @user)
+    if @invoice.approved?
+      @invoice.approved_at = Time.current
+      @invoice.approver = @user
+      @invoice.approved_by_desc = @user.name
+      @invoice.save
+    end
+    auto_approve_draw_cost
+    SystemEvent.log(description: "Approved an Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+    return true
+  end
+
+  def reject
+    raise PolicyError.new unless @policy.reject?
+
+    reset_errors
+
+    if @invoice.permitted_state_events.include?(:reject)
+      @invoice.trigger_event(event_name: :reject, user: @user)
+      SystemEvent.log(description: "Approved Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      return true
+    else
+      @errors << 'Cannot approve invoice at this time'
+      return false
+    end
+  end
+
   private
+
+  # TODO: DrawCost approval
+  def auto_approve_draw_cost
+    return true #STUB
+
+    @draw_cost.invoices.reload
+    if @draw_cost.invoices.visible.count == @draw_cost.invoices.approved.count
+      service = DrawCostService.new(draw: @draw_cost.draw, draw_cost: @draw_cost, user: @user)
+      service.approve
+    end
+  end
 
   def reset_errors
     @errors = []

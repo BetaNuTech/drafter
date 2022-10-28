@@ -71,19 +71,21 @@ class InvoicePolicy < ApplicationPolicy
     record.pending? && edit?
   end
 
-  def approve?
-    # TODO: invoice processing and remove submitted? condition below
-    ( record.submitted? || record.processed? ) &&
+  def approvals?
     user.admin? ||
       user.project_owner?(record.project) ||
       user.project_management?(record.project) ||
       user.project_finance?(record.project)
   end
 
+  def approve?
+    record.permitted_state_events.include?(:approve) &&
+      approvals?
+  end
+
   def reject?
-    # TODO: invoice processing and remove submitted? condition below
-    ( record.submitted? || record.processed? ) &&
-    approve?
+    record.permitted_state_events.include?(:reject) &&
+      approvals?
   end
 
   def allowed_params

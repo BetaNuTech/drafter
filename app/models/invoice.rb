@@ -42,7 +42,7 @@ class Invoice < ApplicationRecord
 
   ### Associations
   belongs_to :draw_cost
-  belongs_to :approver, optional: true
+  belongs_to :approver, optional: true, class_name: 'User'
   belongs_to :user
   has_one :project, through: :draw_cost
   has_one_attached :document
