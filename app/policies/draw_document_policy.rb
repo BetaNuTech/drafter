@@ -55,19 +55,12 @@ class DrawDocumentPolicy < ApplicationPolicy
       user.project_finance?(record.project)
   end
 
-  # TODO: add draw document state machine
   def approve?
-    approvals?
-
-    #record.permitted_state_events.include?(:approve) &&
-      #approvals?
+    approvals? && record.permitted_state_events.include?(:approve)
   end
 
-  # TODO: add draw document state machine
   def reject?
-    approvals?
-    #record.permitted_state_events.include?(:reject) &&
-      #approvals?
+    approvals? && record.permitted_state_events.include?(:reject)
   end
 
   def allowed_params

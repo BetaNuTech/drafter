@@ -7,6 +7,7 @@
 #  approved_at       :datetime
 #  documenttype      :integer          default("other"), not null
 #  notes             :text
+#  state             :string           default("pending")
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  approver_id       :uuid
@@ -19,6 +20,7 @@
 #  index_draw_documents_on_approver_id   (approver_id)
 #  index_draw_documents_on_documenttype  (documenttype)
 #  index_draw_documents_on_draw_id       (draw_id)
+#  index_draw_documents_on_state         (state)
 #  index_draw_documents_on_user_id       (user_id)
 #
 # Foreign Keys
@@ -34,6 +36,9 @@ class DrawDocument < ApplicationRecord
   APPLICATION_DESCRIPTION = 'Application and Certificate of Payment'
   WAIVER_DESCRIPTION = 'Waiver of Lien'
   REQUIRED_DOCUMENTTYPES = %i{budget application waiver}.freeze
+
+  ### Concerns
+  include DrawDocuments::StateMachine
 
   ### Associations
   belongs_to :approver, class_name: 'User', optional: true
@@ -69,7 +74,7 @@ class DrawDocument < ApplicationRecord
     approver.present? && approved_at.present?
   end
 
-  def approve(user)
+  def mark_approval_by(user)
     self.approver = user
     self.approved_at = Time.current
     save

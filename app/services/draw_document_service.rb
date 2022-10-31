@@ -3,13 +3,20 @@ class DrawDocumentService
 
   attr_reader :user, :draw, :draw_document, :project, :organization, :errors
 
-  def initialize(user:, draw:, draw_document: nil)
-    @user = user
-    @draw = draw
+  def initialize(user:, draw: nil, draw_document: nil)
+    raise ActiveRecord::RecordNotFound unless ( draw.present? || draw_document.present? )
+
     @errors = []
+    @user = user
+    if draw.present?
+      @draw = draw
+      @draw_document = draw_document || DrawDocument.new(draw: @draw, user: @user, notes: nil)
+    else
+      @draw_document = draw_document
+      @draw = @draw_document.draw
+    end
     @project = @draw.project
     @organization = @draw.organization
-    @draw_document = draw_document || DrawDocument.new(draw: @draw, user: @user, notes: nil)
     @policy = DrawDocumentPolicy.new(@user, @draw_document)
   end
 
@@ -38,10 +45,38 @@ class DrawDocumentService
     raise PolicyError.new unless @policy.destroy?
 
     document_type = @draw_document.documenttype.capitalize
-    @draw_document.destroy
-    SystemEvent.log(description: "Removed #{document_type} Document for Draw '#{@draw.index}'", event_source: @project, incidental: @current_user, severity: :warn)
+    @draw_document.trigger_event(event_name: :withdraw, user: @user)
+    SystemEvent.log(description: "Removed #{@draw_document.description} Document for Draw '#{@draw.index}'", event_source: @project, incidental: @current_user, severity: :warn)
     @draw.draw_documents.reload
     true
+  end
+
+  def approve
+    raise PolicyError.new unless @policy.approve?
+
+    reset_errors
+
+    if @draw_document.trigger_event(event_name: :approve, user: @user)
+      SystemEvent.log(description: "Approved #{@draw_document.description} Document for Draw '#{@draw.index}'", event_source: @project, incidental: @current_user, severity: :warn)
+      true
+    else
+      @errors << 'Could not approve this document'
+      false
+    end
+  end
+
+  def reject
+    raise PolicyError.new unless @policy.reject?
+
+    reset_errors
+
+    if @draw_document.trigger_event(event_name: :reject, user: @user)
+      SystemEvent.log(description: "Rejected #{@draw_document.description} Document for Draw '#{@draw.index}'", event_source: @project, incidental: @current_user, severity: :warn)
+      true
+    else
+      @errors << 'Could not approve this document'
+      false
+    end
   end
 
   private

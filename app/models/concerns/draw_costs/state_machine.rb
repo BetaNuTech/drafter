@@ -65,7 +65,7 @@ module DrawCosts
 
       def state_css_class
         {
-          'pending' => 'secondary',
+          'pending' => 'info',
           'submitted' => 'warning',
           'approved' => 'success',
           'rejected' => 'danger'

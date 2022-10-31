@@ -10,11 +10,11 @@ module Draws
       end
 
       def remaining_documents
-        ( ['other'] + ( DrawDocument.documenttypes.keys.map(&:to_s) - draw_documents.pluck(:documenttype) ) ).uniq
+        ( ['other'] + ( DrawDocument.documenttypes.keys.map(&:to_s) - required_documents.pluck(:documenttype) ) ).uniq
       end
 
       def required_documents
-        draw_documents.where(documenttype: DrawDocument::REQUIRED_DOCUMENTTYPES)
+        draw_documents.visible.where(documenttype: DrawDocument::REQUIRED_DOCUMENTTYPES)
       end
     end
   end

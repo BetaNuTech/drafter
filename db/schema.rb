@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_27_020721) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_31_212831) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -83,10 +83,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_27_020721) do
     t.datetime "approved_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "state", default: "pending"
     t.index ["approver_id"], name: "index_draw_documents_on_approver_id"
     t.index ["documenttype"], name: "index_draw_documents_on_documenttype"
     t.index ["draw_id", "user_id"], name: "draw_documents_assoc_idx"
     t.index ["draw_id"], name: "index_draw_documents_on_draw_id"
+    t.index ["state"], name: "index_draw_documents_on_state"
     t.index ["user_id"], name: "index_draw_documents_on_user_id"
   end
 

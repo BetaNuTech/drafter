@@ -34,7 +34,10 @@ Rails.application.routes.draw do
     resources :draw_costs do
       post 'submit', to: 'draw_costs#submit'
     end
-    resources :draw_documents
+    resources :draw_documents do
+      post 'approve', to: 'draw_documents#approve'
+      post 'reject', to: 'draw_documents#reject'
+    end
   end
 
   resources :draw_costs do

@@ -4,7 +4,7 @@
       <div class="position-absolute start-50 translate-middle border border-1 border-<%= invoice.state_css_class %> bg-<%= invoice.state_css_class %> text-white text-center" style="width: 8rem; top: 0;">
         <%= invoice.state.titleize %>
       </div>
-  <% end %>
+    <% end %>
     <h4>Invoice</h4>
     <% if invoice.document.attached? %>
       <div class="preview_container">

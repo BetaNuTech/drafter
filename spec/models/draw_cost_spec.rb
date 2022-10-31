@@ -52,7 +52,7 @@ RSpec.describe DrawCost, type: :model do
   describe 'view helpers' do
     it 'returns the css class for the cost type' do
       draw_cost = build(:draw_cost, draw: sample_project.draws.first)
-      expect(draw_cost.state_css_class).to eq('secondary')
+      expect(draw_cost.state_css_class).to eq('info')
     end
   end
 

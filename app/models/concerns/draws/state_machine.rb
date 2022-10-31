@@ -73,10 +73,10 @@ module Draws
 
       def state_css_class
         {
-          'pending' => 'secondary',
+          'pending' => 'info',
           'in_progress' => 'warning',
-          'submitted' => 'danger',
-          'internally_approved' => 'info',
+          'submitted' => 'warning',
+          'internally_approved' => 'primary',
           'externally_approved' => 'primary',
           'funded' => 'success'
         }.fetch(state, 'light')

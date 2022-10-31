@@ -32,9 +32,37 @@ class DrawDocumentsController < ApplicationController
 
   def destroy
     authorize @draw_document
-    @service = DrawDocumentService.new(draw: @draw, draw_document: @draw_document, user: @current_user)
+    @service = DrawDocumentService.new(draw_document: @draw_document, user: @current_user)
     @service.remove
     @draw.draw_documents.reload
+  end
+
+  def approve
+    authorize @draw_document
+    @service = DrawDocumentService.new(draw_document: @draw_document, user: @current_user)
+    @service.approve
+    respond_to do |format|
+      if @service.errors?
+        format.html { render :new, status: :unprocessable_entity }
+      else
+        format.html { redirect_to draw_draw_document_path(draw_id: @draw.id, id: @draw_document.id), notice: 'Approved Document' }
+        format.turbo_stream
+      end
+    end
+  end
+
+  def reject
+    authorize @draw_document
+    @service = DrawDocumentService.new(draw_document: @draw_document, user: @current_user)
+    @service.reject
+    respond_to do |format|
+      if @service.errors?
+        format.html { render :new, status: :unprocessable_entity }
+      else
+        format.html { redirect_to draw_draw_document_path(draw_id: @draw.id, id: @draw_document.id), notice: 'Approved Document' }
+        format.turbo_stream
+      end
+    end
   end
 
   private

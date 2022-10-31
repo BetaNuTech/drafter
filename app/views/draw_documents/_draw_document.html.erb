@@ -1,5 +1,10 @@
 <%= turbo_frame_tag draw_document do %>
   <div id="<%= dom_id(draw_document) %>" class="draw_document_card d-flex flex-column justify-content-evenly text-center m-1 shadow-sm mt-3" style="position: relative;" data-controller="draw_document-card">
+    <% unless draw_document.pending? %>
+      <div class="position-absolute start-50 translate-middle border border-1 border-<%= draw_document.state_css_class %> bg-<%= draw_document.state_css_class %> text-white text-center" style="width: 8rem; top: 0;">
+        <%= draw_document.state.titleize %>
+      </div>
+    <% end %>
     <h4><%= draw_document.documenttype.capitalize %> Document</h4>
     <% if draw_document.document.attached? %>
       <div class="preview_container">
@@ -11,16 +16,14 @@
     <div class="body">
       <% if policy(draw_document).approvals? %>
         <div class="document_approvals_button position-absolute top-50 start-0">
-          <%= inline_icon(icon: :square_check_open, size: 40, fill: :green) %>
-          <%#= link_to(draw_draw_document_approve_path(draw_cost_id: draw_document.draw_cost_id, draw_document_id: draw_document.id), data: {turbo_method: :post}) do %>
-            <%#= inline_icon(icon: :square_check_open, size: 40, fill: :green) %>
-          <%# end if policy(draw_document).approve? %>
+          <%= link_to(draw_draw_document_approve_path(draw_id: draw_document.draw_id, draw_document_id: draw_document.id), data: {turbo_method: :post}) do %>
+            <%= inline_icon(icon: :square_check_open, size: 40, fill: :green) %>
+          <% end if policy(draw_document).approve? %>
         </div>
         <div class="document_approvals_button position-absolute top-50 end-0">
-          <%= inline_icon(icon: :square_x_open, size: 40, fill: :red) %>
-          <%#= link_to(draw_draw_document_reject_path(draw_cost_id: draw_document.draw_cost_id, draw_document_id: draw_document.id), data: {turbo_method: :post}) do %>
-            <%#= inline_icon(icon: :square_x_open, size: 40, fill: :red) %>
-          <%# end if policy(draw_document).reject? %>
+          <%= link_to(draw_draw_document_reject_path(draw_id: draw_document.draw_id, draw_document_id: draw_document.id), data: {turbo_method: :post}) do %>
+            <%= inline_icon(icon: :square_x_open, size: 40, fill: :red) %>
+          <% end if policy(draw_document).reject? %>
         </div>
       <% end %>
       <small><%= short_date draw_document.updated_at %></small><br/>
