@@ -26,7 +26,7 @@ class InvoiceService
     @invoice.draw_cost = @draw_cost
     @invoice.user = @user
     if @invoice.save
-      SystemEvent.log(description: "Added an Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Added an Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
       @draw_cost.invoices.reload
     else
       @errors = @invoice.errors.full_messages
@@ -52,7 +52,7 @@ class InvoiceService
 
     @invoice.trigger_event(event_name: :remove, user: @user)
     if @invoice.removed?
-      SystemEvent.log(description: "Removed an Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Removed an Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
       @draw_cost.invoices.reload
     else
       @errors << 'Error removing invoice'
@@ -64,7 +64,7 @@ class InvoiceService
 
     @invoice.trigger_event(event_name: :submit, user: @user)
     if @invoice.submitted?
-      SystemEvent.log(description: "Submitted an Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Submitted an Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
       @draw_cost.invoices.reload
     else
       @errors << 'Error submitting invoice'
@@ -89,7 +89,7 @@ class InvoiceService
       @invoice.save
     end
     auto_approve_draw_cost
-    SystemEvent.log(description: "Approved an Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+    SystemEvent.log(description: "Approved an Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
     return true
   end
 
@@ -100,7 +100,7 @@ class InvoiceService
 
     if @invoice.permitted_state_events.include?(:reject)
       @invoice.trigger_event(event_name: :reject, user: @user)
-      SystemEvent.log(description: "Approved Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Approved Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
       return true
     else
       @errors << 'Cannot approve invoice at this time'

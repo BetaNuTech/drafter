@@ -28,7 +28,7 @@ class DrawService
     @draw = Draw.new(project: @project, user: @user, organization: @organization)
     @draw.attributes = sanitize_params(params)
     if @draw.save
-      SystemEvent.log(description: "Added Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Added Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
       @project.draws.reload
     else
       @errors = @draw.errors.full_messages
@@ -54,7 +54,7 @@ class DrawService
 
     if @draw.permitted_state_events.include?(:withdraw)
       @draw.trigger_event(event_name: :withdraw, user: @user)
-      SystemEvent.log(description: "Removed Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Removed Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
       @project.draws.reload
       return true
     else
@@ -67,7 +67,7 @@ class DrawService
 
     if @draw.permitted_state_events.include?(:submit)
       @draw.trigger_event(event_name: :submit, user: @user)
-      SystemEvent.log(description: "Submitted Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Submitted Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
       @project.draws.reload
       return true
     else
@@ -80,7 +80,7 @@ class DrawService
 
     if @draw.permitted_state_events.include?(:approve)
       @draw.trigger_event(event_name: :approve_internal, user: @user)
-      SystemEvent.log(description: "Internally Approved Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Internally Approved Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
       @project.draws.reload
       return true
     else
@@ -93,7 +93,7 @@ class DrawService
 
     if @draw.permitted_state_events.include?(:reject)
       @draw.trigger_event(event_name: :reject_internal, user: @user)
-      SystemEvent.log(description: "Rejected Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Rejected Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @pdraw, incidental: @project, severity: :warn)
       return true
     else
       return false
@@ -109,7 +109,7 @@ class DrawService
     document.draw = @draw
     document.user = @user
     if document.save
-      SystemEvent.log(description: "#{document.documenttype} Document added for Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "#{document.documenttype} Document added for Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
       @draw.draw_documents.reload 
       document
     else

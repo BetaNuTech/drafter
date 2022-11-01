@@ -11,7 +11,7 @@ module Invoices
     included do
 
       scope :visible, -> { where.not(state: :removed) }
-      scope :totalable, -> { where.not(state: %i{removed rejected}) }
+      scope :totalable, -> { where.not(state: %i{removed}) }
 
       include AASM
 
@@ -25,27 +25,28 @@ module Invoices
         state :removed
 
         event :submit do
-          transitions from: [:pending], to: :submitted
+          transitions from: %i{ pending rejected }, to: :submitted
         end
 
         event :process do
-          transitions from: [:submitted], to: :processing
+          transitions from: %i{ submitted }, to: :processing
         end
 
         event :complete_processing do
-          transitions from: [:processing], to: :processed
+          transitions from: %i{ processing }, to: :processed
         end
 
         event :approve do
-          transitions from: [:submitted, :processed], to: :approved
+          transitions from: %i{ submitted processed }, to: :approved,
+            after: Proc.new{|*args| after_approve(*args)}
         end
 
         event :reject do
-          transitions from: [:submitted, :processed], to: :rejected
+          transitions from: %i{ submitted processed }, to: :rejected
         end
 
         event :remove do
-          transitions from: %i{pending submitted processed}, to: :removed
+          transitions from: %i{pending submitted processed rejected}, to: :removed
         end
       end
 
@@ -77,6 +78,13 @@ module Invoices
           'rejected' => 'danger',
           'removed' => 'danger'
         }.fetch(state, 'primary')
+      end
+
+      def after_approve(user)
+        draw_cost.invoices.reload
+        if draw_cost.invoices.submitted.none? && draw_cost.invoices.approved.any?
+          draw_cost.trigger_event(event_name: :approve, user: user)
+        end
       end
 
     end

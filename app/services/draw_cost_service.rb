@@ -26,7 +26,7 @@ class DrawCostService
     @draw_cost.draw = @draw
     if @draw_cost.save
       @draw.draw_costs.reload
-      SystemEvent.log(description: "Added #{@draw_cost.project_cost.name} Cost for Draw '#{@draw.name}'", event_source: @draw.project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Added #{@draw_cost.project_cost.name} Cost for Draw '#{@draw.name}'", event_source: @draw, incidental: @project, severity: :warn)
     else
       @errors = @draw_cost.errors.full_messages
     end
@@ -39,7 +39,7 @@ class DrawCostService
 
     if @draw_cost.update(sanitize_draw_cost_params(params))
       @draw.draw_costs.reload
-      SystemEvent.log(description: "Updated #{@draw_cost.project_cost.name} Cost for Draw '#{@draw.name}'", event_source: @draw.project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Updated #{@draw_cost.project_cost.name} Cost for Draw '#{@draw.name}'", event_source: @draw, incidental: @project, severity: :warn)
     else
       @errors = @draw_cost.errors.full_messages
     end
@@ -48,7 +48,7 @@ class DrawCostService
   def withdraw
     raise PolicyError.new unless @draw_cost_policy.destroy?
 
-    SystemEvent.log(description: "Removed #{@draw_cost.project_cost.name} Cost for Draw '#{@draw.name}'", event_source: @draw.project, incidental: @current_user, severity: :warn)
+    SystemEvent.log(description: "Removed #{@draw_cost.project_cost.name} Cost for Draw '#{@draw.name}'", event_source: @draw, incidental: @project, severity: :warn)
     @draw_cost.withdraw!
     @draw_cost.draw.draw_costs.reload
   end
@@ -60,7 +60,7 @@ class DrawCostService
       @draw_cost.trigger_event(event_name: :submit, user: @user)
     end
     if @draw_cost.submitted?
-      SystemEvent.log(description: "Submitted Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Submitted Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
       @draw.draw_costs.reload
     else
       @errors << 'Error submitting Draw Cost'
@@ -73,7 +73,7 @@ class DrawCostService
 
     @draw_cost.trigger_event(event_name: :approve, user: @user)
     if @draw_cost.submitted?
-      SystemEvent.log(description: "Approved Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Approved Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
       @draw.draw_costs.reload
     else
       @errors << 'Error approving Draw Cost'

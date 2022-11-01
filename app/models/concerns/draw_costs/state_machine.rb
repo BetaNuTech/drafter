@@ -4,15 +4,16 @@ module DrawCosts
 
     class_methods do
       def state_names
-        DrawCosts.aasm.states.map{|s| s.name.to_s}
+        DrawCost.aasm.states.map{|s| s.name.to_s}
       end
     end
 
     included do
       class TransitionError < StandardError; end;
 
-      ALLOW_INVOICE_CHANGE_STATES = %i{pending}
+      ALLOW_INVOICE_CHANGE_STATES = %i{pending rejected}
       VISIBLE_STATES = %i{pending submitted approved rejected}
+
       scope :visible, -> { where(state: VISIBLE_STATES) }
 
       include AASM
@@ -25,23 +26,23 @@ module DrawCosts
         state :withdrawn
 
         event :submit do
-          transitions from: [:pending], to: :submitted, 
+          transitions from: %i{ pending rejected }, to: :submitted, 
             guard: :allow_submit?,
             after: Proc.new { |*args| after_submit(*args)}
         end
 
         event :approve do
-          transitions from: [:submitted, :rejected], to: :approved,
+          transitions from: %i{ submitted rejected }, to: :approved,
             guard: :allow_approve?
         end
 
         event :reject do
-          transitions from: [:submitted, :approved], to: :rejected,
+          transitions from: %i{ submitted approved }, to: :rejected,
             after: Proc.new {|*args| reject_request }
         end
 
         event :withdraw do
-          transitions from: [:pending, :submitted], to: :withdrawn
+          transitions from: %i{ pending submitted rejected }, to: :withdrawn
         end
       end
 

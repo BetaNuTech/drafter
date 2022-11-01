@@ -33,7 +33,7 @@ class DrawDocumentService
     @draw_document.draw = @draw
     @draw_document.user = @user
     if @draw_document.save
-      SystemEvent.log(description: "Added #{@draw_document.description} Document for Draw '#{@draw.index}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Added #{@draw_document.description} Document for Draw '#{@draw.index}'", event_source: @draw, incidental: @project, severity: :warn)
       @draw.draw_documents.reload
     else
       @errors = @draw_document.errors.full_messages
@@ -46,7 +46,7 @@ class DrawDocumentService
 
     document_type = @draw_document.documenttype.capitalize
     @draw_document.trigger_event(event_name: :withdraw, user: @user)
-    SystemEvent.log(description: "Removed #{@draw_document.description} Document for Draw '#{@draw.index}'", event_source: @project, incidental: @current_user, severity: :warn)
+    SystemEvent.log(description: "Removed #{@draw_document.description} Document for Draw '#{@draw.index}'", event_source: @draw, incidental: @project, severity: :warn)
     @draw.draw_documents.reload
     true
   end
@@ -57,7 +57,7 @@ class DrawDocumentService
     reset_errors
 
     if @draw_document.trigger_event(event_name: :approve, user: @user)
-      SystemEvent.log(description: "Approved #{@draw_document.description} Document for Draw '#{@draw.index}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Approved #{@draw_document.description} Document for Draw '#{@draw.index}'", event_source: @draw, incidental: @project, severity: :warn)
       true
     else
       @errors << 'Could not approve this document'
@@ -71,7 +71,7 @@ class DrawDocumentService
     reset_errors
 
     if @draw_document.trigger_event(event_name: :reject, user: @user)
-      SystemEvent.log(description: "Rejected #{@draw_document.description} Document for Draw '#{@draw.index}'", event_source: @project, incidental: @current_user, severity: :warn)
+      SystemEvent.log(description: "Rejected #{@draw_document.description} Document for Draw '#{@draw.index}'", event_source: @draw, incidental: @project, severity: :warn)
       true
     else
       @errors << 'Could not approve this document'

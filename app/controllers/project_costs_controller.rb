@@ -23,7 +23,7 @@ class ProjectCostsController < ApplicationController
     authorize @project_cost
     @new_project_cost = @project.project_costs.new
     if @project_cost.save
-        SystemEvent.log(description: "Added Project Cost '#{@project_cost.name}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+        SystemEvent.log(description: "Added Project Cost '#{@project_cost.name}' for Project '#{@project.name}'", event_source: @project_cost, incidental: @project, severity: :warn)
       respond_to do |format|
         format.html { redirect_to project_project_cost_path(project_id: @project_cost.project_id, id: @project_cost.id), notice: 'Added a new Project Cost' }
         format.turbo_stream
@@ -45,7 +45,7 @@ class ProjectCostsController < ApplicationController
     authorize @project_cost
     if @project_cost.update(project_cost_params)
       respond_to do |format|
-        SystemEvent.log(description: "Updated Project Cost '#{@project_cost.name}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+        SystemEvent.log(description: "Updated Project Cost '#{@project_cost.name}' for Project '#{@project.name}'", event_source: @project_cost, incidental: @project, severity: :warn)
         format.html { redirect_to project_project_cost_path(project_id: @project_cost.project_id, id: @project_cost.id), notice: 'Updated Project Cost' }
         format.turbo_stream
       end
@@ -58,7 +58,7 @@ class ProjectCostsController < ApplicationController
     authorize @project_cost
     if @project_cost.destroy
       respond_to do |format|
-        SystemEvent.log(description: "Deleted Project Cost '#{@project_cost.name}' for Project '#{@project.name}'", event_source: @project, incidental: @current_user, severity: :warn)
+        SystemEvent.log(description: "Deleted Project Cost '#{@project_cost.name}' for Project '#{@project.name}'", event_source: @project_cost, incidental: @project, severity: :warn)
         format.html { redirect_to project_path(@project), notice: 'Project Cost deleted'}
         format.turbo_stream
       end

@@ -12,8 +12,8 @@ module Draws
       include AASM
       APPROVED_STATES = %i{ internally_approved externally_approved funded }.freeze
       VISIBLE_STATES = %i{ pending submitted internally_approved externally_approved funded rejected }.freeze
-      ALLOW_DRAW_COST_CHANGE_STATES = %i{pending rejected}
-      ALLOW_DOCUMENT_CHANGE_STATES = %i{pending rejected}
+      ALLOW_DRAW_COST_CHANGE_STATES = %i{ pending rejected }.freeze
+      ALLOW_DOCUMENT_CHANGE_STATES = %i{ pending rejected }.freeze
 
       scope :visible, -> { where(state: VISIBLE_STATES) }
 
@@ -27,13 +27,13 @@ module Draws
         state :withdrawn
 
         event :submit do
-          transitions from: :pending, to: :submitted,
+          transitions from: %i{ pending rejected }, to: :submitted,
             guard: Proc.new{ allow_submit? },
             after: Proc.new {|*args| after_submit(*args) }
         end
 
         event :approve_internal do
-          transitions from: :submitted, to: :internally_approved
+          transitions from: %i{ submitted rejected }, to: :internally_approved
         end
 
         event :approve_external do
@@ -41,11 +41,11 @@ module Draws
         end
 
         event :reject do
-          transitions from: %i{ internally_approved externally_approved }, to: :rejected
+          transitions from: %i{ submitted internally_approved externally_approved }, to: :rejected
         end
 
         event :withdraw do
-          transitions from: %i{ pending submitted }, to: :withdrawn
+          transitions from: %i{ pending submitted rejected internally_approved }, to: :withdrawn
         end
 
         event :fund do

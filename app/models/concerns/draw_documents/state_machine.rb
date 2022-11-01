@@ -4,7 +4,7 @@ module DrawDocuments
 
     class_methods do
       def state_names
-        DrawCosts.aasm.states.map{|s| s.name.to_s}
+        DrawDocument.aasm.states.map{|s| s.name.to_s}
       end
     end
 
