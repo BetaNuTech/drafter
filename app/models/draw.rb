@@ -92,6 +92,11 @@ class Draw < ApplicationRecord
     draw_cost_total - draw_cost_invoices_total
   end
 
+  def all_draw_costs_approved?
+    [:approved] == draw_costs.where(state: %i{pending submitted rejected}).
+                    pluck(:state).map(&:to_sym)
+  end
+
   def over_budget?
     budget_variance > 0
   end
@@ -112,5 +117,6 @@ class Draw < ApplicationRecord
       self.index = _next_index unless self.index >= _next_index
     end
   end
+
 
 end
