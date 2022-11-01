@@ -24,6 +24,10 @@ class Project < ApplicationRecord
   ### Validations
   validates :name, presence: true
 
+  def all_system_events
+    SystemEvent.where(event_source: self).or(SystemEvent.where(incidental: self))
+  end
+
   def draws_visible_to(user)
     case user
     when user.admin?
