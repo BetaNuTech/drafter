@@ -93,8 +93,10 @@ class Draw < ApplicationRecord
   end
 
   def all_draw_costs_approved?
-    [:approved] == draw_costs.where(state: %i{pending submitted rejected}).
-                    pluck(:state).map(&:to_sym)
+    match_states = %i{pending submitted rejected approved}
+    draw_cost_states = draw_costs.where(state: match_states).
+                    pluck(:state).map(&:to_sym).uniq
+    draw_cost_states.size == 1 && draw_cost_states.first == :approved
   end
 
   def over_budget?

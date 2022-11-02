@@ -6,18 +6,21 @@ module Draws
       has_many :draw_documents, dependent: :destroy
 
       def all_documents_submitted?
-        match_states = %i{submitted approved}
+        match_states = %i{pending submitted approved}
         submitted_types = draw_documents.where(state: match_states).
                             pluck(:documenttype).
                             uniq.map(&:to_sym)
-        DrawDocument::REQUIRED_DOCUMENTTYPES.sort == submitted_types.sort
+        ( DrawDocument::REQUIRED_DOCUMENTTYPES.sort - [:other] ) == ( submitted_types.sort - [:other] )
       end
 
       def all_required_documents_approved?
+        return false unless all_documents_submitted?
+
         match_states = %i{submitted approved}
-        all_approved = [:approved] == draw_documents.where(state: match_states).
-                        pluck(:state).map(&:to_sym)
-        all_approved && all_documents_submitted?
+        document_states = draw_documents.where(state: match_states).
+                                pluck(:state).map(&:to_sym).uniq
+        all_approved = document_states.size == 1 && document_states.first == :approved
+        all_approved
       end
 
       def remaining_documents

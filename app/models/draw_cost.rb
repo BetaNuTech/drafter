@@ -40,10 +40,14 @@ class DrawCost < ApplicationRecord
   has_one :organization, through: :draw
   has_many :invoices, dependent: :destroy
 
+  ### Delegations
+  delegate :name, to: :project_cost
+
   ### Validations
   validates :total, presence: true, numericality: { greater_than_or_equal_to: 0.0}
   validates :project_cost_id, presence: true
   validates :state, presence: true
+
 
   def invoice_total
     invoices.totalable.sum(:amount)
