@@ -34,7 +34,8 @@ module Draws
 
         event :approve_internal do
           transitions from: %i{ submitted rejected }, to: :internally_approved,
-            guard: Proc.new { allow_approval? }
+            guard: Proc.new { allow_approval? },
+            after: Proc.new {|*args| after_approval(*args) }
         end
 
         event :approve_external do
@@ -112,6 +113,10 @@ module Draws
 
       def allow_approval?
         all_draw_costs_approved? && all_required_documents_approved?
+      end
+
+      def after_approval(user)
+        approve(user)
       end
 
     end

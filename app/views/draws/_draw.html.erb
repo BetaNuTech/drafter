@@ -32,7 +32,7 @@
     </div>
     <div class="row">
       <div class="col">
-        <%= render partial: 'draws/submit_button', locals: { draw: draw } %>
+        <%= render partial: 'draws/action_buttons', locals: { draw: draw } %>
         <%= link_to('Costs/Documents',
                     project_draw_path(project_id: draw.project_id, id: draw.id),
                     class: 'btn btn-sm btn-primary',

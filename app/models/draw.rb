@@ -120,5 +120,11 @@ class Draw < ApplicationRecord
     end
   end
 
+  # TODO
+  def clean?
+    #STUB
+    true
+  end
+
 
 end

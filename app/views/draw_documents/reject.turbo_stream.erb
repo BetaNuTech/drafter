@@ -1,3 +1,3 @@
 <%= turbo_stream.update dom_id( @draw, :draw_documents ), partial: 'draws/draw_documents', locals: {draw: @draw} %>
 <%= turbo_stream.update dom_id(@draw, :submitted_documents), @draw.required_documents.count %>
-<%= turbo_stream.update dom_id(@draw, :submit_button), partial: 'draws/submit_button', locals: { draw: @draw } %>
+<%= turbo_stream.update dom_id(@draw, :action_buttons), partial: 'draws/action_buttons', locals: { draw: @draw } %>

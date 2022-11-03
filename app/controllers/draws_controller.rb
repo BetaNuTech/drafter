@@ -101,10 +101,23 @@ class DrawsController < ApplicationController
     authorize @draw
     @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
 
-    # Withdraw Draw (soft delete)
-    if @service.withdraw
+    if @service.approve_internal
       respond_to do |format|
-        format.html { redirect_to project_path(id: @project.id), notice: "Draw was removed." }
+        format.html { redirect_to project_path(id: @project.id), notice: "Draw was internally approved." }
+        format.turbo_stream
+      end
+    else
+      render :show, status: :unprocessable_entity
+    end
+  end
+
+  def reject
+    authorize @draw
+    @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
+
+    if @service.reject
+      respond_to do |format|
+        format.html { redirect_to project_path(id: @project.id), notice: "Draw was rejected." }
         format.turbo_stream
       end
     else

@@ -64,10 +64,17 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def approve_internal?
-    raise 'TODO'
-    privileged_user? ||
-      user.project_internal?(record.project)
-    # TODO invoices approved?
+    record.permitted_state_events.include?(:approve_internal) &&
+    ( user.admin? ||
+      user.project_management?(record.project) ||
+      (record.clean? && user.project_finance?(record.project)) )
+  end
+
+  def reject?
+    record.permitted_state_events.include?(:reject) &&
+    ( user.admin? ||
+      user.project_management?(record.project) ||
+      user.project_finance?(record.project) )
   end
 
   def add_document?

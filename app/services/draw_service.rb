@@ -75,10 +75,10 @@ class DrawService
     end
   end
 
-  def approve_internal?
+  def approve_internal
     raise PolicyError unless @policy.approve_internal?
 
-    if @draw.permitted_state_events.include?(:approve)
+    if @draw.permitted_state_events.include?(:approve_internal)
       @draw.trigger_event(event_name: :approve_internal, user: @user)
       SystemEvent.log(description: "Internally Approved Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
       @project.draws.reload
@@ -88,12 +88,12 @@ class DrawService
     end
   end
 
-  def reject_internal?
-    raise PolicyError unless @policy.reject_internal?
+  def reject
+    raise PolicyError unless @policy.reject?
 
     if @draw.permitted_state_events.include?(:reject)
-      @draw.trigger_event(event_name: :reject_internal, user: @user)
-      SystemEvent.log(description: "Rejected Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @pdraw, incidental: @project, severity: :warn)
+      @draw.trigger_event(event_name: :reject, user: @user)
+      SystemEvent.log(description: "Rejected Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
       return true
     else
       return false

@@ -5,7 +5,7 @@
     </h1>
     <% if draw.state != 'pending' %>
       <p class="badge bg-<%= draw.state_css_class %>" style="position: relative; top: -0.75em;">
-        <%= draw.state %>
+        <%= draw.state.humanize %>
       </p>    
     <% end %>
   </div>
@@ -24,8 +24,8 @@
         <% end %>
         of 3 Required Documents
       </h3>
-      <%= turbo_frame_tag :submit_button, draw do %>
-        <%= render partial: 'draws/submit_button', locals: { draw: draw } %>
+      <%= turbo_frame_tag :action_buttons, draw do %>
+        <%= render partial: 'draws/action_buttons', locals: { draw: draw } %>
       <% end %>
     </div>
   </div>
