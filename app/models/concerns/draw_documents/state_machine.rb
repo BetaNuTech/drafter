@@ -27,6 +27,7 @@ module DrawDocuments
 
         event :reject do
           transitions from: %i{ pending approved }, to: :rejected,
+            guard: Proc.new {  allow_reject? },
             after: Proc.new {|*args| after_reject(*args) }
         end
 
@@ -69,6 +70,10 @@ module DrawDocuments
 
       def after_reject(user)
         unapprove
+      end
+
+      def allow_reject?
+        draw.allow_document_changes? 
       end
     end
 
