@@ -103,8 +103,7 @@ class DrawsController < ApplicationController
 
     if @service.approve_internal
       respond_to do |format|
-        format.html { redirect_to project_path(id: @project.id), notice: "Draw was internally approved." }
-        format.turbo_stream
+        format.html { redirect_to draw_path(id: @draw.id), notice: "Draw was internally approved." }
       end
     else
       render :show, status: :unprocessable_entity
@@ -117,8 +116,7 @@ class DrawsController < ApplicationController
 
     if @service.approve_external
       respond_to do |format|
-        format.html { redirect_to project_path(id: @project.id), notice: "Draw was externally approved." }
-        format.turbo_stream
+        format.html { redirect_to draw_path(id: @draw.id), notice: "Draw was externally approved." }
       end
     else
       render :show, status: :unprocessable_entity
@@ -131,8 +129,7 @@ class DrawsController < ApplicationController
 
     if @service.fund
       respond_to do |format|
-        format.html { redirect_to project_path(id: @project.id), notice: "Draw was funded." }
-        format.turbo_stream
+        format.html { redirect_to draw_path(id: @draw.id), notice: "Draw was funded." }
       end
     else
       render :show, status: :unprocessable_entity
@@ -145,7 +142,7 @@ class DrawsController < ApplicationController
 
     if @service.reject
       respond_to do |format|
-        format.html { redirect_to project_path(id: @project.id), notice: "Draw was rejected." }
+        format.html { redirect_to draw_path(id: @draw.id), notice: "Draw was rejected." }
         format.turbo_stream
       end
     else
