@@ -1,8 +1,8 @@
 <%= turbo_frame_tag draw_cost do %>
-  <% case @current_user.project_role(draw_cost.project) %>
-  <% when ProjectRole.developer %>
-    <%= render partial: 'draw_costs/draw_cost_developer', locals: {draw_cost: draw_cost} %>
-  <% else %>
+  <%# case @current_user.project_role(draw_cost.project) %>
+  <%# when ProjectRole.developer %>
+    <%#= render partial: 'draw_costs/draw_cost_developer', locals: {draw_cost: draw_cost} %>
+  <%# else %>
     <%= render partial: 'draw_costs/draw_cost_default', locals: {draw_cost: draw_cost} %>
-  <% end %>
+  <%# end %>
 <% end %>

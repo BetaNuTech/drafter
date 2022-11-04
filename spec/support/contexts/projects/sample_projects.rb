@@ -15,6 +15,9 @@ RSpec.shared_context 'sample_projects' do
     project_service = Projects::Updater.new(project_owner, Project.new)
     project = project_service.create({name: 'test project'})
 
+    # Assign ProjectCosts
+    project.project_costs.update_all(total: 5000)
+
     # Other Organization
     other_organization = create(:organization)
 

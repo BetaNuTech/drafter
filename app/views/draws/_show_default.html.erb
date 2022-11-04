@@ -16,13 +16,18 @@
     <div class="col border bg-light m-2 p-2 text-center">
       <h3>
         <%= draw.name %> Total:
-        <%= turbo_frame_tag(:total_cost, draw) do %>
-          <%= number_to_currency draw.draw_cost_total %>
-        <% end %><br/>
-        <%= turbo_frame_tag(:submitted_documents, draw) do %>
-          <%= draw.required_documents.count %>
+        <span class="badge bg-success">
+          <%= turbo_frame_tag(:total_cost, draw) do %>
+            <%= number_to_currency draw.draw_cost_total %>
+          <% end %>
+        </span>
+        <br/>
+        <% if draw.allow_document_changes? %>
+          <%= turbo_frame_tag(:submitted_documents, draw) do %>
+            <%= draw.required_documents.count %>
+          <% end %>
+          of 3 Required Documents
         <% end %>
-        of 3 Required Documents
       </h3>
       <%= turbo_frame_tag :action_buttons, draw do %>
         <%= render partial: 'draws/action_buttons', locals: { draw: draw } %>

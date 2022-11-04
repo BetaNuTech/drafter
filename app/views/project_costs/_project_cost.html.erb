@@ -15,7 +15,10 @@
       </div>
       <div class="card-text">
         <p>
-          <b>Budget:</b> <%= number_to_currency(project_cost.total) %>
+          <b>Budget:</b> 
+          <span class="badge bg-<%= project_cost.missing_total? ? 'danger' : 'success' %>">
+            <%= number_to_currency(project_cost.total) %>
+          </span>
           <br/>
           <b>Approval Lead Time:</b> <%= project_cost.approval_lead_time > 0 ? "#{project_cost.approval_lead_time} days" : 'None' %>
           <br/>

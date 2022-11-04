@@ -1,2 +1,7 @@
 <% new_draw = Draw.new(project: project, organization: @current_user.organization) %>
-<%= link_to("Create #{new_draw.name}", new_project_draw_path(project_id: @project.id), class: 'btn btn-primary', data: {turbo_frame: 'new_draw'}) if policy(Draw.new(project: project)).new? %>
+<% if project.issues? %>
+  <%= link_to("Create #{new_draw.name}", '#', class: 'btn btn-primary', style: 'opacity: 0.3') %>
+<% end %>
+<% if policy(Draw.new(project: project)).new? %>
+  <%= link_to("Create #{new_draw.name}", new_project_draw_path(project_id: @project.id), class: 'btn btn-primary', data: {turbo_frame: 'new_draw'}) %>
+<% end %>

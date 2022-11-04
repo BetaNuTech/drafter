@@ -1,5 +1,5 @@
-<% if current_user.project_developer?(@project) %>
-  <%= render partial: 'show_developer', locals: {draw: @draw } %>
-<% else %>
+<%# if current_user.project_developer?(@project) %>
+  <%#= render partial: 'show_developer', locals: {draw: @draw } %>
+<%# else %>
   <%= render partial: 'show_default', locals: { draw: @draw } %>
-<% end %>
+<%# end %>

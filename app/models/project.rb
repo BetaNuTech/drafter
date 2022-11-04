@@ -42,7 +42,8 @@ class Project < ApplicationRecord
   end
 
   def allow_new_draw?
-    draws.pending.none?
+    !issues? &&
+      draws.pending.none?
   end
 
   def budget_total
@@ -67,4 +68,28 @@ class Project < ApplicationRecord
     end
     out.flatten
   end
+
+  def issues?
+    issues.any?
+  end
+
+  def issues
+    items = []
+
+    pc_issues = project_cost_issues
+    items << pc_issues if pc_issues.any?
+
+    items
+  end
+
+  def project_cost_issues
+    items = []
+    missing_totals = project_costs.select{ |cost| cost.missing_total? }
+    if missing_totals.any?
+      items = ['One or more Project Costs do not have a budget', missing_totals]
+    end
+
+    items
+  end
+
 end

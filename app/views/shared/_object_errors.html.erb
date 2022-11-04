@@ -3,10 +3,10 @@
   <div class="row">
     <div id="<%= object.id %>-errors" class="col alert bg-warning" >
       <div class="row">
-        <div class="col-1">
+        <div class="col-sm-3 col-1">
           <%= image_tag alert_image, style: 'width: 50px;' %>
         </div>
-        <div class="col">
+        <div class="col-sm-9 col-11">
           <%= pluralize(object.errors.count, "error") %> prohibited this <%= object_name %> from being saved:
           <ul>
             <% object.errors.full_messages.each do |message| %>

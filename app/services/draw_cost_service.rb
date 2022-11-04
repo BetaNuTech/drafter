@@ -30,6 +30,7 @@ class DrawCostService
     else
       @errors = @draw_cost.errors.full_messages
     end
+    @draw_cost
   end
 
   def update(params)
@@ -43,6 +44,7 @@ class DrawCostService
     else
       @errors = @draw_cost.errors.full_messages
     end
+    @draw_cost
   end
 
   def withdraw

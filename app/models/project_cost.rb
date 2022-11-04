@@ -36,6 +36,7 @@ class ProjectCost < ApplicationRecord
   belongs_to :project
   has_many :draw_costs
   has_many :invoices, through: :draw_costs
+  has_many :change_orders, dependent: :destroy
 
   ### Validations
   validates :approval_lead_time, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
@@ -65,12 +66,23 @@ class ProjectCost < ApplicationRecord
   end
 
   def budget_balance
-    total - change_request_total - invoice_total
+    total + change_order_total - change_order_funding_total - invoice_total
   end
 
-  # TODO: change requests
-  def change_request_total
-    0.0
+  def change_order_total
+    change_orders.sum(:amount)
+  end
+
+  def change_order_funding_total
+    ChangeOrder.where(funding_source_id: self.id).sum(:amount)
+  end
+
+  def missing_total?
+    0.0 >= (total || 0.0)
+  end
+
+  def over_budget?
+    0.0 > budget_balance
   end
 
 end

@@ -150,6 +150,8 @@ RSpec.describe DrawsController, type: :controller do
         describe 'as a manager' do
           it 'should internally approve the draw' do
             sign_in approver
+            assert(draw.all_draw_costs_approved?)
+            assert(draw.all_required_documents_approved?)
             post :approve_internal, params: {project_id: draw.project_id, draw_id: draw.id}
             expect(response).to be_redirect
             draw.reload

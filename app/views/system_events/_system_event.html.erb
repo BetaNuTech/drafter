@@ -4,7 +4,10 @@
   </span>
   <%= system_event.description %>
   &mdash;
-  <span class="text-nowrap">
-    <%= link_to(system_event.event_source.name, url_for(system_event.event_source), { data: {'turbo_frame': '_top' } }) %>
-  </span>
+  <% if system_event.event_source.present? %>
+    <span class="text-nowrap">
+      <% url = ( url_for(system_event.event_source) rescue '#' ) %>
+      <%= link_to(system_event.event_source.name, url, { data: {'turbo_frame': '_top' } }) %>
+    </span>
+  <% end %>
 </li>

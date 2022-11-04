@@ -1,0 +1,36 @@
+<div class="bg-light shadow p-2">
+  <h5>Create Change Order</h5>
+
+  <%= form_with(model: change_order, url: draw_cost_change_orders_path(draw_cost_id: change_order.draw_cost_id), data: {turbo_method: :post}) do |form| %>
+    <%= turbo_frame_tag dom_id(change_order, :errors) do %>
+      <%= render partial: 'shared/object_errors', locals: { object: change_order } %>
+    <% end %>
+
+    <div class="row">
+      <div class="col">
+        <b>Amount: </b>
+        <span class="badge bg-success">
+          <%= number_to_currency(change_order.draw_cost.draw_cost_balance * -1.0) %>
+        </span>
+      </div>
+    </div>
+
+    <div class="row pt-2">
+      <div class="col">
+        <div class="form-floating mb-3 g-2">
+          <%= form.select :funding_source_id, change_order_funding_options(change_order), { include_blank: true }, { class: 'form-select', autofocus: true } %>
+          <%= form.label :funding_source_id, 'Funding Source' %>
+        </div>  
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <%= form.submit('Submit', class: 'btn btn-success' ) %>
+        <%= link_to('Cancel', :back, class: 'btn btn-sm btn-secondary') %>
+      </div>
+    </div>
+
+  <% end %>
+
+</div>

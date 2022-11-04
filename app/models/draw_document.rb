@@ -70,10 +70,6 @@ class DrawDocument < ApplicationRecord
     }.fetch(documenttype.to_sym)
   end
 
-  def approved?
-    approver.present? && approved_at.present?
-  end
-
   def mark_approval_by(user)
     self.approver = user
     self.approved_at = Time.current

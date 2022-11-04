@@ -39,6 +39,7 @@ class DrawCost < ApplicationRecord
   has_one :project, through: :draw
   has_one :organization, through: :draw
   has_many :invoices, dependent: :destroy
+  has_many :change_orders, dependent: :destroy
 
   ### Delegations
   delegate :name, to: :project_cost
@@ -53,11 +54,27 @@ class DrawCost < ApplicationRecord
     invoices.totalable.sum(:amount)
   end
 
-  def draw_cost_balance
+  def subtotal
     total - invoice_total
   end
 
+  def draw_cost_balance
+    subtotal + change_order_total
+  end
+
   def over_budget?
-    draw_cost_balance < 0
+    0 > draw_cost_balance
+  end
+
+  def change_order_total
+    change_orders.sum(:amount)
+  end
+
+  def requires_change_order?
+    0 > subtotal
+  end
+
+  def allow_new_change_order?
+    over_budget?
   end
 end

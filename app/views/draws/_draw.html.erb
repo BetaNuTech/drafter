@@ -24,9 +24,10 @@
         </div>
       </div>
       <div class="col col-md-4">
-        <b><%= number_to_currency(draw.draw_cost_total) %></b><br/>
+        <h5><%= number_to_currency(draw.draw_cost_total) %></h5>
         <!--
-        <span class="badge round-pill bg-<%= draw.over_budget? ? 'danger' : 'success' %> "><%= number_to_currency(draw.budget_variance) %></span>
+          <br/>
+          <span class="badge round-pill bg-<%= draw.over_budget? ? 'danger' : 'success' %> "><%= number_to_currency(draw.budget_variance) %></span>
         -->
       </div>
     </div>
@@ -34,18 +35,17 @@
       <div class="col">
         <%= link_to('Costs/Documents',
                     project_draw_path(project_id: draw.project_id, id: draw.id),
-                    class: 'btn btn-primary m-1',
+                    class: 'btn btn-primary',
                     data: { turbo_frame: :_top }) if policy(draw).show? %>
         <%= link_to('Edit',
                     edit_project_draw_path(project_id: draw.project_id, id: draw.id),
-                    class: 'btn btn-sm btn-primary m-1',
+                    class: 'btn btn-sm btn-primary',
                     data: { turbo_frame: draw }) if policy(draw).edit? %>
         <%= link_to('Withdraw', project_draw_path(project_id: draw.project.id, id: draw.id),
-                    class: 'btn btn-sm btn-danger m-1',
+                    class: 'btn btn-sm btn-danger',
                     data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }) if policy(draw).withdraw? %>
-        <hr />
+        <hr/>
         <%= render partial: 'draws/action_buttons', locals: { draw: draw } %>
-        <br/>
       </div>
     </div>
   </div>

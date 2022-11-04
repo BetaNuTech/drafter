@@ -1,4 +1,4 @@
-class DrawCostPolicy < ApplicationPolicy
+class ChangeOrderPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       case user
@@ -9,12 +9,12 @@ class DrawCostPolicy < ApplicationPolicy
       when -> (u) { u.user? }
         # DrawCostRequests for the user's assigned projects
         #  belonging to the user's assigned organization
-        scope.includes(:draw).where(
+        scope.includes(draw_costs: :draw).where(
           draws: { project: user.projects }
         )
       else
         # DrawCostRequests for the user's assigned projects
-        scope.includes(:draw).where(draws: {project: user.projects})
+        scope.includes(draw_costs: :draw).where(draws: {project: user.projects})
       end
     end
   end
@@ -51,67 +51,21 @@ class DrawCostPolicy < ApplicationPolicy
     edit?
   end
 
-  def submit?
-    record.permitted_state_events.include?(:submit) &&
-      edit?
-  end
-
   def destroy?
     record.draw.allow_draw_cost_changes? &&
     ( privileged_user? ||
       user.project_owner?(record.project) ||
-      ( user.project_developer?(record.project) &&
-       user.organization_id == record.organization.id) )
-  end
-
-  def withdraw?
-    record.permitted_state_events.include?(:withdraw) &&
-    destroy?
-  end
-
-  def approvals?
-    user.admin? ||
-      user.project_owner?(record.project) ||
-      user.project_management?(record.project) ||
-      ( user.project_finance?(record.project) && record&.draw_cost.clean? )
-  end
-
-  def approve?
-    record.permitted_state_events.include?(:approve) &&
-      approvals?
-  end
-
-  def reject?
-    record.permitted_state_events.include?(:reject) &&
-      approvals?
-  end
-
-  def add_document?
-    privileged_user? ||
-      ( user.project_developer?(record.project) &&
-       user.organization_id == record.organization.id) ||
-      user.project_management?(record.project) ||
-      user.project_owner?(record.project)
-  end
-
-  def approve_document?
-    privileged_user? ||
-      user.project_management?(record.project) ||
-      user.project_owner?(record.project)
-  end
-
-  def reject_document?
-    approve_document?
+       user.project_developer?(record.project) )
   end
 
   def allowed_params
     case user
     when -> (u) { u.admin? }
-      DrawCost::ALLOWED_PARAMS
+      ChangeOrder::ALLOWED_PARAMS
     when -> (u) { u.project_owner?(record.project) }
-      DrawCost::ALLOWED_PARAMS
+      ChangeOrder::ALLOWED_PARAMS
     when -> (u) { u.project_developer?(record.project) }
-      DrawCost::ALLOWED_PARAMS
+      ChangeOrder::ALLOWED_PARAMS
     else
       []
     end

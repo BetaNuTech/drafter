@@ -63,12 +63,4 @@ class ProjectCostPolicy < ApplicationPolicy
     end
   end
 
-  def draw
-    record&.draw
-  end
-
-  def project
-    draw&.project
-  end
-
 end

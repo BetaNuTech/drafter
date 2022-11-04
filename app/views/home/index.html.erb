@@ -1,6 +1,11 @@
 <div class="row pt-2">
   <div class="col-sm-12 col-md-6" style="font-size: 1.2em;">
     <%= render partial: 'projects', locals: { projects: @projects} %>
+    <% if @projects.none? %>
+      <div class="bg-warning bg-gradient shadow p-2">
+        <h5>You are not a member of any projects at this time.</h5>
+      </div>
+    <% end %>
   </div>
   <div class="col-sm-12 col-md-6">
     <div class="row row-cols-1 g-2">

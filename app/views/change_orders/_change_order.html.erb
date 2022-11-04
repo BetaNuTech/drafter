@@ -1,0 +1,16 @@
+<div class="row border-top p-1">
+  <div class="col-sm-12 col-md-9">
+    <span class="badge bg-success">
+      <%= number_to_currency change_order.amount %>
+    </span>
+    <i>
+      from
+      <b>
+        <%= change_order.funding_source.name %>
+      </b>
+    </i>
+  </div>
+  <div class="col-sm-12 col-md-2">
+    <%= link_to('Withdraw', draw_cost_change_order_path(draw_cost_id: change_order.draw_cost_id, id: change_order.id), class: 'btn btn-sm btn-danger p-1', data: { turbo_method: :delete }) %>
+  </div>
+</div>

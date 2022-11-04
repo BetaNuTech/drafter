@@ -114,10 +114,10 @@
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
-      :drawable: true
+      :drawable: false
       :change_requestable: true
       :initial_draw_only: false
-      :change_request_allowed: true
+      :change_request_allowed: false
       :total: 0.00
     - :name: Development Fee
       :cost_type: soft
@@ -187,15 +187,6 @@
       :approval_lead_time: 0
       :standard: true
       :drawable: true
-      :change_requestable: true
-      :initial_draw_only: false
-      :change_request_allowed: true
-      :total: 0.00
-    - :name: Contingency
-      :cost_type: soft
-      :approval_lead_time: 0
-      :standard: true
-      :drawable: false
       :change_requestable: true
       :initial_draw_only: false
       :change_request_allowed: true
