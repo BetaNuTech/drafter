@@ -25,6 +25,8 @@ Rails.application.routes.draw do
     resources :project_users
     resources :draws do
       post 'approve_internal', to: 'draws#approve_internal'
+      post 'approve_external', to: 'draws#approve_external'
+      post 'fund', to: 'draws#fund'
       post 'reject', to: 'draws#reject'
       post 'submit', to: 'draws#submit'
     end

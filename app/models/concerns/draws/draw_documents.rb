@@ -14,13 +14,8 @@ module Draws
       end
 
       def all_required_documents_approved?
-        return false unless all_documents_submitted?
-
-        match_states = %i{submitted approved}
-        document_states = draw_documents.where(state: match_states).
-                                pluck(:state).map(&:to_sym).uniq
-        all_approved = document_states.size == 1 && document_states.first == :approved
-        all_approved
+        all_documents_submitted? &&
+          required_documents.all?{|d| d.approved?}
       end
 
       def remaining_documents

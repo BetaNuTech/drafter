@@ -59,7 +59,7 @@ module DrawDocuments
           'submitted' => 'warning',
           'approved' => 'success',
           'rejected' => 'danger',
-          'withdrawn' => 'light'
+          'withdrawn' => 'secondary'
         }.fetch(state, 'light')
       end
 

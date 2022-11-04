@@ -39,7 +39,9 @@ module Draws
         end
 
         event :approve_external do
-          transitions from: :internally_approved, to: :externally_approved
+          transitions from: :internally_approved, to: :externally_approved,
+            guard: Proc.new { allow_approval? },
+            after: Proc.new {|*args| after_approval(*args) }
         end
 
         event :reject do
@@ -80,7 +82,8 @@ module Draws
           'submitted' => 'warning',
           'internally_approved' => 'primary',
           'externally_approved' => 'primary',
-          'funded' => 'success'
+          'funded' => 'success',
+          'rejected' => 'danger'
         }.fetch(state, 'light')
       end
 
@@ -104,7 +107,9 @@ module Draws
       end
 
       def allow_submit?
-        all_documents_submitted? && draw_costs.all?(&:allow_submit?)
+        all_documents_submitted? &&
+          draw_costs.visible.any? &&
+          draw_costs.all?(&:allow_submit?)
       end
 
       def after_submit(user)

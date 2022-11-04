@@ -90,7 +90,7 @@ module DrawCosts
       end
 
       def allow_submit?
-        draw_cost_balance == 0.0
+        invoices.visible.any? && draw_cost_balance == 0.0
       end
 
       def allow_approve?

@@ -88,6 +88,32 @@ class DrawService
     end
   end
 
+  def approve_external
+    raise PolicyError unless @policy.approve_external?
+
+    if @draw.permitted_state_events.include?(:approve_external)
+      @draw.trigger_event(event_name: :approve_external, user: @user)
+      SystemEvent.log(description: "Externally Approved Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
+      @project.draws.reload
+      return true
+    else
+      return false
+    end
+  end
+
+  def fund
+    raise PolicyError unless @policy.fund?
+
+    if @draw.permitted_state_events.include?(:fund)
+      @draw.trigger_event(event_name: :fund, user: @user)
+      SystemEvent.log(description: "Externally funded Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
+      @project.draws.reload
+      return true
+    else
+      return false
+    end
+  end
+
   def reject
     raise PolicyError unless @policy.reject?
 
@@ -100,27 +126,27 @@ class DrawService
     end
   end
 
-  def add_document(params)
-    raise PolicyError unless @policy.add_document?
+  #def add_document(params)
+    #raise PolicyError unless @policy.add_document?
 
-    reset_errors
+    #reset_errors
 
-    document = DrawDocument.new(sanitize_document_params(params))
-    document.draw = @draw
-    document.user = @user
-    if document.save
-      SystemEvent.log(description: "#{document.documenttype} Document added for Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
-      @draw.draw_documents.reload 
-      document
-    else
-      @errors = document.errors.full_messages
-      document
-    end
-  end
+    #document = DrawDocument.new(sanitize_document_params(params))
+    #document.draw = @draw
+    #document.user = @user
+    #if document.save
+      #SystemEvent.log(description: "#{document.documenttype} Document added for Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
+      #@draw.draw_documents.reload 
+      #document
+    #else
+      #@errors = document.errors.full_messages
+      #document
+    #end
+  #end
 
-  def remove_document(document)
-    raise 'TODO'
-  end
+  #def remove_document(document)
+    #raise 'TODO'
+  #end
 
   def draws
     DrawPolicy::Scope.new(@user, @project.draws).resolve

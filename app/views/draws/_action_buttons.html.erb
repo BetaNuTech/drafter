@@ -1,3 +1,5 @@
 <%= link_to('Submit', project_draw_submit_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-success', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).submit? %>
-<%= link_to('Internally Approve', project_draw_approve_internal_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-success', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).approve_internal? %>
-<%= link_to('Reject', project_draw_reject_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-danger', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).reject? %>
+<%= link_to('Internally Approve', project_draw_approve_internal_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-success m-1', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).approve_internal? %>
+<%= link_to('Externally Approve', project_draw_approve_external_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-success m-1', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).approve_external? %>
+<%= link_to('Fund', project_draw_fund_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-success m-1', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).fund? %>
+<%= link_to('Reject', project_draw_reject_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-danger m-1', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).reject? %>

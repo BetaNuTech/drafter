@@ -32,18 +32,20 @@
     </div>
     <div class="row">
       <div class="col">
-        <%= render partial: 'draws/action_buttons', locals: { draw: draw } %>
         <%= link_to('Costs/Documents',
                     project_draw_path(project_id: draw.project_id, id: draw.id),
-                    class: 'btn btn-sm btn-primary',
+                    class: 'btn btn-primary m-1',
                     data: { turbo_frame: :_top }) if policy(draw).show? %>
         <%= link_to('Edit',
                     edit_project_draw_path(project_id: draw.project_id, id: draw.id),
-                    class: 'btn btn-sm btn-primary',
+                    class: 'btn btn-sm btn-primary m-1',
                     data: { turbo_frame: draw }) if policy(draw).edit? %>
         <%= link_to('Withdraw', project_draw_path(project_id: draw.project.id, id: draw.id),
-                    class: 'btn btn-sm btn-danger',
+                    class: 'btn btn-sm btn-danger m-1',
                     data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }) if policy(draw).withdraw? %>
+        <hr />
+        <%= render partial: 'draws/action_buttons', locals: { draw: draw } %>
+        <br/>
       </div>
     </div>
   </div>

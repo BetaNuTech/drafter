@@ -111,6 +111,34 @@ class DrawsController < ApplicationController
     end
   end
 
+  def approve_external
+    authorize @draw
+    @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
+
+    if @service.approve_external
+      respond_to do |format|
+        format.html { redirect_to project_path(id: @project.id), notice: "Draw was externally approved." }
+        format.turbo_stream
+      end
+    else
+      render :show, status: :unprocessable_entity
+    end
+  end
+
+  def fund
+    authorize @draw
+    @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
+
+    if @service.fund
+      respond_to do |format|
+        format.html { redirect_to project_path(id: @project.id), notice: "Draw was funded." }
+        format.turbo_stream
+      end
+    else
+      render :show, status: :unprocessable_entity
+    end
+  end
+
   def reject
     authorize @draw
     @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
