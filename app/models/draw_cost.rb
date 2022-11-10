@@ -71,10 +71,10 @@ class DrawCost < ApplicationRecord
   end
 
   def requires_change_order?
-    0 > subtotal
+    invoice_total > project_cost.budget_balance
   end
 
   def allow_new_change_order?
-    over_budget?
+    requires_change_order?
   end
 end

@@ -62,7 +62,7 @@ class ProjectCost < ApplicationRecord
   end
 
   def invoice_total
-    invoices.totalable.sum(:total)
+    invoices.totalable.sum(:amount)
   end
 
   def budget_balance
