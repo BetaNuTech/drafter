@@ -88,19 +88,11 @@ class Draw < ApplicationRecord
     draw_costs.visible.map(&:invoice_total).sum
   end
 
-  def budget_variance
-    draw_cost_total - draw_cost_invoices_total
-  end
-
   def all_draw_costs_approved?
     match_states = %i{pending submitted rejected approved}
     draw_cost_states = draw_costs.where(state: match_states).
                     pluck(:state).map(&:to_sym).uniq
     draw_cost_states.size == 1 && draw_cost_states.first == :approved
-  end
-
-  def over_budget?
-    budget_variance > 0
   end
 
   def approve(user)
