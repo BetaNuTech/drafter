@@ -52,7 +52,8 @@ class DrawDocument < ApplicationRecord
   enum :documenttype, [:other, :budget, :application, :waiver]
 
   ### Validations
-  validates :documenttype, presence: true, uniqueness: { scope: :draw_id }
+  validates :documenttype, presence: true
+  validates :documenttype, uniqueness: { scope: :draw_id }, unless: -> { documenttype == 'other' }
 
   ### Scopes
   scope :budget, -> { where(documenttype: :budget) }

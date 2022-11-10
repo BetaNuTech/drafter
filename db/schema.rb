@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_08_174912) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_10_215333) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -47,18 +47,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_08_174912) do
     t.uuid "project_cost_id", null: false
     t.uuid "draw_cost_id", null: false
     t.uuid "funding_source_id", null: false
-    t.uuid "approved_by_id"
     t.decimal "amount"
     t.text "description"
-    t.datetime "approved_at"
-    t.string "approved_by_desc"
     t.string "external_task_id"
     t.datetime "integration_attempt_at"
     t.integer "integration_attempt_number"
-    t.string "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["approved_by_id"], name: "index_change_orders_on_approved_by_id"
     t.index ["draw_cost_id"], name: "index_change_orders_on_draw_cost_id"
     t.index ["funding_source_id"], name: "index_change_orders_on_funding_source_id"
     t.index ["project_cost_id"], name: "index_change_orders_on_project_cost_id"
@@ -300,7 +295,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_08_174912) do
   add_foreign_key "change_orders", "draw_costs"
   add_foreign_key "change_orders", "project_costs"
   add_foreign_key "change_orders", "project_costs", column: "funding_source_id"
-  add_foreign_key "change_orders", "users", column: "approved_by_id"
   add_foreign_key "draw_costs", "draws"
   add_foreign_key "draw_costs", "project_costs"
   add_foreign_key "draw_costs", "users", column: "approver_id"
