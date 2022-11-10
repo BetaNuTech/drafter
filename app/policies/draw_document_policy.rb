@@ -18,7 +18,7 @@ class DrawDocumentPolicy < ApplicationPolicy
     record.draw.allow_document_changes? &&
       ( privileged_user? ||
         user.project_developer?(record.project) ||
-        user.project_management?(record.project) )
+        user.project_internal?(record.project) )
   end
 
   def create?
@@ -33,7 +33,7 @@ class DrawDocumentPolicy < ApplicationPolicy
   def edit?
     record.draw.allow_document_changes? &&
       ( privileged_user? ||
-        user.project_management?(record.project) ||
+        user.project_internal?(record.project) ||
         user.project_developer?(record.project))
   end
 
@@ -50,9 +50,7 @@ class DrawDocumentPolicy < ApplicationPolicy
 
   def approvals?
     user.admin? ||
-      user.project_owner?(record.project) ||
-      user.project_management?(record.project) ||
-      user.project_finance?(record.project)
+      user.project_internal?(record.project)
   end
 
   def approve?

@@ -26,7 +26,7 @@ class DrawCostPolicy < ApplicationPolicy
   def new?
     record.draw.allow_draw_cost_changes? &&
       ( privileged_user? ||
-        user.project_owner?(record.project) ||
+        user.project_internal?(record.project) ||
         user.project_developer?(record.project) )
   end
 
@@ -58,10 +58,9 @@ class DrawCostPolicy < ApplicationPolicy
 
   def destroy?
     record.draw.allow_draw_cost_changes? &&
-    ( privileged_user? ||
-      user.project_owner?(record.project) ||
-      ( user.project_developer?(record.project) &&
-       user.organization_id == record.organization.id) )
+      ( privileged_user? ||
+        user.project_developer?(record.project) ||
+        user.project_internal?(record.project) )
   end
 
   def withdraw?
@@ -88,16 +87,13 @@ class DrawCostPolicy < ApplicationPolicy
 
   def add_document?
     privileged_user? ||
-      ( user.project_developer?(record.project) &&
-       user.organization_id == record.organization.id) ||
-      user.project_management?(record.project) ||
-      user.project_owner?(record.project)
+      user.project_developer?(record.project)
+      user.project_internal?(record.project)
   end
 
   def approve_document?
     privileged_user? ||
-      user.project_management?(record.project) ||
-      user.project_owner?(record.project)
+      user.project_internal?(record.project)
   end
 
   def reject_document?
@@ -108,7 +104,7 @@ class DrawCostPolicy < ApplicationPolicy
     case user
     when -> (u) { u.admin? }
       DrawCost::ALLOWED_PARAMS
-    when -> (u) { u.project_owner?(record.project) }
+    when -> (u) { u.project_internal?(record.project) }
       DrawCost::ALLOWED_PARAMS
     when -> (u) { u.project_developer?(record.project) }
       DrawCost::ALLOWED_PARAMS

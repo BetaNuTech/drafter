@@ -7,9 +7,7 @@ class InvoicePolicy < ApplicationPolicy
       when -> (u) { u.executive? }
         scope
       else
-        scope.includes(draw_cost: [:draw]).where(
-          draws: { project: u.projects, organization_id: u.organization_id }
-        )
+        scope.includes(draw_cost: [:draw]).where( draws: { project: u.projects })
       end
     end
   end
@@ -21,7 +19,7 @@ class InvoicePolicy < ApplicationPolicy
   def new?
     record&.draw_cost&.allow_invoice_changes? &&
       ( user.admin? ||
-       user.project_owner?(record.project) ||
+       user.project_internal?(record.project) ||
        user.project_developer?(record.project)
       ) 
   end
@@ -32,11 +30,8 @@ class InvoicePolicy < ApplicationPolicy
 
   def show?
     user.admin? ||
-      user.project_owner?(record.project) ||
-      user.project_management?(record.project) ||
-      user.project_finance?(record.project) ||
-      ( user.project_developer?(record.project) &&
-        record.organization == user.organization)
+    user.project_internal?(record.project) ||
+    user.project_developer?(record.project)
   end
 
   def edit?
@@ -44,11 +39,8 @@ class InvoicePolicy < ApplicationPolicy
       record.pending? && (
       user == record.user ||
         user.admin? ||
-        user.project_owner?(record.project) ||
-        user.project_management?(record.project) ||
-        user.project_finance?(record.project) ||
-        ( user.project_developer?(record.project) &&
-          record.organization == user.organization)
+        user.project_internal?(record.project) ||
+        user.project_developer?(record.project)
       )
   end
 
@@ -73,9 +65,7 @@ class InvoicePolicy < ApplicationPolicy
 
   def approvals?
     user.admin? ||
-      user.project_owner?(record.project) ||
-      user.project_management?(record.project) ||
-      user.project_finance?(record.project)
+      user.project_internal?(record.project)
   end
 
   def approve?
@@ -92,7 +82,7 @@ class InvoicePolicy < ApplicationPolicy
     case user
     when -> (u) { u.admin? }
       Invoice::ALLOWED_PARAMS + [:multi_invoice]
-    when -> (u) { u.project_owner?(record.project) }
+    when -> (u) { u.project_internal?(record.project) }
       Invoice::ALLOWED_PARAM + [:multi_invoice]
     when -> (u) { u.project_developer?(record.project) }
       Invoice::ALLOWED_PARAMS

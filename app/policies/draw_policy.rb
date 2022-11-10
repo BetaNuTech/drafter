@@ -18,7 +18,7 @@ class DrawPolicy < ApplicationPolicy
     record.project.allow_new_draw? &&
       ( privileged_user? ||
         user.project_developer?(record.project) ||
-        user.project_management?(record.project) )
+        user.project_internal?(record.project) )
   end
 
   def create?
@@ -32,7 +32,7 @@ class DrawPolicy < ApplicationPolicy
 
   def edit?
     privileged_user? ||
-      user.project_management?(record.project) ||
+      user.project_internal?(record.project) ||
       ( ( record.pending? || record.rejected? ) &&
           user.project_developer?(record.project) ) 
   end
@@ -80,33 +80,14 @@ class DrawPolicy < ApplicationPolicy
   def reject?
     record.permitted_state_events.include?(:reject) &&
     ( user.admin? ||
-      user.project_management?(record.project) ||
-      user.project_finance?(record.project) )
+      user.project_internal?(record.project))
   end
 
   def fund?
     record.permitted_state_events.include?(:fund) &&
     ( user.admin? ||
-      user.project_management?(record.project) ||
-      user.project_finance?(record.project) )
+      user.project_internal?(record.project))
   end
-
-  #def add_document?
-    #( privileged_user? ||
-      #user.project_owner?(record.project) ||
-      #user.project_developer?(record.project) )
-  #end
-
-  #def remove_document?
-    #( privileged_user? ||
-      #record.user == user ||
-      #user.project_owner?(record.project) ||
-      #user.project_developer?(record.project) )
-  #end
-
-  #def approve_document?
-    #raise 'TODO'
-  #end
 
   def allowed_params
     allow_params = Draw::ALLOWED_PARAMS
@@ -115,11 +96,8 @@ class DrawPolicy < ApplicationPolicy
       allow_params << :organization_id
       allow_params << :reference if record.funded?
       allow_params
-    when -> (u) { u.project_management?(record.project) }
+    when -> (u) { u.project_internal?(record.project) }
       allow_params << :organization_id
-      allow_params << :reference if record.funded?
-      allow_params
-    when -> (u) { u.project_finance?(record.project) }
       allow_params << :reference if record.funded?
       allow_params
     else
