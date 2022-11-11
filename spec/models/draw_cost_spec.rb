@@ -28,19 +28,9 @@
 require 'rails_helper'
 
 RSpec.describe DrawCost, type: :model do
-  include_context 'sample_projects'
+  include_context 'sample_draws'
 
-  let(:user) { sample_project.developers.first }
-  let(:uploaded_file) {Rack::Test::UploadedFile.new("#{Rails.root}/spec/fixtures/files/sample_document_1.pdf", 'application/pdf')}
-  let(:draw) { sample_project.draws.first}
-  let(:draw_cost) {
-    create(:draw_cost, draw: draw, project_cost: sample_project.project_costs.first, total: 12345.67, state: 'pending')
-  }
-  let(:invoices) {
-    draw_cost.invoices.create!(amount: '1234.56', description: 'Test invoice 1', document: uploaded_file, user:)
-    draw_cost.invoices.create!(amount: '1234.56', description: 'Test invoice 1', document: uploaded_file, user:)
-    draw_cost.invoices
-  }
+  let(:user) { developer_user }
 
   describe 'initialization' do
     it 'creates a DrawCost' do

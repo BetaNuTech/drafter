@@ -58,12 +58,17 @@ class DrawCost < ApplicationRecord
     total - invoice_total
   end
 
-  def draw_cost_balance
+  def balance
     subtotal + change_order_total
   end
 
+  def project_cost_overage
+    difference = project_cost.budget_balance - total
+    difference > 0.0 ? difference : 0.0
+  end
+
   def over_budget?
-    0 > draw_cost_balance
+    0.0 > balance
   end
 
   def change_order_total
@@ -71,7 +76,7 @@ class DrawCost < ApplicationRecord
   end
 
   def requires_change_order?
-    invoice_total > project_cost.budget_balance
+    0.0 < project_cost_overage 
   end
 
   def allow_new_change_order?

@@ -1,0 +1,10 @@
+<p class="p-2 border border-dark" style="background: #ddd;">
+  <b>Invoices Total:</b>
+  <span class="badge bg-success">
+    <%= number_to_currency draw_cost.invoice_total %>
+  </span>
+  <b>Remaining:</b>
+  <span class="badge bg-<%= draw_cost.over_budget? ? 'danger' : 'success' %>">
+    <%= number_to_currency draw_cost.balance %>
+  </span>
+</p>

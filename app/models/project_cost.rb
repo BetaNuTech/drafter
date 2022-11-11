@@ -61,12 +61,16 @@ class ProjectCost < ApplicationRecord
     }.fetch(cost_type.to_sym)
   end
 
+  def budget_balance
+    total + change_order_total - change_order_funding_total - draw_cost_total
+  end
+
   def invoice_total
     invoices.totalable.sum(:amount)
   end
 
-  def budget_balance
-    total + change_order_total - change_order_funding_total - invoice_total
+  def draw_cost_total
+    draw_costs.visible.sum(:total)
   end
 
   def change_order_total

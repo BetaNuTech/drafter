@@ -31,7 +31,7 @@ module DrawsHelper
   end
 
   def change_order_funding_options(change_order)
-    proposed_amount = change_order.draw_cost.draw_cost_balance * -1.0
+    proposed_amount = change_order.draw_cost.project_cost_overage
     project_costs = change_order.project.project_costs.where.not(id: change_order.draw_cost.project_cost_id).select{|cost| cost.budget_balance >= proposed_amount  }
     options_from_collection_for_select(project_costs, 'id', 'name', change_order.funding_source_id)
   end

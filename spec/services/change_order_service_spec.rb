@@ -55,7 +55,7 @@ RSpec.describe ChangeOrderService do
       describe 'when there is sufficient project cost budget remaining' do
         it 'should create a change order for the invoice overage' do
           assert(draw_cost.over_budget?)
-          expect(draw_cost.draw_cost_balance).to eq(draw_cost.subtotal)
+          expect(draw_cost.balance).to eq(draw_cost.subtotal)
           expect(project_cost.budget_balance).to be > 0.0
 
           service = ChangeOrderService.new(user:, draw_cost:)
@@ -64,7 +64,7 @@ RSpec.describe ChangeOrderService do
           refute(service.errors?)
           expect(change_order).to eq(service.change_order)
           expect(change_order.amount).to eq(draw_cost.subtotal * -1.0)
-          expect(draw_cost.draw_cost_balance).to eq(0.0)
+          expect(draw_cost.balance).to eq(0.0)
           refute(draw_cost.over_budget?)
         end
       end

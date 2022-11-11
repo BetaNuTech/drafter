@@ -42,7 +42,7 @@ RSpec.shared_context 'sample_projects' do
     # Add Draws 
     user = project.developers.first
     draw_service = DrawService.new(user:, project: )
-    draw_service.create({amount: 123456.0})
+    draw_service.create({amount: 5000.0})
 
     project.reload
     project

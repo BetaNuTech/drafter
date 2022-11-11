@@ -32,7 +32,7 @@ class ChangeOrderService
     @change_order = @draw_cost.change_orders.new(sanitize_change_order_params(params))
     @change_order.project_cost = @draw_cost.project_cost
     if ( funding_source = @change_order.funding_source)
-      @change_order.amount = proposed_amount(funding_source)
+      @change_order.amount = @draw_cost.project_cost_overage
     end
     if @change_order.save
       @draw_cost.change_orders.reload
@@ -50,8 +50,8 @@ class ChangeOrderService
     SystemEvent.log(description: "Removed Change Order for #{@draw_cost.project_cost.name} Cost for Draw '#{@draw.name}'", event_source: @draw, incidental: @project, severity: :warn)
   end
 
-  def update(params)
-    raise NotImplementedError
+  #def update(params)
+    #raise NotImplementedError
     #raise PolicyError.new unless @change_order_policy.create?
 
     #reset_errors
@@ -63,25 +63,7 @@ class ChangeOrderService
       #@errors = @change_order.errors.full_messages
     #end
     #@change_order
-  end
-
-  # TODO
-  def approve
-
-  end
-
-  # TODO
-  def unapprove
-
-  end
-
-  def proposed_amount(funding_source)
-    subtotal = @draw_cost.subtotal * -1.0
-    return 0.0 if 0.0 > subtotal
-
-    available = funds_available(funding_source)
-    subtotal > available ? 0.0 : subtotal
-  end
+  #end
 
   def funds_available?(funding_source)
     0 < funds_available(funding_source)
