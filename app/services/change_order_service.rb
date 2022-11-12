@@ -31,9 +31,14 @@ class ChangeOrderService
 
     @change_order = @draw_cost.change_orders.new(sanitize_change_order_params(params))
     @change_order.project_cost = @draw_cost.project_cost
-    if ( funding_source = @change_order.funding_source)
-      @change_order.amount = @draw_cost.project_cost_overage
+
+    @change_order.amount = @draw_cost.draw_cost_overage
+
+    unless ( @change_order.amount.positive? )
+      @errors << 'Draw Cost does not require a change order'
+      return @change_order
     end
+
     if @change_order.save
       @draw_cost.change_orders.reload
       SystemEvent.log(description: "Added Change Order for #{@draw_cost.project_cost.name} Cost for Draw '#{@draw.name}'", event_source: @draw, incidental: @project, severity: :warn)
@@ -74,6 +79,11 @@ class ChangeOrderService
   end
   
   private
+
+  def draw_cost_overage
+    difference = @draw_cost.project_cost.budget_balance - @draw_cost.total
+    difference.negative? ? ( difference * -1.0 ) : 0.0
+  end
 
   def reset_errors
     @errors = []

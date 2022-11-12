@@ -10,6 +10,8 @@ RSpec.describe ChangeOrderService do
     cost.save!
     Invoice.create!(draw_cost: cost, user: user, amount: 50.0)
     cost.invoices.reload
+    cost.total = cost.invoice_total
+    cost.save
     cost
   }
   let(:project_cost) { draw_cost.project_cost }
@@ -35,9 +37,8 @@ RSpec.describe ChangeOrderService do
       }
     }
 
-    describe 'when the invoice total is less than the draw cost budget' do
+    describe 'when the draw cost total is less than the remaining draw cost budget' do
       it 'should not create a change order' do
-        refute(draw_cost.over_budget?)
         service = ChangeOrderService.new(user:, draw_cost:)
         expect {
           change_order = service.create(valid_attributes)
@@ -51,20 +52,25 @@ RSpec.describe ChangeOrderService do
         # add an invoice to the draw cost to bring it over budget
         Invoice.create!(draw_cost:, user: , amount: draw_cost.total)
         draw_cost.invoices.reload
+        draw_cost.total = draw_cost.invoice_total
+        draw_cost.save!
       end
       describe 'when there is sufficient project cost budget remaining' do
         it 'should create a change order for the invoice overage' do
-          assert(draw_cost.over_budget?)
-          expect(draw_cost.balance).to eq(draw_cost.subtotal)
-          expect(project_cost.budget_balance).to be > 0.0
+          project_cost.total = 1.0
+          project_cost.save!
+          draw_cost.project_cost.reload
+
+          assert(draw_cost.requires_change_order?)
+          expect(project_cost.budget_balance).to be < 0.0
 
           service = ChangeOrderService.new(user:, draw_cost:)
           change_order = service.create(valid_attributes)
 
           refute(service.errors?)
           expect(change_order).to eq(service.change_order)
-          expect(change_order.amount).to eq(draw_cost.subtotal * -1.0)
-          expect(draw_cost.balance).to eq(0.0)
+          expect(change_order.amount).to eq(99.0)
+          expect(draw_cost.project_cost_overage).to eq(0.0)
           refute(draw_cost.over_budget?)
         end
       end

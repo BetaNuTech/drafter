@@ -27,4 +27,31 @@ RSpec.shared_context 'sample_draws' do
     draw_cost2.invoices
   }
   let(:invoices) { draw_cost_invoices }
+  let(:draw2) {
+    old_draw_state = draw.state
+    draw.state = 'funded'
+    draw.save!
+    user = sample_project.developers.first
+    draw_service = DrawService.new(user:, project: draw.project )
+    draw2 = draw_service.create({amount: 10000.0})
+    draw.state = old_draw_state
+    draw.save!
+    draw2
+  }
+  let(:draw2_draw_cost) {
+    create(:draw_cost, draw: draw2, project_cost: draw_cost.project_cost, total: 4000.0, state: 'pending')
+  }
+  let(:draw2_draw_cost2) {
+    create(:draw_cost, draw: draw2, project_cost: draw_cost2.project_cost, total: 4000.0, state: 'pending')
+  }
+  let(:draw2_draw_cost_invoices) {
+    draw2_draw_cost.invoices.create!(amount: 2000.0, description: 'Test invoice 1', document: uploaded_file, user: developer_user)
+    draw2_draw_cost.invoices.create!(amount: 2000.0, description: 'Test invoice 1', document: uploaded_file, user: developer_user)
+    draw2_draw_cost.invoices
+  }
+  let(:draw2_draw_cost2_invoices) {
+    draw2_draw_cost2.invoices.create!(amount: 2000.0, description: 'Test invoice 1', document: uploaded_file, user: developer_user)
+    draw2_draw_cost2.invoices.create!(amount: 2000.0, description: 'Test invoice 1', document: uploaded_file, user: developer_user)
+    draw_cost2.invoices
+  }
 end
