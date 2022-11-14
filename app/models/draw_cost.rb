@@ -58,6 +58,10 @@ class DrawCost < ApplicationRecord
     total - invoice_total
   end
 
+  def invoice_mismatch?
+    0.0 != subtotal
+  end
+
   def project_cost_overage
     balance = project_cost.budget_balance
     balance.negative? ? ( balance * -1.0 ) : 0.0
