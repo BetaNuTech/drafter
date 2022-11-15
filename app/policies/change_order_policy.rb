@@ -24,7 +24,8 @@ class ChangeOrderPolicy < ApplicationPolicy
   end
 
   def new?
-    record.draw.allow_draw_cost_changes? &&
+    record.draw_cost.project_cost.change_request_allowed? &&
+      record.draw.allow_draw_cost_changes? &&
       ( privileged_user? ||
         user.project_owner?(record.project) ||
         user.project_developer?(record.project) )

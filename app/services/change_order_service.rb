@@ -31,11 +31,20 @@ class ChangeOrderService
 
     @change_order = @draw_cost.change_orders.new(sanitize_change_order_params(params))
     @change_order.project_cost = @draw_cost.project_cost
-
     @change_order.amount = @draw_cost.project_cost_overage
 
     unless ( @change_order.amount.positive? )
       @errors << 'Draw Cost does not require a change order'
+      return @change_order
+    end
+
+    unless @draw_cost.project_cost.change_request_allowed?
+      @errors << 'Change Requests are not allowed for this Draw Cost'
+      return @change_order
+    end
+
+    unless @change_order.funding_source.change_requestable?
+      @errors << 'This Funding Source Project Cost does not allow change requests'
       return @change_order
     end
 
