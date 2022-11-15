@@ -2,7 +2,7 @@
   <div class="col">
     <% if draw_cost.allow_new_change_order? %>
       <%= turbo_frame_tag :new_change_order do %>
-        <%= link_to('Create Change Order', new_draw_cost_change_order_path(draw_cost_id: draw_cost.id), class: 'btn btn-primary', data: {turbo_frame: :new_change_order}) %> 
+        <%= link_to('Create Change Order', new_draw_cost_change_order_path(draw_cost_id: draw_cost.id), class: 'btn btn-danger', data: {turbo_frame: :new_change_order}) %> 
       <% end %>
     <% end %>
 
