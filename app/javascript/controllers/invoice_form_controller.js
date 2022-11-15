@@ -1,7 +1,7 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = ["file_field", "file_selected_image", "submit_button", "file_upload_prompt", "amount_field", "document"]
+  static targets = ['file_field', 'file_selected_image', 'submit_button', 'file_upload_prompt', 'amount_field', 'document']
 
   connect() {
     const submit_button_el = this.submit_buttonTarget
