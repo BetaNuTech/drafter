@@ -51,9 +51,11 @@
         <%= render @draw.draw_costs.visible %>
       <% end %>
       <%= turbo_frame_tag 'new_draw_cost' do %>
-        <%= link_to('Add Draw Cost',
-                      new_draw_draw_cost_path(draw_id: @draw.id),
-                      class: 'btn btn-primary m-2', data: {turbo_frame: dom_id(@draw, 'new_draw_cost' )}) if policy(DrawCost.new(draw: @draw)).new? %>
+        <div class="d-flex justify-content-center" >
+            <%= link_to('Add Draw Cost',
+                        new_draw_draw_cost_path(draw_id: @draw.id),
+                        class: 'btn btn-primary m-2 align-self-center', data: {turbo_frame: dom_id(@draw, 'new_draw_cost' )}) if policy(DrawCost.new(draw: @draw)).new? %>
+        </div>
       <% end %>
     </div>
   </div>
