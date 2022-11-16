@@ -101,7 +101,7 @@ module Draws
 
       def submit_draw_costs(user)
         draw_costs.reload
-        draw_costs.pending.each do |draw_cost|
+        draw_costs.where(state: %i{pending rejected}).each do |draw_cost|
           draw_cost.trigger_event(event_name: :submit, user: user)
         end
       end
@@ -109,7 +109,7 @@ module Draws
       def allow_submit?
         all_documents_submitted? &&
           draw_costs.visible.any? &&
-          draw_costs.all?(&:allow_submit?)
+          draw_costs.visible.all?(&:allow_submit?)
       end
 
       def after_submit(user)

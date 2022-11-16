@@ -42,7 +42,8 @@ module Invoices
         end
 
         event :reject do
-          transitions from: %i{ submitted processed }, to: :rejected
+          transitions from: %i{ submitted processed }, to: :rejected,
+            after: Proc.new{|*args| after_reject(*args)}
         end
 
         event :remove do
@@ -85,6 +86,10 @@ module Invoices
         if draw_cost.invoices.submitted.none? && draw_cost.invoices.approved.any?
           draw_cost.trigger_event(event_name: :approve, user: user)
         end
+      end
+
+      def after_reject(user)
+        draw_cost.trigger_event(event_name: :reject, user: user)
       end
 
     end

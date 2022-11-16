@@ -143,7 +143,6 @@ class DrawsController < ApplicationController
     if @service.reject
       respond_to do |format|
         format.html { redirect_to draw_path(id: @draw.id), notice: "Draw was rejected." }
-        format.turbo_stream
       end
     else
       render :show, status: :unprocessable_entity

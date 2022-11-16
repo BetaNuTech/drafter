@@ -37,13 +37,14 @@ class Project < ApplicationRecord
     when user.project_investor?(self)
       draws.visible
     else
-      draws.where(organization: user.organization).visible
+      draws.visible
     end
   end
 
   def allow_new_draw?
     !issues? &&
-      draws.pending.none?
+      draws.pending.none? &&
+      draws.rejected.none?
   end
 
   def budget_total

@@ -66,19 +66,37 @@ class ProjectCost < ApplicationRecord
   end
 
   def invoice_total
-    invoices.totalable.sum(:amount)
+    #invoices.totalable.sum(:amount)
+    Invoice.includes(draw_cost: :draw).
+      where(draws: { state: Draw::VISIBLE_STATES},
+            draw_costs: {state: DrawCost::VISIBLE_STATES}).
+      totalable.
+      sum(:amount)
   end
 
   def draw_cost_total
-    draw_costs.visible.sum(:total)
+    #draw_costs.visible.sum(:total)
+    DrawCost.includes(:draw).
+      where(draws: { state: Draw::VISIBLE_STATES}).
+      visible.
+      sum(:total)
   end
 
   def change_order_total
-    change_orders.sum(:amount)
+    #change_orders.sum(:amount)
+    ChangeOrder.includes(draw_cost: :draw).
+      where(draws: { state: Draw::VISIBLE_STATES},
+            draw_costs: {state: DrawCost::VISIBLE_STATES}).
+      sum(:amount)
   end
 
   def change_order_funding_total
-    ChangeOrder.where(funding_source_id: self.id).sum(:amount)
+    #ChangeOrder.where(funding_source_id: self.id).sum(:amount)
+    ChangeOrder.includes(draw_cost: :draw).
+      where(draws: { state: Draw::VISIBLE_STATES},
+            draw_costs: {state: DrawCost::VISIBLE_STATES},
+            change_orders: {funding_source_id: self.id}).
+      sum(:amount)
   end
 
   def missing_total?
