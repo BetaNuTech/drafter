@@ -30,6 +30,19 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class DrawDocument < ApplicationRecord
+  class DocumenttypeValidator < ActiveModel::Validator
+    def validate(record)
+      return true if record.documenttype == 'other'
+
+      if record.draw.draw_documents.
+          visible.
+          where(documenttype: record.documenttype).
+          where.not(id: record.id).any?
+        record.errors.add(:documenttype, 'is not unique')
+      end
+    end
+  end
+
   ALLOWED_PARAMS = %i{notes documenttype document}.freeze
   OTHER_DESCRIPTION = 'Other'
   BUDGET_DESCRIPTION = 'Budget'
@@ -53,7 +66,7 @@ class DrawDocument < ApplicationRecord
 
   ### Validations
   validates :documenttype, presence: true
-  validates :documenttype, uniqueness: { scope: :draw_id }, unless: -> { documenttype == 'other' }
+  validates_with DocumenttypeValidator, fields: %i{documenttype}
 
   ### Scopes
   scope :budget, -> { where(documenttype: :budget) }

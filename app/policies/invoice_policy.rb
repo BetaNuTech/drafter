@@ -17,11 +17,11 @@ class InvoicePolicy < ApplicationPolicy
   end
 
   def new?
-    record&.draw_cost&.allow_invoice_changes? &&
+    record&.draw_cost&.draw&.rejected? ||
+    ( record&.draw_cost&.allow_invoice_changes? &&
       ( user.admin? ||
        user.project_internal?(record.project) ||
-       user.project_developer?(record.project)
-      ) 
+       user.project_developer?(record.project)) )
   end
 
   def create?
@@ -49,10 +49,11 @@ class InvoicePolicy < ApplicationPolicy
   end
   
   def destroy?
-    record&.draw_cost&.allow_invoice_changes? &&
-    ( user == record.user ||
-      user.admin? ||
-      user.project_owner?(record.project) )
+    record&.draw_cost&.draw&.rejected? ||
+    ( record&.draw_cost&.allow_invoice_changes? &&
+      ( user == record.user ||
+        user.admin? ||
+        user.project_owner?(record.project) ))
   end
 
   def remove?
@@ -66,6 +67,7 @@ class InvoicePolicy < ApplicationPolicy
   def approvals?
     user.admin? ||
       user.project_internal?(record.project)
+      user.project_finance?(record.project)
   end
 
   def approve?

@@ -70,12 +70,11 @@ class DrawCostPolicy < ApplicationPolicy
 
   def approvals?
     user.admin? ||
-      user.project_owner?(record.project) ||
-      user.project_management?(record.project) ||
-      ( user.project_finance?(record.project) && record&.draw_cost.clean? )
+      user.project_internal?(record.project)
   end
 
   def approve?
+    return true
     record.permitted_state_events.include?(:approve) &&
       approvals?
   end
