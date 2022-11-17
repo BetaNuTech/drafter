@@ -38,11 +38,13 @@ module Invoices
 
         event :approve do
           transitions from: %i{ submitted processed }, to: :approved,
+            guard: Proc.new { allow_approve? },
             after: Proc.new{|*args| after_approve(*args)}
         end
 
         event :reject do
           transitions from: %i{ submitted processed }, to: :rejected,
+            guard: Proc.new { allow_reject? },
             after: Proc.new{|*args| after_reject(*args)}
         end
 
@@ -90,6 +92,14 @@ module Invoices
 
       def after_reject(user)
         draw_cost.trigger_event(event_name: :reject, user: user)
+      end
+
+      def allow_reject?
+        draw.allow_invoice_approvals?
+      end
+
+      def allow_approve?
+        draw.allow_invoice_approvals?
       end
 
     end

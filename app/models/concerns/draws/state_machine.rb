@@ -14,6 +14,8 @@ module Draws
       VISIBLE_STATES = %i{ pending submitted internally_approved externally_approved funded rejected }.freeze
       ALLOW_DRAW_COST_CHANGE_STATES = %i{ pending rejected }.freeze
       ALLOW_DOCUMENT_CHANGE_STATES = %i{ pending rejected }.freeze
+      ALLOW_DOCUMENT_APPROVALS_STATES = %i{submitted}
+      ALLOW_INVOICE_APPROVALS_STATES = %i{submitted}
 
       scope :visible, -> { where(state: VISIBLE_STATES) }
 
@@ -97,6 +99,14 @@ module Draws
 
       def allow_document_changes?
         ALLOW_DOCUMENT_CHANGE_STATES.include?(state.to_sym)
+      end
+
+      def allow_document_approvals?
+        ALLOW_DOCUMENT_APPROVALS_STATES.include?(state.to_sym)
+      end
+
+      def allow_invoice_approvals?
+        ALLOW_INVOICE_APPROVALS_STATES.include?(state.to_sym)
       end
 
       def submit_draw_costs(user)

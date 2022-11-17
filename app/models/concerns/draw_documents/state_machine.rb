@@ -22,12 +22,13 @@ module DrawDocuments
 
         event :approve do
           transitions from: %i{ pending rejected }, to: :approved, 
+            guard: Proc.new { allow_approve? },
             after: Proc.new {|*args| after_approve(*args) }
         end
 
         event :reject do
           transitions from: %i{ pending approved }, to: :rejected,
-            guard: Proc.new {  allow_reject? },
+            guard: Proc.new { allow_reject? },
             after: Proc.new {|*args| after_reject(*args) }
         end
 
@@ -73,7 +74,11 @@ module DrawDocuments
       end
 
       def allow_reject?
-        draw.allow_document_changes? 
+        draw.allow_document_approvals?
+      end
+
+      def allow_approve?
+        draw.allow_document_approvals?
       end
     end
 

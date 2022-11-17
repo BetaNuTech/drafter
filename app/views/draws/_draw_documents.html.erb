@@ -1,15 +1,15 @@
 <div class="row">
-  <div class="col d-flex justify-content-evenly">
+  <div class="col d-flex flex-wrap justify-content-evenly">
+    <%= render draw.draw_documents.visible.order(created_at: :desc) %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col d-flex justify-content-evenly mt-2">
     <%= turbo_frame_tag draw, 'new_draw_document' do %>
       <%= link_to('Add Document',
                     new_draw_draw_document_path(draw_id: draw.id),
                     class: 'btn btn-primary', data: {turbo_frame: dom_id(draw, 'new_draw_document' )}) if policy(DrawDocument.new(draw: draw)).new? %>
     <% end %>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col d-flex flex-wrap justify-content-evenly">
-    <%= render draw.draw_documents.visible.order(created_at: :desc) %>
   </div>
 </div>
