@@ -49,7 +49,9 @@ module Invoices
         end
 
         event :remove do
-          transitions from: %i{pending submitted processed rejected}, to: :removed
+          transitions from: %i{pending submitted processed rejected approved}, to: :removed,
+            guard: Proc.new { allow_remove? },
+            after: Proc.new {|*args| after_remove(*args)}
         end
       end
 
@@ -100,6 +102,19 @@ module Invoices
 
       def allow_approve?
         draw_cost.draw.allow_invoice_approvals?
+      end
+
+      def after_remove(user)
+        # TODO
+        # transition an approved or submitted draw cost to pending
+        #raise 'not implemented'
+      end
+
+      def allow_remove?
+        # TODO
+        # draw rejected? or draw cost allow invoice changes
+        #raise 'not implemented'
+        true
       end
 
     end

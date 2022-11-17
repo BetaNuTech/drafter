@@ -49,11 +49,12 @@ class InvoicePolicy < ApplicationPolicy
   end
   
   def destroy?
-    record&.draw_cost&.draw&.rejected? ||
-    ( record&.draw_cost&.allow_invoice_changes? &&
+    record.permitted_state_events.include?(:remove) &&
       ( user == record.user ||
         user.admin? ||
-        user.project_owner?(record.project) ))
+        user.project_internal?(record.project) ||
+        user.project_developer?(record.project)
+      )
   end
 
   def remove?

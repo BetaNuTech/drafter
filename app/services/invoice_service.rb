@@ -60,7 +60,7 @@ class InvoiceService
   end
 
   def submit
-    raise PolicyError.new unless @policy.remove?
+    raise PolicyError.new unless @policy.submit?
 
     @invoice.trigger_event(event_name: :submit, user: @user)
     if @invoice.submitted?
