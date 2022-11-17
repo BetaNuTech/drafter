@@ -8,6 +8,7 @@ RSpec.describe ChangeOrdersController, type: :controller do
   let(:draw_cost) {
     cost = sample_draw_cost
     cost.project_cost = sample_project.project_costs.first
+    cost.total = cost.project_cost.total + 1.0
     cost.save!
     Invoice.create!(draw_cost: cost, user: user, amount: ( cost.total + 1.0 ))
     cost.invoices.reload
