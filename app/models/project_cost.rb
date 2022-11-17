@@ -65,6 +65,10 @@ class ProjectCost < ApplicationRecord
     total + change_order_total - change_order_funding_total - draw_cost_total
   end
 
+  def budget_balance_without_change_orders
+    total - change_order_funding_total - draw_cost_total
+  end
+
   def invoice_total
     Invoice.includes(draw_cost: :draw).
       where(draws: { state: Draw::VISIBLE_STATES},
