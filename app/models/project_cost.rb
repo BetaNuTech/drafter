@@ -68,30 +68,34 @@ class ProjectCost < ApplicationRecord
   def invoice_total
     Invoice.includes(draw_cost: :draw).
       where(draws: { state: Draw::VISIBLE_STATES},
-            draw_costs: {state: DrawCost::VISIBLE_STATES}).
+            draw_costs: { state: DrawCost::VISIBLE_STATES,
+                          project_cost_id: self.id }).
       totalable.
       sum(:amount)
   end
 
   def draw_cost_total
     DrawCost.includes(:draw).
-      where(draws: { state: Draw::VISIBLE_STATES}).
-      visible.
+      where(draws: { state: Draw::VISIBLE_STATES},
+            draw_costs: { state: DrawCost::VISIBLE_STATES,
+                          project_cost_id: self.id }).
       sum(:total)
   end
 
   def change_order_total
     ChangeOrder.includes(draw_cost: :draw).
       where(draws: { state: Draw::VISIBLE_STATES},
-            draw_costs: {state: DrawCost::VISIBLE_STATES}).
+            draw_costs: { state: DrawCost::VISIBLE_STATES,
+                          project_cost_id: self.id }).
       sum(:amount)
   end
 
   def change_order_funding_total
     ChangeOrder.includes(draw_cost: :draw).
       where(draws: { state: Draw::VISIBLE_STATES},
-            draw_costs: {state: DrawCost::VISIBLE_STATES},
-            change_orders: {funding_source_id: self.id}).
+            draw_costs: { state: DrawCost::VISIBLE_STATES,
+                          project_cost_id: self.id},
+            change_orders: { funding_source_id: self.id }).
       sum(:amount)
   end
 
