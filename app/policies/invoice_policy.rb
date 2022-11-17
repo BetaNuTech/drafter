@@ -83,7 +83,7 @@ class InvoicePolicy < ApplicationPolicy
     when -> (u) { u.admin? }
       Invoice::ALLOWED_PARAMS + [:multi_invoice]
     when -> (u) { u.project_internal?(record.project) }
-      Invoice::ALLOWED_PARAM + [:multi_invoice]
+      Invoice::ALLOWED_PARAMS + [:multi_invoice]
     when -> (u) { u.project_developer?(record.project) }
       Invoice::ALLOWED_PARAMS
     else
