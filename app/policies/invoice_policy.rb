@@ -67,7 +67,7 @@ class InvoicePolicy < ApplicationPolicy
 
   def approvals?
     user.admin? ||
-      user.project_internal?(record.project)
+      user.project_internal?(record.project) ||
       user.project_finance?(record.project)
   end
 

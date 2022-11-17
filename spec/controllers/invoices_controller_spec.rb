@@ -88,6 +88,10 @@ RSpec.describe InvoicesController, type: :controller do
       draw_cost.save!
       draw_cost
     }
+    before do
+      draw_cost.draw.state = 'submitted'
+      draw_cost.draw.save!
+    end
     describe 'as a manager' do
       let(:user) { sample_project.managers.first }
       it 'should approve the invoice' do
@@ -132,6 +136,10 @@ RSpec.describe InvoicesController, type: :controller do
   describe '#reject' do
     let(:invoice) { draw_cost.invoices.create!(amount: 123.45, user: user, state: :submitted) }
     let(:invoice2) { draw_cost.invoices.create!(amount: 123.45, user: user, state: :submitted) }
+    before do
+      draw_cost.draw.state = 'submitted'
+      draw_cost.draw.save!
+    end
     describe 'as a manager' do
       let(:user) { sample_project.managers.first }
       it 'should reject the invoice' do

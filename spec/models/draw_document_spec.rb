@@ -36,7 +36,7 @@ RSpec.describe DrawDocument, type: :model do
   let(:user) { sample_project.developers.first }
   let(:approver) { sample_project.managers.first }
   let(:uploaded_file) {Rack::Test::UploadedFile.new("#{Rails.root}/spec/fixtures/files/sample_document_1.pdf", 'application/pdf')}
-  let(:draw) { sample_project.draws.first}
+  let(:draw) {sample_project.draws.first}
   let(:draw_document) { DrawDocument.create!(draw: draw, user: user) }
 
   describe 'initialization' do
@@ -47,8 +47,14 @@ RSpec.describe DrawDocument, type: :model do
   end
 
   describe 'state machine' do
+    before do
+      draw.state = 'submitted'
+      draw.save!
+    end
     describe 'approval' do
       it 'approves a submitted document and assigns the approver' do
+        draw_document.draw.state = 'submitted'
+        draw_document.draw.save!
         assert(draw_document.pending?)
         draw_document.trigger_event(event_name: :approve, user: approver)
         draw_document.reload

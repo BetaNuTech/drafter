@@ -98,14 +98,14 @@ class InvoiceService
 
     reset_errors
 
-    if @invoice.permitted_state_events.include?(:reject)
-      @invoice.trigger_event(event_name: :reject, user: @user)
-      SystemEvent.log(description: "Approved Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
-      return true
-    else
-      @errors << 'Cannot approve invoice at this time'
+    unless @invoice.permitted_state_events.include?(:reject)
+      @errors << 'Cannot reject invoice at this time'
       return false
     end
+
+    @invoice.trigger_event(event_name: :reject, user: @user)
+    SystemEvent.log(description: "Approved Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
+    return true
   end
 
   private

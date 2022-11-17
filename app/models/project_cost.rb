@@ -97,8 +97,7 @@ class ProjectCost < ApplicationRecord
   def change_order_funding_total
     ChangeOrder.includes(draw_cost: :draw).
       where(draws: { state: Draw::VISIBLE_STATES},
-            draw_costs: { state: DrawCost::VISIBLE_STATES,
-                          project_cost_id: self.id},
+            draw_costs: { state: DrawCost::VISIBLE_STATES },
             change_orders: { funding_source_id: self.id }).
       sum(:amount)
   end
