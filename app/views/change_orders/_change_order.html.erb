@@ -1,16 +1,16 @@
 <div class="row border-top p-1">
-  <div class="col-sm-12 col-md-9">
+  <div class="col">
     <span class="badge bg-success">
       <%= number_to_currency change_order.amount %>
     </span>
     <span class="fst-italic">
       from
-      <span class="fw-bold">
+      <span class="fw-bold text-nowrap">
         <%= change_order.funding_source.name %>
       </span>
     </span>
-  </div>
-  <div class="col-sm-12 col-md-2">
-    <%= link_to('Withdraw', draw_cost_change_order_path(draw_cost_id: change_order.draw_cost_id, id: change_order.id), class: 'btn btn-sm btn-danger p-1', data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }) if policy(change_order).destroy? %>
+    <div class="float-end position-top">
+      <%= link_to('Withdraw', draw_cost_change_order_path(draw_cost_id: change_order.draw_cost_id, id: change_order.id), class: 'btn btn-sm btn-danger p-1', data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }) if policy(change_order).destroy? %>
+    </div>
   </div>
 </div>
