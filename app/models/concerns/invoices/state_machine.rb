@@ -105,16 +105,12 @@ module Invoices
       end
 
       def after_remove(user)
-        # TODO
-        # transition an approved or submitted draw cost to pending
-        #raise 'not implemented'
+        draw_cost.trigger_event(event_name: :revert_to_pending, user: user) if
+          draw_cost.permitted_state_events.include?(:revert_to_pending)
       end
 
       def allow_remove?
-        # TODO
-        # draw rejected? or draw cost allow invoice changes
-        #raise 'not implemented'
-        true
+        draw_cost.allow_invoice_changes?
       end
 
     end

@@ -65,7 +65,7 @@ class DrawCostPolicy < ApplicationPolicy
 
   def withdraw?
     record.permitted_state_events.include?(:withdraw) &&
-    destroy?
+      destroy?
   end
 
   def approvals?
@@ -74,7 +74,6 @@ class DrawCostPolicy < ApplicationPolicy
   end
 
   def approve?
-    return true
     record.permitted_state_events.include?(:approve) &&
       approvals?
   end

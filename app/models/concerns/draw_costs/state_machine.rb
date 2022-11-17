@@ -43,6 +43,10 @@ module DrawCosts
         event :withdraw do
           transitions from: %i{ pending submitted rejected }, to: :withdrawn
         end
+
+        event :revert_to_pending do
+          transitions from: %i{ submitted approved rejected }, to: :pending
+        end
       end
 
       def trigger_event(event_name:, user: nil)
@@ -89,7 +93,7 @@ module DrawCosts
       end
 
       def allow_submit?
-        invoices.visible.any? && !over_budget?
+        invoices.visible.any? && !over_budget? && !invoice_mismatch?
       end
 
       def allow_approve?
