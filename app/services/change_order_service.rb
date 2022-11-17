@@ -61,23 +61,12 @@ class ChangeOrderService
     raise PolicyError.new unless @change_order_policy.destroy?
 
     @change_order.destroy
+
+    @draw_cost.trigger_event(event_name: :revert_to_pending, user: user) if
+      @draw_cost.permitted_state_events.include?(:revert_to_pending)
+
     SystemEvent.log(description: "Removed Change Order for #{@draw_cost.project_cost.name} Cost for Draw '#{@draw.name}'", event_source: @draw, incidental: @project, severity: :warn)
   end
-
-  #def update(params)
-    #raise NotImplementedError
-    #raise PolicyError.new unless @change_order_policy.create?
-
-    #reset_errors
-
-    #if @change_order.update(sanitize_change_order_params(params))
-      #@draw_cost.change_orders.reload
-      #SystemEvent.log(description: "Updated Change Order for #{@draw_cost.project_cost.name} Cost for Draw '#{@draw.name}'", event_source: @draw, incidental: @project, severity: :warn)
-    #else
-      #@errors = @change_order.errors.full_messages
-    #end
-    #@change_order
-  #end
 
   def funds_available?(funding_source)
     0 < funds_available(funding_source)
