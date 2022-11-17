@@ -65,6 +65,8 @@ class ChangeOrderPolicy < ApplicationPolicy
       ChangeOrder::ALLOWED_PARAMS
     when -> (u) { u.project_owner?(record.project) }
       ChangeOrder::ALLOWED_PARAMS
+    when -> (u) { u.project_finance?(record.project) }
+      ChangeOrder::ALLOWED_PARAMS
     when -> (u) { u.project_developer?(record.project) }
       ChangeOrder::ALLOWED_PARAMS
     else
