@@ -80,7 +80,7 @@ class Draw < ApplicationRecord
   end
 
   def draw_cost_total
-    draw_cost_invoices_total
+    draw_costs.visible.sum(:total)
   end
 
   def draw_cost_invoices_total
