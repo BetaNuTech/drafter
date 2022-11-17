@@ -55,6 +55,18 @@ RSpec.describe DrawCost, type: :model do
         draw_cost.reload
         refute(draw_cost.submitted?)
       end
+      it 'will not transition to submitted if there are any rejected invoices' do
+        invoices
+        invoice = draw_cost.invoices.last
+        invoice.state = 'rejected'
+        invoice.save!
+
+        assert(draw_cost.pending?)
+        draw_cost.trigger_event(event_name: :submit, user: )
+        draw_cost.save
+        draw_cost.reload
+        refute(draw_cost.submitted?)
+      end
       it 'automatically submits pending invoices' do
         draw_cost.state = 'submitted'
         draw_cost.save!

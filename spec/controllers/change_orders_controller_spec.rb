@@ -41,5 +41,14 @@ RSpec.describe ChangeOrdersController, type: :controller do
         delete :destroy, params: {draw_cost_id: draw_cost.id, id: change_order.id}
       }.to change{ChangeOrder.count}.by(-1)
     end
+    it 'should not change the Draw state' do
+      draw = draw_cost.draw
+      change_order = ChangeOrderService.new(user:, draw_cost:).create(valid_change_order_attributes)
+      sign_in user
+      expect {
+        delete :destroy, params: {draw_cost_id: draw_cost.id, id: change_order.id}
+        draw.reload
+      }.to_not change{draw.state}
+    end
   end
 end

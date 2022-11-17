@@ -69,7 +69,7 @@ module DrawCosts
 
       def state_css_class
         {
-          'pending' => 'info',
+          'pending' => 'secondary',
           'submitted' => 'warning',
           'approved' => 'success',
           'rejected' => 'danger'
@@ -93,7 +93,9 @@ module DrawCosts
       end
 
       def allow_submit?
-        invoices.visible.any? && !over_budget? && !invoice_mismatch?
+        return false if invoices.rejected.any? || over_budget? || invoice_mismatch?
+
+        invoices.visible.any?
       end
 
       def allow_approve?
