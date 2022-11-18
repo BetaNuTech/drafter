@@ -24,11 +24,11 @@
         </div>
       <% end %>
       <span class="badge bg-success"><%= number_to_currency invoice.amount %></span><br/>
-      <small><%= short_date invoice.updated_at %></small>
       <% icon_attrs = invoice.description.present? ? {fill: :blue, opacity: 1.0, description: invoice.description } : {fill: :lightgray, opacity: 0.1, description: ''} %>
       <%= inline_icon(icon: :info, size: 35, fill: icon_attrs[:fill], opacity: icon_attrs[:opacity],
                       html: { id: dom_id(invoice, 'description_popover') ,class: "invoice_description_popover p-1", style: ( invoice.description.present? ?  'cursor: pointer' : '' ),
                               data: { bs_toggle: :popover, bs_placement: :bottom, bs_content: icon_attrs[:description], bs_trigger: 'click hover' } } ) %>
+      <small><%= short_date invoice.updated_at %></small>
     </div>
     <div class="actions align-items-end">
       <%= link_to('Edit', edit_draw_cost_invoice_path(draw_cost_id: invoice.draw_cost_id, id: invoice.id), class: 'btn btn-sm btn-primary m-1') if policy(invoice).edit? %>
