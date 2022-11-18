@@ -124,7 +124,7 @@ class UserPolicy < ApplicationPolicy
       if user.user?
         # Only allow editing user role accounts
         # Allow deactivating user role accounts
-        valid_user_params = valid_user_params + [:active, :organization_id]
+        valid_user_params = valid_user_params + [:active, :role_id, :organization_id]
       else
         # Disallow editing non-user role accounts
         valid_user_params = []
