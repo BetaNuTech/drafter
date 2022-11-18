@@ -67,9 +67,10 @@ class InvoicePolicy < ApplicationPolicy
   end
 
   def approvals?
-    user.admin? ||
+    record.draw_cost.draw.allow_invoice_approvals? &&
+    ( user.admin? ||
       user.project_internal?(record.project) ||
-      user.project_finance?(record.project)
+      user.project_finance?(record.project) )
   end
 
   def approve?

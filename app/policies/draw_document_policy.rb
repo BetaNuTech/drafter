@@ -49,8 +49,9 @@ class DrawDocumentPolicy < ApplicationPolicy
   end
 
   def approvals?
-    user.admin? ||
-      user.project_internal?(record.project)
+    record.draw.allow_document_approvals? &&
+    ( user.admin? ||
+      user.project_internal?(record.project) )
   end
 
   def approve?
