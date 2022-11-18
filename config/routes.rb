@@ -47,6 +47,7 @@ Rails.application.routes.draw do
       post 'submit', to: 'invoices#submit'
       post 'approve', to: 'invoices#approve'
       post 'reject', to: 'invoices#reject'
+      post 'reset_approval', to: 'invoices#reset_approval'
     end
     resources :change_orders
   end

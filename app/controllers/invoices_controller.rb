@@ -91,6 +91,17 @@ class InvoicesController < ApplicationController
     end
   end
 
+  def reset_approval
+    authorize @invoice
+    @service = InvoiceService.new(user: @current_user, draw_cost: @draw_cost, invoice: @invoice)
+    @service.reset_approval
+    @draw_cost.draw.draw_costs.reload
+    respond_to do |format|
+      format.html { redirect_to draw_draw_cost_path(draw_id: @draw_cost.draw_id, id: @draw_cost.id)}
+      format.turbo_stream
+    end
+  end
+
   private
 
   def draw_cost_scope

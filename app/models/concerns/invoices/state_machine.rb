@@ -48,11 +48,17 @@ module Invoices
             after: Proc.new{|*args| after_reject(*args)}
         end
 
+        event :reset_approval do
+          transitions from: %i{approved rejected}, to: :submitted,
+            after: Proc.new{|*args| after_reset_approval(*args)}
+        end
+
         event :remove do
           transitions from: %i{pending submitted processed rejected approved}, to: :removed,
             guard: Proc.new { allow_remove? },
             after: Proc.new {|*args| after_remove(*args)}
         end
+
       end
 
       def trigger_event(event_name:, user: nil)
@@ -111,6 +117,11 @@ module Invoices
 
       def allow_remove?
         draw_cost.allow_invoice_changes?
+      end
+
+      def after_reset_approval(user)
+        draw_cost.trigger_event(event_name: :revert_to_pending, user: user) if
+          draw_cost.permitted_state_events.include?(:revert_to_pending)
       end
 
     end
