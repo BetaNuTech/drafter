@@ -74,7 +74,21 @@ class DrawDocumentService
       SystemEvent.log(description: "Rejected #{@draw_document.description} Document for Draw '#{@draw.index}'", event_source: @draw, incidental: @project, severity: :warn)
       true
     else
-      @errors << 'Could not approve this document'
+      @errors << 'Could not reject this document'
+      false
+    end
+  end
+
+  def reset_approval
+    raise PolicyError.new unless @policy.reset_approval?
+
+    reset_errors
+
+    if @draw_document.trigger_event(event_name: :reset_approval, user: @user)
+      SystemEvent.log(description: "Reset approval for #{@draw_document.description} Document for Draw '#{@draw.index}'", event_source: @draw, incidental: @project, severity: :warn)
+      true
+    else
+      @errors << 'Could not reset approval for this document'
       false
     end
   end

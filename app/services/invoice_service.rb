@@ -104,7 +104,28 @@ class InvoiceService
     end
 
     @invoice.trigger_event(event_name: :reject, user: @user)
-    SystemEvent.log(description: "Approved Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
+    if @invoice.rejected?
+      @invoice.approved_at = nil
+      @invoice.approver = nil
+      @invoice.approved_by_desc = nil
+      @invoice.save
+    end
+    SystemEvent.log(description: "Rejected Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
+    return true
+  end
+
+  def reset_approval
+    raise PolicyError.new unless @policy.reject?
+
+    reset_errors
+
+    unless @invoice.permitted_state_events.include?(:reset_approval)
+      @errors << 'Cannot reset approval for invoice at this time'
+      return false
+    end
+
+    @invoice.trigger_event(event_name: :reset_approval, user: @user)
+    SystemEvent.log(description: "Reset approval for Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
     return true
   end
 

@@ -82,6 +82,11 @@ class InvoicePolicy < ApplicationPolicy
       approvals?
   end
 
+  def reset_approval?
+    record.permitted_state_events.include?(:reset_approval) &&
+      approvals?
+  end
+
   def allowed_params
     case user
     when -> (u) { u.admin? }

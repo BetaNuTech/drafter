@@ -1,0 +1,2 @@
+<%= turbo_stream.replace @draw_cost %>
+<%= turbo_stream.update dom_id(@draw_cost.draw, :action_buttons), partial: 'draws/action_buttons', locals: { draw: @draw_cost.draw } %>

@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     resources :draw_documents do
       post 'approve', to: 'draw_documents#approve'
       post 'reject', to: 'draw_documents#reject'
+      post 'reset_approval', to: 'draw_documents#reset_approval'
     end
   end
 
@@ -47,6 +48,7 @@ Rails.application.routes.draw do
       post 'submit', to: 'invoices#submit'
       post 'approve', to: 'invoices#approve'
       post 'reject', to: 'invoices#reject'
+      post 'reset_approval', to: 'invoices#reset_approval'
     end
     resources :change_orders
   end

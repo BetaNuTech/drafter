@@ -25,7 +25,10 @@ class DrawCostsController < ApplicationController
     if @service.errors?
       render :new, status: :unprocessable_entity
     else
-      redirect_to project_draw_path(project_id: @service.project.id, id: @service.draw.id), notice: 'Created new Draw Cost'
+      respond_to do |format|
+        format.html { redirect_to project_draw_path(project_id: @service.project.id, id: @service.draw.id), notice: 'Created new Draw Cost' }
+        format.turbo_stream
+      end
     end
   end
 

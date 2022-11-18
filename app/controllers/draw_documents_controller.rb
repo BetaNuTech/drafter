@@ -65,6 +65,20 @@ class DrawDocumentsController < ApplicationController
     end
   end
 
+  def reset_approval
+    authorize @draw_document
+    @service = DrawDocumentService.new(draw_document: @draw_document, user: @current_user)
+    @service.reset_approval
+    respond_to do |format|
+      if @service.errors?
+        format.html { render :new, status: :unprocessable_entity }
+      else
+        format.html { redirect_to draw_draw_document_path(draw_id: @draw.id, id: @draw_document.id), notice: 'Approved Document' }
+        format.turbo_stream
+      end
+    end
+  end
+
   private
 
   def draw_record_scope

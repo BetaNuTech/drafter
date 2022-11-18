@@ -32,6 +32,11 @@ module DrawDocuments
             after: Proc.new {|*args| after_reject(*args) }
         end
 
+        event :reset_approval do
+          transitions from: %i{approved rejected}, to: :submitted,
+            after: Proc.new{|*args| after_reset_approval(*args)}
+        end
+
         event :withdraw do
           transitions from: %i{pending approved rejected}, to: :withdrawn
         end
@@ -79,6 +84,10 @@ module DrawDocuments
 
       def allow_approve?
         draw.allow_document_approvals?
+      end
+
+      def after_reset_approval(user)
+        unapprove 
       end
     end
 

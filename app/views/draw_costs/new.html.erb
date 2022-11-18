@@ -6,7 +6,7 @@
 
 <div class="row">
   <div class="col">
-    <%= turbo_frame_tag @service.draw_cost do %>
+    <%= turbo_frame_tag 'new_draw_cost' do %>
       <%= render 'form', draw_cost: @service.draw_cost %>
     <% end %>
   </div>

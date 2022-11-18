@@ -5,7 +5,7 @@
   <% form_url = draw_draw_cost_path(draw_id: draw_cost.draw_id, id: draw_cost.id) %>
   <% title = 'Edit Draw Cost' %>
 <% end %>
-<%= form_with(model: draw_cost, url: form_url, multipart: true, data: { turbo_frame: :_top, controller: 'draw-cost-form'}) do |form| %>
+<%= form_with(model: draw_cost, url: form_url, multipart: true, data: { controller: 'draw-cost-form'}) do |form| %>
   <h5><%= title %></h5>
   <%= turbo_frame_tag dom_id(draw_cost, 'errors') do %>
     <%= render partial: 'shared/object_errors', locals: { object: draw_cost } %>
@@ -14,7 +14,7 @@
   <div class="row">
     <div class="col">
       <div class="form-floating mb-3 g-2">
-        <%= form.select :project_cost_id, project_cost_options(project: draw_cost.project, project_cost: draw_cost.project_cost),{ include_blank: true }, { class: 'form-select', autofocus: true, data: { 'draw-cost-form-target' => 'project_cost_select' } } %>
+        <%= form.select :project_cost_id, project_cost_options(project: draw_cost.project, project_cost: draw_cost.project_cost), { include_blank: false }, { class: 'form-select', autofocus: true, data: { 'draw-cost-form-target' => 'project_cost_select' } } %>
         <%= form.label :project_cost_id, 'Project Cost Category ($ Remaining)' %>
       </div>  
     </div>

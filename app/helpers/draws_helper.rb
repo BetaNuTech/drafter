@@ -11,12 +11,18 @@ module DrawsHelper
   end
 
   def project_cost_options(project: nil, project_cost:)
-    non_initial_draw = ( project || project_cost&.project ).draws.where("index > 1").first
+    project = project || project_cost&.project 
+    non_initial_draw = project.draws.where("index > 1").first
+    used_project_costs = project.draw_costs.visible.pluck(:project_cost_id)
+    used_project_costs = used_project_costs - [ project_cost.id ] if project_cost.present?
+    project_costs = project.project_costs || []
     if non_initial_draw.nil?
-      project_costs = ( project || project_cost&.project )&.project_costs&.drawable&.order(name: :asc) || []
+      project_costs = project_costs.drawable
     else   
-      project_costs = ( project || project_cost&.project )&.project_costs&.drawable_and_non_initial&.order(name: :asc) || []
+      project_costs = project_costs.drawable_and_non_initial
     end
+    project_costs = project_costs.where.not(id: used_project_costs)
+    project_costs = project_costs.order(name: :asc)
     project_cost_options_with_remaining(project_costs, project_cost&.id)
   end
 
