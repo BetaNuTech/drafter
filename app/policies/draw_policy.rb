@@ -60,7 +60,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def set_reference?
-    record.approved?
+    record.funded? && user.project_internal?(record.project)
   end
 
   def approve_internal?

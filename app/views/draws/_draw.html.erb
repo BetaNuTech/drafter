@@ -15,9 +15,7 @@
       <div class="col col-md-8">
         <div class="card-text">
           <!-- additional information here -->
-          <% if @current_user.project_internal?(draw.project) %>
-            <em><b>Reference #:</b> <%= draw.reference %></em>
-          <% end %>
+          <em><b>Reference #:</b> <%= draw.reference %></em>
           <p style="line-height: 1em;">
             <%= draw.notes %>
           </p>

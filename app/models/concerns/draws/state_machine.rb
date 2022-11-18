@@ -90,7 +90,7 @@ module Draws
       end
 
       def approved?
-        APPROVED_STATES.include?(state)
+        APPROVED_STATES.include?(state.to_sym)
       end
 
       def allow_draw_cost_changes?
