@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     resources :draw_documents do
       post 'approve', to: 'draw_documents#approve'
       post 'reject', to: 'draw_documents#reject'
+      post 'reset_approval', to: 'draw_documents#reset_approval'
     end
   end
 

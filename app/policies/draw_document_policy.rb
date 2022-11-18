@@ -61,6 +61,10 @@ class DrawDocumentPolicy < ApplicationPolicy
     approvals? && record.permitted_state_events.include?(:reject)
   end
 
+  def reset_approval?
+    approvals? && record.permitted_state_events.include?(:reset_approval)
+  end
+
   def allowed_params
     DrawDocument::ALLOWED_PARAMS
   end
