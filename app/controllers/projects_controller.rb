@@ -2,6 +2,7 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_project, only: [:edit, :update, :show, :destroy, :add_member]
   after_action :verify_authorized
+  rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_home
 
   def index
     authorize Project
@@ -56,8 +57,7 @@ class ProjectsController < ApplicationController
   def destroy
     authorize @project
     @project.destroy
-    SystemEvent.log(description: "Removed Project", event_source: @project, incidental: @current_user, severity: :warn)
-    redirect_to projects_path, notice: 'Removed project'
+    redirect_to root_path, notice: 'Removed project'
   end
 
   def add_member
@@ -75,6 +75,10 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def redirect_to_home
+    redirect_to root_path
+  end
 
   def record_scope
     policy_scope(Project)
