@@ -12,7 +12,7 @@ FIRST!:
 * First time use/setup:
 ```
 docker-compose build
-docker-compose run web rake db:setup db:migrate db:seed
+docker-compose run web rake db:setup db:schema:load db:seed
 docker-compose run test rake db:test:prepare
 ```
 
