@@ -92,6 +92,6 @@ class DrawCost < ApplicationRecord
   end
 
   def allow_new_change_order?
-    project_cost_overage.positive?
+    project_cost.change_request_allowed? && project_cost_overage.positive? 
   end
 end
