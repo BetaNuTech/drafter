@@ -19,6 +19,7 @@ class Project < ApplicationRecord
   ### Associations
   has_many :system_events, as: :event_source, dependent: :destroy
   has_many :draws, dependent: :destroy
+  has_many :draw_costs, through: :draws
   has_many :project_costs, dependent: :destroy
 
   ### Validations
