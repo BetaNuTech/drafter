@@ -36,11 +36,11 @@ class InvoicePolicy < ApplicationPolicy
 
   def edit?
     record&.draw_cost&.allow_invoice_changes? &&
-      record.pending? && (
-      user == record.user ||
-        user.admin? ||
-        user.project_internal?(record.project) ||
-        user.project_developer?(record.project)
+      record.pending? &&
+      ( user == record.user ||
+         user.admin? ||
+         user.project_internal?(record.project) ||
+         user.project_developer?(record.project)
       )
   end
 
@@ -62,7 +62,8 @@ class InvoicePolicy < ApplicationPolicy
   end
 
   def submit?
-    record.pending? && edit?
+    record.permitted_state_events.include?(:submit) &&
+      edit?
   end
 
   def approvals?
