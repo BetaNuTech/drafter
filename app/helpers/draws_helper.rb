@@ -13,7 +13,8 @@ module DrawsHelper
   def project_cost_options(project: nil, project_cost:)
     project = project || project_cost&.project 
     non_initial_draw = project.draws.where("index > 1").first
-    used_project_costs = project.draw_costs.pluck(:project_cost_id)
+    used_project_costs = project.draw_costs.visible.pluck(:project_cost_id)
+    used_project_costs = used_project_costs - [ project_cost.id ] if project_cost.present?
     project_costs = project.project_costs || []
     if non_initial_draw.nil?
       project_costs = project_costs.drawable

@@ -29,6 +29,18 @@ class DrawCost < ApplicationRecord
   ### Concerns
   include DrawCosts::StateMachine
 
+  class ProjectCostValidator < ActiveModel::Validator
+    def validate(record)
+      if record.project.draw_costs.
+          visible.
+          where(project_cost_id: record.project_cost_id).
+          where.not(id: record.id).
+          any?
+        record.errors.add(:project_cost_id, 'There is already a Draw Cost for this Project Cost')
+      end
+    end
+  end
+
   ALLOWED_PARAMS = %i{project_cost_id total}.freeze
 
   ### Associations
@@ -45,8 +57,8 @@ class DrawCost < ApplicationRecord
   delegate :name, to: :project_cost
 
   ### Validations
+  validates_with ProjectCostValidator
   validates :total, presence: true, numericality: { greater_than_or_equal_to: 0.0}
-  validates :project_cost_id, presence: true, uniqueness: { scope: :draw_id }
   validates :state, presence: true
 
 

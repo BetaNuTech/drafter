@@ -1,0 +1,2 @@
+<%= turbo_stream.append dom_id(@draw, 'draw_costs'), partial: 'draw_costs/draw_cost', locals: { draw_cost: @draw_cost } %>
+<%= turbo_stream.update 'new_draw_cost', partial: 'draws/add_draw_cost_button', locals: { draw: @draw } %>
