@@ -73,8 +73,7 @@ class DrawPolicy < ApplicationPolicy
   def approve_external?
     record.permitted_state_events.include?(:approve_external) &&
     ( user.admin? ||
-      user.project_management?(record.project) ||
-      (record.clean? && user.project_finance?(record.project)) )
+      user.project_internal?(record.project) )
   end
 
   def reject?

@@ -17,7 +17,7 @@
 <div class="row row-cols-1 row-cols-md-2 px-2">
   <div class="col">
     <%= turbo_frame_tag dom_id(@project, 'draws') do %>
-      <%= render @project.draws_visible_to(@current_user) %>
+      <%= render @project.draws_visible_to(@current_user).order(index: :desc) %>
     <% end %>
   </div>
 

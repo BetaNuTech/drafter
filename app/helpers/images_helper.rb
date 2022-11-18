@@ -11,7 +11,7 @@ module ImagesHelper
     info: 'info-circle-fill.svg',
     square_check: 'check-square-fill.svg',
     square_check_open: 'check-square.svg',
-    square_x_image: 'x-square-fill.svg',
+    square_x: 'x-square-fill.svg',
     square_x_open: 'x-square.svg',
     upload: 'cloud-upload-fill.svg',
     uploaded: 'cloud-check-fill.svg',
