@@ -6,7 +6,7 @@ RSpec.describe ChangeOrderService do
   let(:project) { sample_project }
   let(:draw_cost) {
     cost = sample_draw_cost
-    cost.project_cost = sample_project.project_costs.first
+    cost.project_cost = sample_project.project_costs.change_request_allowed.first
     cost.save!
     Invoice.create!(draw_cost: cost, user: user, amount: 50.0)
     cost.invoices.reload
@@ -15,7 +15,7 @@ RSpec.describe ChangeOrderService do
     cost
   }
   let(:project_cost) { draw_cost.project_cost }
-  let(:funding_source) { sample_project.project_costs.last }
+  let(:funding_source) { sample_project.project_costs.change_requestable.last }
   let(:user) { sample_project.developers.first }
   let(:unauthorized_user) { sample_project.investors.first }
 
@@ -78,6 +78,8 @@ RSpec.describe ChangeOrderService do
         it 'should not create a change order' do
           funding_source.total = 1.0
           funding_source.save!
+          draw_cost.total = 2.0
+          draw_cost.save!
 
           service = ChangeOrderService.new(user:, draw_cost:)
           assert(service.funds_available?(funding_source))
