@@ -11,7 +11,7 @@ module DrawCosts
     included do
       class TransitionError < StandardError; end;
 
-      ALLOW_INVOICE_CHANGE_STATES = %i{pending rejected submitted}
+      ALLOW_INVOICE_CHANGE_STATES = %i{pending rejected}
       VISIBLE_STATES = %i{pending submitted approved rejected}
 
       scope :visible, -> { where(state: VISIBLE_STATES) }

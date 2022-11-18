@@ -17,7 +17,6 @@ class InvoicePolicy < ApplicationPolicy
   end
 
   def new?
-    record&.draw_cost&.draw&.rejected? ||
     ( record&.draw_cost&.allow_invoice_changes? &&
       ( user.admin? ||
        user.project_internal?(record.project) ||
