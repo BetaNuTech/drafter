@@ -15,16 +15,28 @@
     <% end %>
     <div class="body">
       <% if policy(draw_document).approvals? %>
-        <div class="document_approvals_button position-absolute top-50 start-0">
-          <%= link_to(draw_draw_document_approve_path(draw_id: draw_document.draw_id, draw_document_id: draw_document.id), data: {turbo_method: :post}) do %>
-            <%= inline_icon(icon: :square_check_open, size: 40, fill: :green) %>
-          <% end if policy(draw_document).approve? %>
-        </div>
-        <div class="document_approvals_button position-absolute top-50 end-0">
-          <%= link_to(draw_draw_document_reject_path(draw_id: draw_document.draw_id, draw_document_id: draw_document.id), data: {turbo_method: :post}) do %>
-            <%= inline_icon(icon: :square_x_open, size: 40, fill: :red) %>
-          <% end if policy(draw_document).reject? %>
-        </div>
+        <% if policy(draw_document).approve? %>
+          <div class="document_approvals_button position-absolute top-50 start-0">
+            <%= link_to(draw_draw_document_approve_path(draw_id: draw_document.draw_id, draw_document_id: draw_document.id), data: {turbo_method: :post}) do %>
+              <%= inline_icon(icon: :square_check_open, size: 40, fill: :green) %>
+            <% end %>
+          </div>
+        <% elsif draw_document.approved? %>
+          <div class="document_approvals_decided_button position-absolute top-50 start-0">
+            <%= inline_icon(icon: :square_check, size: 40, fill: :green) %>
+          </div>
+        <% end %>
+        <% if policy(draw_document).reject? %>
+          <div class="document_approvals_button position-absolute top-50 end-0">
+            <%= link_to(draw_draw_document_reject_path(draw_id: draw_document.draw_id, draw_document_id: draw_document.id), data: {turbo_method: :post}) do %>
+              <%= inline_icon(icon: :square_x_open, size: 40, fill: :red) %>
+            <% end %>
+          </div>
+        <% elsif draw_document.rejected? %>
+          <div class="document_approvals_decided_button position-absolute top-50 end-0">
+            <%= inline_icon(icon: :square_x, size: 40, fill: :red) %>
+          </div>
+        <% end %>
       <% end %>
       <% icon_attrs = draw_document.notes.present? ? {fill: :blue, opacity: 1.0, description: draw_document.notes } : {fill: :lightgray, opacity: 0.1, description: ''} %>
       <%= inline_icon(icon: :info, size: 35, fill: icon_attrs[:fill], opacity: icon_attrs[:opacity],

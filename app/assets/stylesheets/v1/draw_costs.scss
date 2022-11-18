@@ -75,3 +75,10 @@ div.document_approvals_button {
 div.document_approvals_button:hover { 
   opacity: 1.0;
 }
+
+div.document_approvals_decided_button {
+  height: 50px;
+  width: 50px;
+  opacity: 1.0;
+  cursor: pointer;
+}
