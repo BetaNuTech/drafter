@@ -12,16 +12,28 @@
     <% end %>
     <div class="body">
       <% if policy(invoice).approvals? %>
-        <div class="document_approvals_button position-absolute top-50 start-0">
-          <%= link_to(draw_cost_invoice_approve_path(draw_cost_id: invoice.draw_cost_id, invoice_id: invoice.id), data: {turbo_method: :post}) do %>
-            <%= inline_icon(icon: :square_check_open, size: 40, fill: :green) %>
-          <% end if policy(invoice).approve? %>
-        </div>
-        <div class="document_approvals_button position-absolute top-50 end-0">
-          <%= link_to(draw_cost_invoice_reject_path(draw_cost_id: invoice.draw_cost_id, invoice_id: invoice.id), data: {turbo_method: :post}) do %>
-            <%= inline_icon(icon: :square_x_open, size: 40, fill: :red) %>
-          <% end if policy(invoice).reject? %>
-        </div>
+        <% if policy(invoice).approve? %>
+          <div class="document_approvals_button position-absolute top-50 start-0">
+            <%= link_to(draw_cost_invoice_approve_path(draw_cost_id: invoice.draw_cost_id, invoice_id: invoice.id), data: {turbo_method: :post}) do %>
+              <%= inline_icon(icon: :square_check_open, size: 40, fill: :green) %>
+            <% end %>
+          </div>
+        <% elsif invoice.approved? %>
+          <div class="document_approvals_decided_button position-absolute top-50 start-0">
+            <%= inline_icon(icon: :square_check, size: 40, fill: :green) %>
+          </div>
+        <% end %>
+        <% if policy(invoice).reject? %>
+          <div class="document_approvals_button position-absolute top-50 end-0">
+            <%= link_to(draw_cost_invoice_reject_path(draw_cost_id: invoice.draw_cost_id, invoice_id: invoice.id), data: {turbo_method: :post}) do %>
+              <%= inline_icon(icon: :square_x_open, size: 40, fill: :red) %>
+            <% end %>
+          </div>
+        <% elsif invoice.rejected? %>
+          <div class="document_approvals_decided_button position-absolute top-50 end-0">
+            <%= inline_icon(icon: :square_x, size: 40, fill: :red) %>
+          </div>
+        <% end %>
       <% end %>
       <span class="badge bg-success"><%= number_to_currency invoice.amount %></span><br/>
       <% icon_attrs = invoice.description.present? ? {fill: :blue, opacity: 1.0, description: invoice.description } : {fill: :lightgray, opacity: 0.1, description: ''} %>
