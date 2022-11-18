@@ -3,6 +3,6 @@ var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
   try {
     return new bootstrap.Popover(popoverTriggerEl)
   } catch {
-    console.log('skipping', popoverTriggerEl.id, 'with no content')
+    // noop
   }
 })

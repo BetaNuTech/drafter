@@ -23,34 +23,11 @@
   <div class="row">
     <div class="col-6">
       <div class="form-floating mb-3 g-2">
-        <%= form.number_field :total, class: 'form-control form-control-lg', placeholder: '$', step: 0.01, data: { 'draw-cost-form-target' => 'total_input'} %>
+        <%= form.number_field :total, class: 'currency_input form-control form-control-lg', placeholder: '$', step: 0.01, data: { 'draw-cost-form-target' => 'total_input'} %>
         <%= form.label :total, 'Estimated Total $ (optional)' %>
       </div>
     </div>
   </div>
-
-  <!--
-  <div data-draw-cost-form-target="change_order_form">
-    <input id="change_order_project_cost_id" name="change_order[project_cost_id]" type="hidden" value="0.0" data-change-order-form-target="change_order_project_cost_field" />
-    <div class="row">
-      <div class="col">
-        <b>Amount: </b>
-        $<span class="badge bg-success" data-draw-cost-form-target="change_order_amount">
-          0.00
-        </span>
-        <input id="change_order_amount" name="change_order[amount]" type="hidden" value="0.0" data-change-order-form-target="change_order_amount_field" />
-      </div>
-    </div>
-    <div class="row pt-2">
-      <div class="col">
-        <div class="form-floating mb-3 g-2">
-          <%#= select_tag 'change_order_funding_source_id', change_order_funding_options(change_order), { include_blank: true, class: 'form-select', autofocus: true, name: 'change_order[funding_source_id]' } %>
-          <%= label_tag 'change_order_funding_source_id', 'Funding Source' %>
-        </div>  
-      </div>
-    </div>
-  </div>
-  -->
 
   <%= form.submit 'Save', class: 'btn btn-success m-1', data: { 'draw-cost-form-target' => 'save_button'} %>
   <%= link_to 'Cancel', :back, class: "btn btn-sm btn-secondary", data: { turbo_frame: :_top } %>
