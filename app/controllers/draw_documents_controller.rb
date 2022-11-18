@@ -59,7 +59,7 @@ class DrawDocumentsController < ApplicationController
       if @service.errors?
         format.html { render :new, status: :unprocessable_entity }
       else
-        format.html { redirect_to draw_draw_document_path(draw_id: @draw.id, id: @draw_document.id), notice: 'Approved Document' }
+        format.html { redirect_to draw_draw_document_path(draw_id: @draw.id, id: @draw_document.id), notice: 'Rejected Document' }
         format.turbo_stream
       end
     end
@@ -73,7 +73,7 @@ class DrawDocumentsController < ApplicationController
       if @service.errors?
         format.html { render :new, status: :unprocessable_entity }
       else
-        format.html { redirect_to draw_draw_document_path(draw_id: @draw.id, id: @draw_document.id), notice: 'Approved Document' }
+        format.html { redirect_to draw_draw_document_path(draw_id: @draw.id, id: @draw_document.id), notice: 'Reset Approval for Document' }
         format.turbo_stream
       end
     end

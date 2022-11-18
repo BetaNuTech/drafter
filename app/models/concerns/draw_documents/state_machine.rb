@@ -33,7 +33,7 @@ module DrawDocuments
         end
 
         event :reset_approval do
-          transitions from: %i{approved rejected}, to: :submitted,
+          transitions from: %i{approved rejected}, to: :pending,
             after: Proc.new{|*args| after_reset_approval(*args)}
         end
 

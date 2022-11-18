@@ -115,7 +115,7 @@ class InvoiceService
   end
 
   def reset_approval
-    raise PolicyError.new unless @policy.reject?
+    raise PolicyError.new unless @policy.reset_approval?
 
     reset_errors
 
