@@ -20,7 +20,9 @@
           </div>
         <% elsif invoice.approved? %>
           <div class="document_approvals_decided_button position-absolute top-50 start-0">
-            <%= inline_icon(icon: :square_check, size: 40, fill: :green) %>
+            <%= link_to(draw_cost_invoice_reset_approval_path(draw_cost_id: invoice.draw_cost_id, invoice_id: invoice.id), data: {turbo_method: :post}) do %>
+              <%= inline_icon(icon: :square_check, size: 40, fill: :green) %>
+            <% end %>
           </div>
         <% end %>
         <% if policy(invoice).reject? %>
@@ -31,7 +33,9 @@
           </div>
         <% elsif invoice.rejected? %>
           <div class="document_approvals_decided_button position-absolute top-50 end-0">
-            <%= inline_icon(icon: :square_x, size: 40, fill: :red) %>
+            <%= link_to(draw_cost_invoice_reset_approval_path(draw_cost_id: invoice.draw_cost_id, invoice_id: invoice.id), data: {turbo_method: :post}) do %>
+              <%= inline_icon(icon: :square_x, size: 40, fill: :red) %>
+            <% end %>
           </div>
         <% end %>
       <% end %>

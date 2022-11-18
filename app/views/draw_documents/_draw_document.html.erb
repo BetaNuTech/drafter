@@ -23,7 +23,9 @@
           </div>
         <% elsif draw_document.approved? %>
           <div class="document_approvals_decided_button position-absolute top-50 start-0">
-            <%= inline_icon(icon: :square_check, size: 40, fill: :green) %>
+            <%= link_to(draw_draw_document_reset_approval_path(draw_id: draw_document.draw_id, draw_document_id: draw_document.id), data: {turbo_method: :post}) do %>
+              <%= inline_icon(icon: :square_check, size: 40, fill: :green) %>
+            <% end %>          
           </div>
         <% end %>
         <% if policy(draw_document).reject? %>
@@ -34,7 +36,9 @@
           </div>
         <% elsif draw_document.rejected? %>
           <div class="document_approvals_decided_button position-absolute top-50 end-0">
-            <%= inline_icon(icon: :square_x, size: 40, fill: :red) %>
+            <%= link_to(draw_draw_document_reset_approval_path(draw_id: draw_document.draw_id, draw_document_id: draw_document.id), data: {turbo_method: :post}) do %>
+              <%= inline_icon(icon: :square_x, size: 40, fill: :red) %>
+            <% end %>          
           </div>
         <% end %>
       <% end %>
