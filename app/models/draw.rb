@@ -58,6 +58,7 @@ class Draw < ApplicationRecord
   belongs_to :user
   belongs_to :approver, class_name: 'User', optional: true
   has_many :draw_costs, dependent: :destroy
+  has_many :change_orders, through: :draw_costs
   has_many :invoices, through: :draw_costs
 
   ### Validations
@@ -112,11 +113,8 @@ class Draw < ApplicationRecord
     end
   end
 
-  # TODO
   def clean?
-    #STUB
-    true
+    change_orders.none?
   end
-
 
 end

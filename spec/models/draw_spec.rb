@@ -71,4 +71,30 @@ RSpec.describe Draw, type: :model do
     it 'returns budget variance'
     it 'returns if over budget'
   end
+
+  describe 'helpers' do
+    include_context 'sample_draws'
+
+    describe 'clean draws' do
+      let(:project_cost) { draw_cost.project_cost }
+      let(:funding_source) { sample_project.project_costs.change_requestable.last }
+      let(:change_order) {
+        service = ChangeOrderService.new(user: developer_user, draw_cost: draw_cost)
+        service.create({funding_source_id: funding_source.id})
+      }
+
+      it 'returns if the Draw is "clean"' do
+        draw
+        draw_cost.total = draw_cost.project_cost.total * 2.0
+        draw_cost.save!
+        draw.reload
+        assert(draw.clean?)
+
+        change_order
+        draw.reload
+        refute(draw.clean?)
+      end
+    end # clean draws
+  end # helpers
+
 end
