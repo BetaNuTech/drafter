@@ -16,7 +16,7 @@
       :approval_lead_time: 0
       :standard: true
       :drawable: false
-      :change_requestable: false
+      :change_requestable: true
       :initial_draw_only: false
       :change_request_allowed: false
       :total: 0.00
