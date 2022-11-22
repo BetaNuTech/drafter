@@ -73,10 +73,13 @@ class UserPolicy < ApplicationPolicy
     case user
     when nil
       false
+    when ->(u) { record == u}
+      # Can't change own role
+      false
     when ->(u) { user.admin? }
       true
     when -> (u) { u.executive? }
-      false
+      true
     else
       false
     end
@@ -89,7 +92,7 @@ class UserPolicy < ApplicationPolicy
     when ->(u) { user.admin? }
       true
     when -> (u) { u.executive? }
-      false
+      true
     else
       false
     end
@@ -115,21 +118,11 @@ class UserPolicy < ApplicationPolicy
     when nil
       valid_user_params = []
       valid_user_profile_params = []
-    when ->(u) { u.admin? }
+    when ->(u) { u.admin? || u.executive? }
       # All valid fields allowed
       # Allow setting feature flags
       valid_user_params = valid_user_params + [:active, :role_id, :organization_id]
       valid_user_profile_params = [ { profile_attributes: UserProfile::ALLOWED_PARAMS + [ UserProfile::FEATURE_PARAMS ] + [ UserProfile::APPSETTING_PARAMS ] } ]
-    when ->(u) { u.executive? }
-      if user.user?
-        # Only allow editing user role accounts
-        # Allow deactivating user role accounts
-        valid_user_params = valid_user_params + [:active, :role_id, :organization_id]
-      else
-        # Disallow editing non-user role accounts
-        valid_user_params = []
-        valid_user_profile_params = []
-      end
     when ->(u) { u.user? }
       unless record == user
         valid_user_params = User::ALLOWED_PARAMS
@@ -155,9 +148,16 @@ class UserPolicy < ApplicationPolicy
   end
 
   def roles_for_select
-    return Role.all.to_a.sort.
-      select{|role| user.role.present? ? user.role >= role : false}.
-      map{|role| [role.name, role.id]}
+    case user
+    when ->(u) { u.admin? }
+      roles = Role.all.to_a.sort
+    when ->(u) { u.executive? }
+      roles = Role.all.to_a.sort.
+        select{|role| user.role.present? ? user.role > role : false}
+    else
+      roles = []
+    end
+    return roles.map{|role| [role.name, role.id]}
   end
 
   def organizations_for_select

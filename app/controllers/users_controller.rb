@@ -21,6 +21,9 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     authorize @user
+    unless policy(@user).may_change_role?(user_params[:role_id])
+      user_params[:role_id] = nil
+    end
     respond_to do |format|
       if @user.save
         format.html { redirect_to users_path, notice: 'Created new user'}
@@ -41,6 +44,9 @@ class UsersController < ApplicationController
 
   def update
     authorize @user
+    unless policy(@user).may_change_role?(user_params[:role_id])
+      user_params[:role_id] = nil
+    end
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to edit_user_path(@user), notice: 'Account Information updated'} 
