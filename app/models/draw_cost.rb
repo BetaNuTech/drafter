@@ -33,7 +33,7 @@ class DrawCost < ApplicationRecord
     def validate(record)
       if record.project.draw_costs.
           visible.
-          where(project_cost_id: record.project_cost_id).
+          where(project_cost_id: record.project_cost_id, draw_id: record.draw_id).
           where.not(id: record.id).
           any?
         record.errors.add(:project_cost_id, 'There is already a Draw Cost for this Project Cost')
@@ -88,10 +88,10 @@ class DrawCost < ApplicationRecord
   end
 
   def requires_change_order?
-    allow_new_change_order?
+    allow_new_change_order? && project_cost_overage.positive? 
   end
 
   def allow_new_change_order?
-    project_cost.change_request_allowed? && project_cost_overage.positive? 
+    project_cost.change_request_allowed?
   end
 end

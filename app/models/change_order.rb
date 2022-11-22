@@ -27,7 +27,7 @@
 #  fk_rails_...  (project_cost_id => project_costs.id)
 #
 class ChangeOrder < ApplicationRecord
-  ALLOWED_PARAMS = %i{description funding_source_id}.freeze
+  ALLOWED_PARAMS = %i{amount description funding_source_id}.freeze
 
   ### Associations
   belongs_to :project_cost

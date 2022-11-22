@@ -6,12 +6,12 @@
       <%= render partial: 'shared/object_errors', locals: { object: change_order } %>
     <% end %>
 
-    <div class="row">
+    <div class="row pt-2">
       <div class="col">
-        <b>Amount: </b>
-        <span class="badge bg-success">
-          <%= number_to_currency(change_order.draw_cost.project_cost_overage) %>
-        </span>
+        <div class="form-floating mb-3 g-2">
+          <%= form.number_field :amount, { class: 'currency_input form-control', step: 0.01, autofocus: true } %>
+          <%= form.label :amount %>
+        </div>  
       </div>
     </div>
 

@@ -10,7 +10,7 @@ class ChangeOrdersController < ApplicationController
   end
 
   def new
-    @change_order = ChangeOrder.new(draw_cost: @draw_cost)
+    @change_order = ChangeOrder.new(draw_cost: @draw_cost, amount: @draw_cost.project_cost_overage)
     authorize @change_order
   end
 
