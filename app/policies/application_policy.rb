@@ -23,4 +23,8 @@ class ApplicationPolicy
   def privileged_user?
     user.admin? || user.executive?
   end
+
+  def project
+    record&.project
+  end
 end

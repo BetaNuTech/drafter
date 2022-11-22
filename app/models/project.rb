@@ -56,7 +56,6 @@ class Project < ApplicationRecord
     draws.map(&:draw_cost_total).sum
   end
 
-  # TODO: account for change requests
   def total_contract_remaining
     budget_total - draw_total
   end
@@ -92,6 +91,10 @@ class Project < ApplicationRecord
     end
 
     items
+  end
+
+  def allow_project_cost_changes?
+    draws.where(state: Draw::APPROVED_STATES).none?
   end
 
 end

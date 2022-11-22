@@ -17,7 +17,10 @@ class ProjectCostPolicy < ApplicationPolicy
   end
 
   def new?
-    privileged_user? || user.project_management?(project)
+    user.admin? || 
+      ( project.allow_project_cost_changes? &&
+        ( privileged_user? ||
+          user.project_management?(project) ) )
   end
 
   def create?
@@ -29,7 +32,10 @@ class ProjectCostPolicy < ApplicationPolicy
   end
 
   def edit?
-    privileged_user? || user.project_management?(project)
+    user.admin? || 
+      ( project.allow_project_cost_changes? &&
+        ( privileged_user? ||
+          user.project_management?(project) ) )
   end
 
   def update?
@@ -37,17 +43,10 @@ class ProjectCostPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.draw_costs.empty? &&
-    ( privileged_user? || user.project_management?(project) )
-  end
-  
-  def approve?
     user.admin? ||
-      user.project_internal?(project)
-  end
-
-  def reject?
-    raise 'Not implemented'
+      ( record.draw_costs.empty? &&
+        project.allow_project_cost_changes? &&
+        ( privileged_user? || user.project_management?(project) ) )
   end
 
   def allowed_params
