@@ -46,13 +46,14 @@ RSpec.describe ProjectCostsController, type: :controller do
   describe '#update' do
     describe 'as a manager' do
       let(:draw) { sample_draw }
-      let(:project_cost) { project.project_costs.first }
+      let(:project_cost) { project.project_costs.drawable.first }
       describe 'before the first draw is approved' do
         it 'updates the project cost' do
           assert(project.allow_project_cost_changes?)
           sign_in user
           expect {
             put :update, params: {project_id: project.id, id: project_cost.id, project_cost: {total: 999.0}}
+            project_cost.reload
           }.to change{project_cost.total}
         end
       end

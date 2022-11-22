@@ -7,7 +7,7 @@ RSpec.describe ChangeOrdersController, type: :controller do
   let(:project) { sample_project }
   let(:draw_cost) {
     cost = sample_draw_cost
-    projectcost = sample_project.project_costs.change_requestable.order(created_at: :asc).first
+    projectcost = sample_project.project_costs.change_request_allowed.change_requestable.order(created_at: :asc).first
     projectcost.total = 1000.0
     projectcost.save!
     sample_project.project_costs.reload

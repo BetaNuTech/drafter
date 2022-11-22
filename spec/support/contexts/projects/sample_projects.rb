@@ -101,7 +101,7 @@ RSpec.shared_context 'sample_projects' do
     sample_draw.draw_costs.create!(total: 123.45, draw: sample_draw, project_cost: sample_project_cost)
   }
   let(:sample_project_cost) {
-    sample_project.project_costs.all.sample
+    sample_project.project_costs.drawable.sample
   }
 
   before do
