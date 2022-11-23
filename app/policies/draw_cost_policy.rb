@@ -102,6 +102,8 @@ class DrawCostPolicy < ApplicationPolicy
     case user
     when -> (u) { u.admin? }
       DrawCost::ALLOWED_PARAMS
+    when -> (u) { u.executive? }
+      DrawCost::ALLOWED_PARAMS
     when -> (u) { u.project_internal?(record.project) }
       DrawCost::ALLOWED_PARAMS
     when -> (u) { u.project_developer?(record.project) }

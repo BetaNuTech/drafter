@@ -41,10 +41,14 @@ class DrawCostsController < ApplicationController
     authorize @draw_cost
     @service = DrawCostService.new(user: @current_user, draw: @draw_cost.draw, draw_cost: @draw_cost)
     @service.update(params[:draw_cost])
+    @draw_cost.draw.reload
     if @service.errors?
       render :edit, status: :unprocessable_entity
     else
-      redirect_to project_draw_path(project_id: @service.project.id, id: @service.draw.id), notice: 'Updated Draw Cost'
+      respond_to do |format|
+        format.html { redirect_to project_draw_path(project_id: @service.project.id, id: @service.draw.id), notice: 'Updated Draw Cost' }
+        format.turbo_stream
+      end
     end
   end
 

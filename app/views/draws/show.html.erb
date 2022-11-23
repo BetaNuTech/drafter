@@ -1,39 +1,7 @@
-<div class="row">
-  <div class="col">
-    <h1 style="display: inline;">
-      <%= @draw.name %>
-    </h1>
-    <% if @draw.state != 'pending' %>
-      <p class="badge bg-<%= @draw.state_css_class %>" style="position: relative; top: -0.75em;">
-        <%= @draw.state.humanize %>
-      </p>    
-    <% end %>
-  </div>
-</div>
-
 <%= turbo_frame_tag @draw do %>
-  <div class="row px-2">
-    <div class="col border bg-light m-2 p-2 text-center">
-      <h3>
-        <%= @draw.name %> Total:
-        <span class="badge bg-success">
-          <%= turbo_frame_tag(:total_cost, @draw) do %>
-            <%= number_to_currency @draw.draw_cost_total %>
-          <% end %>
-        </span>
-        <br/>
-        <% if @draw.allow_document_changes? %>
-          <%= turbo_frame_tag(:submitted_documents, @draw) do %>
-            <%= @draw.required_documents.count %>
-          <% end %>
-          of 3 Required Documents
-        <% end %>
-      </h3>
-      <%= turbo_frame_tag :action_buttons, @draw do %>
-        <%= render partial: 'draws/action_buttons', locals: { draw: @draw } %>
-      <% end %>
-    </div>
-  </div>
+  <%= turbo_frame_tag(:details, @draw) do %>
+    <%= render partial: 'draws/draw_details', locals: { draw: @draw } %>
+  <% end %>
 
   <div class="row">
     <div class="col m-2 p-3 border shadow">

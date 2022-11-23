@@ -1,0 +1,2 @@
+<%= turbo_stream.update dom_id(@draw, :details), partial: 'draws/draw_details', locals: {draw: @draw} %>
+<%= turbo_stream.update dom_id(@draw, :draw_costs), @draw.draw_costs.visible %>
