@@ -63,6 +63,8 @@ class ChangeOrderPolicy < ApplicationPolicy
     case user
     when -> (u) { u.admin? }
       ChangeOrder::ALLOWED_PARAMS
+    when -> (u) { u.executive? }
+      ChangeOrder::ALLOWED_PARAMS
     when -> (u) { u.project_owner?(record.project) }
       ChangeOrder::ALLOWED_PARAMS
     when -> (u) { u.project_finance?(record.project) }

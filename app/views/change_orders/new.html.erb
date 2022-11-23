@@ -6,7 +6,7 @@
 
 <div class="row">
   <div class="col">
-    <%= turbo_frame_tag 'new_change_order' do %>
+    <%= turbo_frame_tag :new_change_order, @draw_cost do %>
       <%= render 'form', change_order: @change_order %>
     <% end %>
   </div>
