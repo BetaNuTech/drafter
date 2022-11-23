@@ -2,7 +2,7 @@
   <b>Invoices Total:</b>
   <span class="badge bg-<%= draw_cost_invoice_remaining_class(draw_cost) %>">
     <%= number_to_currency draw_cost.invoice_total %>
-  </span>
+  </span><br/>
   <b>Remaining:</b>
   <span class="badge bg-<%= draw_cost_invoice_remaining_class(draw_cost) %>">
     <%= number_to_currency draw_cost.subtotal %>
