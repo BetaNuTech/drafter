@@ -1,7 +1,17 @@
-<% if project.issues?(@current_user) %>
+<% if project.issues? || project.user_issues?(@current_user)  %>
   <div class="m-2 p-2 bg-warning bg-gradient shadow-sm">
     <h5>There are issues that require attention:</h5>
-    <% project.issues(@current_user).each do |issue| %>
+    <% project.issues.each do |issue| %>
+    <p class="ps-4 mb-1">
+      <%= issue.first %>:
+      <em>
+      <% issue.last.each do |obj| %>
+        <span class="pe-1"><%= obj.name %></span>
+      <% end %>
+      </em>
+    </p>
+    <% end %>
+    <% project.user_issues(@current_user).each do |issue| %>
     <p class="ps-4 mb-1">
       <%= issue.first %>:
       <em>

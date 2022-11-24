@@ -70,25 +70,26 @@ class Project < ApplicationRecord
     out.flatten
   end
 
-  def issues?(user=nil)
-    issues(user).any?
+  def issues?
+    issues.any?
   end
 
-  def issues(user=nil)
+  def issues
     items = []
 
     pc_issues = project_cost_issues
     items << pc_issues if pc_issues.any?
 
-    u_issues = user_issues(user)
-    items << u_issues if u_issues.any?
-
     items
+  end
+
+  def user_issues?(user=nil)
+    user_issues(user).any?
   end
 
   def user_issues(user=nil)
     items = []
-    items += ['Not a member of this Project', [ user ]] unless role_for(user).present?
+    items << ['Not a member of this Project', [ user ]] unless role_for(user).present?
 
     items
   end
