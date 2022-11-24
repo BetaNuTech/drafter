@@ -1,5 +1,18 @@
-<% if current_user.project_developer?(project) %>
-  <%= render partial: 'project_developer', locals: {project: project} %>
-<% else %>
-  <%= render partial: 'project_default', locals: {project: project} %>
-<% end %>
+<div class="card project-card">
+  <div class="card-body">
+    <h3 class="card-title">
+      <%= link_to(project.name, project_path(project), data: {'turbo_frame': '_top'}) %>
+    </h3>
+    <div class="card-action-buttons">
+      <%= link_to('Edit', edit_project_path(project), class: 'btn btn-sm btn-primary', data: { turbo_frame: project }) if policy(project).edit? %>
+      <%= link_to('Delete', project_path(project), class: 'btn btn-sm btn-danger', data: { turbo_method: :delete, turbo_confirm: 'Are you sure?', turbo_frame: :_top }) if policy(project).destroy? %>
+    </div>
+    <div class="card-text">
+      <p>
+        <%= project.description %>
+      </p>
+      <%= link_to('Project Costs', project_project_costs_path(project_id: project.id), class: 'btn btn-primary', data: {turbo_frame: :_top})%>
+      <%= render partial: 'projects/issues', locals: { project: project } %>
+    </div>
+  </div>
+</div>

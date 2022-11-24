@@ -7,7 +7,9 @@ module Projects
       has_many :users, through: :project_users
 
       def role_for(user)
-        project_users.includes(:user).where(user_id: user.id).limit(1).first.role
+        return nil unless user.present?
+
+        project_users.includes(:user).where(user_id: user.id).limit(1).first&.role
       end
 
       def owners
