@@ -9,7 +9,7 @@ module Projects
       def role_for(user)
         return nil unless user.present?
 
-        project_users.includes(:user).where(user_id: user.id).limit(1).first&.role
+        project_users.includes(:user).where(user_id: user.id).limit(1).first&.project_role
       end
 
       def owners

@@ -37,7 +37,7 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def destroy?
-    privileged_user? || user.project_owner?(record)
+    user.admin? || user.project_owner?(record)
   end
 
   def add_member?
