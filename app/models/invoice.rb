@@ -46,6 +46,7 @@ class Invoice < ApplicationRecord
   belongs_to :user
   has_one :project, through: :draw_cost
   has_one_attached :document
+  #has_one_attached :annotated_preview
 
   ### Validations
   validates :amount, presence: true, numericality: { greater_than: 0.0}
