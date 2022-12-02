@@ -68,6 +68,8 @@ module ApplicationHelper
     else
       document.variant(resize_to_fit: resize)
     end
+  rescue
+    '#'
   end
 
 end
