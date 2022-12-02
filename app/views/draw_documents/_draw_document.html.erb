@@ -10,7 +10,7 @@
       <div class="preview_container">
         <%= link_to(rails_blob_path(draw_document.document), target: '_blank') do %>
           <%= image_tag preview_document(document: draw_document.document, resize: [150,150]), class: 'align-middle' %>
-        <% end %>
+        <% end rescue 'File Missing' %>
       </div>
     <% end %>
     <div class="body">
