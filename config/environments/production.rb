@@ -37,7 +37,11 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
   # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
 
-  config.active_storage.service = :amazon
+  if ENV.fetch('APPLICATION_ENV','production') == 'production'
+    config.active_storage.service = :amazon
+  else
+    config.active_storage.service = :amazon_staging
+  end
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
