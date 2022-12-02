@@ -33,9 +33,13 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
   config.active_storage.default_url_options = { host: 'localhost', port: '3000', protocol: 'http' }
+  if ENV.fetch('USE_S3_IN_DEVELOPMENT','false') == 'true'
+    config.active_storage.service = :amazon_development
+  else
+    # Store uploaded files on the local file system (see config/storage.yml for options).
+    config.active_storage.service = :local
+  end
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false

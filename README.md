@@ -119,6 +119,16 @@ In development, there is a dedicated worker service/container which runs `bin/de
 
 For more information, see: `https://github.com/collectiveidea/delayed_job`
 
+# ActiveStorage / Object Storage
+
+In development, local file storage is used by default.
+
+For testing the Amazon S3 bucket used by the staging environment add the following line to `.env`
+
+```
+USE_S3_IN_DEVELOPMENT=true
+```
+
 # Staging
 
 Drafter Staging is hosted on Heroku.
@@ -153,6 +163,16 @@ Control Panel: `https://dashboard.heroku.com/apps/drafter-staging`
 ### Email
 
 Twilio Sendgrid
+
+### Object Storage
+
+Amazon S3
+
+### Invoice Analysis
+
+AWS Textract
+AWS SNS
+AWS SQS
 
 ## Initial Staging Setup
 
