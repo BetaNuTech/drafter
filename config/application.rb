@@ -28,5 +28,6 @@ module Drafter
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.active_job.queue_adapter = :delayed_job
+    config.active_storage.variant_processor = :vips
   end
 end
