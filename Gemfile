@@ -40,6 +40,7 @@ gem 'delayed_job_web'
 gem 'daemons'
 gem 'factory_bot_rails'
 gem 'aws-sdk-s3'
+gem 'httparty'
 
 group :development do
   gem 'web-console'
