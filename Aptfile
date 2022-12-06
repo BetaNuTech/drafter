@@ -1,7 +1,6 @@
 libcairo2-dev
 libgirepository1.0-dev
 libglib2.0-dev
-libjpeg62-turbo-dev
 libvips
 poppler-utils
 vim
