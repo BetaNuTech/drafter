@@ -143,6 +143,13 @@ Control Panel: `https://dashboard.heroku.com/apps/drafter-staging`
 * Frameworks: NONE
 * Git URL: `https://git.heroku.com/drafter-staging.git`
 
+## Buildpacks
+
+1. heroku-community/apt
+2. heroku/ruby
+
+See `Aptfile` for managing system dependencies installed by the Apt buildpack
+
 ## Services/Resources
 
 * Web Dyno x1 -- Hobby
