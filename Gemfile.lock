@@ -481,6 +481,7 @@ DEPENDENCIES
   rspec
   rspec-rails
   rspec_junit_formatter
+  ruby-vips
   sassc-rails
   simplecov
   sprockets-rails
