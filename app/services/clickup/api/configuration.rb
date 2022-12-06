@@ -8,11 +8,13 @@ module Clickup
       attr_reader :errors
 
       # Initialize using ENVVARS or with a provided Hash with keys matching PROPERTIES
-      def initialize(source=:env)
+      def initialize(source=:credentials)
         @errors = []
         case source
         when :env
           load_env_settings
+        when :credentials
+          load_rails_credentials
         when Hash
           load_hash_settings(source)
         end
@@ -30,6 +32,17 @@ module Clickup
 
       private
 
+      def application_env
+        @application_env ||=
+          begin
+            if Rails.env.development?
+              :development
+            else
+              ( ENV.fetch('APPLICATION_ENV','production') == 'production' ) ? :production : :staging
+            end
+          end
+      end
+
       def load_hash_settings(data)
         @errors = []
         @api_token = data.fetch(:api_token, nil)
@@ -43,6 +56,10 @@ module Clickup
       def get_prefixed_env(var)
         val = ENV.fetch("#{ENV_PREFIX}_#{var.to_s.upcase}", nil)
         return val
+      end
+
+      def load_rails_credentials
+        @api_token = Rails.application.credentials.dig(:clickup, application_env, :api_token)
       end
 
       # Returns Array: [isValid, errorsArr]

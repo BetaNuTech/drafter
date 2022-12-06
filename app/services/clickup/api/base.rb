@@ -9,7 +9,7 @@ module Clickup
       # Initialize with an optional Clickup::Configuration instance
       def initialize(conf=nil)
         @debug = false
-        @configuration = conf || Clickup::Api::Configuration.new(:env)
+        @configuration = conf || Clickup::Api::Configuration.new(:credentials)
         @request_id = nil
       end
 
