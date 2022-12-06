@@ -61,7 +61,7 @@ module ApplicationHelper
   end
 
   def preview_document(document:, resize:)
-    return '#' unless document.attached?
+    return '' unless document.attached?
 
     if document.previewable?
       document.preview(resize_to_fit: resize)
@@ -69,7 +69,7 @@ module ApplicationHelper
       document.variant(resize_to_fit: resize)
     end
   rescue
-    '#'
+    ''
   end
 
 end
