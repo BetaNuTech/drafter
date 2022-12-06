@@ -41,7 +41,7 @@ gem 'daemons'
 gem 'factory_bot_rails'
 gem 'aws-sdk-s3'
 gem 'httparty'
-gem 'ruby-vips'
+#gem 'ruby-vips'
 
 group :development do
   gem 'web-console'
