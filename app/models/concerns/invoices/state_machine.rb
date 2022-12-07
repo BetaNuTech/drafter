@@ -38,30 +38,30 @@ module Invoices
         end
 
         event :approve do
-          transitions from: %i{ submitted processed rejected }, to: :approved,
+          transitions from: %i{ submitted processed processing_failed rejected }, to: :approved,
             guard: Proc.new { allow_approve? },
             after: Proc.new{|*args| after_approve(*args)}
         end
 
         event :reject do
-          transitions from: %i{ submitted processed approved }, to: :rejected,
+          transitions from: %i{ submitted processed processing_failed approved }, to: :rejected,
             guard: Proc.new { allow_reject? },
             after: Proc.new{|*args| after_reject(*args)}
         end
 
         event :reset_approval do
-          transitions from: %i{approved rejected}, to: :submitted,
+          transitions from: %i{approved rejected processing_failed}, to: :submitted,
             after: Proc.new{|*args| after_reset_approval(*args)}
         end
 
         event :remove do
-          transitions from: %i{pending submitted processed rejected approved}, to: :removed,
+          transitions from: %i{pending submitted processed processing_failed rejected approved}, to: :removed,
             guard: Proc.new { allow_remove? },
             after: Proc.new {|*args| after_remove(*args)}
         end
 
         event :fail_processing do
-          transitions from: [:processing], to: :processing_failed
+          transitions from: %i{ processing }, to: :processing_failed
         end
 
       end
