@@ -35,6 +35,9 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Invoice < ApplicationRecord
+  # invoice.ocr_data
+  # { meta: { attempts: 0, documentid: document.id, jobid: 'TextractJobId', key: 'S3ObjectKey', filename: 'filename.pdf', last_attempt: timestamp, service: 'Textract'}, analysis: {} }
+  
   ALLOWED_PARAMS = %i{amount description document}
   
   ### Concerns
@@ -46,12 +49,25 @@ class Invoice < ApplicationRecord
   belongs_to :user
   has_one :project, through: :draw_cost
   has_one_attached :document
-  #has_one_attached :annotated_preview
+  has_one_attached :annotated_preview
 
   ### Validations
   validates :amount, presence: true, numericality: { greater_than: 0.0}
   validates :state, presence: true
 
   delegate :organization, to: :draw_cost
+
+  def init_ocr_data
+    self.ocr_data ||= {}
+    self.ocr_data['meta'] ||= {}
+    self.ocr_data['meta']['attempts'] ||= 0
+    self.ocr_data['meta']['service'] ||= 'Textract'
+
+    if document.attached?
+      self.ocr_data['meta']['documentid'] =  document.id
+      self.ocr_data['meta']['key'] ||= document.attachment.blob.key
+      self.ocr_data['meta']['filename'] ||= document.attachment.blob.filename.to_s
+    end
+  end
 
 end

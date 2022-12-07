@@ -26,7 +26,8 @@ module Invoices
         state :removed
 
         event :submit do
-          transitions from: %i{ pending rejected }, to: :submitted
+          transitions from: %i{ pending rejected }, to: :submitted,
+            after: Proc.new{|*args| after_submit(*args)}
         end
 
         event :process do
@@ -62,6 +63,10 @@ module Invoices
 
         event :fail_processing do
           transitions from: %i{ processing }, to: :processing_failed
+        end
+
+        event :fail_processing_attempt do
+          transitions from: %i{ processing }, to: :submitted
         end
 
       end
@@ -127,6 +132,11 @@ module Invoices
       def after_reset_approval(user)
         draw_cost.trigger_event(event_name: :revert_to_pending, user: user) if
           draw_cost.permitted_state_events.include?(:revert_to_pending)
+      end
+
+      def after_submit(user)
+        # TODO
+        # InvoiceProcessingService.new(invoice: self, user: user).start_analysis
       end
 
     end
