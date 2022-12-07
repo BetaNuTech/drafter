@@ -4,7 +4,7 @@ module Invoices
 
     class_methods do
       def state_names
-        DrawCosts.aasm.states.map{|s| s.name.to_s}
+        Invoice.aasm.states.map{|s| s.name.to_s}
       end
     end
 
@@ -20,6 +20,7 @@ module Invoices
         state :submitted
         state :processing
         state :processed
+        state :processing_failed
         state :approved
         state :rejected
         state :removed
@@ -57,6 +58,10 @@ module Invoices
           transitions from: %i{pending submitted processed rejected approved}, to: :removed,
             guard: Proc.new { allow_remove? },
             after: Proc.new {|*args| after_remove(*args)}
+        end
+
+        event :fail_processing do
+          transitions from: [:processing], to: :processing_failed
         end
 
       end
