@@ -36,7 +36,7 @@
 #
 class Invoice < ApplicationRecord
   # invoice.ocr_data
-  # { meta: { attempts: 0, documentid: document.id, jobid: 'TextractJobId', key: 'S3ObjectKey', filename: 'filename.pdf', last_attempt: timestamp, service: 'Textract'}, analysis: {} }
+  # { meta: { attempts: 0, requests: [{timestamp: timestamp, request_token: 'XXX'}], documentid: document.id, jobid: 'TextractJobId', key: 'S3ObjectKey', filename: 'filename.pdf', last_attempt: timestamp, service: 'Textract'}, analysis: {} }
   
   ALLOWED_PARAMS = %i{amount description document}
   
@@ -59,12 +59,13 @@ class Invoice < ApplicationRecord
 
   def init_ocr_data
     self.ocr_data ||= {}
+    self.ocr_data['analysis'] ||= {}
     self.ocr_data['meta'] ||= {}
     self.ocr_data['meta']['attempts'] ||= 0
-    self.ocr_data['meta']['service'] ||= 'Textract'
+    self.ocr_data['meta']['requests'] ||= []
 
     if document.attached?
-      self.ocr_data['meta']['documentid'] =  document.id
+      self.ocr_data['meta']['documentid'] = document.id
       self.ocr_data['meta']['key'] ||= document.attachment.blob.key
       self.ocr_data['meta']['filename'] ||= document.attachment.blob.filename.to_s
     end

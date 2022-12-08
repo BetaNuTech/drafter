@@ -1,58 +1,94 @@
 class InvoiceProcessingService
-  ATTEMPTS_MAX = 4
-  attr_reader :invoice, :errors
+  class InvoiceProcessingServiceError < StandardError; end
+  class InvalidAnalyzerError < InvoiceProcessingServiceError; end
+  class InvalidStateError < InvoiceProcessingServiceError; end
+  class MissingDocumentError < InvoiceProcessingServiceError; end
 
-  class InvalidStateError < StandardError; end
-  class MissingDocumentError < StandardError; end
+  ATTEMPTS_MAX = 5
+  attr_reader :invoice, :errors, :service_name, :service
 
-  def initialize(service=:textract)
-    @service = service
+  def initialize(backing_service: :textract, dry_run: false, debug: false)
+    @service_name = backing_service
+    @service = analyzer_service(@service_name)
+    @service.dry_run = dry_run
+    @service.debug = debug
   end
 
   def errors?
     @errors.any?
   end
 
-  def start_analysis(invoice)
-    return false unless invoice.submitted?
+  # Start analysis of provided invoice
+  def start_analysis(invoice:)
+    raise InvalidStateError.new('Invoice must be in submitted state for analysis') unless invoice.submitted?
 
-    return false unless invoice.document.attached?
+    raise MissingDocumentError.new('Invoice has no attached document') unless invoice.document.attached?
 
     invoice.init_ocr_data
-    invoice.trigger_event(event_name: 'process')
 
     attempt = invoice.ocr_data.dig('meta', 'attempts')
     if ATTEMPTS_MAX < attempt
       invoice.trigger_event(event_name: 'fail_processing')
-      SystemEvent.log(description: 'Exceeded maximum invoice processing attempts', event_source: invoice, incidental: invoice.rproject, severity: :error)
+      SystemEvent.log(description: 'Exceeded maximum invoice processing attempts', event_source: invoice, incidental: invoice.project, severity: :error)
       return false
     end
 
+    invoice.trigger_event(event_name: 'process')
+
     attempt += 1
-    invoice.ocr_data['meta']['last_attempt'] ||= Time.current.to_s
-    invoice.ocr_data['meta']['attempts'] ||= attempt
+    requestid = SecureRandom.hex
+    timestamp = Time.current.to_s
+    job_tag = "Invoice--#{invoice.id}"
+    request = { attempt:, requestid:, job_tag: ,timestamp: }
+
+    invoice.ocr_data['meta']['service'] = @service_name
+    invoice.ocr_data['meta']['attempts'] = attempt
+    invoice.ocr_data['meta']['last_attempt'] = timestamp
+    invoice.ocr_data['meta']['job_tag'] = job_tag
+    invoice.ocr_data['meta']['requests'] ||= []
+    invoice.ocr_data['meta']['requests']  << request
     invoice.save
 
-    #jobid = Textract::Api::Analyzer.new.analyze_document(invoice.ocr_data['meta'])
-    # if jobid.present?
-    #  invoice.ocr_data['meta']['jobid'] = jobid
-    #  invoice.save
-    # else
-    #  invoice.trigger_event(event_name: 'fail_processing_attempt')
-    #  SystemEvent.log(description: "Invoice processing attempt #{attempt} failed", event_source: invoice, incidental: invoice.rproject, severity: :warn)
-    #  invoice.save
-    #  return false
-    # end
-    #return jobid
+    submit_analysis_request(invoice:, requestid:)
+  rescue => e
+    invoice.trigger_event(event_name: 'fail_processing_attempt')
+    description = "Error starting analysis of invoice: #{e.class.to_s}: #{e.to_s}"
+    SystemEvent.log(description: , event_source: invoice, incidental: invoice.project, severity: :error)
   end
 
-  def get_analysis(invoice)
+  # Process completed document analysis data for 'processing' invoices
+  def process_completion_queue
+    # TODO
+  end
+
+  def get_analysis(invoice:)
     # TODO
   end
 
   private
 
-  
+  def submit_analysis_request(invoice:, requestid:)
+    jobid = @service.analyze_document(metadata: invoice.ocr_data['meta'], requestid:)
+    if jobid.present?
+      invoice.ocr_data['meta']['jobid'] = jobid
+      invoice.save
+      jobid
+    else
+      invoice.trigger_event(event_name: 'fail_processing_attempt')
+      attempt = invoice.ocr_data['meta']['attempt']
+      SystemEvent.log(description: "Invoice processing attempt #{attempt} failed", event_source: invoice, incidental: invoice.project, severity: :warn)
+      nil
+    end
+  end
+
+  def analyzer_service(service)
+    case service
+    when :textract
+      Textract::Api::Analyzer.new
+    else
+      raise InvalidAnalyzerError.new("#{service} is not a supported invoice document analyser")
+    end
+  end
 
   def reset_errors
     @errors = []

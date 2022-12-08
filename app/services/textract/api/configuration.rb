@@ -2,7 +2,7 @@ module Textract
   module Api
     class Configuration
 
-      PROPERTIES = %i{access_key_id secret_access_key bucket region sns_topic_arn topic_arn}.freeze
+      PROPERTIES = %i{access_key_id secret_access_key bucket region sns_topic_arn role_arn sqs_arn}.freeze
 
       attr_reader *PROPERTIES
       attr_reader :errors
@@ -46,7 +46,7 @@ module Textract
       end
 
       def load_rails_credentials
-        config = Rails.application.credentials.dig(:aws, :textract, application_env)
+        config = Rails.application.credentials.dig(:aws, application_env, :textract)
         load_hash_settings(config)
       end
 
@@ -56,7 +56,8 @@ module Textract
         @bucket = data.fetch(:bucket)
         @region = data.fetch(:region)
         @sns_topic_arn = data.fetch(:sns_topic_arn)
-        @topic_arn = data.fetch(:topic_arn)
+        @role_arn = data.fetch(:role_arn)
+        @sqs_arn = data.fetch(:sqs_arn)
 
         true
       end
