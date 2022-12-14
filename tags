@@ -10,6 +10,21 @@ AddDrawableToProjectCosts	./db/migrate/20221020170459_add_drawable_to_project_co
 AddInitialDrawOnlyToProjectCosts	./db/migrate/20221027012909_add_initial_draw_only_to_project_costs.rb	/^class AddInitialDrawOnlyToProjectCosts < ActiveRecord::Migration[7.0]$/;"	c
 AddStateToDrawDocuments	./db/migrate/20221031212831_add_state_to_draw_documents.rb	/^class AddStateToDrawDocuments < ActiveRecord::Migration[7.0]$/;"	c
 AddTotalToProjectCostSamples	./db/migrate/20221027020721_add_total_to_project_cost_samples.rb	/^class AddTotalToProjectCostSamples < ActiveRecord::Migration[7.0]$/;"	c
+AnalysisJob	./app/services/textract/data/analysis_job.rb	/^    class AnalysisJob$/;"	c	class:Textract.Data
+AnalysisJobData	./app/services/textract/data/analysis_job_data.rb	/^    class AnalysisJobData$/;"	c	class:Textract.Data
+Analyzer	./app/services/textract/api/analyzer.rb	/^    class Analyzer < Base$/;"	c	class:Textract.Api
+Api	./app/services/clickup/api.rb	/^  module Api$/;"	m	class:Clickup
+Api	./app/services/clickup/api/base.rb	/^  module Api$/;"	m	class:Clickup
+Api	./app/services/clickup/api/configuration.rb	/^  module Api$/;"	m	class:Clickup
+Api	./app/services/clickup/api/folders.rb	/^  module Api$/;"	m	class:Clickup
+Api	./app/services/clickup/api/lists.rb	/^  module Api$/;"	m	class:Clickup
+Api	./app/services/clickup/api/spaces.rb	/^  module Api$/;"	m	class:Clickup
+Api	./app/services/clickup/api/tasks.rb	/^  module Api$/;"	m	class:Clickup
+Api	./app/services/clickup/api/workspaces.rb	/^  module Api$/;"	m	class:Clickup
+Api	./app/services/textract/api.rb	/^  module Api$/;"	m	class:Textract
+Api	./app/services/textract/api/analyzer.rb	/^  module Api$/;"	m	class:Textract
+Api	./app/services/textract/api/base.rb	/^  module Api$/;"	m	class:Textract
+Api	./app/services/textract/api/configuration.rb	/^  module Api$/;"	m	class:Textract
 Application	./config/application.rb	/^  class Application < Rails::Application$/;"	c	class:Drafter
 ApplicationCable	./app/channels/application_cable/channel.rb	/^module ApplicationCable$/;"	m
 ApplicationCable	./app/channels/application_cable/connection.rb	/^module ApplicationCable$/;"	m
@@ -19,12 +34,31 @@ ApplicationJob	./app/jobs/application_job.rb	/^class ApplicationJob < ActiveJob:
 ApplicationMailer	./app/mailers/application_mailer.rb	/^class ApplicationMailer < ActionMailer::Base$/;"	c
 ApplicationPolicy	./app/policies/application_policy.rb	/^class ApplicationPolicy$/;"	c
 ApplicationRecord	./app/models/application_record.rb	/^class ApplicationRecord < ActiveRecord::Base$/;"	c
+Base	./app/services/clickup/api/base.rb	/^    class Base$/;"	c	class:Clickup.Api
+Base	./app/services/textract/api/base.rb	/^    class Base$/;"	c	class:Textract.Api
 Breadcrumbs	./app/services/breadcrumbs.rb	/^class Breadcrumbs$/;"	c
 ChangeOrder	./app/models/change_order.rb	/^class ChangeOrder < ApplicationRecord$/;"	c
 ChangeOrderPolicy	./app/policies/change_order_policy.rb	/^class ChangeOrderPolicy < ApplicationPolicy$/;"	c
 ChangeOrderService	./app/services/change_order_service.rb	/^class ChangeOrderService$/;"	c
 ChangeOrdersController	./app/controllers/change_orders_controller.rb	/^class ChangeOrdersController < ApplicationController$/;"	c
 Channel	./app/channels/application_cable/channel.rb	/^  class Channel < ActionCable::Channel::Base$/;"	c	class:ApplicationCable
+Clickup	./app/services/clickup/api.rb	/^module Clickup$/;"	m
+Clickup	./app/services/clickup/api/base.rb	/^module Clickup$/;"	m
+Clickup	./app/services/clickup/api/configuration.rb	/^module Clickup$/;"	m
+Clickup	./app/services/clickup/api/folders.rb	/^module Clickup$/;"	m
+Clickup	./app/services/clickup/api/lists.rb	/^module Clickup$/;"	m
+Clickup	./app/services/clickup/api/spaces.rb	/^module Clickup$/;"	m
+Clickup	./app/services/clickup/api/tasks.rb	/^module Clickup$/;"	m
+Clickup	./app/services/clickup/api/workspaces.rb	/^module Clickup$/;"	m
+Clickup	./app/services/clickup/data.rb	/^module Clickup$/;"	m
+Clickup	./app/services/clickup/data/error.rb	/^module Clickup$/;"	m
+Clickup	./app/services/clickup/data/folder.rb	/^module Clickup$/;"	m
+Clickup	./app/services/clickup/data/list.rb	/^module Clickup$/;"	m
+Clickup	./app/services/clickup/data/space.rb	/^module Clickup$/;"	m
+Clickup	./app/services/clickup/data/task.rb	/^module Clickup$/;"	m
+Clickup	./app/services/clickup/data/workspace.rb	/^module Clickup$/;"	m
+Configuration	./app/services/clickup/api/configuration.rb	/^    class Configuration$/;"	c	class:Clickup.Api
+Configuration	./app/services/textract/api/configuration.rb	/^    class Configuration$/;"	c	class:Textract.Api
 Connection	./app/channels/application_cable/connection.rb	/^  class Connection < ActionCable::Connection::Base$/;"	c	class:ApplicationCable
 CreateActiveStorageTables	./db/migrate/20220901195346_create_active_storage_tables.active_storage.rb	/^class CreateActiveStorageTables < ActiveRecord::Migration[5.2]$/;"	c
 CreateChangeOrders	./db/migrate/20221104225749_create_change_orders.rb	/^class CreateChangeOrders < ActiveRecord::Migration[7.0]$/;"	c
@@ -42,9 +76,23 @@ CreateProjects	./db/migrate/20220715231026_create_projects.rb	/^class CreateProj
 CreateRoles	./db/migrate/20220630210948_create_roles.rb	/^class CreateRoles < ActiveRecord::Migration[7.0]$/;"	c
 CreateSystemEvents	./db/migrate/20220719225846_create_system_events.rb	/^class CreateSystemEvents < ActiveRecord::Migration[7.0]$/;"	c
 CreateUserProfiles	./db/migrate/20220630204256_create_user_profiles.rb	/^class CreateUserProfiles < ActiveRecord::Migration[7.0]$/;"	c
+Data	./app/services/clickup/data.rb	/^  module Data$/;"	m	class:Clickup
+Data	./app/services/clickup/data/error.rb	/^  module Data$/;"	m	class:Clickup
+Data	./app/services/clickup/data/folder.rb	/^  module Data$/;"	m	class:Clickup
+Data	./app/services/clickup/data/list.rb	/^  module Data$/;"	m	class:Clickup
+Data	./app/services/clickup/data/space.rb	/^  module Data$/;"	m	class:Clickup
+Data	./app/services/clickup/data/task.rb	/^  module Data$/;"	m	class:Clickup
+Data	./app/services/clickup/data/workspace.rb	/^  module Data$/;"	m	class:Clickup
+Data	./app/services/textract/data.rb	/^  module Data$/;"	m	class:Textract
+Data	./app/services/textract/data/analysis_job.rb	/^  module Data$/;"	m	class:Textract
+Data	./app/services/textract/data/analysis_job_data.rb	/^  module Data$/;"	m	class:Textract
+Data	./app/services/textract/data/error.rb	/^  module Data$/;"	m	class:Textract
+Data	./app/services/textract/data/sqs_message.rb	/^  module Data$/;"	m	class:Textract
+Data	./app/services/textract/data/textract_job_status.rb	/^  module Data$/;"	m	class:Textract
 DevelopmentSeeder	./app/services/development_seeder.rb	/^class DevelopmentSeeder$/;"	c
 Devise	./app/models/concerns/users/devise.rb	/^  module Devise$/;"	m	class:Users
 DeviseCreateUsers	./db/migrate/20220629233840_devise_create_users.rb	/^class DeviseCreateUsers < ActiveRecord::Migration[7.0]$/;"	c
+DocumenttypeValidator	./app/models/draw_document.rb	/^  class DocumenttypeValidator < ActiveModel::Validator$/;"	c	class:DrawDocument
 Drafter	./config/application.rb	/^module Drafter$/;"	m
 DrafterDeviseMailer	./app/mailers/drafter_devise_mailer.rb	/^class DrafterDeviseMailer < Devise::Mailer$/;"	c
 Draw	./app/models/draw.rb	/^class Draw < ApplicationRecord$/;"	c
@@ -65,17 +113,28 @@ Draws	./app/models/concerns/draws/draw_documents.rb	/^module Draws$/;"	m
 Draws	./app/models/concerns/draws/state_machine.rb	/^module Draws$/;"	m
 DrawsController	./app/controllers/draws_controller.rb	/^class DrawsController < ApplicationController$/;"	c
 DrawsHelper	./app/helpers/draws_helper.rb	/^module DrawsHelper$/;"	m
+Error	./app/services/clickup/data/error.rb	/^    class Error < StandardError; end$/;"	c	class:Clickup.Data
+Error	./app/services/textract/data/error.rb	/^    class Error < StandardError; end$/;"	c	class:Textract.Data
+Folder	./app/services/clickup/data/folder.rb	/^    class Folder$/;"	c	class:Clickup.Data
+Folders	./app/services/clickup/api/folders.rb	/^    class Folders < Base$/;"	c	class:Clickup.Api
 HomeController	./app/controllers/home_controller.rb	/^class HomeController < ApplicationController$/;"	c
 HomeHelper	./app/helpers/home_helper.rb	/^module HomeHelper$/;"	m
 HomePolicy	./app/policies/home_policy.rb	/^class HomePolicy$/;"	c
 ImagesHelper	./app/helpers/images_helper.rb	/^module ImagesHelper$/;"	m
 IndexValidator	./app/models/draw.rb	/^  class IndexValidator < ActiveModel::Validator$/;"	c	class:Draw
+InvalidAnalyzerError	./app/services/invoice_processing_service.rb	/^  class InvalidAnalyzerError < InvoiceProcessingServiceError; end$/;"	c	class:InvoiceProcessingService
+InvalidStateError	./app/services/invoice_processing_service.rb	/^  class InvalidStateError < InvoiceProcessingServiceError; end$/;"	c	class:InvoiceProcessingService
 Invoice	./app/models/invoice.rb	/^class Invoice < ApplicationRecord$/;"	c
 InvoicePolicy	./app/policies/invoice_policy.rb	/^class InvoicePolicy < ApplicationPolicy$/;"	c
+InvoiceProcessingService	./app/services/invoice_processing_service.rb	/^class InvoiceProcessingService$/;"	c
+InvoiceProcessingServiceError	./app/services/invoice_processing_service.rb	/^  class InvoiceProcessingServiceError < StandardError; end$/;"	c	class:InvoiceProcessingService
 InvoiceService	./app/services/invoice_service.rb	/^class InvoiceService$/;"	c
 Invoices	./app/models/concerns/invoices/state_machine.rb	/^module Invoices$/;"	m
 InvoicesController	./app/controllers/invoices_controller.rb	/^class InvoicesController < ApplicationController$/;"	c
+List	./app/services/clickup/data/list.rb	/^    class List$/;"	c	class:Clickup.Data
+Lists	./app/services/clickup/api/lists.rb	/^    class Lists < Base$/;"	c	class:Clickup.Api
 Membership	./app/services/projects/membership.rb	/^  class Membership$/;"	c	class:Projects
+MissingDocumentError	./app/services/invoice_processing_service.rb	/^  class MissingDocumentError < InvoiceProcessingServiceError; end$/;"	c	class:InvoiceProcessingService
 Organization	./app/models/organization.rb	/^class Organization < ApplicationRecord$/;"	c
 OrganizationPolicy	./app/policies/organization_policy.rb	/^class OrganizationPolicy < ApplicationPolicy$/;"	c
 OrganizationsController	./app/controllers/organizations_controller.rb	/^class OrganizationsController < ApplicationController$/;"	c
@@ -89,6 +148,7 @@ Project	./app/models/project.rb	/^class Project < ApplicationRecord$/;"	c
 ProjectCost	./app/models/project_cost.rb	/^class ProjectCost < ApplicationRecord$/;"	c
 ProjectCostPolicy	./app/policies/project_cost_policy.rb	/^class ProjectCostPolicy < ApplicationPolicy$/;"	c
 ProjectCostSample	./app/models/project_cost_sample.rb	/^class ProjectCostSample < ApplicationRecord$/;"	c
+ProjectCostValidator	./app/models/draw_cost.rb	/^  class ProjectCostValidator < ActiveModel::Validator$/;"	c	class:DrawCost
 ProjectCosts	./app/models/concerns/project_costs/state_machine.rb	/^module ProjectCosts$/;"	m
 ProjectCostsController	./app/controllers/project_costs_controller.rb	/^class ProjectCostsController < ApplicationController$/;"	c
 ProjectPolicy	./app/policies/project_policy.rb	/^class ProjectPolicy < ApplicationPolicy$/;"	c
@@ -128,13 +188,30 @@ Scope	./app/policies/project_user_policy.rb	/^  class Scope < Scope$/;"	c	class:
 Scope	./app/policies/user_policy.rb	/^  class Scope < Scope$/;"	c	class:UserPolicy
 Seedable	./app/models/concerns/seeds/seedable.rb	/^  module Seedable$/;"	m	class:Seeds
 Seeds	./app/models/concerns/seeds/seedable.rb	/^module Seeds$/;"	m
+Space	./app/services/clickup/data/space.rb	/^    class Space$/;"	c	class:Clickup.Data
+Spaces	./app/services/clickup/api/spaces.rb	/^    class Spaces < Base$/;"	c	class:Clickup.Api
+SqsMessage	./app/services/textract/data/sqs_message.rb	/^    class SqsMessage$/;"	c	class:Textract.Data
 StateMachine	./app/models/concerns/draw_costs/state_machine.rb	/^  module StateMachine$/;"	m	class:DrawCosts
 StateMachine	./app/models/concerns/draw_documents/state_machine.rb	/^  module StateMachine$/;"	m	class:DrawDocuments
 StateMachine	./app/models/concerns/draws/state_machine.rb	/^  module StateMachine$/;"	m	class:Draws
 StateMachine	./app/models/concerns/invoices/state_machine.rb	/^  module StateMachine$/;"	m	class:Invoices
 StateMachine	./app/models/concerns/project_costs/state_machine.rb	/^  module StateMachine$/;"	m	class:ProjectCosts
 SystemEvent	./app/models/system_event.rb	/^class SystemEvent < ApplicationRecord$/;"	c
+Task	./app/services/clickup/data/task.rb	/^    class Task$/;"	c	class:Clickup.Data
+Tasks	./app/services/clickup/api/tasks.rb	/^    class Tasks < Base$/;"	c	class:Clickup.Api
 TestMailer	./app/mailers/test_mailer.rb	/^class TestMailer < ApplicationMailer$/;"	c
+Textract	./app/services/textract/api.rb	/^module Textract$/;"	m
+Textract	./app/services/textract/api/analyzer.rb	/^module Textract$/;"	m
+Textract	./app/services/textract/api/base.rb	/^module Textract$/;"	m
+Textract	./app/services/textract/api/configuration.rb	/^module Textract$/;"	m
+Textract	./app/services/textract/data.rb	/^module Textract$/;"	m
+Textract	./app/services/textract/data/analysis_job.rb	/^module Textract$/;"	m
+Textract	./app/services/textract/data/analysis_job_data.rb	/^module Textract$/;"	m
+Textract	./app/services/textract/data/error.rb	/^module Textract$/;"	m
+Textract	./app/services/textract/data/sqs_message.rb	/^module Textract$/;"	m
+Textract	./app/services/textract/data/textract_job_status.rb	/^module Textract$/;"	m
+TextractApiError	./app/services/textract/api/analyzer.rb	/^      class TextractApiError < StandardError; end;$/;"	c	class:Textract.Api.Analyzer
+TextractJobStatus	./app/services/textract/data/textract_job_status.rb	/^    class TextractJobStatus$/;"	c	class:Textract.Data
 TransitionError	./app/models/concerns/draw_costs/state_machine.rb	/^      class TransitionError < StandardError; end;$/;"	c	class:DrawCosts.StateMachine
 TurboDeviseUserController	./app/controllers/turbo_devise_user_controller.rb	/^class TurboDeviseUserController < ApplicationController$/;"	c
 TurboFailureApp	./config/initializers/devise.rb	/^class TurboFailureApp < Devise::FailureApp$/;"	c
@@ -155,6 +232,8 @@ Users	./app/models/concerns/users/projects.rb	/^module Users$/;"	m
 Users	./app/models/concerns/users/role.rb	/^module Users$/;"	m
 UsersController	./app/controllers/users_controller.rb	/^class UsersController < ApplicationController$/;"	c
 UsersHelper	./app/helpers/users_helper.rb	/^module UsersHelper$/;"	m
+Workspace	./app/services/clickup/data/workspace.rb	/^    class Workspace$/;"	c	class:Clickup.Data
+Workspaces	./app/services/clickup/api/workspaces.rb	/^    class Workspaces < Base$/;"	c	class:Clickup.Api
 about	./app/controllers/home_controller.rb	/^  def about$/;"	f	class:HomeController
 about?	./app/policies/home_policy.rb	/^  def about?$/;"	f	class:HomePolicy
 activate_bundler	./bin/bundle	/^  def activate_bundler$/;"	f
@@ -168,6 +247,7 @@ add_member	./app/services/projects/membership.rb	/^    def add_member(user: , ro
 add_member?	./app/policies/project_policy.rb	/^  def add_member?$/;"	f	class:ProjectPolicy
 add_project_costs	./app/services/projects/updater.rb	/^    def add_project_costs(project)$/;"	f	class:Projects.Updater
 add_project_user	./spec/support/project_spec_helper.rb	/^  def add_project_user(user:, project:, role:)$/;"	f	class:ProjectSpecHelper
+add_uri_parameters	./app/services/clickup/api/base.rb	/^      def add_uri_parameters(url, parameters)$/;"	f	class:Clickup.Api.Base
 add_user	./app/models/concerns/projects/users.rb	/^      def add_user(user:, role:)$/;"	f	class:Projects.Users
 admin	./app/models/role.rb	/^  def self.admin$/;"	F	class:Role
 admin?	./app/models/concerns/users/role.rb	/^      def admin?$/;"	f	class:Users.Role
@@ -178,8 +258,13 @@ after_approve	./app/models/concerns/draw_documents/state_machine.rb	/^      def 
 after_approve	./app/models/concerns/invoices/state_machine.rb	/^      def after_approve(user)$/;"	f	class:Invoices.StateMachine
 after_confirmation_path_for	./app/controllers/users/confirmations_controller.rb	/^  def after_confirmation_path_for(resource_name, resource)$/;"	f	class:Users
 after_reject	./app/models/concerns/draw_documents/state_machine.rb	/^      def after_reject(user)$/;"	f	class:DrawDocuments.StateMachine
+after_reject	./app/models/concerns/invoices/state_machine.rb	/^      def after_reject(user)$/;"	f	class:Invoices.StateMachine
+after_remove	./app/models/concerns/invoices/state_machine.rb	/^      def after_remove(user)$/;"	f	class:Invoices.StateMachine
+after_reset_approval	./app/models/concerns/draw_documents/state_machine.rb	/^      def after_reset_approval(user)$/;"	f	class:DrawDocuments.StateMachine
+after_reset_approval	./app/models/concerns/invoices/state_machine.rb	/^      def after_reset_approval(user)$/;"	f	class:Invoices.StateMachine
 after_submit	./app/models/concerns/draw_costs/state_machine.rb	/^      def after_submit(user)$/;"	f	class:DrawCosts.StateMachine.TransitionError
 after_submit	./app/models/concerns/draws/state_machine.rb	/^      def after_submit(user)$/;"	f	class:Draws.StateMachine
+after_submit	./app/models/concerns/invoices/state_machine.rb	/^      def after_submit(user)$/;"	f	class:Invoices.StateMachine
 alert_image	./app/helpers/images_helper.rb	/^  def alert_image$/;"	f
 all_documents_submitted?	./app/models/concerns/draws/draw_documents.rb	/^      def all_documents_submitted?$/;"	f	class:Draws.DrawDocuments
 all_draw_costs_approved?	./app/models/draw.rb	/^  def all_draw_costs_approved?$/;"	f	class:Draw
@@ -187,12 +272,19 @@ all_required_documents_approved?	./app/models/concerns/draws/draw_documents.rb	/
 all_system_events	./app/models/project.rb	/^  def all_system_events$/;"	f	class:Project
 allow_approval?	./app/models/concerns/draws/state_machine.rb	/^      def allow_approval?$/;"	f	class:Draws.StateMachine
 allow_approve?	./app/models/concerns/draw_costs/state_machine.rb	/^      def allow_approve?$/;"	f	class:DrawCosts.StateMachine.TransitionError
+allow_approve?	./app/models/concerns/draw_documents/state_machine.rb	/^      def allow_approve?$/;"	f	class:DrawDocuments.StateMachine
+allow_approve?	./app/models/concerns/invoices/state_machine.rb	/^      def allow_approve?$/;"	f	class:Invoices.StateMachine
+allow_document_approvals?	./app/models/concerns/draws/state_machine.rb	/^      def allow_document_approvals?$/;"	f	class:Draws.StateMachine
 allow_document_changes?	./app/models/concerns/draws/state_machine.rb	/^      def allow_document_changes?$/;"	f	class:Draws.StateMachine
 allow_draw_cost_changes?	./app/models/concerns/draws/state_machine.rb	/^      def allow_draw_cost_changes?$/;"	f	class:Draws.StateMachine
+allow_invoice_approvals?	./app/models/concerns/draws/state_machine.rb	/^      def allow_invoice_approvals?$/;"	f	class:Draws.StateMachine
 allow_invoice_changes?	./app/models/concerns/draw_costs/state_machine.rb	/^      def allow_invoice_changes?$/;"	f	class:DrawCosts.StateMachine.TransitionError
 allow_new_change_order?	./app/models/draw_cost.rb	/^  def allow_new_change_order?$/;"	f	class:DrawCost
 allow_new_draw?	./app/models/project.rb	/^  def allow_new_draw?$/;"	f	class:Project
+allow_project_cost_changes?	./app/models/project.rb	/^  def allow_project_cost_changes?$/;"	f	class:Project.project_cost_issues
 allow_reject?	./app/models/concerns/draw_documents/state_machine.rb	/^      def allow_reject?$/;"	f	class:DrawDocuments.StateMachine
+allow_reject?	./app/models/concerns/invoices/state_machine.rb	/^      def allow_reject?$/;"	f	class:Invoices.StateMachine
+allow_remove?	./app/models/concerns/invoices/state_machine.rb	/^      def allow_remove?$/;"	f	class:Invoices.StateMachine
 allow_submit?	./app/models/concerns/draw_costs/state_machine.rb	/^      def allow_submit?$/;"	f	class:DrawCosts.StateMachine.TransitionError
 allow_submit?	./app/models/concerns/draws/state_machine.rb	/^      def allow_submit?$/;"	f	class:Draws.StateMachine
 allowed_params	./app/policies/change_order_policy.rb	/^  def allowed_params$/;"	f	class:ChangeOrderPolicy
@@ -205,6 +297,11 @@ allowed_params	./app/policies/project_cost_policy.rb	/^  def allowed_params$/;"	
 allowed_params	./app/policies/project_policy.rb	/^  def allowed_params$/;"	f	class:ProjectPolicy
 allowed_params	./app/policies/project_user_policy.rb	/^  def allowed_params$/;"	f	class:ProjectUserPolicy
 allowed_params	./app/policies/user_policy.rb	/^  def allowed_params$/;"	f	class:UserPolicy
+analyze_document	./app/services/textract/api/analyzer.rb	/^      def analyze_document(metadata:, requestid:)$/;"	f	class:Textract.Api.Analyzer.TextractApiError
+analyzer_service	./app/services/invoice_processing_service.rb	/^  def analyzer_service(service)$/;"	f	class:InvoiceProcessingService
+api_root	./app/services/clickup/api/base.rb	/^      def api_root$/;"	f	class:Clickup.Api.Base
+application_env	./app/services/clickup/api/configuration.rb	/^      def application_env$/;"	f	class:Clickup.Api.Configuration
+application_env	./app/services/textract/api/configuration.rb	/^      def application_env$/;"	f	class:Textract.Api.Configuration
 approvals?	./app/policies/draw_cost_policy.rb	/^  def approvals?$/;"	f	class:DrawCostPolicy
 approvals?	./app/policies/draw_document_policy.rb	/^  def approvals?$/;"	f	class:DrawDocumentPolicy
 approvals?	./app/policies/invoice_policy.rb	/^  def approvals?$/;"	f	class:InvoicePolicy
@@ -217,7 +314,6 @@ approve	./app/services/invoice_service.rb	/^  def approve$/;"	f	class:InvoiceSer
 approve?	./app/policies/draw_cost_policy.rb	/^  def approve?$/;"	f	class:DrawCostPolicy
 approve?	./app/policies/draw_document_policy.rb	/^  def approve?$/;"	f	class:DrawDocumentPolicy
 approve?	./app/policies/invoice_policy.rb	/^  def approve?$/;"	f	class:InvoicePolicy
-approve?	./app/policies/project_cost_policy.rb	/^  def approve?$/;"	f	class:ProjectCostPolicy
 approve_document?	./app/policies/draw_cost_policy.rb	/^  def approve_document?$/;"	f	class:DrawCostPolicy
 approve_external	./app/controllers/draws_controller.rb	/^  def approve_external$/;"	f	class:DrawsController
 approve_external	./app/services/draw_service.rb	/^  def approve_external$/;"	f	class:DrawService
@@ -239,9 +335,11 @@ available_roles	./app/services/projects/membership.rb	/^    def available_roles$
 available_roles	./app/services/projects/updater.rb	/^    def available_roles$/;"	f	class:Projects.Updater
 available_users	./app/models/concerns/projects/users.rb	/^      def available_users$/;"	f	class:Projects.Users
 available_users	./app/models/project_user.rb	/^  def available_users$/;"	f	class:ProjectUser
+aws_credentials	./app/services/textract/api/configuration.rb	/^      def aws_credentials$/;"	f	class:Textract.Api.Configuration
 breadcrumbs	./app/controllers/application_controller.rb	/^  def breadcrumbs$/;"	f	class:ApplicationController
 breadcrumbs_tag	./app/helpers/application_helper.rb	/^  def breadcrumbs_tag$/;"	f	class:ApplicationHelper
 budget_balance	./app/models/project_cost.rb	/^  def budget_balance$/;"	f	class:ProjectCost
+budget_balance_without_change_orders	./app/models/project_cost.rb	/^  def budget_balance_without_change_orders$/;"	f	class:ProjectCost
 budget_total	./app/models/project.rb	/^  def budget_total$/;"	f	class:Project
 bundler_requirement	./bin/bundle	/^  def bundler_requirement$/;"	f
 bundler_requirement_for	./bin/bundle	/^  def bundler_requirement_for(version)$/;"	f
@@ -283,6 +381,7 @@ circle_check_image	./app/helpers/images_helper.rb	/^  def circle_check_image$/;"
 circle_x_image	./app/helpers/images_helper.rb	/^  def circle_x_image$/;"	f
 clean?	./app/models/draw.rb	/^  def clean?$/;"	f	class:Draw
 cli_arg_version	./bin/bundle	/^  def cli_arg_version$/;"	f
+config	./app/services/clickup/api/base.rb	/^      def config$/;"	f	class:Clickup.Api.Base
 confirmation_instructions	./app/mailers/drafter_devise_mailer.rb	/^  def confirmation_instructions(record, token, opts={})$/;"	f	class:DrafterDeviseMailer
 copyright_years	./app/helpers/application_helper.rb	/^  def copyright_years$/;"	f	class:ApplicationHelper
 cost_type_css_class	./app/models/project_cost.rb	/^  def cost_type_css_class$/;"	f	class:ProjectCost
@@ -313,6 +412,7 @@ create?	./app/policies/project_cost_policy.rb	/^  def create?$/;"	f	class:Projec
 create?	./app/policies/project_policy.rb	/^  def create?$/;"	f	class:ProjectPolicy
 create?	./app/policies/project_user_policy.rb	/^  def create?$/;"	f	class:ProjectUserPolicy
 create?	./app/policies/user_policy.rb	/^  def create?$/;"	f	class:UserPolicy
+createTask	./app/services/clickup/api/tasks.rb	/^      def createTask(list_id:, name:, status:, description: nil, assignees: nil, tags: nil, priority: nil, $/;"	f	class:Clickup.Api.Tasks
 create_draws	./app/services/development_seeder.rb	/^  def create_draws(project=nil)$/;"	f	class:DevelopmentSeeder
 create_organizations	./app/services/development_seeder.rb	/^  def create_organizations$/;"	f	class:DevelopmentSeeder
 create_projects	./app/services/development_seeder.rb	/^  def create_projects$/;"	f	class:DevelopmentSeeder
@@ -320,6 +420,10 @@ create_requests	./app/services/development_seeder.rb	/^  def create_requests(pro
 create_users	./app/services/development_seeder.rb	/^  def create_users$/;"	f	class:DevelopmentSeeder
 deactivate?	./app/policies/user_policy.rb	/^  def deactivate?$/;"	f	class:UserPolicy
 deactivated?	./app/models/user.rb	/^  def deactivated?$/;"	f	class:User
+deleteData	./app/services/clickup/api/base.rb	/^      def deleteData(options, dry_run: false)$/;"	f	class:Clickup.Api.Base
+deleteTask	./app/services/clickup/api/tasks.rb	/^      def deleteTask(task_id:)$/;"	f	class:Clickup.Api.Tasks
+delete_data	./app/services/clickup/api/base.rb	/^      def delete_data(url:, body:, headers: {}, options: {})$/;"	f	class:Clickup.Api.Base
+delete_sqs_message	./app/services/textract/api/analyzer.rb	/^      def delete_sqs_message(sqs_message)$/;"	f	class:Textract.Api.Analyzer.TextractApiError
 description	./app/models/draw_document.rb	/^  def description$/;"	f	class:DrawDocument
 destroy	./app/controllers/change_orders_controller.rb	/^  def destroy$/;"	f	class:ChangeOrdersController
 destroy	./app/controllers/draw_costs_controller.rb	/^  def destroy$/;"	f	class:DrawCostsController
@@ -387,17 +491,46 @@ errors?	./app/services/change_order_service.rb	/^  def errors?$/;"	f	class:Chang
 errors?	./app/services/draw_cost_service.rb	/^  def errors?$/;"	f	class:DrawCostService
 errors?	./app/services/draw_document_service.rb	/^  def errors?$/;"	f	class:DrawDocumentService
 errors?	./app/services/draw_service.rb	/^  def errors?$/;"	f	class:DrawService
+errors?	./app/services/invoice_processing_service.rb	/^  def errors?$/;"	f	class:InvoiceProcessingService
 errors?	./app/services/invoice_service.rb	/^  def errors?$/;"	f	class:InvoiceService
 errors?	./app/services/projects/updater.rb	/^    def errors?$/;"	f	class:Projects.Updater
+errors?	./app/services/textract/api/configuration.rb	/^      def errors?$/;"	f	class:Textract.Api.Configuration
 event_severity_color_class	./app/helpers/application_helper.rb	/^  def event_severity_color_class(event)$/;"	f	class:ApplicationHelper
 executive	./app/models/role.rb	/^  def self.executive$/;"	F	class:Role
 executive?	./app/models/concerns/users/role.rb	/^      def executive?$/;"	f	class:Users.Role
 executive?	./app/models/role.rb	/^  def executive?$/;"	f	class:Role
 external?	./app/models/project_role.rb	/^  def external?$/;"	f	class:ProjectRole
+failed?	./app/services/textract/data/textract_job_status.rb	/^      def failed?$/;"	f	class:Textract.Data.TextractJobStatus
+fetch_data	./app/services/clickup/api/base.rb	/^      def fetch_data(url:, body:, headers: {}, options: {})$/;"	f	class:Clickup.Api.Base
 finance	./app/models/concerns/projects/users.rb	/^      def finance$/;"	f	class:Projects.Users
 finance	./app/models/project_role.rb	/^  def self.finance$/;"	F	class:ProjectRole
 finance?	./app/models/project_role.rb	/^  def finance?$/;"	f	class:ProjectRole
 format_phone	./app/models/user_profile.rb	/^  def self.format_phone(number, prefixed: false)$/;"	F	class:UserProfile
+format_request_id	./app/services/clickup/api/base.rb	/^      def format_request_id$/;"	f	class:Clickup.Api.Base
+from_CreateTask	./app/services/clickup/data/task.rb	/^      def self.from_CreateTask(data)$/;"	F	class:Clickup.Data.Task
+from_DeleteTask	./app/services/clickup/data/task.rb	/^      def self.from_DeleteTask(data)$/;"	F	class:Clickup.Data.Task
+from_Folders	./app/services/clickup/data/folder.rb	/^      def self.from_Folders(data)$/;"	F	class:Clickup.Data.Folder
+from_Lists	./app/services/clickup/data/list.rb	/^      def self.from_Lists(data)$/;"	F	class:Clickup.Data.List
+from_Spaces	./app/services/clickup/data/space.rb	/^      def self.from_Spaces(data)$/;"	F	class:Clickup.Data.Space
+from_Task	./app/services/clickup/data/task.rb	/^      def self.from_Task(data)$/;"	F	class:Clickup.Data.Task
+from_Tasks	./app/services/clickup/data/task.rb	/^      def self.from_Tasks(data)$/;"	F	class:Clickup.Data.Task
+from_UpdateTask	./app/services/clickup/data/task.rb	/^      def self.from_UpdateTask(data)$/;"	F	class:Clickup.Data.Task
+from_Workspaces	./app/services/clickup/data/workspace.rb	/^      def self.from_Workspaces(data)$/;"	F	class:Clickup.Data.Workspace
+from_api	./app/services/textract/data/analysis_job_data.rb	/^      def self.from_api(response:, job_id:, expected_total: nil)$/;"	F	class:Textract.Data.AnalysisJobData
+from_api	./app/services/textract/data/sqs_message.rb	/^      def self.from_api(response)$/;"	F	class:Textract.Data.SqsMessage
+from_api_response	./app/services/clickup/data/folder.rb	/^      def self.from_api_response(response:, method:)$/;"	F	class:Clickup.Data.Folder
+from_api_response	./app/services/clickup/data/list.rb	/^      def self.from_api_response(response:, method:)$/;"	F	class:Clickup.Data.List
+from_api_response	./app/services/clickup/data/space.rb	/^      def self.from_api_response(response:, method:)$/;"	F	class:Clickup.Data.Space
+from_api_response	./app/services/clickup/data/task.rb	/^      def self.from_api_response(response:, method:)$/;"	F	class:Clickup.Data.Task
+from_api_response	./app/services/clickup/data/workspace.rb	/^      def self.from_api_response(response:, method:)$/;"	F	class:Clickup.Data.Workspace
+from_folder_node	./app/services/clickup/data/folder.rb	/^      def self.from_folder_node(data)$/;"	F	class:Clickup.Data.Folder
+from_hash	./app/services/textract/data/analysis_job_data.rb	/^      def self.from_hash(hash: {})$/;"	F	class:Textract.Data.AnalysisJobData
+from_list_node	./app/services/clickup/data/list.rb	/^      def self.from_list_node(data)$/;"	F	class:Clickup.Data.List
+from_space_node	./app/services/clickup/data/space.rb	/^      def self.from_space_node(data)$/;"	F	class:Clickup.Data.Space
+from_sqs_message	./app/services/textract/data/analysis_job.rb	/^      def self.from_sqs_message(sqs_message)$/;"	F	class:Textract.Data.AnalysisJob
+from_sqs_message	./app/services/textract/data/textract_job_status.rb	/^      def self.from_sqs_message(sqs_message)$/;"	F	class:Textract.Data.TextractJobStatus
+from_task_node	./app/services/clickup/data/task.rb	/^      def self.from_task_node(data)$/;"	F	class:Clickup.Data.Task
+from_workspace_node	./app/services/clickup/data/workspace.rb	/^      def self.from_workspace_node(data)$/;"	F	class:Clickup.Data.Workspace
 full_datetime	./app/helpers/application_helper.rb	/^  def full_datetime(time)$/;"	f	class:ApplicationHelper
 full_name	./app/models/concerns/users/profile.rb	/^      def full_name$/;"	f	class:Users.Profile
 full_role_desc	./app/models/user.rb	/^  def full_role_desc(project)$/;"	f	class:User
@@ -407,6 +540,19 @@ fund?	./app/policies/draw_policy.rb	/^  def fund?$/;"	f	class:DrawPolicy
 funds_available	./app/services/change_order_service.rb	/^  def funds_available(funding_source)$/;"	f	class:ChangeOrderService
 funds_available?	./app/services/change_order_service.rb	/^  def funds_available?(funding_source)$/;"	f	class:ChangeOrderService
 gemfile	./bin/bundle	/^  def gemfile$/;"	f
+generate_annotated_preview	./app/services/invoice_processing_service.rb	/^  def generate_annotated_preview(invoice:)$/;"	f	class:InvoiceProcessingService
+getData	./app/services/clickup/api/base.rb	/^      def getData(options, dry_run: false)$/;"	f	class:Clickup.Api.Base
+getFolderlessLists	./app/services/clickup/api/lists.rb	/^      def getFolderlessLists(space_id:)$/;"	f	class:Clickup.Api.Lists
+getFolders	./app/services/clickup/api/folders.rb	/^      def getFolders(space_id:)$/;"	f	class:Clickup.Api.Folders
+getLists	./app/services/clickup/api/lists.rb	/^      def getLists(folder_id:)$/;"	f	class:Clickup.Api.Lists
+getSpaces	./app/services/clickup/api/spaces.rb	/^      def getSpaces$/;"	f	class:Clickup.Api.Spaces
+getTask	./app/services/clickup/api/tasks.rb	/^      def getTask(task_id:)$/;"	f	class:Clickup.Api.Tasks
+getTasks	./app/services/clickup/api/tasks.rb	/^      def getTasks(list_id:)$/;"	f	class:Clickup.Api.Tasks
+getWorkspaces	./app/services/clickup/api/workspaces.rb	/^      def getWorkspaces$/;"	f	class:Clickup.Api.Workspaces
+get_analysis	./app/services/invoice_processing_service.rb	/^  def get_analysis(invoice:)$/;"	f	class:InvoiceProcessingService
+get_completed_items	./app/services/textract/api/analyzer.rb	/^      def get_completed_items$/;"	f	class:Textract.Api.Analyzer.TextractApiError
+get_prefixed_env	./app/services/clickup/api/configuration.rb	/^      def get_prefixed_env(var)$/;"	f	class:Clickup.Api.Configuration
+get_textract_analysis	./app/services/textract/api/analyzer.rb	/^      def get_textract_analysis(job_id:, expected_total:)$/;"	f	class:Textract.Api.Analyzer.TextractApiError
 home_image	./app/helpers/images_helper.rb	/^  def home_image$/;"	f
 http_auth_credentials	./app/controllers/application_controller.rb	/^  def self.http_auth_credentials$/;"	F	class:ApplicationController
 impersonate?	./app/policies/user_policy.rb	/^  def impersonate?$/;"	f	class:UserPolicy
@@ -433,17 +579,23 @@ index?	./app/policies/project_user_policy.rb	/^  def index?$/;"	f	class:ProjectU
 index?	./app/policies/user_policy.rb	/^  def index?$/;"	f	class:UserPolicy
 index_redirect	./app/controllers/users_controller.rb	/^  def index_redirect$/;"	f	class:UsersController
 info_image	./app/helpers/images_helper.rb	/^  def info_image$/;"	f
+init_ocr_data	./app/models/invoice.rb	/^  def init_ocr_data$/;"	f	class:Invoice
 initialize	./app/policies/application_policy.rb	/^    def initialize(user, scope)$/;"	f	class:ApplicationPolicy.Scope
 initialize	./app/policies/application_policy.rb	/^  def initialize(user, record)$/;"	f	class:ApplicationPolicy
 initialize	./app/policies/home_policy.rb	/^  def initialize(user, _record)$/;"	f	class:HomePolicy
 initialize	./app/services/breadcrumbs.rb	/^  def initialize$/;"	f	class:Breadcrumbs
 initialize	./app/services/change_order_service.rb	/^  def initialize(user:, draw_cost: nil, change_order: nil)$/;"	f	class:ChangeOrderService
+initialize	./app/services/clickup/api/base.rb	/^      def initialize(conf=nil)$/;"	f	class:Clickup.Api.Base
+initialize	./app/services/clickup/api/configuration.rb	/^      def initialize(source=:credentials)$/;"	f	class:Clickup.Api.Configuration
 initialize	./app/services/draw_cost_service.rb	/^  def initialize(user:, draw:, draw_cost: nil)$/;"	f	class:DrawCostService
 initialize	./app/services/draw_document_service.rb	/^  def initialize(user:, draw: nil, draw_document: nil)$/;"	f	class:DrawDocumentService
 initialize	./app/services/draw_service.rb	/^  def initialize(user:, project: nil, draw: nil)$/;"	f	class:DrawService
+initialize	./app/services/invoice_processing_service.rb	/^  def initialize(backing_service: :textract, dry_run: false, debug: false)$/;"	f	class:InvoiceProcessingService
 initialize	./app/services/invoice_service.rb	/^  def initialize(user:, draw_cost:, invoice: nil)$/;"	f	class:InvoiceService
 initialize	./app/services/projects/membership.rb	/^    def initialize(current_user:, project:)$/;"	f	class:Projects.Membership
 initialize	./app/services/projects/updater.rb	/^    def initialize(current_user, project)$/;"	f	class:Projects.Updater
+initialize	./app/services/textract/api/base.rb	/^      def initialize(conf=nil)$/;"	f	class:Textract.Api.Base
+initialize	./app/services/textract/api/configuration.rb	/^      def initialize(source=:credentials)$/;"	f	class:Textract.Api.Configuration
 inline_icon	./app/helpers/images_helper.rb	/^  def inline_icon(**icon_args)$/;"	f	class:ImagesHelper
 internal?	./app/models/project_role.rb	/^  def internal?$/;"	f	class:ProjectRole
 investor	./app/models/project_role.rb	/^  def self.investor$/;"	F	class:ProjectRole
@@ -456,8 +608,14 @@ invoked_as_script?	./bin/bundle	/^  def invoked_as_script?$/;"	f
 is_owner?	./app/policies/application_policy.rb	/^  def is_owner?$/;"	f	class:ApplicationPolicy
 issues	./app/models/project.rb	/^  def issues$/;"	f	class:Project
 issues?	./app/models/project.rb	/^  def issues?$/;"	f	class:Project
+job_status	./app/services/textract/data/sqs_message.rb	/^      def job_status$/;"	f	class:Textract.Data.SqsMessage
 load_bundler!	./bin/bundle	/^  def load_bundler!$/;"	f
+load_env_settings	./app/services/clickup/api/configuration.rb	/^      def load_env_settings$/;"	f	class:Clickup.Api.Configuration
+load_hash_settings	./app/services/clickup/api/configuration.rb	/^      def load_hash_settings(data)$/;"	f	class:Clickup.Api.Configuration
+load_hash_settings	./app/services/textract/api/configuration.rb	/^      def load_hash_settings(data)$/;"	f	class:Textract.Api.Configuration
 load_icon	./app/helpers/images_helper.rb	/^  def load_icon(name)$/;"	f	class:ImagesHelper
+load_rails_credentials	./app/services/clickup/api/configuration.rb	/^      def load_rails_credentials$/;"	f	class:Clickup.Api.Configuration
+load_rails_credentials	./app/services/textract/api/configuration.rb	/^      def load_rails_credentials$/;"	f	class:Textract.Api.Configuration
 load_seed_data	./app/models/concerns/seeds/seedable.rb	/^      def load_seed_data(yaml_path=nil)$/;"	f	class:Seeds.Seedable
 lockfile	./bin/bundle	/^  def lockfile$/;"	f
 lockfile_version	./bin/bundle	/^  def lockfile_version$/;"	f
@@ -505,6 +663,7 @@ next_index	./app/models/draw.rb	/^  def next_index$/;"	f	class:Draw
 normalize_phone	./app/models/user_profile.rb	/^  def normalize_phone$/;"	f	class:UserProfile
 notify_member_of_membership	./app/services/projects/membership.rb	/^    def notify_member_of_membership(project_user)$/;"	f	class:Projects.Membership
 notify_member_of_role_change	./app/services/projects/membership.rb	/^    def notify_member_of_role_change(project_user)$/;"	f	class:Projects.Membership
+ok?	./app/services/textract/data/textract_job_status.rb	/^      def ok?$/;"	f	class:Textract.Data.TextractJobStatus
 organization_options_for_select	./app/helpers/users_helper.rb	/^  def organization_options_for_select(user)$/;"	f	class:UsersHelper
 organization_params	./app/controllers/organizations_controller.rb	/^  def organization_params$/;"	f	class:OrganizationsController
 organizations_for_select	./app/policies/organization_policy.rb	/^  def organizations_for_select$/;"	f	class:OrganizationPolicy
@@ -525,9 +684,19 @@ permitted_states	./app/models/concerns/draw_documents/state_machine.rb	/^      d
 permitted_states	./app/models/concerns/draws/state_machine.rb	/^      def permitted_states$/;"	f	class:Draws.StateMachine
 permitted_states	./app/models/concerns/invoices/state_machine.rb	/^      def permitted_states$/;"	f	class:Invoices.StateMachine
 permitted_states	./app/models/concerns/project_costs/state_machine.rb	/^      def permitted_states$/;"	f	class:ProjectCosts.StateMachine
+postData	./app/services/clickup/api/base.rb	/^      def postData(options, dry_run: false)$/;"	f	class:Clickup.Api.Base
+post_data	./app/services/clickup/api/base.rb	/^      def post_data(url:, body:, headers: {}, options: {})$/;"	f	class:Clickup.Api.Base
 preview_document	./app/helpers/application_helper.rb	/^  def preview_document(document:, resize:)$/;"	f	class:ApplicationHelper.breadcrumbs_tag
 primary_and_foreign_key_types	./db/migrate/20220901195346_create_active_storage_tables.active_storage.rb	/^    def primary_and_foreign_key_types$/;"	f	class:CreateActiveStorageTables
 privileged_user?	./app/policies/application_policy.rb	/^  def privileged_user?$/;"	f	class:ApplicationPolicy
+process_analysis	./app/models/invoice.rb	/^  def process_analysis$/;"	f	class:Invoice
+process_api_response	./app/services/textract/data/analysis_job_data.rb	/^      def self.process_api_response(response:, job_id:, expected_total:)$/;"	F	class:Textract.Data.AnalysisJobData
+process_completion_queue	./app/services/invoice_processing_service.rb	/^  def process_completion_queue$/;"	f	class:InvoiceProcessingService
+process_completion_queue	./app/services/textract/api/analyzer.rb	/^      def process_completion_queue(allow_class, &block)$/;"	f	class:Textract.Api.Analyzer.TextractApiError
+process_data	./app/services/textract/data/analysis_job_data.rb	/^      def self.process_data(data:, data_type:, job_id:, expected_total:)$/;"	F	class:Textract.Data.AnalysisJobData
+process_invoice_analysis	./app/services/invoice_processing_service.rb	/^  def process_invoice_analysis(invoice:, analysis_job_data:)$/;"	f	class:InvoiceProcessingService
+process_json_data	./app/services/textract/data/analysis_job_data.rb	/^      def self.process_json_data(data:, job_id:, expected_total:)$/;"	F	class:Textract.Data.AnalysisJobData
+project	./app/policies/application_policy.rb	/^  def project$/;"	f	class:ApplicationPolicy
 project_cost_cost_type_options	./app/helpers/draws_helper.rb	/^  def project_cost_cost_type_options$/;"	f
 project_cost_issues	./app/models/project.rb	/^  def project_cost_issues$/;"	f	class:Project
 project_cost_options	./app/helpers/draws_helper.rb	/^  def project_cost_options(project: nil, project_cost:)$/;"	f
@@ -548,6 +717,9 @@ project_role	./app/models/concerns/users/projects.rb	/^      def project_role(pr
 project_role_background_class	./app/helpers/projects_helper.rb	/^  def project_role_background_class(role)$/;"	f	class:ProjectsHelper
 project_user	./app/services/projects/membership.rb	/^    def project_user$/;"	f	class:Projects.Membership
 project_user_params	./app/controllers/project_users_controller.rb	/^  def project_user_params$/;"	f	class:ProjectUsersController
+putData	./app/services/clickup/api/base.rb	/^      def putData(options, dry_run: false)$/;"	f	class:Clickup.Api.Base
+put_data	./app/services/clickup/api/base.rb	/^      def put_data(url:, body:, headers: {}, options: {})$/;"	f	class:Clickup.Api.Base
+record	./app/services/textract/data/textract_job_status.rb	/^      def record$/;"	f	class:Textract.Data.TextractJobStatus
 record_errors	./app/services/projects/updater.rb	/^    def record_errors$/;"	f	class:Projects.Updater
 record_scope	./app/controllers/change_orders_controller.rb	/^  def record_scope$/;"	f	class:ChangeOrdersController
 record_scope	./app/controllers/draw_costs_controller.rb	/^  def record_scope$/;"	f	class:DrawCostsController
@@ -559,6 +731,7 @@ record_scope	./app/controllers/project_costs_controller.rb	/^  def record_scope$
 record_scope	./app/controllers/project_users_controller.rb	/^  def record_scope$/;"	f	class:ProjectUsersController
 record_scope	./app/controllers/projects_controller.rb	/^  def record_scope$/;"	f	class:ProjectsController
 record_scope	./app/controllers/users_controller.rb	/^  def record_scope$/;"	f	class:UsersController
+redirect_to_home	./app/controllers/projects_controller.rb	/^  def redirect_to_home$/;"	f	class:ProjectsController
 refresh_policy	./app/services/projects/updater.rb	/^    def refresh_policy$/;"	f	class:Projects.Updater
 reject	./app/controllers/draw_documents_controller.rb	/^  def reject$/;"	f	class:DrawDocumentsController
 reject	./app/controllers/draws_controller.rb	/^  def reject$/;"	f	class:DrawsController
@@ -570,7 +743,6 @@ reject?	./app/policies/draw_cost_policy.rb	/^  def reject?$/;"	f	class:DrawCostP
 reject?	./app/policies/draw_document_policy.rb	/^  def reject?$/;"	f	class:DrawDocumentPolicy
 reject?	./app/policies/draw_policy.rb	/^  def reject?$/;"	f	class:DrawPolicy
 reject?	./app/policies/invoice_policy.rb	/^  def reject?$/;"	f	class:InvoicePolicy
-reject?	./app/policies/project_cost_policy.rb	/^  def reject?$/;"	f	class:ProjectCostPolicy
 reject_document?	./app/policies/draw_cost_policy.rb	/^  def reject_document?$/;"	f	class:DrawCostPolicy
 remaining_documents	./app/models/concerns/draws/draw_documents.rb	/^      def remaining_documents$/;"	f	class:Draws.DrawDocuments
 remove	./app/services/draw_document_service.rb	/^  def remove$/;"	f	class:DrawDocumentService
@@ -579,13 +751,23 @@ remove?	./app/policies/invoice_policy.rb	/^  def remove?$/;"	f	class:InvoicePoli
 remove_member	./app/controllers/projects_controller.rb	/^  def remove_member$/;"	f	class:ProjectsController
 remove_member	./app/services/projects/membership.rb	/^    def remove_member(user)$/;"	f	class:Projects.Membership
 remove_member?	./app/policies/project_policy.rb	/^  def remove_member?$/;"	f	class:ProjectPolicy
+request_headers	./app/services/clickup/api/base.rb	/^      def request_headers(content_length:)$/;"	f	class:Clickup.Api.Base
+request_parameters	./app/services/textract/api/analyzer.rb	/^      def request_parameters(metadata:, requestid:)$/;"	f	class:Textract.Api.Analyzer.TextractApiError
 required_documents	./app/models/concerns/draws/draw_documents.rb	/^      def required_documents$/;"	f	class:Draws.DrawDocuments
 requires_change_order?	./app/models/draw_cost.rb	/^  def requires_change_order?$/;"	f	class:DrawCost
+reset_approval	./app/controllers/draw_documents_controller.rb	/^  def reset_approval$/;"	f	class:DrawDocumentsController
+reset_approval	./app/controllers/invoices_controller.rb	/^  def reset_approval$/;"	f	class:InvoicesController
+reset_approval	./app/services/draw_document_service.rb	/^  def reset_approval$/;"	f	class:DrawDocumentService
+reset_approval	./app/services/invoice_service.rb	/^  def reset_approval$/;"	f	class:InvoiceService
+reset_approval?	./app/policies/draw_document_policy.rb	/^  def reset_approval?$/;"	f	class:DrawDocumentPolicy
+reset_approval?	./app/policies/invoice_policy.rb	/^  def reset_approval?$/;"	f	class:InvoicePolicy
 reset_errors	./app/services/change_order_service.rb	/^  def reset_errors$/;"	f	class:ChangeOrderService
 reset_errors	./app/services/draw_cost_service.rb	/^  def reset_errors$/;"	f	class:DrawCostService
 reset_errors	./app/services/draw_document_service.rb	/^  def reset_errors$/;"	f	class:DrawDocumentService
 reset_errors	./app/services/draw_service.rb	/^  def reset_errors$/;"	f	class:DrawService
+reset_errors	./app/services/invoice_processing_service.rb	/^  def reset_errors$/;"	f	class:InvoiceProcessingService
 reset_errors	./app/services/invoice_service.rb	/^  def reset_errors$/;"	f	class:InvoiceService
+reset_errors	./app/services/textract/api/configuration.rb	/^      def reset_errors$/;"	f	class:Textract.Api.Configuration
 resolve	./app/policies/change_order_policy.rb	/^    def resolve$/;"	f	class:ChangeOrderPolicy.Scope
 resolve	./app/policies/draw_cost_policy.rb	/^    def resolve$/;"	f	class:DrawCostPolicy.Scope
 resolve	./app/policies/draw_document_policy.rb	/^    def resolve$/;"	f	class:DrawDocumentPolicy.Scope
@@ -626,6 +808,7 @@ set_project	./app/controllers/project_users_controller.rb	/^  def set_project$/;
 set_project	./app/controllers/projects_controller.rb	/^  def set_project$/;"	f	class:ProjectsController
 set_project_cost	./app/controllers/project_costs_controller.rb	/^  def set_project_cost$/;"	f	class:ProjectCostsController
 set_project_user	./app/controllers/project_users_controller.rb	/^  def set_project_user$/;"	f	class:ProjectUsersController
+set_properties_from_hash	./app/services/textract/data/analysis_job_data.rb	/^      def self.set_properties_from_hash(data:)$/;"	F	class:Textract.Data.AnalysisJobData
 set_reference?	./app/policies/draw_policy.rb	/^  def set_reference?$/;"	f	class:DrawPolicy
 set_user	./app/controllers/users_controller.rb	/^  def set_user$/;"	f	class:UsersController
 short_date	./app/helpers/application_helper.rb	/^  def short_date(time)$/;"	f	class:ApplicationHelper
@@ -651,10 +834,13 @@ sign_in	./spec/support/request_spec_helper.rb	/^  def sign_in(resource)$/;"	f	cl
 sign_out	./spec/support/request_spec_helper.rb	/^  def sign_out(resource)$/;"	f	class:RequestSpecHelper
 skip_format?	./config/initializers/devise.rb	/^  def skip_format?$/;"	f	class:TurboFailureApp
 sorted_members	./app/models/project.rb	/^  def sorted_members$/;"	f	class:Project
+sqs_client_parameters	./app/services/textract/api/analyzer.rb	/^      def sqs_client_parameters$/;"	f	class:Textract.Api.Analyzer.TextractApiError
 square_check_image	./app/helpers/images_helper.rb	/^  def square_check_image$/;"	f
 square_check_open_image	./app/helpers/images_helper.rb	/^  def square_check_open_image$/;"	f
 square_x_image	./app/helpers/images_helper.rb	/^  def square_x_image$/;"	f
 square_x_open_image	./app/helpers/images_helper.rb	/^  def square_x_open_image$/;"	f
+start_analysis	./app/models/invoice.rb	/^  def start_analysis(force: false)$/;"	f	class:Invoice
+start_analysis	./app/services/invoice_processing_service.rb	/^  def start_analysis(invoice:, force: false)$/;"	f	class:InvoiceProcessingService
 state_css_class	./app/models/concerns/draw_costs/state_machine.rb	/^      def state_css_class$/;"	f	class:DrawCosts.StateMachine.TransitionError
 state_css_class	./app/models/concerns/draw_documents/state_machine.rb	/^      def state_css_class$/;"	f	class:DrawDocuments.StateMachine
 state_css_class	./app/models/concerns/draws/state_machine.rb	/^      def state_css_class$/;"	f	class:Draws.StateMachine
@@ -674,13 +860,17 @@ submit	./app/services/invoice_service.rb	/^  def submit$/;"	f	class:InvoiceServi
 submit?	./app/policies/draw_cost_policy.rb	/^  def submit?$/;"	f	class:DrawCostPolicy
 submit?	./app/policies/draw_policy.rb	/^  def submit?$/;"	f	class:DrawPolicy
 submit?	./app/policies/invoice_policy.rb	/^  def submit?$/;"	f	class:InvoicePolicy
+submit_analysis_request	./app/services/invoice_processing_service.rb	/^  def submit_analysis_request(invoice:, requestid:)$/;"	f	class:InvoiceProcessingService
 submit_draw_costs	./app/models/concerns/draws/state_machine.rb	/^      def submit_draw_costs(user)$/;"	f	class:Draws.StateMachine
 submit_invoices	./app/models/concerns/draw_costs/state_machine.rb	/^      def submit_invoices(user)$/;"	f	class:DrawCosts.StateMachine.TransitionError
 subtotal	./app/models/draw_cost.rb	/^  def subtotal$/;"	f	class:DrawCost
 switch_setting?	./app/policies/user_policy.rb	/^  def switch_setting?$/;"	f	class:UserPolicy
 system!	./bin/setup	/^def system!(*args)$/;"	f
 test_email	./app/mailers/test_mailer.rb	/^  def test_email$/;"	f	class:TestMailer
+textract_client_parameters	./app/services/textract/api/analyzer.rb	/^      def textract_client_parameters$/;"	f	class:Textract.Api.Analyzer.TextractApiError
 to_a	./app/services/breadcrumbs.rb	/^  def to_a$/;"	f	class:Breadcrumbs
+to_h	./app/services/clickup/api/configuration.rb	/^      def to_h$/;"	f	class:Clickup.Api.Configuration
+to_h	./app/services/textract/data/analysis_job_data.rb	/^      def to_h$/;"	f	class:Textract.Data.AnalysisJobData
 to_turbo_stream	./app/controllers/turbo_devise_user_controller.rb	/^    def to_turbo_stream$/;"	f	class:TurboDeviseUserController.Responder
 total_contract_remaining	./app/models/project.rb	/^  def total_contract_remaining$/;"	f	class:Project
 trigger_event	./app/models/concerns/draw_costs/state_machine.rb	/^      def trigger_event(event_name:, user: nil)$/;"	f	class:DrawCosts.StateMachine.TransitionError
@@ -712,17 +902,28 @@ update?	./app/policies/project_cost_policy.rb	/^  def update?$/;"	f	class:Projec
 update?	./app/policies/project_policy.rb	/^  def update?$/;"	f	class:ProjectPolicy
 update?	./app/policies/project_user_policy.rb	/^  def update?$/;"	f	class:ProjectUserPolicy
 update?	./app/policies/user_policy.rb	/^  def update?$/;"	f	class:UserPolicy
+updateTask	./app/services/clickup/api/tasks.rb	/^      def updateTask(task:, archived: false, start_date_time: false, due_date_time: false)$/;"	f	class:Clickup.Api.Tasks
 update_member_role	./app/services/projects/membership.rb	/^    def update_member_role(user:, role: )$/;"	f	class:Projects.Membership
 upload_image	./app/helpers/images_helper.rb	/^  def upload_image$/;"	f
 uploaded_image	./app/helpers/images_helper.rb	/^  def uploaded_image$/;"	f
 user	./app/models/role.rb	/^  def self.user$/;"	F	class:Role
 user?	./app/models/concerns/users/role.rb	/^      def user?$/;"	f	class:Users.Role
 user?	./app/models/role.rb	/^  def user?$/;"	f	class:Role
+user_issues	./app/models/project.rb	/^  def user_issues(user=nil)$/;"	f	class:Project
+user_issues?	./app/models/project.rb	/^  def user_issues?(user=nil)$/;"	f	class:Project
 user_not_authorized	./app/controllers/application_controller.rb	/^  def user_not_authorized$/;"	f	class:ApplicationController
 user_params	./app/controllers/users_controller.rb	/^  def user_params$/;"	f	class:UsersController
 user_role_desc	./app/services/draw_cost_service.rb	/^  def user_role_desc$/;"	f	class:DrawCostService
 user_timezone	./app/controllers/application_controller.rb	/^  def user_timezone(&block)$/;"	f	class:ApplicationController
+valid?	./app/services/clickup/api/configuration.rb	/^      def valid?$/;"	f	class:Clickup.Api.Configuration
+valid?	./app/services/textract/api/configuration.rb	/^      def valid?$/;"	f	class:Textract.Api.Configuration
+valid?	./app/services/textract/data/sqs_message.rb	/^      def valid?$/;"	f	class:Textract.Data.SqsMessage
+valid?	./app/services/textract/data/textract_job_status.rb	/^      def valid?$/;"	f	class:Textract.Data.TextractJobStatus
 validate	./app/models/draw.rb	/^    def validate(record)$/;"	f	class:Draw.IndexValidator
+validate	./app/models/draw_cost.rb	/^    def validate(record)$/;"	f	class:DrawCost.ProjectCostValidator
+validate	./app/models/draw_document.rb	/^    def validate(record)$/;"	f	class:DrawDocument.DocumenttypeValidator
+validate_settings	./app/services/clickup/api/configuration.rb	/^      def validate_settings$/;"	f	class:Clickup.Api.Configuration
+validate_settings	./app/services/textract/api/configuration.rb	/^      def validate_settings$/;"	f	class:Textract.Api.Configuration
 warden_scope	./spec/support/request_spec_helper.rb	/^  def warden_scope(resource)$/;"	f	class:RequestSpecHelper
 withdraw	./app/services/draw_cost_service.rb	/^  def withdraw$/;"	f	class:DrawCostService
 withdraw	./app/services/draw_service.rb	/^  def withdraw$/;"	f	class:DrawService

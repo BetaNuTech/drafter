@@ -2,7 +2,7 @@ module Textract
   module Api
     class Configuration
 
-      PROPERTIES = %i{access_key_id secret_access_key bucket region sns_topic_arn role_arn sqs_arn}.freeze
+      PROPERTIES = %i{access_key_id secret_access_key bucket region sns_topic_arn role_arn sqs_arn sqs_url}.freeze
 
       attr_reader *PROPERTIES
       attr_reader :errors
@@ -26,6 +26,10 @@ module Textract
 
       def errors?
         @errors.any?
+      end
+
+      def aws_credentials
+        Aws::Credentials.new(@access_key_id, @secret_access_key) 
       end
 
       private
@@ -58,6 +62,7 @@ module Textract
         @sns_topic_arn = data.fetch(:sns_topic_arn)
         @role_arn = data.fetch(:role_arn)
         @sqs_arn = data.fetch(:sqs_arn)
+        @sqs_url = data.fetch(:sqs_url)
 
         true
       end

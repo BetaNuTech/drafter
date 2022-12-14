@@ -25,8 +25,6 @@ module Textract
         self.process_data(data: response, data_type: :api, job_id: job_id, expected_total: expected_total_f)
       end
 
-      private
-
       def self.process_data(data:, data_type:, job_id:, expected_total:)
         case data_type
         when :hash
@@ -57,14 +55,18 @@ module Textract
         case response
         when String
           begin
-            data = JSON.parse(response)
+            data = JSON.parse(response).symbolize_keys
           rescue => e
             raise Textract::Data::Error.new("Invalid API Response Data: #{e}")
           end
         when Hash
-          data = response
+          data = response.symbolize_keys
         else
-          raise Textract::Data::Error.new("Unknown API Response Data Type")
+          if response.respond_to?(:to_h)
+            data = response.to_h.symbolize_keys
+          else
+            raise Textract::Data::Error.new("Unknown API Response Data Type")
+          end
         end
 
         return self.process_json_data(data: data, job_id: job_id, expected_total: expected_total)
@@ -73,16 +75,16 @@ module Textract
       def self.process_json_data(data:, job_id:, expected_total:)
         # Pull out all TOTAL Types which that meet minimum Type, Label, AND Value Confidence Scores
         total_fields = []
-        documents = data["ExpenseDocuments"]
+        documents = data[:expense_documents]
         if documents.present? && documents.kind_of?(Array)
           documents.each do |doc|
-            summary_fields = doc["SummaryFields"]
+            summary_fields = doc[:summary_fields]
             if summary_fields.present? && summary_fields.kind_of?(Array)
               summary_fields.each do |field|
-                type = field.dig('Type', 'Text') || ""
-                type_confidence = (field.dig('Type', 'Confidence') || 0.0).to_f
-                label_confidence = (field.dig('LabelDetection', 'Confidence') || 0.0).to_f
-                value_confidence = (field.dig('ValueDetection', 'Confidence') || 0.0).to_f
+                type = field.dig(:type, :text) || ""
+                type_confidence = (field.dig(:type, :confidence) || 0.0).to_f
+                label_confidence = (field.dig(:label_detection, :confidence) || 0.0).to_f
+                value_confidence = (field.dig(:value_detection, :confidence) || 0.0).to_f
                 if type == TYPE_KEY && 
                   type_confidence >= CONFIDENCE_MIN && 
                   label_confidence >= CONFIDENCE_MIN && 
@@ -101,7 +103,7 @@ module Textract
         total_field_picked = nil
         total_field_picked_value = nil
         total_fields_reversed.each do |total_field|
-          value_text = total_field.dig('ValueDetection', 'Text') || ""
+          value_text = total_field.dig(:value_detection, :text) || ""
           if value_text.present?
             value = value_text.tr('^0-9.', '').to_f
             if value == expected_total
@@ -121,18 +123,27 @@ module Textract
         if total_field_picked.present?
           analysis_job_data.total            = total_field_picked_value
           analysis_job_data.is_total_present = analysis_job_data.total.present?
-          analysis_job_data.page_number      = total_field_picked["PageNumber"]
-          bounding_box = total_field_picked.dig('ValueDetection', 'Geometry', 'BoundingBox') || {}
+          analysis_job_data.page_number      = total_field_picked[:page_number]
+          bounding_box = total_field_picked.dig(:value_detection, :geometry, :bounding_box) || {}
           analysis_job_data.bounding_box     = bounding_box
-          type_confidence = (total_field_picked.dig('Type', 'Confidence') || 0.0).to_f
-          label_confidence = (total_field_picked.dig('LabelDetection', 'Confidence') || 0.0).to_f
-          value_confidence = (total_field_picked.dig('ValueDetection', 'Confidence') || 0.0).to_f
+          type_confidence = (total_field_picked.dig(:type, :confidence) || 0.0).to_f
+          label_confidence = (total_field_picked.dig(:label_detection, :confidence) || 0.0).to_f
+          value_confidence = (total_field_picked.dig(:value_detection, :confidence) || 0.0).to_f
           avg_confidence = (type_confidence + label_confidence + value_confidence) / 3.0
           analysis_job_data.confidence       = avg_confidence
         end
 
         return analysis_job_data
       end
+
+      def to_h
+        out = {}
+        PROPERTIES.each do |prop|
+          out[prop] = self.send(prop)
+        end
+        out
+      end
+
 
     end
   end

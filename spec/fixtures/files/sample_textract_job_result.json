@@ -1,0 +1,11 @@
+{
+               "JobId" => "843f82a4e0726a5ededdef5495a769526277b2321ff818ab493572fade8efdbe",
+              "Status" => "SUCCEEDED",
+                 "API" => "StartExpenseAnalysis",
+              "JobTag" => "Invoice--7d8a1f80-b940-4d69-aaf4-5c5ffd503fc8",
+           "Timestamp" => 1670982017548,
+    "DocumentLocation" => {
+        "S3ObjectName" => "fnep0w5mlh29yt0ia57wepes40gy",
+            "S3Bucket" => "drafter-staging-activestorage"
+    }
+}

@@ -12,6 +12,7 @@ gem 'audited'
 gem 'awesome_print'
 gem 'aws-sdk-s3'
 gem 'aws-sdk-textract'
+gem 'aws-sdk-sqs'
 gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'bootstrap', '~> 5.1.3'

@@ -19,8 +19,8 @@ class InvoiceProcessingService
   end
 
   # Start analysis of provided invoice
-  def start_analysis(invoice:)
-    raise InvalidStateError.new('Invoice must be in submitted state for analysis') unless invoice.submitted?
+  def start_analysis(invoice:, force: false)
+    raise InvalidStateError.new('Invoice must be in submitted state for analysis') unless (force || invoice.submitted?)
 
     raise MissingDocumentError.new('Invoice has no attached document') unless invoice.document.attached?
 
@@ -33,7 +33,7 @@ class InvoiceProcessingService
       return false
     end
 
-    invoice.trigger_event(event_name: 'process')
+    invoice.trigger_event(event_name: 'process') if invoice.submitted?
 
     attempt += 1
     requestid = SecureRandom.hex
@@ -58,10 +58,51 @@ class InvoiceProcessingService
 
   # Process completed document analysis data for 'processing' invoices
   def process_completion_queue
-    # TODO
+    analyzer = Textract::Api::Analyzer.new
+    analyzer.process_completion_queue(Invoice) do |successful_jobs, failed_jobs|
+      failed_jobs.each do |job|
+        invoice = job.record
+        invoice.trigger_event(event_name: 'fail_processing_attempt') unless invoice.processing_failed?
+        description = "External service error processing document"
+        SystemEvent.log(description: , event_source: invoice, incidental: invoice.project, severity: :error)
+      end
+
+      successful_jobs.each do |job|
+        invoice = job.record
+        process_invoice_analysis(invoice: invoice, analysis_job_data: job.data)
+
+        if invoice.processing? && job.data.is_total_present
+          invoice.trigger_event(event_name: :complete_processing)
+        else
+          invoice.trigger_event(event_name: :fail_processing)
+        end
+
+        generate_annotated_preview(invoice: invoice) if invoice.processed?
+      end
+    end
   end
 
   def get_analysis(invoice:)
+    job_id = ( invoice.ocr_data || {} ).dig('meta', 'jobid')
+    return nil if job_id.nil?
+
+    service = Textract::Api::Analyzer.new
+    service.get_textract_analysis(job_id:, expected_total: invoice.amount)
+  end
+
+  def process_invoice_analysis(invoice:, analysis_job_data:)
+    invoice.init_ocr_data
+    invoice.ocr_data['analysis'] = analysis_job_data.to_h
+
+    if analysis_job_data.is_total_present
+      invoice.ocr_amount = analysis_job_data.total
+    else
+      invoice.audit = true
+    end
+    invoice.save
+  end
+
+  def generate_annotated_preview(invoice:)
     # TODO
   end
 

@@ -103,6 +103,9 @@ GEM
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
+    aws-sdk-sqs (1.52.1)
+      aws-sdk-core (~> 3, >= 3.165.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-textract (1.43.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
@@ -440,6 +443,7 @@ DEPENDENCIES
   audited
   awesome_print
   aws-sdk-s3
+  aws-sdk-sqs
   aws-sdk-textract
   bcrypt
   bootsnap

@@ -135,8 +135,7 @@ module Invoices
       end
 
       def after_submit(user)
-        # TODO
-        # InvoiceProcessingService.new(invoice: self, user: user).start_analysis
+        delay.start_analysis
       end
 
     end

@@ -1,0 +1,11 @@
+{
+  "Type" : "Notification",
+  "MessageId" : "4172e79d-b846-573e-8357-bb8e938786cc",
+  "TopicArn" : "arn:aws:sns:us-west-2:212049522981:AmazonTextractDrafterStaging",
+  "Message" : "{\"JobId\":\"843f82a4e0726a5ededdef5495a769526277b2321ff818ab493572fade8efdbe\",\"Status\":\"SUCCEEDED\",\"API\":\"StartExpenseAnalysis\",\"JobTag\":\"Invoice--7d8a1f80-b940-4d69-aaf4-5c5ffd503fc8\",\"Timestamp\":1670982017548,\"DocumentLocation\":{\"S3ObjectName\":\"fnep0w5mlh29yt0ia57wepes40gy\",\"S3Bucket\":\"drafter-staging-activestorage\"}}",
+  "Timestamp" : "2022-12-14T01:40:17.604Z",
+  "SignatureVersion" : "1",
+  "Signature" : "dL4viNy8q26f5rwO0TlrJEE7twkPWiqJ1Jq1/xdyafy4aB/iATFBq82dd2Fg9L2NSYE3UIIf1yiUuR9ZIQ++zx3y8cLc38E4EDBQFdvPkYoitCSsad4o0rn0wEkPjGhTrffYoFX/HbKl35jNS9+qrf4VHMkJYJ/hao3dnDLIfNjrI4I9cJybKjesvaWw/GoGU5RLXEDU41okUKmXS5zNw/5HAHHXCrw5UHHq5QLUIclaa20deMdp4SLwlEu9SQiCcGHMMwID4RsDGkWpty9+7JVVM2jGCipkQ0IvAClNoa5/uSgZ+lSUcdEXiAbGIPTC6fT2Wz/f7MYuIQCF7dC1mA==",
+  "SigningCertURL" : "https://sns.us-west-2.amazonaws.com/SimpleNotificationService-56e67fcb41f6fec09b0196692625d385.pem",
+  "UnsubscribeURL" : "https://sns.us-west-2.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-west-2:212049522981:AmazonTextractDrafterStaging:614b7112-5205-4ec4-9c61-81ed8fd419dd"
+}

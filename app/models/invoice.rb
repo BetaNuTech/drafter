@@ -66,9 +66,22 @@ class Invoice < ApplicationRecord
 
     if document.attached?
       self.ocr_data['meta']['documentid'] = document.id
-      self.ocr_data['meta']['key'] ||= document.attachment.blob.key
-      self.ocr_data['meta']['filename'] ||= document.attachment.blob.filename.to_s
+      self.ocr_data['meta']['key'] = document.attachment.blob.key
+      self.ocr_data['meta']['filename'] = document.attachment.blob.filename.to_s
     end
+  end
+
+  def start_analysis(force: false)
+    InvoiceProcessingService.new.
+      start_analysis(invoice: self, force: )
+  end
+
+  def process_analysis
+    service = InvoiceProcessingService.new
+    analysis_job_data = service.get_analysis(invoice: self)
+    service.process_invoice_analysis(invoice: self, analysis_job_data:)
+    self.reload
+    service.generate_annotated_preview(invoice: self) if processed?
   end
 
 end
