@@ -12,14 +12,14 @@ module Textract
         request_params = request_parameters(metadata:, requestid:)
         if @debug
           puts "*** Textract::Api::Analyzer: Textract API Client: Params: #{client_params.inspect}"
-          puts "*** Textract::Api::Analyzer: Textract API Request: start_document_text_detection: Params: #{request_params.inspect}"
+          puts "*** Textract::Api::Analyzer: Textract API Request: start_expense_analysis: Params: #{request_params.inspect}"
         end
         if @dry_run
           puts '*** Textract::Api::Analyzer: DRY RUN: skipping Textract API Call'
           return nil
         end
         client = CLIENT.new(client_params)
-        response = client.start_document_text_detection(request_params)
+        response = client.start_expense_analysis(request_params)
         puts "*** Textract Response: #{response.inspect}" if @debug
         response[:job_id]
       rescue => e
