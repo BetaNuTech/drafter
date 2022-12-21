@@ -32,6 +32,7 @@ module Textract
       def process_completion_queue(allow_class, &block)
         loop do
           messages = get_completed_items.select{|message| message.job_status.record.is_a?(allow_class)}
+          puts "*** Found #{messages.count} Messages on the Textract Completion Queue for processing" if @debug
           break if messages.empty?
 
           successful_job_messages = messages.select{|message| message.job_status.ok? } 
@@ -46,7 +47,7 @@ module Textract
           successful_jobs = []
           successful_job_messages.each do |sqs_message|
             job = Textract::Data::AnalysisJob.from_sqs_message(sqs_message)
-            job.data = get_textract_analysis(job_id: job.job_id, expected_total: job.record&.amount)
+            job.data = get_analysis(job_id: job.job_id, expected_total: job.record&.amount)
             successful_jobs << job
           end
 
@@ -69,7 +70,7 @@ module Textract
         items
       end
 
-      def get_textract_analysis(job_id:, expected_total:)
+      def get_analysis(job_id:, expected_total:)
         client = TEXTRACT_CLIENT.new(textract_client_parameters)
         response = client.get_expense_analysis(job_id:).to_h
         analysis = Textract::Data::AnalysisJobData.from_api(response:, job_id:, expected_total:)
@@ -77,8 +78,8 @@ module Textract
       end
 
       def delete_sqs_message(sqs_message)
-        client = TEXTRACT_CLIENT.new(textract_client_parameters)
-        client.delete_message(queue_url: @configuration.sqs_url, reciept_handle: sqs_message.receipt_handle)
+        client = SQS_CLIENT.new(sqs_client_parameters)
+        client.delete_message(queue_url: @configuration.sqs_url, receipt_handle: sqs_message.receipt_handle)
       end
 
       private

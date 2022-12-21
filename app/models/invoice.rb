@@ -57,6 +57,12 @@ class Invoice < ApplicationRecord
 
   delegate :organization, to: :draw_cost
 
+  def self.analyze_submitted
+    self.submitted.each do |invoice|
+      invoice.delay(queue: :low_priority).start_analysis
+    end
+  end
+
   def init_ocr_data
     self.ocr_data ||= {}
     self.ocr_data['analysis'] ||= {}

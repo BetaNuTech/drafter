@@ -58,8 +58,7 @@ class InvoiceProcessingService
 
   # Process completed document analysis data for 'processing' invoices
   def process_completion_queue
-    analyzer = Textract::Api::Analyzer.new
-    analyzer.process_completion_queue(Invoice) do |successful_jobs, failed_jobs|
+    @service.process_completion_queue(Invoice) do |successful_jobs, failed_jobs|
       failed_jobs.each do |job|
         invoice = job.record
         invoice.trigger_event(event_name: 'fail_processing_attempt') unless invoice.processing_failed?
@@ -86,8 +85,7 @@ class InvoiceProcessingService
     job_id = ( invoice.ocr_data || {} ).dig('meta', 'jobid')
     return nil if job_id.nil?
 
-    service = Textract::Api::Analyzer.new
-    service.get_textract_analysis(job_id:, expected_total: invoice.amount)
+    @service.get_analysis(job_id:, expected_total: invoice.amount)
   end
 
   def process_invoice_analysis(invoice:, analysis_job_data:)
