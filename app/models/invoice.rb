@@ -59,7 +59,7 @@ class Invoice < ApplicationRecord
 
   def self.analyze_submitted
     self.submitted.each do |invoice|
-      invoice.delay(queue: :low_priority).start_analysis
+      invoice.delay(queue: :invoice_processing).start_analysis
     end
   end
 
@@ -86,8 +86,12 @@ class Invoice < ApplicationRecord
     service = InvoiceProcessingService.new
     analysis_job_data = service.get_analysis(invoice: self)
     service.process_invoice_analysis(invoice: self, analysis_job_data:)
-    self.reload
-    service.generate_annotated_preview(invoice: self) if processed?
+    service.generate_annotated_preview(invoice: self)
+  end
+
+  def generate_annotated_preview
+    service = InvoiceProcessingService.new
+    service.generate_annotated_preview(invoice: self)
   end
 
 end

@@ -1,6 +1,10 @@
 libcairo2-dev
 libgirepository1.0-dev
+libglib2.0-0
 libglib2.0-dev
+libheif-dev
+libpoppler-glib8
 libvips
+libvips-dev
 poppler-utils
 vim

@@ -1,4 +1,6 @@
 class InvoiceProcessingService
+  require 'vips'
+
   class InvoiceProcessingServiceError < StandardError; end
   class InvalidAnalyzerError < InvoiceProcessingServiceError; end
   class InvalidStateError < InvoiceProcessingServiceError; end
@@ -76,7 +78,7 @@ class InvoiceProcessingService
           invoice.trigger_event(event_name: :fail_processing)
         end
 
-        generate_annotated_preview(invoice: invoice) if invoice.processed?
+        generate_annotated_preview(invoice: invoice)
       end
     end
   end
@@ -94,14 +96,44 @@ class InvoiceProcessingService
 
     if analysis_job_data.is_total_present
       invoice.ocr_amount = analysis_job_data.total
+      invoice.manual_approval_required = invoice.ocr_amount != invoice.amount
+      invoice.audit = true if invoice.manual_approval_required?
     else
+      invoice.manual_approval_required = true
       invoice.audit = true
     end
     invoice.save
   end
 
   def generate_annotated_preview(invoice:)
-    # TODO
+    analysis = invoice.ocr_data.fetch('analysis',nil)
+    return false unless analysis && invoice.document.attached?
+
+    page = analysis['page_number'].to_i - 1
+    return false unless page >= 0
+
+    invoice.document.blob.open do |tempfile|
+      pdf_page_image = Vips::Image.new_from_file(tempfile.path, access: :sequential, page: page)
+
+      width, height = pdf_page_image.size
+      return false if ( width.zero? || height.zero? )
+
+      box_width, box_height, box_left, box_top = analysis['bounding_box'].values_at('width', 'height', 'left', 'top')
+      return false if [box_width, box_height, box_left, box_top].any?{|val| val.nil? || val.zero?}
+
+      box_width = (box_width * width) + 10 
+      box_left = (box_left * width) - 5
+      box_height = (box_height * height) + 10 
+      box_top = (box_top * height) - 5
+
+      border_color = [255.0,0.0,0.0,100.0]
+      pdf_page_image = pdf_page_image.draw_rect(border_color, box_left, box_top, box_width, box_height)
+      annotated_page_data = pdf_page_image.write_to_buffer '.jpg[Q=90]'
+      invoice.annotated_preview.attach(io: StringIO.new(annotated_page_data), filename: 'annotated_preview.jpg')
+      true
+    end
+  rescue => e
+    return false
   end
 
   private

@@ -15,6 +15,7 @@ module ImagesHelper
     square_x_open: 'x-square.svg',
     upload: 'cloud-upload-fill.svg',
     uploaded: 'cloud-check-fill.svg',
+    warning: 'exclamation-triangle-fill.svg'
   }.freeze
 
   # Render SVG icon inline: inline_icon(icon: :icon_name, size: 30, fill: :black, opacity: 1.0, html: {id: })

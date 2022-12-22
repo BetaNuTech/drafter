@@ -135,7 +135,7 @@ module Invoices
       end
 
       def after_submit(user)
-        delay.start_analysis
+        delay(queue: :invoice_processing).start_analysis
       end
 
     end
