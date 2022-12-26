@@ -6,7 +6,10 @@ class InvoiceProcessingService
   class InvalidStateError < InvoiceProcessingServiceError; end
   class MissingDocumentError < InvoiceProcessingServiceError; end
 
-  ATTEMPTS_MAX = 5
+  #ANNOTATION_COLOR = [70.0,190.0,60.0,100.0].freeze # a shade of green
+  ANNOTATION_COLOR = [0.0, 255.0, 0.0, 100.0].freeze # a shade of green
+  ANALYSIS_ATTEMPTS_MAX = 5
+
   attr_reader :invoice, :errors, :service_name, :service
 
   def initialize(backing_service: :textract, dry_run: false, debug: false)
@@ -29,7 +32,7 @@ class InvoiceProcessingService
     invoice.init_ocr_data
 
     attempt = invoice.ocr_data.dig('meta', 'attempts')
-    if ATTEMPTS_MAX < attempt
+    if ANALYSIS_ATTEMPTS_MAX < attempt
       invoice.trigger_event(event_name: 'fail_processing')
       SystemEvent.log(description: 'Exceeded maximum invoice processing attempts', event_source: invoice, incidental: invoice.project, severity: :error)
       return false
@@ -126,7 +129,7 @@ class InvoiceProcessingService
       box_height = (box_height * height) + 10 
       box_top = (box_top * height) - 5
 
-      border_color = [255.0,0.0,0.0,100.0]
+      border_color = ANNOTATION_COLOR
       pdf_page_image = pdf_page_image.draw_rect(border_color, box_left, box_top, box_width, box_height)
       annotated_page_data = pdf_page_image.write_to_buffer '.jpg[Q=90]'
       invoice.annotated_preview.attach(io: StringIO.new(annotated_page_data), filename: 'annotated_preview.jpg')

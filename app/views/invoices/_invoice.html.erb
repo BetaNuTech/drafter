@@ -8,16 +8,6 @@
         <%= link_to(rails_blob_path(invoice.document), target: '_blank') do %>
           <%= image_tag preview_document(document: invoice.document, resize: [150,150]), class: 'align-middle' %>
         <% end %>
-        <% if invoice.annotated_preview.attached? %>
-          <span class="annotated_preview_link">
-            <%= link_to(rails_blob_path(invoice.annotated_preview), target: '_blank') do %>
-              <small>Review</small>
-            <% end %>
-            <% if invoice.manual_approval_required? || invoice.audit? %>
-              <%= inline_icon(icon: :warning, size: 20, fill: :red) %>
-            <% end %>
-          </span>
-        <% end %>
       </div>
     <% end %>
     <div class="body">
@@ -50,6 +40,20 @@
         <% end %>
       <% end %>
       <span class="badge bg-success"><%= number_to_currency invoice.amount %></span>
+      <% if invoice.annotated_preview.attached? %>
+        <span class="annotated_preview_link">
+          <%= link_to(rails_blob_path(invoice.annotated_preview), target: '_blank') do %>
+            <%= inline_icon(icon: :eye, size: 20, fill: :blue) %>
+          <% end %>
+          <% if invoice.manual_approval_required? || invoice.audit? %>
+            <%= inline_icon(icon: :warning, size: 20, fill: :red) %>
+          <% end %>
+        </span>
+      <% else %>
+        <span class="annotated_preview_link">
+          <%= inline_icon(icon: :eye_slash, size: 20, fill: :gray) %>
+        </span>
+      <% end %>
       <br/>
       <% icon_attrs = invoice.description.present? ? {fill: :blue, opacity: 1.0, description: invoice.description } : {fill: :lightgray, opacity: 0.1, description: ''} %>
       <%= inline_icon(icon: :info, size: 35, fill: icon_attrs[:fill], opacity: icon_attrs[:opacity],

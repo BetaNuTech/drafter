@@ -7,6 +7,8 @@ module ImagesHelper
     destroy: 'trash.svg',
     add: 'plus-square.svg',
     edit: 'pencil-square.svg',
+    eye: 'eye-fill.svg',
+    eye_slash: 'eye-slash-fill.svg',
     home: 'house-fill.svg',
     info: 'info-circle-fill.svg',
     square_check: 'check-square-fill.svg',
