@@ -81,6 +81,8 @@ class Invoice < ApplicationRecord
   def start_analysis(force: false)
     InvoiceProcessingService.new.
       start_analysis(invoice: self, force: )
+  rescue
+    true
   end
 
   def process_analysis
