@@ -39,6 +39,7 @@ class Invoice < ApplicationRecord
   # { meta: { attempts: 0, requests: [{timestamp: timestamp, request_token: 'XXX'}], documentid: document.id, jobid: 'TextractJobId', key: 'S3ObjectKey', filename: 'filename.pdf', last_attempt: timestamp, service: 'Textract'}, analysis: {} }
   
   ALLOWED_PARAMS = %i{amount description document}
+  PROCESSING_QUEUE = :invoice_processing
   
   ### Concerns
   include Invoices::StateMachine
@@ -59,7 +60,7 @@ class Invoice < ApplicationRecord
 
   def self.analyze_submitted
     self.submitted.each do |invoice|
-      invoice.delay(queue: :invoice_processing).start_analysis
+      invoice.delay(queue: PROCESSING_QUEUE).start_analysis
     end
   end
 
@@ -85,8 +86,7 @@ class Invoice < ApplicationRecord
   def process_analysis
     service = InvoiceProcessingService.new
     analysis_job_data = service.get_analysis(invoice: self)
-    service.process_invoice_analysis(invoice: self, analysis_job_data:)
-    service.generate_annotated_preview(invoice: self)
+    service.process_analysis_job_data(invoice: self, analysis_job_data:)
   end
 
   def generate_annotated_preview

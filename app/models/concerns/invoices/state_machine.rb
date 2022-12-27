@@ -39,7 +39,7 @@ module Invoices
         end
 
         event :approve do
-          transitions from: %i{ submitted processed processing_failed rejected }, to: :approved,
+          transitions from: %i{ submitted processing processed processing_failed rejected }, to: :approved,
             guard: Proc.new { allow_approve? },
             after: Proc.new{|*args| after_approve(*args)}
         end
@@ -135,9 +135,28 @@ module Invoices
       end
 
       def after_submit(user)
-        delay(queue: :invoice_processing).start_analysis
+        delay(queue: Invoice::PROCESSING_QUEUE).start_analysis
       end
 
+      def displayed_invoice_state_name
+        case state
+        when 'processing', 'processed', 'processing_failed'
+          'submitted'.titleize
+        else
+          state.titleize
+        end
+      end
+
+      def document_processing_display_state
+        return nil unless document.attached?
+
+        case state
+        when 'processing', 'processed', 'failed_processing'
+          state.titleize
+        else
+          nil
+        end
+      end
     end
 
   end

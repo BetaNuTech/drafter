@@ -72,18 +72,23 @@ class InvoiceProcessingService
       end
 
       successful_jobs.each do |job|
-        invoice = job.record
-        process_invoice_analysis(invoice: invoice, analysis_job_data: job.data)
-
-        if invoice.processing? && job.data.is_total_present
-          invoice.trigger_event(event_name: :complete_processing)
-        else
-          invoice.trigger_event(event_name: :fail_processing)
-        end
-
-        generate_annotated_preview(invoice: invoice)
+        process_analysis_job_data(invoice: job.record, analysis_job_data: job.data)
       end
     end
+  end
+
+  def process_analysis_job_data(invoice: ,analysis_job_data:)
+    return false if analysis_job_data.nil?
+
+    process_invoice_analysis(invoice: invoice, analysis_job_data:)
+
+    if invoice.processing? && analysis_job_data.is_total_present
+      invoice.trigger_event(event_name: :complete_processing)
+    else
+      invoice.trigger_event(event_name: :fail_processing)
+    end
+
+    generate_annotated_preview(invoice: invoice)
   end
 
   def get_analysis(invoice:)
@@ -113,7 +118,11 @@ class InvoiceProcessingService
     return false unless analysis && invoice.document.attached?
 
     page = analysis['page_number'].to_i - 1
-    return false unless page >= 0
+    if page <= 0
+      invoice.manual_approval_required = true
+      invoice.save
+      return false
+    end
 
     invoice.document.blob.open do |tempfile|
       pdf_page_image = Vips::Image.new_from_file(tempfile.path, access: :sequential, page: page)
@@ -136,6 +145,9 @@ class InvoiceProcessingService
       true
     end
   rescue => e
+    invoice.trigger_event(event_name: 'fail_processing_attempt') unless invoice.processing_failed?
+    description = "Error generating invoice preview: " + e.to_s
+    SystemEvent.log(description: , event_source: invoice, incidental: invoice.project, severity: :error)
     return false
   end
 
@@ -146,6 +158,7 @@ class InvoiceProcessingService
     if jobid.present?
       invoice.ocr_data['meta']['jobid'] = jobid
       invoice.save
+      invoice.delay(run_at: 1.minute.from_now, queue: Invoice::PROCESSING_QUEUE).process_analysis
       jobid
     else
       invoice.trigger_event(event_name: 'fail_processing_attempt')

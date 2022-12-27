@@ -66,4 +66,15 @@ module DrawsHelper
     end
     options_for_select(project_cost_options, current_value)
   end
+
+  def displayed_invoice_state_name(invoice:, user:)
+    return invoice.state if user.admin?
+
+    case invoice.state
+    when 'processed', 'processing_failed'
+      'submitted'
+    else
+      invoice.state
+    end
+  end
 end

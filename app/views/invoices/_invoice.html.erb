@@ -1,7 +1,7 @@
 <%= turbo_frame_tag invoice do %>
   <div id="<%= dom_id(invoice) %>" class="invoice_card d-flex flex-column justify-content-evenly text-center m-1 shadow-sm mt-3" style="position: relative;" data-controller="invoice-card">
     <div class="position-absolute start-50 translate-middle border border-1 border-<%= invoice.state_css_class %> bg-<%= invoice.state_css_class %> text-white text-center" style="width: 8rem; top: 0;">
-      <%= invoice.state.titleize %>
+      <%= invoice.displayed_invoice_state_name %>
     </div>
     <% if invoice.document.attached? %>
       <div class="preview_container">
@@ -55,6 +55,13 @@
         </span>
       <% end %>
       <br/>
+      <% if @current_user.admin?  %>
+        <% status = invoice.document_processing_display_state %>
+        <% unless status.nil? %>
+          <small><i><%= invoice.document_processing_display_state %></i></small>
+          <br/>
+        <% end %>
+      <% end %>
       <% icon_attrs = invoice.description.present? ? {fill: :blue, opacity: 1.0, description: invoice.description } : {fill: :lightgray, opacity: 0.1, description: ''} %>
       <%= inline_icon(icon: :info, size: 35, fill: icon_attrs[:fill], opacity: icon_attrs[:opacity],
                       html: { id: dom_id(invoice, 'description_popover') ,class: "invoice_description_popover p-1", style: ( invoice.description.present? ?  'cursor: pointer' : '' ),
