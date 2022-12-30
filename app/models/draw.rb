@@ -117,4 +117,9 @@ class Draw < ApplicationRecord
     change_orders.none?
   end
 
+  def mark_invoices_for_manual_approval
+    return false unless ( pending? || submitted? )
+
+    invoices.mark_random_selection_for_manual_approval
+  end
 end

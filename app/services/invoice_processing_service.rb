@@ -103,13 +103,15 @@ class InvoiceProcessingService
     invoice.ocr_data['analysis'] = analysis_job_data.to_h
 
     if analysis_job_data.is_total_present
+      page = invoice.ocr_data.dig('analysis','page_number').to_i
+      page_found = page > 0
+      amount_match = analysis_job_data.total == invoice.amount
+      invoice.manual_approval_required = !amount_match || !page_found
       invoice.ocr_amount = analysis_job_data.total
-      invoice.manual_approval_required = invoice.ocr_amount != invoice.amount
-      invoice.audit = true if invoice.manual_approval_required?
     else
       invoice.manual_approval_required = true
-      invoice.audit = true
     end
+
     invoice.save
   end
 
@@ -117,12 +119,8 @@ class InvoiceProcessingService
     analysis = invoice.ocr_data.fetch('analysis',nil)
     return false unless analysis && invoice.document.attached?
 
-    page = analysis['page_number'].to_i - 1
-    if page <= 0
-      invoice.manual_approval_required = true
-      invoice.save
-      return false
-    end
+    page = analysis['page_number'].to_i - 1 # zero-indexed page
+    return false if page <= 0
 
     invoice.document.blob.open do |tempfile|
       pdf_page_image = Vips::Image.new_from_file(tempfile.path, access: :sequential, page: page)

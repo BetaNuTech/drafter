@@ -40,6 +40,7 @@ class Invoice < ApplicationRecord
   
   ALLOWED_PARAMS = %i{amount description document}
   PROCESSING_QUEUE = :invoice_processing
+  RANDOM_SELECTION_RATIO = 0.1
   
   ### Concerns
   include Invoices::StateMachine
@@ -62,6 +63,34 @@ class Invoice < ApplicationRecord
     self.submitted.each do |invoice|
       invoice.delay(queue: PROCESSING_QUEUE).start_analysis
     end
+  end
+
+  def self.mark_random_selection_for_manual_approval
+    sample_invoices = processed.where(manual_approval_required: false)
+    return false if sample_invoices.none?
+
+    invoice_count = sample_invoices.count
+    sample_size = [1, ( invoice_count.to_f * RANDOM_SELECTION_RATIO ).to_i].max
+    high_value_invoices = sample_invoices.order(amount: :desc).limit((sample_size * 2))
+    high_value_invoice_ids = sample_invoices.where(id: high_value_invoices.pluck(:id)).
+                                order('RANDOM()').
+                                limit(sample_size).
+                                pluck(:id)
+
+    invoice_count = sample_invoices.count - high_value_invoice_ids.count
+    random_sample_size = [1, ( invoice_count.to_f * RANDOM_SELECTION_RATIO ).to_i].max
+    random_invoice_ids = sample_invoices.where.not(id: high_value_invoice_ids).
+                                order('RANDOM()').
+                                limit(random_sample_size).
+                                pluck(:id)
+
+    invoices_for_processing_ids = high_value_invoice_ids + random_invoice_ids
+    invoices_for_processing = sample_invoices.where(id: invoices_for_processing_ids)
+    return false if invoices_for_processing.none?
+
+    invoices_for_processing.update_all(manual_approval_required: true)
+
+    true
   end
 
   def init_ocr_data

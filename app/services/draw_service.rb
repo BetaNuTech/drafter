@@ -9,7 +9,7 @@ class DrawService
     @errors = []
     @user = user
     @project = project || draw&.project
-    @organization = @user.organization
+    @organization = @user&.organization
     @draw = draw || Draw.new(project: @project, organization: @organization, user: @user)
     @policy = DrawPolicy.new(@user, @draw)
 
@@ -126,31 +126,10 @@ class DrawService
     end
   end
 
-  #def add_document(params)
-    #raise PolicyError unless @policy.add_document?
-
-    #reset_errors
-
-    #document = DrawDocument.new(sanitize_document_params(params))
-    #document.draw = @draw
-    #document.user = @user
-    #if document.save
-      #SystemEvent.log(description: "#{document.documenttype} Document added for Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
-      #@draw.draw_documents.reload 
-      #document
-    #else
-      #@errors = document.errors.full_messages
-      #document
-    #end
-  #end
-
-  #def remove_document(document)
-    #raise 'TODO'
-  #end
-
   def draws
     DrawPolicy::Scope.new(@user, @project.draws).resolve
   end
+
 
   private
 
