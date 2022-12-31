@@ -81,5 +81,43 @@ RSpec.describe Invoice, type: :model do
     end
   end
 
+  describe 'class methods' do
+    describe 'mark random selection for manual approval' do
+      let(:invoice1) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 1000.0, manual_approval_required: false) }
+      let(:invoice2) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 2000.0, manual_approval_required: false) }
+      let(:invoice3) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 3000.0, manual_approval_required: false) }
+      let(:invoice4) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 4000.0, manual_approval_required: false) }
+      let(:invoice5) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 5000.0, manual_approval_required: false) }
+      let(:invoice6) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 6000.0, manual_approval_required: false) }
+      let(:invoice7) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 7000.0, manual_approval_required: false) }
+      let(:invoice8) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 8000.0, manual_approval_required: false) }
+      let(:invoice9) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 9000.0, manual_approval_required: false) }
+      let(:invoice10) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 10000.0, manual_approval_required: false) }
+
+      let(:invoice11) { create(:invoice, draw_cost: draw_cost, state: :pending, amount: 1000.0, manual_approval_required: false) }
+      let(:invoice12) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 1000.0, manual_approval_required: true) }
+
+      let(:invoices) {
+        [ invoice1, invoice2, invoice3, invoice4, invoice5, invoice6, invoice7,
+          invoice8, invoice9, invoice10, invoice11, invoice12 ]
+      }
+
+      it 'marks a random selection of high value and other invoices that passed other QC controls' do
+        invoices
+        assert(Invoice.mark_random_selection_for_manual_approval)
+        expect(Invoice.processed.where(manual_approval_required: false).count).to eq(8)
+      end
+
+      it 'returns false if there are no passing processed invoices' do
+        invoice11; invoice12
+        refute(Invoice.mark_random_selection_for_manual_approval)
+
+        invoice10
+        assert(Invoice.mark_random_selection_for_manual_approval)
+      end
+    end
+
+  end
+
 
 end
