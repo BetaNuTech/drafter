@@ -46,7 +46,7 @@
             <%= inline_icon(icon: :eye, size: 20, fill: :blue) %>
           <% end %>
           <% if invoice.manual_approval_required? || invoice.audit? %>
-            <%= inline_icon(icon: :warning, size: 20, fill: :red) %>
+            <%= inline_icon(icon: :warning, size: 20, fill: :orange) %>
           <% end %>
         </span>
       <% else %>
