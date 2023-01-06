@@ -10,6 +10,13 @@ RSpec.shared_context 'sample_draws' do
 
   let(:uploaded_file) {Rack::Test::UploadedFile.new("#{Rails.root}/spec/fixtures/files/sample_document_1.pdf", 'application/pdf')}
   let(:draw) { sample_project.draws.first}
+  let(:draw_documents) {
+    [
+      create(:draw_document, draw: draw, user: developer_user, document: uploaded_file, documenttype: :budget, state: :pending),
+      create(:draw_document, draw: draw, user: developer_user, document: uploaded_file, documenttype: :application, state: :pending),
+      create(:draw_document, draw: draw, user: developer_user, document: uploaded_file, documenttype: :waiver, state: :pending),
+    ]
+  }
   let(:draw_cost) {
     create(:draw_cost, draw: draw, project_cost: sample_project.project_costs.first, total: 4000.0, state: 'pending')
   }

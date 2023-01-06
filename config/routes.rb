@@ -32,6 +32,14 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :project_tasks do
+    member do
+      post 'verify', to: 'project_tasks#verify'
+      post 'reject', to: 'project_tasks#reject'
+      post 'archive', to: 'project_tasks#archive'
+    end
+  end
+
   resources :draws do
     resources :draw_costs do
       post 'submit', to: 'draw_costs#submit'

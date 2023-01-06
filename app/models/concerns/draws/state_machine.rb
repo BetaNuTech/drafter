@@ -51,7 +51,8 @@ module Draws
         end
 
         event :withdraw do
-          transitions from: %i{ pending submitted rejected internally_approved }, to: :withdrawn
+          transitions from: %i{ pending submitted rejected internally_approved }, to: :withdrawn,
+            after: Proc.new {|*args| after_withdraw(*args) }
         end
 
         event :fund do
@@ -122,8 +123,20 @@ module Draws
           draw_costs.visible.all?(&:allow_submit?)
       end
 
+      def create_document_verify_tasks
+        draw_documents.visible.each do |doc|
+          doc.create_task(assignee: nil, action: :verify) #rescue false
+        end
+      end
+
+      def create_draw_approval_tasks
+        create_task(action: :approve)
+      end
+
       def after_submit(user)
         submit_draw_costs(user)
+        create_document_verify_tasks
+        create_draw_approval_tasks
       end
 
       def allow_approval?
@@ -132,6 +145,11 @@ module Draws
 
       def after_approval(user)
         approve(user)
+      end
+
+      def after_withdraw(user=nil)
+        items = draw_documents.to_a + invoices.to_a
+        ProjectTask.where(origin: items).pending.each{ |task| task.trigger_event(event_name: :archive, user: user) }
       end
 
     end

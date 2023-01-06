@@ -38,7 +38,8 @@ module DrawDocuments
         end
 
         event :withdraw do
-          transitions from: %i{pending approved rejected}, to: :withdrawn
+          transitions from: %i{pending approved rejected}, to: :withdrawn,
+            after: Proc.new{|*args| after_withdraw(*args)}
         end
       end
 
@@ -88,6 +89,10 @@ module DrawDocuments
 
       def after_reset_approval(user)
         unapprove 
+      end
+
+      def after_withdraw(user=nil)
+        project_tasks.pending.each{|task| task.trigger_event(event_name: :archive, user: user)}
       end
     end
 

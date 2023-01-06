@@ -119,5 +119,60 @@ RSpec.describe Invoice, type: :model do
 
   end
 
+  describe 'state machine' do
+    let(:invoice) { create(:invoice, draw_cost: draw_cost, state: :processing, amount: 1000.0, manual_approval_required: false) }
+
+    describe 'processing' do
+      it 'creates a project task after failed processing' do
+        expect{
+          invoice.trigger_event(event_name: :fail_processing)  
+        }.to change{ProjectTask.count}.by(1)
+        invoice.project_tasks.reload
+        expect(invoice.project_tasks.count).to eq(1)
+      end
+      it 'creates a project task after successful processing' do
+        expect{
+          invoice.trigger_event(event_name: :complete_processing)  
+        }.to change{ProjectTask.count}.by(1)
+        invoice.project_tasks.reload
+        expect(invoice.project_tasks.count).to eq(1)
+      end
+    end
+
+    describe 'remove' do
+      let(:completed_invoice_tasks) {
+        Array.new(3) {
+          task = ProjectTaskServices::Generator.call(origin: invoice, action: :verify)
+          task.state = 'verified'; task.save!
+          task
+        }
+      }
+      let(:pending_invoice_tasks) {
+        Array.new(2) {
+          task = ProjectTaskServices::Generator.call(origin: invoice, action: :verify)
+          task.state = 'needs_review'; task.save!
+          task
+        }
+      }
+      it 'archives pending tasks' do
+        invoice.state = 'pending'
+        invoice.save!
+        completed_invoice_tasks
+        pending_invoice_tasks
+        invoice.project_tasks.reload
+        expect(invoice.project_tasks.verified.count).to eq(3)
+        expect(invoice.project_tasks.pending.count).to eq(2)
+        task_count = invoice.project_tasks.count
+        assert(invoice.allow_remove?)
+        invoice.trigger_event(event_name: :remove)
+        invoice.project_tasks.reload
+        expect(invoice.project_tasks.count).to eq(task_count)
+        expect(invoice.project_tasks.verified.count).to eq(3)
+        expect(invoice.project_tasks.pending.count).to eq(0)
+      end
+
+    end
+  end
+
 
 end

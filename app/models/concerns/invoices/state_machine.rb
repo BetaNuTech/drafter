@@ -35,7 +35,8 @@ module Invoices
         end
 
         event :complete_processing do
-          transitions from: %i{ processing }, to: :processed
+          transitions from: %i{ processing }, to: :processed,
+            after: Proc.new {|*args| after_processing(*args)}
         end
 
         event :approve do
@@ -62,7 +63,8 @@ module Invoices
         end
 
         event :fail_processing do
-          transitions from: %i{ processing }, to: :processing_failed
+          transitions from: %i{ processing }, to: :processing_failed,
+            after: Proc.new {|*args| after_processing(*args)}
         end
 
         event :fail_processing_attempt do
@@ -123,6 +125,7 @@ module Invoices
       def after_remove(user)
         draw_cost.trigger_event(event_name: :revert_to_pending, user: user) if
           draw_cost.permitted_state_events.include?(:revert_to_pending)
+        project_tasks.pending.each{|task| task.trigger_event(event_name: :archive, user: user)}
       end
 
       def allow_remove?
@@ -136,6 +139,11 @@ module Invoices
 
       def after_submit(user)
         delay(queue: Invoice::PROCESSING_QUEUE).start_analysis
+      end
+
+      def after_processing(user)
+        # Create invoice review task
+        create_task(assignee: nil, action: :verify)
       end
 
       def displayed_invoice_state_name

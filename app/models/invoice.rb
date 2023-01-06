@@ -49,9 +49,11 @@ class Invoice < ApplicationRecord
   belongs_to :draw_cost
   belongs_to :approver, optional: true, class_name: 'User'
   belongs_to :user
+  has_one :draw, through: :draw_cost
   has_one :project, through: :draw_cost
   has_one_attached :document
   has_one_attached :annotated_preview
+  has_many :project_tasks, as: :origin, dependent: :destroy
 
   ### Validations
   validates :amount, presence: true, numericality: { greater_than: 0.0}
@@ -123,6 +125,10 @@ class Invoice < ApplicationRecord
   def generate_annotated_preview
     service = InvoiceProcessingService.new
     service.generate_annotated_preview(invoice: self)
+  end
+
+  def create_task(action:, assignee: nil)
+    ProjectTaskServices::Generator.call(origin: self, assignee: , action: )
   end
 
 end

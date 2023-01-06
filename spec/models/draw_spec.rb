@@ -35,7 +35,7 @@ require 'rails_helper'
 
 RSpec.describe Draw, type: :model do
   include_context 'projects'
-  include_context 'sample_projects'
+  include_context 'sample_draws'
   include_context 'organizations'
 
   describe 'initialization' do
@@ -96,5 +96,96 @@ RSpec.describe Draw, type: :model do
       end
     end # clean draws
   end # helpers
+
+  describe 'state machine' do
+    describe 'on submit' do
+      it 'creates draw document verify tasks' do
+        draw_cost_invoices
+        draw_documents
+        draw.state = 'pending'
+        draw.save!
+        draw.reload
+        expect(draw.draw_documents.count).to eq(3)
+        expect(ProjectTask.where(origin: draw_documents).count).to eq(0)
+        draw.trigger_event(event_name: :submit)
+        expect(ProjectTask.where(origin: draw_documents).count).to eq(3)
+      end
+
+      it 'creates draw approve task' do
+        draw_cost_invoices
+        draw_documents
+        draw.state = 'pending'
+        draw.save!
+        expect(draw.project_tasks.count).to eq(0)
+        draw.trigger_event(event_name: :submit)
+        draw.reload
+        expect(draw.project_tasks.count).to eq(1)
+      end
+    end
+
+    describe 'on withdraw' do
+      describe 'project tasks' do
+        let(:user) { sample_project.developers.first }
+        let(:draw_document) { DrawDocument.create!(draw: draw, user: user) }
+        let(:completed_document_tasks) {
+          Array.new(3) {
+            task = ProjectTaskServices::Generator.call(origin: draw_document, action: :verify)
+            task.state = 'verified'; task.save!
+            task
+          }
+        }
+        let(:pending_document_tasks) {
+          Array.new(2) {
+            task = ProjectTaskServices::Generator.call(origin: draw_document, action: :verify)
+            task.state = 'needs_review'; task.save!
+            task
+          }
+        }
+        let(:invoice) { draw_cost_invoices.first }
+        let(:completed_invoice_tasks) {
+          Array.new(3) {
+            task = ProjectTaskServices::Generator.call(origin: invoice, action: :verify)
+            task.state = 'verified'; task.save!
+            task
+          }
+        }
+        let(:pending_invoice_tasks) {
+          Array.new(2) {
+            task = ProjectTaskServices::Generator.call(origin: invoice, action: :verify)
+            task.state = 'needs_review'; task.save!
+            task
+          }
+        }
+
+        it 'archives any pending project tasks' do
+
+        end
+        it 'archives any pending draw document project tasks' do
+          pending_document_tasks
+          completed_document_tasks
+          draw_document.reload
+          expect(draw_document.project_tasks.pending.count).to eq(2)
+          expect(draw_document.project_tasks.verified.count).to eq(3)
+          draw.trigger_event(event_name: :withdraw)
+          draw.reload
+          draw_document.reload
+          expect(draw_document.project_tasks.verified.count).to eq(3)
+          expect(draw_document.project_tasks.pending.count).to eq(0)
+        end
+        it 'archives any pending invoice project tasks' do
+          pending_invoice_tasks
+          completed_invoice_tasks
+          invoice.reload
+          expect(invoice.project_tasks.verified.count).to eq(3)
+          expect(invoice.project_tasks.pending.count).to eq(2)
+          draw.trigger_event(event_name: :withdraw)
+          draw.reload
+          invoice.reload
+          expect(invoice.project_tasks.verified.count).to eq(3)
+          expect(invoice.project_tasks.pending.count).to eq(0)
+        end
+      end
+    end
+  end
 
 end

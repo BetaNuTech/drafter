@@ -21,6 +21,8 @@ class Project < ApplicationRecord
   has_many :draws, dependent: :destroy
   has_many :draw_costs, through: :draws
   has_many :project_costs, dependent: :destroy
+  has_many :project_tasks, dependent: :destroy
+  has_many :invoices, through: :draws
 
   ### Validations
   validates :name, presence: true

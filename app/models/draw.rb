@@ -60,6 +60,7 @@ class Draw < ApplicationRecord
   has_many :draw_costs, dependent: :destroy
   has_many :change_orders, through: :draw_costs
   has_many :invoices, through: :draw_costs
+  has_many :project_tasks, as: :origin, dependent: :destroy
 
   ### Validations
   validates_with IndexValidator
@@ -121,5 +122,9 @@ class Draw < ApplicationRecord
     return false unless ( pending? || submitted? )
 
     invoices.mark_random_selection_for_manual_approval
+  end
+
+  def create_task(action:, assignee: nil)
+    ProjectTaskServices::Generator.call(origin: self, assignee:, action: )
   end
 end

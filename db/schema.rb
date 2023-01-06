@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_10_215333) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_06_002416) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -201,6 +201,35 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_10_215333) do
     t.index ["slug"], name: "index_project_roles_on_slug"
   end
 
+  create_table "project_tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.string "origin_type"
+    t.uuid "origin_id"
+    t.uuid "assignee_id"
+    t.uuid "approver_id"
+    t.string "state", default: "new", null: false
+    t.string "remoteid"
+    t.string "name", null: false
+    t.string "assignee_name"
+    t.string "approver_name"
+    t.string "attachment_url"
+    t.string "preview_url"
+    t.datetime "reviewed_at"
+    t.datetime "due_at"
+    t.datetime "completed_at"
+    t.text "description", null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["approver_id"], name: "index_project_tasks_on_approver_id"
+    t.index ["assignee_id"], name: "index_project_tasks_on_assignee_id"
+    t.index ["origin_type", "origin_id"], name: "idx_project_tasks_origin"
+    t.index ["origin_type", "origin_id"], name: "index_project_tasks_on_origin"
+    t.index ["project_id", "assignee_id", "approver_id", "state"], name: "idx_project_tasks_general"
+    t.index ["project_id"], name: "index_project_tasks_on_project_id"
+    t.index ["remoteid"], name: "index_project_tasks_on_remoteid"
+  end
+
   create_table "project_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "project_id", null: false
     t.uuid "user_id", null: false
@@ -309,6 +338,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_10_215333) do
   add_foreign_key "invoices", "users"
   add_foreign_key "invoices", "users", column: "approver_id"
   add_foreign_key "project_costs", "projects"
+  add_foreign_key "project_tasks", "projects"
+  add_foreign_key "project_tasks", "users", column: "approver_id"
+  add_foreign_key "project_tasks", "users", column: "assignee_id"
   add_foreign_key "project_users", "project_roles"
   add_foreign_key "project_users", "projects"
   add_foreign_key "project_users", "users"

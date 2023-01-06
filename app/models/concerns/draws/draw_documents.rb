@@ -6,7 +6,7 @@ module Draws
       has_many :draw_documents, dependent: :destroy
 
       def all_documents_submitted?
-        match_states = %i{pending submitted approved}
+        match_states = %i{pending approved}
         submitted_types = draw_documents.where(state: match_states).
                             pluck(:documenttype).
                             uniq.map(&:to_sym)

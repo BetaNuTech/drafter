@@ -52,6 +52,8 @@ class User < ApplicationRecord
   validates :email, uniqueness: true, presence: true
   validates :role_id, presence: true
   belongs_to :organization, required: false
+  has_many :approved_tasks, foreign_key: 'approver_id', class_name: 'ProjectTask', dependent: :destroy
+  has_many :assigned_tasks, foreign_key: 'assignee_id', class_name: 'ProjectTask', dependent: :destroy
 
   scope :ordered_by_name, -> { includes(:profile).order("user_profiles.last_name ASC, user_profiles.first_name ASC")}
   scope :active, -> { where(active: true) }

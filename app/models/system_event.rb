@@ -29,6 +29,7 @@ class SystemEvent < ApplicationRecord
   belongs_to :event_source, polymorphic: true
   belongs_to :incidental, polymorphic: true, required: false
   
+  ### Broadcast Streams
   after_create_commit -> (system_event) {
     target =  "#{system_event.event_source_type}_#{system_event.event_source_id}_system_events"
     broadcast_prepend_to target,

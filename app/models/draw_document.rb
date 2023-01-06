@@ -60,6 +60,7 @@ class DrawDocument < ApplicationRecord
   belongs_to :user, optional: true
   has_one :organization, through: :user
   has_one_attached :document
+  has_many :project_tasks, as: :origin, dependent: :destroy
 
   ### Enums
   enum :documenttype, [:other, :budget, :application, :waiver]
@@ -94,5 +95,9 @@ class DrawDocument < ApplicationRecord
     self.approver = nil
     self.approved_at = nil
     save
+  end
+
+  def create_task(action:, assignee: nil)
+    ProjectTaskServices::Generator.call(origin: self, assignee: , action: )
   end
 end

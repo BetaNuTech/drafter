@@ -1,0 +1,16 @@
+<%= turbo_frame_tag project_task do %>
+  <li class="list-group-item">
+    <span class="badge rounded-pill bg-<%= project_task_due_class(project_task) %>">
+      <em><%= short_date(project_task.due_at) %></em>
+    </span>
+    &nbsp;
+    <%= link_to('Verify', verify_project_task_path(project_task), class: 'project-task-action btn btn-sm btn-success', data: {turbo_method: :post, turbo_confirm: "Are you sure you want to approve this #{project_task.origin.class.name}?"} ) %>
+    <%= link_to('Reject', reject_project_task_path(project_task), class: 'project-task-action btn btn-sm btn-danger', data: {turbo_method: :post, turbo_confirm: "Are you sure you want to reject this #{project_task.origin.class.name}?"} ) %>
+    <%= link_to('Archive', archive_project_task_path(project_task), class: 'project-task-action btn btn-sm btn-warning', data: {turbo_method: :post, turbo_confirm: 'Are you sure you want to archive/delete this task?'} ) %>
+    <br/>
+    <%= link_to(project_task.name, project_task_origin_url(project_task), { target: '_blank' }) %>
+    <span class="badge bg-secondary">
+      <%= project_task.state.humanize %>
+    </span>
+  </li>
+<% end %>
