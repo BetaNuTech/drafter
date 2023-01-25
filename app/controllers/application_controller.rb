@@ -11,14 +11,35 @@ class ApplicationController < ActionController::Base
     @breadcrumbs ||= Breadcrumbs.new
   end
 
+  def authenticate_service_token
+    service = ( params[:service] || '' ).to_sym
+    token = params[:token] || ''
+
+    api_token = Rails.application.credentials.dig(service, application_env, :drafter_token)
+    if api_token.present? && token == api_token
+      return true
+    else
+      render json: { status: 'Token authentication failed' }, status: :unauthorized
+    end
+  end
+
   private
+
+  def application_env
+    @application_env ||=
+      begin
+        if Rails.env.development?
+          :development
+        elsif Rails.env.test?
+          :test
+        else
+          ( ENV.fetch('APPLICATION_ENV','production') == 'production' ) ? :production : :staging
+        end
+      end
+  end
 
   def user_timezone(&block)
     Time.use_zone(current_user.timezone, &block)
-  end
-
-  def self.http_auth_credentials
-    return { name: ENV.fetch('HTTP_AUTH_NAME', 'druid'), password: ENV.fetch('HTTP_AUTH_PASSWORD', 'Default Password') }
   end
 
   def user_not_authorized

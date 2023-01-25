@@ -1,6 +1,8 @@
 class ProjectTaskService
   attr_reader :project_task, :errors
 
+  PERMITTED_EVENTS = %i{verify reject archive}
+
   def initialize(project_task=nil)
     @project_task = project_task
     @errors = []
@@ -8,6 +10,17 @@ class ProjectTaskService
 
   def generate(origin:, assignee:, action:)
     ProjectTaskServices::Generator.call(origin:, assignee:, action:)
+  end
+
+  def trigger_event(event_name)
+    reset_errors
+
+    unless PERMITTED_EVENTS.include?(event_name.to_sym)
+      @errors << "#{event_name} is not a valid Project Task event"
+      return false
+    end
+
+    public_send(event_name)
   end
 
   def verify

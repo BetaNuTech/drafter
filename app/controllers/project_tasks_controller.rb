@@ -1,7 +1,8 @@
 class ProjectTasksController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_project_task, except: %i[index new create]
-  after_action :verify_authorized
+  before_action :authenticate_user!, except: %i{trigger_event}
+  before_action :authenticate_service_token, only: %i{trigger_event}
+  before_action :set_project_task, except: %i{ index new create trigger_event }
+  after_action :verify_authorized, except: %i{trigger_event}
 
   # GET /project_tasks
   def index
@@ -85,6 +86,26 @@ class ProjectTasksController < ApplicationController
       respond_to do |format|
         format.html { redirect_to url_for(@project_task), notice: 'Archived Task'}
         format.turbo_stream
+      end
+    end
+  end
+
+  # POST /project_tasks/trigger_event?token=XXX&action=XXX
+  #
+  def trigger_event
+    event = params[:event] || ''
+    
+    @project_task = ProjectTask.find(params[:id])
+    service = ProjectTaskService.new(@project_task)
+    result = service.trigger_event(event)
+
+    respond_to do |format|
+      format.json do
+        if service.errors?
+          render json: service.errors.to_json, status: :unprocessable_entity
+        else
+          render json: { status: service.project_task.state }
+        end
       end
     end
   end

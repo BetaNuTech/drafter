@@ -64,8 +64,65 @@ RSpec.describe ProjectTasksController, type: :controller do
         expect(invoice_task.state).to eq('verified')
       end
     end
-    describe 'as a non-privileged user outside of project'
+    describe 'as a non-privileged user outside of project' do
+      let(:user) { regular_user }
+      it 'should not mark the task as verified' do
+        sign_in user
+        expect(invoice_task.state).to eq('needs_review')
+        expect {
+          post :verify, params: { id: invoice_task.id }
+        }.to raise_error{ActiveRecord::RecordNotFound}
+        invoice_task.reload
+        expect(invoice_task.state).to_not eq('verified')
+      end
+    end
 
+  end # verify
+
+  describe '#trigger_event' do
+    let(:token) { 'XXX' }
+    describe 'as an API user' do
+      it' should verify the task' do
+        expect(invoice_task.state).to eq('needs_review')
+        post :trigger_event, params: { id: invoice_task.id, event: 'verify', token: token, service: 'clickup', format: :json }
+        expect(response).to be_successful
+        invoice_task.reload
+        expect(invoice_task.state).to eq('verified')
+        expect(invoice_task.origin.state).to eq('approved')
+      end
+      it' should reject the task' do
+        expect(invoice_task.state).to eq('needs_review')
+        post :trigger_event, params: { id: invoice_task.id, event: 'reject', token: token, service: 'clickup', format: :json }
+        expect(response).to be_successful
+        invoice_task.reload
+        expect(invoice_task.state).to eq('rejected')
+        expect(invoice_task.origin.state).to eq('rejected')
+      end
+      it' should archive the task' do
+        invoice_starting_state = invoice_task.origin.state
+        expect(invoice_task.state).to eq('needs_review')
+        post :trigger_event, params: { id: invoice_task.id, event: 'archive', token: token, service: 'clickup', format: :json }
+        expect(response).to be_successful
+        invoice_task.reload
+        expect(invoice_task.state).to eq('archived')
+        expect(invoice_task.origin.state).to eq(invoice_starting_state)
+      end
+
+    end
+    describe 'as a logged-in user without a valid token' do
+      let(:user) { project.managers.first }
+      it 'should fail authentication and do nothing' do
+        sign_in user
+        invoice_starting_state = invoice_task.origin.state
+        expect(invoice_task.state).to eq('needs_review')
+        post :trigger_event, params: { id: invoice_task.id, event: 'archive', token: 'incorrect', service: 'clickup', format: :json }
+        expect(response).to_not be_successful
+        invoice_task.reload
+        expect(invoice_task.state).to eq('needs_review')
+        expect(invoice_task.origin.state).to eq(invoice_starting_state)
+      end
+
+    end
   end
   
 end
