@@ -1,8 +1,8 @@
 class ProjectTasksController < ApplicationController
-  before_action :authenticate_user!, except: %i{trigger_event}
-  before_action :authenticate_service_token, only: %i{trigger_event}
-  before_action :set_project_task, except: %i{ index new create trigger_event }
-  after_action :verify_authorized, except: %i{trigger_event}
+  before_action :authenticate_user!, except: %i{update_task}
+  before_action :authenticate_service_token, only: %i{update_task}
+  before_action :set_project_task, except: %i{ index new create update_task }
+  after_action :verify_authorized, except: %i{update_task}
 
   # GET /project_tasks
   def index
@@ -45,16 +45,16 @@ class ProjectTasksController < ApplicationController
     authorize ProjectTask
   end
 
-  # POST /project_tasks/:id/verify
-  def verify
+  # POST /project_tasks/:id/approve
+  def approve
     authorize @project_task
     service = ProjectTaskService.new(@project_task)
-    service.verify
+    service.approve
     if service.errors?
-      render :show, status: :unprocessable_entity, notice: 'Error Verifying Task Item'
+      render :show, status: :unprocessable_entity, notice: 'Error Approving Task Item'
     else
       respond_to do |format|
-        format.html { redirect_to url_for(@project_task), notice: 'Verified Task Item'}
+        format.html { redirect_to url_for(@project_task), notice: 'Approving Task Item'}
         format.turbo_stream
       end
     end
@@ -90,14 +90,16 @@ class ProjectTasksController < ApplicationController
     end
   end
 
-  # POST /project_tasks/trigger_event?token=XXX&action=XXX
+  # POST /project_tasks/update_task.json?id=XXX&token=XXX&status=XXX
+  # !!! Only accepts JSON requests !!!
   #
-  def trigger_event
-    event = params[:event] || ''
+  def update_task
+    status = params[:status] || ''
+    remoteid = params[:id] || params[:remoteid] || nil or raise ActiveRecord::RecordNotFound
     
-    @project_task = ProjectTask.find(params[:id])
+    ( @project_task = ProjectTask.where(remoteid: remoteid).first ) or raise ActiveRecord::RecordNotFound
     service = ProjectTaskService.new(@project_task)
-    result = service.trigger_event(event)
+    result = service.update_status(status)
 
     respond_to do |format|
       format.json do

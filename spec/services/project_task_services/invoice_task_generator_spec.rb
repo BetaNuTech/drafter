@@ -14,11 +14,11 @@ RSpec.describe ProjectTaskServices::InvoiceTaskGenerator do
     invoice
   }
   let(:assignee) { project.developers.first }
-  let(:valid_task_action) { :verify }
+  let(:valid_task_action) { :approve }
   let(:invalid_task_action) { :invalid_action }
 
   describe 'initialization' do
-    it 'should initialize the generator with the verify action' do
+    it 'should initialize the generator with the approve action' do
       service = service_class.new(invoice: invoice, assignee: assignee, action: valid_task_action)
       assert(service).is_a?(service_class)
     end
@@ -46,7 +46,7 @@ RSpec.describe ProjectTaskServices::InvoiceTaskGenerator do
       expect(task.due_at).to be_a(Time)
       assert(task.attachment_url.present?)
       assert(task.preview_url.present?)
-      expect(task.name).to match('Verify')
+      expect(task.name).to match('Approve')
       expect(task.name).to match(project.name)
       expect(task.description).to match('active_storage')
       expect(assignee.assigned_tasks).to include(task)
@@ -69,7 +69,7 @@ RSpec.describe ProjectTaskServices::InvoiceTaskGenerator do
       expect(task.due_at).to be_a(Time)
       assert(task.attachment_url.present?)
       assert(task.preview_url.present?)
-      expect(task.name).to match('Verify')
+      expect(task.name).to match('Approve')
       expect(task.name).to match(project.name)
       expect(task.description).to match('active_storage')
       expect(assignee.assigned_tasks).to include(task)

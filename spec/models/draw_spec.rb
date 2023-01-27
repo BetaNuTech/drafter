@@ -99,7 +99,7 @@ RSpec.describe Draw, type: :model do
 
   describe 'state machine' do
     describe 'on submit' do
-      it 'creates draw document verify tasks' do
+      it 'creates draw document approve tasks' do
         draw_cost_invoices
         draw_documents
         draw.state = 'pending'
@@ -129,14 +129,14 @@ RSpec.describe Draw, type: :model do
         let(:draw_document) { DrawDocument.create!(draw: draw, user: user) }
         let(:completed_document_tasks) {
           Array.new(3) {
-            task = ProjectTaskServices::Generator.call(origin: draw_document, action: :verify)
-            task.state = 'verified'; task.save!
+            task = ProjectTaskServices::Generator.call(origin: draw_document, action: :approve)
+            task.state = 'approved'; task.save!
             task
           }
         }
         let(:pending_document_tasks) {
           Array.new(2) {
-            task = ProjectTaskServices::Generator.call(origin: draw_document, action: :verify)
+            task = ProjectTaskServices::Generator.call(origin: draw_document, action: :approve)
             task.state = 'needs_review'; task.save!
             task
           }
@@ -144,14 +144,14 @@ RSpec.describe Draw, type: :model do
         let(:invoice) { draw_cost_invoices.first }
         let(:completed_invoice_tasks) {
           Array.new(3) {
-            task = ProjectTaskServices::Generator.call(origin: invoice, action: :verify)
-            task.state = 'verified'; task.save!
+            task = ProjectTaskServices::Generator.call(origin: invoice, action: :approve)
+            task.state = 'approved'; task.save!
             task
           }
         }
         let(:pending_invoice_tasks) {
           Array.new(2) {
-            task = ProjectTaskServices::Generator.call(origin: invoice, action: :verify)
+            task = ProjectTaskServices::Generator.call(origin: invoice, action: :approve)
             task.state = 'needs_review'; task.save!
             task
           }
@@ -165,23 +165,23 @@ RSpec.describe Draw, type: :model do
           completed_document_tasks
           draw_document.reload
           expect(draw_document.project_tasks.pending.count).to eq(2)
-          expect(draw_document.project_tasks.verified.count).to eq(3)
+          expect(draw_document.project_tasks.approved.count).to eq(3)
           draw.trigger_event(event_name: :withdraw)
           draw.reload
           draw_document.reload
-          expect(draw_document.project_tasks.verified.count).to eq(3)
+          expect(draw_document.project_tasks.approved.count).to eq(3)
           expect(draw_document.project_tasks.pending.count).to eq(0)
         end
         it 'archives any pending invoice project tasks' do
           pending_invoice_tasks
           completed_invoice_tasks
           invoice.reload
-          expect(invoice.project_tasks.verified.count).to eq(3)
+          expect(invoice.project_tasks.approved.count).to eq(3)
           expect(invoice.project_tasks.pending.count).to eq(2)
           draw.trigger_event(event_name: :withdraw)
           draw.reload
           invoice.reload
-          expect(invoice.project_tasks.verified.count).to eq(3)
+          expect(invoice.project_tasks.approved.count).to eq(3)
           expect(invoice.project_tasks.pending.count).to eq(0)
         end
       end

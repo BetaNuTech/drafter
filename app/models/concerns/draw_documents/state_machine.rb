@@ -89,6 +89,10 @@ module DrawDocuments
 
       def after_reset_approval(user)
         unapprove 
+
+        # Clear pending tasks and create a new Approve task
+        project_tasks.pending.each{|task| task.trigger_event(event_name: :archive, user: user)}
+        create_task(assignee: nil, action: :approve)
       end
 
       def after_withdraw(user=nil)

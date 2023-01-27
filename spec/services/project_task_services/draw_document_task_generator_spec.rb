@@ -9,11 +9,11 @@ RSpec.describe ProjectTaskServices::DrawDocumentTaskGenerator do
   let(:draw_document) { DrawDocument.create!(draw: draw, user: user, document: uploaded_file) }
   let(:user) { project.developers.first }
   let(:assignee) { user }
-  let(:valid_task_action) { :verify }
+  let(:valid_task_action) { :approve }
   let(:invalid_task_action) { :invalid_action }
 
   describe 'initialization' do
-    it 'should initialize the generator with the verify action' do
+    it 'should initialize the generator with the approve action' do
       service = service_class.new(draw_document: draw_document, assignee: assignee, action: valid_task_action)
       assert(service).is_a?(service_class)
     end
@@ -39,7 +39,7 @@ RSpec.describe ProjectTaskServices::DrawDocumentTaskGenerator do
       expect(task.project).to eq(project)
       expect(task.due_at).to be_a(Time)
       assert(task.attachment_url.present?)
-      expect(task.name).to match('Verify')
+      expect(task.name).to match('Approve')
       expect(task.name).to match(project.name)
       expect(task.description).to match('active_storage')
       expect(assignee.assigned_tasks).to include(task)
@@ -61,7 +61,7 @@ RSpec.describe ProjectTaskServices::DrawDocumentTaskGenerator do
       expect(task.project).to eq(project)
       expect(task.due_at).to be_a(Time)
       assert(task.attachment_url.present?)
-      expect(task.name).to match('Verify')
+      expect(task.name).to match('Approve')
       expect(task.name).to match(project.name)
       expect(task.description).to match('active_storage')
       expect(assignee.assigned_tasks).to include(task)

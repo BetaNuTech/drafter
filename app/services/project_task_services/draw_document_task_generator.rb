@@ -8,7 +8,7 @@ module ProjectTaskServices
       end
     end # Class methods
 
-    ACTIONS = %i{verify}
+    ACTIONS = %i{approve}
 
     attr_reader :draw_document, :assignee, :action
 
@@ -24,8 +24,8 @@ module ProjectTaskServices
       description = 'undefined'
 
       case @action
-      when :verify
-        name = 'Verify ' + base_task_name
+      when :approve
+        name = 'Approve ' + base_task_name
         description = base_task_description
       else
         name = 'Review ' + base_task_name

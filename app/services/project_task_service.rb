@@ -1,7 +1,8 @@
 class ProjectTaskService
   attr_reader :project_task, :errors
 
-  PERMITTED_EVENTS = %i{verify reject archive}
+  PERMITTED_EVENTS = %i{approve reject archive}.freeze
+  STATUS_EVENTS = { approved: :approve, rejected: :reject, archived: :archive }.freeze
 
   def initialize(project_task=nil)
     @project_task = project_task
@@ -10,6 +11,18 @@ class ProjectTaskService
 
   def generate(origin:, assignee:, action:)
     ProjectTaskServices::Generator.call(origin:, assignee:, action:)
+  end
+
+  def update_status(status)
+    reset_errors
+    status_key = status.to_sym
+
+    unless STATUS_EVENTS.keys.include?(status_key)
+      @errors << "#{status} is not a valid Project Task status"
+      return false
+    end
+
+    trigger_event(STATUS_EVENTS[status_key])
   end
 
   def trigger_event(event_name)
@@ -23,13 +36,13 @@ class ProjectTaskService
     public_send(event_name)
   end
 
-  def verify
+  def approve
     reset_errors
     origin = project_task.origin
 
-    if project_task.permitted_state_events.include?(:verify) && origin.permitted_state_events.include?(:approve)
+    if project_task.permitted_state_events.include?(:approve) && origin.permitted_state_events.include?(:approve)
       origin.trigger_event(event_name: :approve)
-      project_task.trigger_event(event_name: :verify)
+      project_task.trigger_event(event_name: :approve)
     else
       @errors << "Can't approve this %{origin_state} %{origin_class}" % {
         origin_state: origin.state.humanize,

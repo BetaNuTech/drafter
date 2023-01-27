@@ -34,6 +34,12 @@ module Draws
             after: Proc.new {|*args| after_submit(*args) }
         end
 
+        event :approve do
+          transitions from: %i{ submitted rejected }, to: :internally_approved,
+            guard: Proc.new { allow_approval? },
+            after: Proc.new {|*args| after_approval(*args) }
+        end
+
         event :approve_internal do
           transitions from: %i{ submitted rejected }, to: :internally_approved,
             guard: Proc.new { allow_approval? },
@@ -123,9 +129,9 @@ module Draws
           draw_costs.visible.all?(&:allow_submit?)
       end
 
-      def create_document_verify_tasks
+      def create_document_approve_tasks
         draw_documents.visible.each do |doc|
-          doc.create_task(assignee: nil, action: :verify) #rescue false
+          doc.create_task(assignee: nil, action: :approve) #rescue false
         end
       end
 
@@ -135,7 +141,7 @@ module Draws
 
       def after_submit(user)
         submit_draw_costs(user)
-        create_document_verify_tasks
+        create_document_approve_tasks
         create_draw_approval_tasks
       end
 

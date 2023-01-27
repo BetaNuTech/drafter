@@ -142,14 +142,14 @@ RSpec.describe Invoice, type: :model do
     describe 'remove' do
       let(:completed_invoice_tasks) {
         Array.new(3) {
-          task = ProjectTaskServices::Generator.call(origin: invoice, action: :verify)
-          task.state = 'verified'; task.save!
+          task = ProjectTaskServices::Generator.call(origin: invoice, action: :approve)
+          task.state = 'approved'; task.save!
           task
         }
       }
       let(:pending_invoice_tasks) {
         Array.new(2) {
-          task = ProjectTaskServices::Generator.call(origin: invoice, action: :verify)
+          task = ProjectTaskServices::Generator.call(origin: invoice, action: :approve)
           task.state = 'needs_review'; task.save!
           task
         }
@@ -160,14 +160,14 @@ RSpec.describe Invoice, type: :model do
         completed_invoice_tasks
         pending_invoice_tasks
         invoice.project_tasks.reload
-        expect(invoice.project_tasks.verified.count).to eq(3)
+        expect(invoice.project_tasks.approved.count).to eq(3)
         expect(invoice.project_tasks.pending.count).to eq(2)
         task_count = invoice.project_tasks.count
         assert(invoice.allow_remove?)
         invoice.trigger_event(event_name: :remove)
         invoice.project_tasks.reload
         expect(invoice.project_tasks.count).to eq(task_count)
-        expect(invoice.project_tasks.verified.count).to eq(3)
+        expect(invoice.project_tasks.approved.count).to eq(3)
         expect(invoice.project_tasks.pending.count).to eq(0)
       end
 

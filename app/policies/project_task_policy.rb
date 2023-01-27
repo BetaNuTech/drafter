@@ -46,16 +46,16 @@ class ProjectTaskPolicy < ApplicationPolicy
     #privileged_user?
   end
 
-  def verify?
+  def approve?
     privileged_user? || user.project_internal?(record.project)
   end
 
   def reject?
-    verify?
+    approve?
   end
 
   def archive?
-    verify?
+    approve?
   end
 
 end

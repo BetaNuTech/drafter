@@ -34,10 +34,12 @@ Rails.application.routes.draw do
 
   resources :project_tasks do
     member do
-      post 'verify', to: 'project_tasks#verify'
+      post 'approve', to: 'project_tasks#approve'
       post 'reject', to: 'project_tasks#reject'
       post 'archive', to: 'project_tasks#archive'
-      post 'trigger_event.:format', to: 'project_tasks#trigger_event'
+    end
+    collection do
+      post 'update_task.:format', to: 'project_tasks#update_task'
     end
   end
 

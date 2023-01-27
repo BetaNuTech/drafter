@@ -20,7 +20,7 @@ module ProjectTasks
         state :needs_review
         state :needs_consult
         state :rejected
-        state :verified
+        state :approved
         state :archived
 
         event :submit_for_review do
@@ -31,16 +31,16 @@ module ProjectTasks
           transitions from: %i{new needs_review archived}, to: :needs_consult
         end
 
-        event :verify do
-          transitions from: %i{new needs_review needs_consult rejected}, to: :verified
+        event :approve do
+          transitions from: %i{new needs_review needs_consult rejected archived}, to: :approved
         end
 
         event :reject do
-          transitions from: %i{new needs_review needs_consult verified archived}, to: :rejected
+          transitions from: %i{new needs_review needs_consult approved archived}, to: :rejected
         end
 
         event :archive do
-          transitions from: %i{new needs_review needs_consult verified rejected}, to: :archived
+          transitions from: %i{new needs_review needs_consult approved rejected}, to: :archived
         end
       end
 

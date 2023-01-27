@@ -133,8 +133,13 @@ module Invoices
       end
 
       def after_reset_approval(user)
+        # Reset Draw Cost to pending state
         draw_cost.trigger_event(event_name: :revert_to_pending, user: user) if
           draw_cost.permitted_state_events.include?(:revert_to_pending)
+
+        # Clear pending tasks and create a new approve task
+        project_tasks.pending.each{|task| task.trigger_event(event_name: :archive, user: user)}
+        create_task(assignee: nil, action: :approve)
       end
 
       def after_submit(user)
@@ -143,7 +148,7 @@ module Invoices
 
       def after_processing(user)
         # Create invoice review task
-        create_task(assignee: nil, action: :verify)
+        create_task(assignee: nil, action: :approve)
       end
 
       def displayed_invoice_state_name
