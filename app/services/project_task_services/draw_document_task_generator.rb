@@ -25,10 +25,10 @@ module ProjectTaskServices
 
       case @action
       when :approve
-        name = 'Approve ' + base_task_name
+        name = task_name('Approve')
         description = base_task_description
       else
-        name = 'Review ' + base_task_name
+        name = task_name('Review')
         description = base_task_description
       end
 
@@ -45,6 +45,11 @@ module ProjectTaskServices
     end
 
     private
+
+    def task_name(verb)
+      data = { origin_state: @draw_document.state.upcase, verb:, base_task_name:}
+      "[%{origin_state}] %{verb} %{base_task_name}" % data
+    end
 
     def base_task_name
       data = { type: @draw_document.documenttype.capitalize, project_name: @draw_document.project.name, draw_name: @draw_document.draw.name }

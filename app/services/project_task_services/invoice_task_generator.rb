@@ -25,10 +25,10 @@ module ProjectTaskServices
 
       case @action
       when :approve
-        name = 'Approve ' + base_task_name
+        name = task_name('Approve')
         description = base_task_description
       else
-        name = 'Review ' + base_task_name
+        name = task_name('Review')
         description = base_task_description
       end
 
@@ -46,6 +46,11 @@ module ProjectTaskServices
     end
 
     private
+
+    def task_name(verb)
+      data = { origin_state: @invoice.state.upcase, verb:, base_task_name:}
+      "[%{origin_state}] %{verb} %{base_task_name}" % data
+    end
 
     def base_task_name
       data = { amount: ( "$%0.2f" % @invoice.amount ), project_name: @invoice.project.name, draw_name: @invoice.draw_cost.draw.name, draw_cost_name: @invoice.draw_cost.name }
