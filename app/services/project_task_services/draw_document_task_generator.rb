@@ -1,5 +1,7 @@
 module ProjectTaskServices
   class DrawDocumentTaskGenerator
+    include Routing
+
     class Error < StandardError; end
 
     class << self
@@ -57,11 +59,11 @@ module ProjectTaskServices
     end
 
     def base_task_description
-      [attachment_markup].compact.join(' ')
+      [attachment_markup, origin_link_markup].compact.join(' ')
     end
 
     def due_at
-      Time.current
+      Time.current + (@draw_document.approval_lead_time || 1).days
     end
 
     def attachment_url
@@ -74,6 +76,14 @@ module ProjectTaskServices
 
     def preview_markup
       "[%{description}](%{url})" % {description: 'Preview', url: preview_url}
+    end
+
+    def origin_link_markup
+      "[View in Drafter](#{origin_url})"
+    end
+
+    def origin_url
+      project_draw_path(project_id: @draw_document.draw.project_id, id: @draw_document.draw_id)
     end
   end
 end

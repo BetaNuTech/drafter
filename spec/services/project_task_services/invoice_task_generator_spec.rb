@@ -70,7 +70,6 @@ RSpec.describe ProjectTaskServices::InvoiceTaskGenerator do
       assert(task.attachment_url.present?)
       assert(task.preview_url.present?)
       expect(task.name).to match('Approve')
-      expect(task.name).to match(invoice.state.upcase)
       expect(task.name).to match(project.name)
       expect(task.description).to match('active_storage')
       expect(assignee.assigned_tasks).to include(task)

@@ -4,7 +4,7 @@ module Clickup
       require 'nokogiri'
 
       attr_accessor :remoteid, :name, :description, :status, :date_created, :date_updated, 
-        :date_closed, :due_date, :assignees, :priority, :parent, :start_date, :time_estimate, :url
+        :date_closed, :due_date, :assignees, :priority, :parent, :start_date, :time_estimate, :url, :tags
 
 
       def self.from_Tasks(data)
@@ -112,6 +112,7 @@ module Clickup
         task.start_date = data["start_date"]
         task.time_estimate = data["time_estimate"]
         task.url = data["url"]
+        task.tags = data["tags"]
         return task
       end
     end

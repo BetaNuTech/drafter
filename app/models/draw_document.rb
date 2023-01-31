@@ -2,17 +2,16 @@
 #
 # Table name: draw_documents
 #
-#  id                :uuid             not null, primary key
-#  approval_due_date :date
-#  approved_at       :datetime
-#  documenttype      :integer          default("other"), not null
-#  notes             :text
-#  state             :string           default("pending")
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  approver_id       :uuid
-#  draw_id           :uuid             not null
-#  user_id           :uuid
+#  id           :uuid             not null, primary key
+#  approved_at  :datetime
+#  documenttype :integer          default("other"), not null
+#  notes        :text
+#  state        :string           default("pending")
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  approver_id  :uuid
+#  draw_id      :uuid             not null
+#  user_id      :uuid
 #
 # Indexes
 #
@@ -49,6 +48,7 @@ class DrawDocument < ApplicationRecord
   APPLICATION_DESCRIPTION = 'Application and Certificate of Payment'
   WAIVER_DESCRIPTION = 'Waiver of Lien'
   REQUIRED_DOCUMENTTYPES = %i{budget application waiver}.freeze
+  APPROVAL_LEAD_TIME = 7 # days
 
   ### Concerns
   include DrawDocuments::StateMachine
@@ -99,5 +99,9 @@ class DrawDocument < ApplicationRecord
 
   def create_task(action:, assignee: nil)
     ProjectTaskServices::Generator.call(origin: self, assignee: , action: )
+  end
+
+  def approval_lead_time
+    APPROVAL_LEAD_TIME
   end
 end

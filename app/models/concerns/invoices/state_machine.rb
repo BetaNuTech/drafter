@@ -105,9 +105,7 @@ module Invoices
 
       def after_approve(user)
         draw_cost.invoices.reload
-        if draw_cost.invoices.submitted.none? && draw_cost.invoices.approved.any?
-          draw_cost.trigger_event(event_name: :approve, user: user)
-        end
+        draw_cost.after_last_invoice_approval
       end
 
       def after_reject(user)
@@ -125,7 +123,7 @@ module Invoices
       def after_remove(user)
         draw_cost.trigger_event(event_name: :revert_to_pending, user: user) if
           draw_cost.permitted_state_events.include?(:revert_to_pending)
-        project_tasks.pending.each{|task| task.trigger_event(event_name: :archive, user: user)}
+        archive_project_tasks
       end
 
       def allow_remove?

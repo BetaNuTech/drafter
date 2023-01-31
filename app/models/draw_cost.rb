@@ -52,6 +52,7 @@ class DrawCost < ApplicationRecord
   has_one :organization, through: :draw
   has_many :invoices, dependent: :destroy
   has_many :change_orders, dependent: :destroy
+  has_many :project_tasks, as: :origin, dependent: :destroy
 
   ### Delegations
   delegate :name, to: :project_cost
@@ -61,6 +62,9 @@ class DrawCost < ApplicationRecord
   validates :total, presence: true, numericality: { greater_than_or_equal_to: 0.0}
   validates :state, presence: true
 
+  def project_cost_subtotal
+    total - change_orders.sum(:amount) 
+  end
 
   def invoice_total
     invoices.totalable.sum(:amount)
@@ -97,5 +101,28 @@ class DrawCost < ApplicationRecord
 
   def name
     project_cost.name
+  end
+
+  def uses_contingency?
+    project_cost.contingency? || change_orders.any?(&:contingency?)
+  end
+
+  def archive_project_tasks(recurse: false)
+    project_tasks.pending.each{|task| task.trigger_event(event_name: :archive)}
+    invoices.each{|invoice| invoice.archive_project_tasks} if recurse
+  end
+
+  def create_task(action:, assignee: nil)
+    ProjectTaskServices::Generator.call(origin: self, action: :approve, assignee:)
+  end
+
+  def submit_new_tasks
+    project_tasks.where(state: :new).each do |task| 
+      if uses_contingency?
+        task.trigger_event(event_name: :submit_for_consult)
+      else
+        task.trigger_event(event_name: :submit_for_review)
+      end
+    end
   end
 end

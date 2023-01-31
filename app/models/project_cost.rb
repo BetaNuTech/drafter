@@ -110,4 +110,8 @@ class ProjectCost < ApplicationRecord
     0.0 > budget_balance
   end
 
+  def contingency?
+    name.match?('Contingency')
+  end
+
 end

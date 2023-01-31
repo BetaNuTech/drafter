@@ -41,7 +41,8 @@ module DrawCosts
         end
 
         event :withdraw do
-          transitions from: %i{ pending submitted rejected }, to: :withdrawn
+          transitions from: %i{ pending submitted rejected }, to: :withdrawn,
+            after: Proc.new { |*args| after_withdraw(*args)}
         end
 
         event :revert_to_pending do
@@ -101,6 +102,34 @@ module DrawCosts
       def allow_approve?
         invoices.where(state: %i{submitted approved}).any? && invoices.pending.none?
       end
+
+      def allow_auto_approve?
+        !uses_contingency? &&
+          allow_approve? &&
+          all_invoices_approved?
+      end
+
+      def all_invoices_approved?
+        invoices.submitted.none? &&
+          invoices.approved.any?
+      end
+
+      def after_last_invoice_approval
+        if allow_auto_approve?
+          trigger_event(event_name: :approve, user: user)
+        else
+          create_task(action: :approve) 
+        end
+      end
+
+      def after_withdraw(user=nil)
+        archive_project_tasks(recurse: true)
+      end
+
+      def approval_lead_time
+        APPROVAL_LEAD_TIME
+      end
+
     end
   end
 end

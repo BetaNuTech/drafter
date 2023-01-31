@@ -24,23 +24,28 @@ module ProjectTasks
         state :archived
 
         event :submit_for_review do
-          transitions from: %i{new archived}, to: :needs_review
+          transitions from: %i{new archived}, to: :needs_review,
+            after: Proc.new{|*args| after_submit(*args)}
         end
 
         event :submit_for_consult do
-          transitions from: %i{new needs_review archived}, to: :needs_consult
+          transitions from: %i{new needs_review archived}, to: :needs_consult,
+            after: Proc.new{|*args| after_submit(*args)}
         end
 
         event :approve do
-          transitions from: %i{new needs_review needs_consult rejected archived}, to: :approved
+          transitions from: %i{new needs_review needs_consult rejected archived}, to: :approved,
+            after: Proc.new{|*args| after_approve(*args)}
         end
 
         event :reject do
-          transitions from: %i{new needs_review needs_consult approved archived}, to: :rejected
+          transitions from: %i{new needs_review needs_consult approved archived}, to: :rejected,
+            after: Proc.new{|*args| after_reject(*args)}
         end
 
         event :archive do
-          transitions from: %i{new needs_review needs_consult approved rejected}, to: :archived
+          transitions from: %i{new needs_review needs_consult approved rejected}, to: :archived,
+            after: Proc.new{|*args| after_archive(*args)}
         end
       end
 
@@ -68,6 +73,28 @@ module ProjectTasks
 
       def due?
         pending? && Time.current >= due_at
+      end
+
+      def after_submit(user)
+        self.remoteid = nil
+        save
+        create_remote_task
+        true
+      end
+
+      def after_approve(user)
+        approve_remote_task
+        true
+      end
+
+      def after_reject(user)
+        reject_remote_task
+        true
+      end
+
+      def after_archive(user)
+        archive_remote_task
+        true
       end
 
     end

@@ -2,6 +2,10 @@ module Clickup
   module Api
     class Tasks < Base
 
+      ARCHIVED_STATUS = 'archived'
+      APPROVED_STATUS = 'approved'
+      REJECTED_STATUS = 'rejected'
+
       def getTasks(list_id:)
         request_options = {
           resource: "list/#{list_id}/task",
@@ -40,7 +44,7 @@ module Clickup
         data = {
           "name" => name,
           "status" => status,
-          "description" => description,
+          "markdown_description" => description,
           "assignees" => assignees,
           "tags" => tags,
           "priority" => priority,
@@ -71,11 +75,12 @@ module Clickup
         return task
       end
 
-      def updateTask(task:, archived: false, start_date_time: false, due_date_time: false)
+      def updateTask(task:, archived: false, start_date_time: false, due_date_time: false, status: nil)
         data = {
           "name" => task.name,
-          "status" => task.status,
-          "description" => task.description,
+          "status" => ( status || task.status ),
+          "markdown_description" => task.description,
+          "tags" => task.tags,
           "assignees" => task.assignees,
           "priority" => task.priority,
           "due_date" => task.due_date,
@@ -84,7 +89,6 @@ module Clickup
           "start_date" => task.start_date,
           "start_date_time" => start_date_time,
           "parent" => task.parent,
-          "archived" => archived
         }
         request_options = {
           resource: "task/#{task.remoteid}",
@@ -100,6 +104,56 @@ module Clickup
           return nil
         end
         return task
+      end
+
+      def updateTaskStatus(task:, status:)
+        data = {
+          "name" => task.name,
+          # OMIT description so that it not overwritten
+          "tags" => task.tags,
+          "status" => ( status || task.status ),
+          "assignees" => task.assignees,
+          "priority" => task.priority,
+          "due_date" => task.due_date,
+          "time_estimate" => task.time_estimate,
+          "start_date" => task.start_date,
+          "parent" => task.parent
+        }
+        request_options = {
+          resource: "task/#{task.remoteid}",
+          parameters: [],
+          body: data
+        }
+        begin
+          response = putData(request_options)
+          task = Clickup::Data::Task.from_UpdateTask(response.parsed_response)
+        rescue => e
+          msg = "#{format_request_id} Clickup::Api::Tasks encountered an error fetching data. #{e}"
+          Rails.logger.error msg
+          return nil
+        end
+        return task
+      end
+
+      def archiveTask(task_id:)
+        task = getTask(task_id:)
+        return true if ARCHIVED_STATUS == task.status
+
+        updateTaskStatus(task:, status: ARCHIVED_STATUS)
+      end
+
+      def approveTask(task_id:)
+        task = getTask(task_id:)
+        return true if APPROVED_STATUS == task.status
+
+        updateTaskStatus(task:, status: APPROVED_STATUS)
+      end
+
+      def rejectTask(task_id:)
+        task = getTask(task_id:)
+        return true if REJECTED_STATUS == task.status
+
+        updateTaskStatus(task:, status: REJECTED_STATUS)
       end
 
       def deleteTask(task_id:)

@@ -8,6 +8,7 @@
 <=>	./app/models/role.rb	/^  def <=>(other)$/;"	f	class:Role
 AddDrawableToProjectCosts	./db/migrate/20221020170459_add_drawable_to_project_costs.rb	/^class AddDrawableToProjectCosts < ActiveRecord::Migration[7.0]$/;"	c
 AddInitialDrawOnlyToProjectCosts	./db/migrate/20221027012909_add_initial_draw_only_to_project_costs.rb	/^class AddInitialDrawOnlyToProjectCosts < ActiveRecord::Migration[7.0]$/;"	c
+AddRemoteUpdatedAtToProjectTasks	./db/migrate/20230201005442_add_remote_updated_at_to_project_tasks.rb	/^class AddRemoteUpdatedAtToProjectTasks < ActiveRecord::Migration[7.0]$/;"	c
 AddStateToDrawDocuments	./db/migrate/20221031212831_add_state_to_draw_documents.rb	/^class AddStateToDrawDocuments < ActiveRecord::Migration[7.0]$/;"	c
 AddTotalToProjectCostSamples	./db/migrate/20221027020721_add_total_to_project_cost_samples.rb	/^class AddTotalToProjectCostSamples < ActiveRecord::Migration[7.0]$/;"	c
 AnalysisJob	./app/services/textract/data/analysis_job.rb	/^    class AnalysisJob$/;"	c	class:Textract.Data
@@ -57,6 +58,7 @@ Clickup	./app/services/clickup/data/list.rb	/^module Clickup$/;"	m
 Clickup	./app/services/clickup/data/space.rb	/^module Clickup$/;"	m
 Clickup	./app/services/clickup/data/task.rb	/^module Clickup$/;"	m
 Clickup	./app/services/clickup/data/workspace.rb	/^module Clickup$/;"	m
+Clickup	./app/services/project_task_services/sync_adapters/clickup.rb	/^    class Clickup$/;"	c	class:ProjectTaskServices.SyncAdapters
 Configuration	./app/services/clickup/api/configuration.rb	/^    class Configuration$/;"	c	class:Clickup.Api
 Configuration	./app/services/textract/api/configuration.rb	/^    class Configuration$/;"	c	class:Textract.Api
 Connection	./app/channels/application_cable/connection.rb	/^  class Connection < ActionCable::Connection::Base$/;"	c	class:ApplicationCable
@@ -100,6 +102,7 @@ Draw	./app/models/draw.rb	/^class Draw < ApplicationRecord$/;"	c
 DrawCost	./app/models/draw_cost.rb	/^class DrawCost < ApplicationRecord$/;"	c
 DrawCostPolicy	./app/policies/draw_cost_policy.rb	/^class DrawCostPolicy < ApplicationPolicy$/;"	c
 DrawCostService	./app/services/draw_cost_service.rb	/^class DrawCostService$/;"	c
+DrawCostTaskGenerator	./app/services/project_task_services/draw_cost_task_generator.rb	/^  class DrawCostTaskGenerator$/;"	c	class:ProjectTaskServices
 DrawCosts	./app/models/concerns/draw_costs/state_machine.rb	/^module DrawCosts$/;"	m
 DrawCostsController	./app/controllers/draw_costs_controller.rb	/^class DrawCostsController < ApplicationController$/;"	c
 DrawDocument	./app/models/draw_document.rb	/^class DrawDocument < ApplicationRecord$/;"	c
@@ -117,9 +120,12 @@ Draws	./app/models/concerns/draws/state_machine.rb	/^module Draws$/;"	m
 DrawsController	./app/controllers/draws_controller.rb	/^class DrawsController < ApplicationController$/;"	c
 DrawsHelper	./app/helpers/draws_helper.rb	/^module DrawsHelper$/;"	m
 Error	./app/services/clickup/data/error.rb	/^    class Error < StandardError; end$/;"	c	class:Clickup.Data
+Error	./app/services/project_task_services/draw_cost_task_generator.rb	/^    class Error < StandardError; end$/;"	c	class:ProjectTaskServices.DrawCostTaskGenerator
 Error	./app/services/project_task_services/draw_document_task_generator.rb	/^    class Error < StandardError; end$/;"	c	class:ProjectTaskServices.DrawDocumentTaskGenerator
 Error	./app/services/project_task_services/draw_task_generator.rb	/^    class Error < StandardError; end$/;"	c	class:ProjectTaskServices.DrawTaskGenerator
 Error	./app/services/project_task_services/invoice_task_generator.rb	/^    class Error < StandardError; end$/;"	c	class:ProjectTaskServices.InvoiceTaskGenerator
+Error	./app/services/project_task_services/sync.rb	/^    class Error < StandardError; end$/;"	c	class:ProjectTaskServices.Sync
+Error	./app/services/project_task_services/sync_adapters/clickup.rb	/^      class Error < StandardError; end$/;"	c	class:ProjectTaskServices.SyncAdapters.Clickup
 Error	./app/services/textract/data/error.rb	/^    class Error < StandardError; end$/;"	c	class:Textract.Data
 Folder	./app/services/clickup/data/folder.rb	/^    class Folder$/;"	c	class:Clickup.Data
 Folders	./app/services/clickup/api/folders.rb	/^    class Folders < Base$/;"	c	class:Clickup.Api
@@ -165,11 +171,15 @@ ProjectSpecHelper	./spec/support/project_spec_helper.rb	/^module ProjectSpecHelp
 ProjectTask	./app/models/project_task.rb	/^class ProjectTask < ApplicationRecord$/;"	c
 ProjectTaskPolicy	./app/policies/project_task_policy.rb	/^class ProjectTaskPolicy < ApplicationPolicy$/;"	c
 ProjectTaskService	./app/services/project_task_service.rb	/^class ProjectTaskService$/;"	c
+ProjectTaskServices	./app/services/project_task_services/draw_cost_task_generator.rb	/^module ProjectTaskServices$/;"	m
 ProjectTaskServices	./app/services/project_task_services/draw_document_task_generator.rb	/^module ProjectTaskServices$/;"	m
 ProjectTaskServices	./app/services/project_task_services/draw_task_generator.rb	/^module ProjectTaskServices$/;"	m
 ProjectTaskServices	./app/services/project_task_services/generator.rb	/^module ProjectTaskServices$/;"	m
 ProjectTaskServices	./app/services/project_task_services/invoice_task_generator.rb	/^module ProjectTaskServices$/;"	m
+ProjectTaskServices	./app/services/project_task_services/sync.rb	/^module ProjectTaskServices$/;"	m
+ProjectTaskServices	./app/services/project_task_services/sync_adapters/clickup.rb	/^module ProjectTaskServices$/;"	m
 ProjectTasks	./app/models/concerns/project_tasks/state_machine.rb	/^module ProjectTasks$/;"	m
+ProjectTasks	./app/models/concerns/project_tasks/sync.rb	/^module ProjectTasks$/;"	m
 ProjectTasksController	./app/controllers/project_tasks_controller.rb	/^class ProjectTasksController < ApplicationController$/;"	c
 ProjectTasksHelper	./app/helpers/project_tasks_helper.rb	/^module ProjectTasksHelper$/;"	m
 ProjectUser	./app/models/project_user.rb	/^class ProjectUser < ApplicationRecord$/;"	c
@@ -184,6 +194,7 @@ ProjectsHelper	./app/helpers/projects_helper.rb	/^module ProjectsHelper$/;"	m
 RemoveApprovalFromChangeOrders	./db/migrate/20221110215333_remove_approval_from_change_orders.rb	/^class RemoveApprovalFromChangeOrders < ActiveRecord::Migration[7.0]$/;"	c
 RemoveConsultantRole	./db/migrate/20221023182655_remove_consultant_role.rb	/^class RemoveConsultantRole < ActiveRecord::Migration[7.0]$/;"	c
 RemoveDrawCostPlanChangeAttributes	./db/migrate/20221019173638_remove_draw_cost_plan_change_attributes.rb	/^class RemoveDrawCostPlanChangeAttributes < ActiveRecord::Migration[7.0]$/;"	c
+RemoveDrawDocumentApprovalDueDate	./db/migrate/20230131061032_remove_draw_document_approval_due_date.rb	/^class RemoveDrawDocumentApprovalDueDate < ActiveRecord::Migration[7.0]$/;"	c
 RemoveDrawIndexUniqueScope	./db/migrate/20221020191457_remove_draw_index_unique_scope.rb	/^class RemoveDrawIndexUniqueScope < ActiveRecord::Migration[7.0]$/;"	c
 RemoveNameFromDraws	./db/migrate/20221020175700_remove_name_from_draws.rb	/^class RemoveNameFromDraws < ActiveRecord::Migration[7.0]$/;"	c
 RemoveProjectBudget	./db/migrate/20221018040730_remove_project_budget.rb	/^class RemoveProjectBudget < ActiveRecord::Migration[7.0]$/;"	c
@@ -193,6 +204,7 @@ RequestSpecHelper	./spec/support/request_spec_helper.rb	/^module RequestSpecHelp
 Responder	./app/controllers/turbo_devise_user_controller.rb	/^ class Responder < ActionController::Responder$/;"	c	class:TurboDeviseUserController
 Role	./app/models/concerns/users/role.rb	/^  module Role$/;"	m	class:Users
 Role	./app/models/role.rb	/^class Role < ApplicationRecord$/;"	c
+Routing	./app/models/concerns/routing.rb	/^module Routing$/;"	m
 Scope	./app/policies/application_policy.rb	/^  class Scope$/;"	c	class:ApplicationPolicy
 Scope	./app/policies/change_order_policy.rb	/^  class Scope < Scope$/;"	c	class:ChangeOrderPolicy
 Scope	./app/policies/draw_cost_policy.rb	/^  class Scope < Scope$/;"	c	class:DrawCostPolicy
@@ -216,6 +228,9 @@ StateMachine	./app/models/concerns/draws/state_machine.rb	/^  module StateMachin
 StateMachine	./app/models/concerns/invoices/state_machine.rb	/^  module StateMachine$/;"	m	class:Invoices
 StateMachine	./app/models/concerns/project_costs/state_machine.rb	/^  module StateMachine$/;"	m	class:ProjectCosts
 StateMachine	./app/models/concerns/project_tasks/state_machine.rb	/^  module StateMachine$/;"	m	class:ProjectTasks
+Sync	./app/models/concerns/project_tasks/sync.rb	/^  module Sync$/;"	m	class:ProjectTasks
+Sync	./app/services/project_task_services/sync.rb	/^  class Sync$/;"	c	class:ProjectTaskServices
+SyncAdapters	./app/services/project_task_services/sync_adapters/clickup.rb	/^  module SyncAdapters$/;"	m	class:ProjectTaskServices
 SystemEvent	./app/models/system_event.rb	/^class SystemEvent < ApplicationRecord$/;"	c
 Task	./app/services/clickup/data/task.rb	/^    class Task$/;"	c	class:Clickup.Data
 Tasks	./app/services/clickup/api/tasks.rb	/^    class Tasks < Base$/;"	c	class:Clickup.Api
@@ -276,27 +291,35 @@ administrator?	./app/models/concerns/users/role.rb	/^      def administrator?$/;
 after_approval	./app/models/concerns/draws/state_machine.rb	/^      def after_approval(user)$/;"	f	class:Draws.StateMachine
 after_approve	./app/models/concerns/draw_documents/state_machine.rb	/^      def after_approve(user)$/;"	f	class:DrawDocuments.StateMachine
 after_approve	./app/models/concerns/invoices/state_machine.rb	/^      def after_approve(user)$/;"	f	class:Invoices.StateMachine
+after_approve	./app/models/concerns/project_tasks/state_machine.rb	/^      def after_approve(user)$/;"	f	class:ProjectTasks.StateMachine
+after_archive	./app/models/concerns/project_tasks/state_machine.rb	/^      def after_archive(user)$/;"	f	class:ProjectTasks.StateMachine
 after_confirmation_path_for	./app/controllers/users/confirmations_controller.rb	/^  def after_confirmation_path_for(resource_name, resource)$/;"	f	class:Users
+after_last_invoice_approval	./app/models/concerns/draw_costs/state_machine.rb	/^      def after_last_invoice_approval$/;"	f	class:DrawCosts.StateMachine.TransitionError
 after_processing	./app/models/concerns/invoices/state_machine.rb	/^      def after_processing(user)$/;"	f	class:Invoices.StateMachine
 after_reject	./app/models/concerns/draw_documents/state_machine.rb	/^      def after_reject(user)$/;"	f	class:DrawDocuments.StateMachine
 after_reject	./app/models/concerns/invoices/state_machine.rb	/^      def after_reject(user)$/;"	f	class:Invoices.StateMachine
+after_reject	./app/models/concerns/project_tasks/state_machine.rb	/^      def after_reject(user)$/;"	f	class:ProjectTasks.StateMachine
 after_remove	./app/models/concerns/invoices/state_machine.rb	/^      def after_remove(user)$/;"	f	class:Invoices.StateMachine
 after_reset_approval	./app/models/concerns/draw_documents/state_machine.rb	/^      def after_reset_approval(user)$/;"	f	class:DrawDocuments.StateMachine
 after_reset_approval	./app/models/concerns/invoices/state_machine.rb	/^      def after_reset_approval(user)$/;"	f	class:Invoices.StateMachine
 after_submit	./app/models/concerns/draw_costs/state_machine.rb	/^      def after_submit(user)$/;"	f	class:DrawCosts.StateMachine.TransitionError
 after_submit	./app/models/concerns/draws/state_machine.rb	/^      def after_submit(user)$/;"	f	class:Draws.StateMachine
 after_submit	./app/models/concerns/invoices/state_machine.rb	/^      def after_submit(user)$/;"	f	class:Invoices.StateMachine
+after_submit	./app/models/concerns/project_tasks/state_machine.rb	/^      def after_submit(user)$/;"	f	class:ProjectTasks.StateMachine
+after_withdraw	./app/models/concerns/draw_costs/state_machine.rb	/^      def after_withdraw(user=nil)$/;"	f	class:DrawCosts.StateMachine.TransitionError
 after_withdraw	./app/models/concerns/draw_documents/state_machine.rb	/^      def after_withdraw(user=nil)$/;"	f	class:DrawDocuments.StateMachine
 after_withdraw	./app/models/concerns/draws/state_machine.rb	/^      def after_withdraw(user=nil)$/;"	f	class:Draws.StateMachine
 alert_image	./app/helpers/images_helper.rb	/^  def alert_image$/;"	f
 all_documents_submitted?	./app/models/concerns/draws/draw_documents.rb	/^      def all_documents_submitted?$/;"	f	class:Draws.DrawDocuments
 all_draw_costs_approved?	./app/models/draw.rb	/^  def all_draw_costs_approved?$/;"	f	class:Draw
+all_invoices_approved?	./app/models/concerns/draw_costs/state_machine.rb	/^      def all_invoices_approved?$/;"	f	class:DrawCosts.StateMachine.TransitionError
 all_required_documents_approved?	./app/models/concerns/draws/draw_documents.rb	/^      def all_required_documents_approved?$/;"	f	class:Draws.DrawDocuments
 all_system_events	./app/models/project.rb	/^  def all_system_events$/;"	f	class:Project
 allow_approval?	./app/models/concerns/draws/state_machine.rb	/^      def allow_approval?$/;"	f	class:Draws.StateMachine
 allow_approve?	./app/models/concerns/draw_costs/state_machine.rb	/^      def allow_approve?$/;"	f	class:DrawCosts.StateMachine.TransitionError
 allow_approve?	./app/models/concerns/draw_documents/state_machine.rb	/^      def allow_approve?$/;"	f	class:DrawDocuments.StateMachine
 allow_approve?	./app/models/concerns/invoices/state_machine.rb	/^      def allow_approve?$/;"	f	class:Invoices.StateMachine
+allow_auto_approve?	./app/models/concerns/draw_costs/state_machine.rb	/^      def allow_auto_approve?$/;"	f	class:DrawCosts.StateMachine.TransitionError
 allow_document_approvals?	./app/models/concerns/draws/state_machine.rb	/^      def allow_document_approvals?$/;"	f	class:Draws.StateMachine
 allow_document_changes?	./app/models/concerns/draws/state_machine.rb	/^      def allow_document_changes?$/;"	f	class:Draws.StateMachine
 allow_draw_cost_changes?	./app/models/concerns/draws/state_machine.rb	/^      def allow_draw_cost_changes?$/;"	f	class:Draws.StateMachine
@@ -327,6 +350,11 @@ api_root	./app/services/clickup/api/base.rb	/^      def api_root$/;"	f	class:Cli
 application_env	./app/controllers/application_controller.rb	/^  def application_env$/;"	f	class:ApplicationController
 application_env	./app/services/clickup/api/configuration.rb	/^      def application_env$/;"	f	class:Clickup.Api.Configuration
 application_env	./app/services/textract/api/configuration.rb	/^      def application_env$/;"	f	class:Textract.Api.Configuration
+application_host	./app/models/concerns/routing.rb	/^  def application_host$/;"	f	class:Routing
+application_protocol	./app/models/concerns/routing.rb	/^  def application_protocol$/;"	f	class:Routing
+approval_lead_time	./app/models/concerns/draw_costs/state_machine.rb	/^      def approval_lead_time$/;"	f	class:DrawCosts.StateMachine.TransitionError
+approval_lead_time	./app/models/concerns/draws/state_machine.rb	/^      def approval_lead_time$/;"	f	class:Draws.StateMachine
+approval_lead_time	./app/models/draw_document.rb	/^  def approval_lead_time$/;"	f	class:DrawDocument
 approvals?	./app/policies/draw_cost_policy.rb	/^  def approvals?$/;"	f	class:DrawCostPolicy
 approvals?	./app/policies/draw_document_policy.rb	/^  def approvals?$/;"	f	class:DrawDocumentPolicy
 approvals?	./app/policies/invoice_policy.rb	/^  def approvals?$/;"	f	class:InvoicePolicy
@@ -342,6 +370,7 @@ approve?	./app/policies/draw_cost_policy.rb	/^  def approve?$/;"	f	class:DrawCos
 approve?	./app/policies/draw_document_policy.rb	/^  def approve?$/;"	f	class:DrawDocumentPolicy
 approve?	./app/policies/invoice_policy.rb	/^  def approve?$/;"	f	class:InvoicePolicy
 approve?	./app/policies/project_task_policy.rb	/^  def approve?$/;"	f	class:ProjectTaskPolicy
+approveTask	./app/services/clickup/api/tasks.rb	/^      def approveTask(task_id:)$/;"	f	class:Clickup.Api.Tasks
 approve_document?	./app/policies/draw_cost_policy.rb	/^  def approve_document?$/;"	f	class:DrawCostPolicy
 approve_external	./app/controllers/draws_controller.rb	/^  def approve_external$/;"	f	class:DrawsController
 approve_external	./app/services/draw_service.rb	/^  def approve_external$/;"	f	class:DrawService
@@ -349,10 +378,17 @@ approve_external?	./app/policies/draw_policy.rb	/^  def approve_external?$/;"	f	
 approve_internal	./app/controllers/draws_controller.rb	/^  def approve_internal$/;"	f	class:DrawsController
 approve_internal	./app/services/draw_service.rb	/^  def approve_internal$/;"	f	class:DrawService
 approve_internal?	./app/policies/draw_policy.rb	/^  def approve_internal?$/;"	f	class:DrawPolicy
+approve_remote_task	./app/models/concerns/project_tasks/sync.rb	/^      def approve_remote_task$/;"	f	class:ProjectTasks.Sync
+approve_task	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def approve_task(project_task_or_task_id)$/;"	f	class:ProjectTaskServices.SyncAdapters
 approved?	./app/models/concerns/draws/state_machine.rb	/^      def approved?$/;"	f	class:Draws.StateMachine
 archive	./app/controllers/project_tasks_controller.rb	/^  def archive$/;"	f	class:ProjectTasksController
 archive	./app/services/project_task_service.rb	/^  def archive$/;"	f	class:ProjectTaskService
 archive?	./app/policies/project_task_policy.rb	/^  def archive?$/;"	f	class:ProjectTaskPolicy
+archiveTask	./app/services/clickup/api/tasks.rb	/^      def archiveTask(task_id:)$/;"	f	class:Clickup.Api.Tasks
+archive_project_tasks	./app/models/draw_cost.rb	/^  def archive_project_tasks(recurse: false)$/;"	f	class:DrawCost
+archive_project_tasks	./app/models/invoice.rb	/^  def archive_project_tasks$/;"	f	class:Invoice
+archive_remote_task	./app/models/concerns/project_tasks/sync.rb	/^      def archive_remote_task$/;"	f	class:ProjectTasks.Sync
+archive_task	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def archive_task(project_task_or_task_id)$/;"	f	class:ProjectTaskServices.SyncAdapters
 assign_index	./app/models/draw.rb	/^  def assign_index$/;"	f	class:Draw
 assign_reference?	./app/models/draw.rb	/^  def assign_reference?$/;"	f	class:Draw
 assign_to_organization?	./app/policies/user_policy.rb	/^  def assign_to_organization?$/;"	f	class:UserPolicy
@@ -372,9 +408,11 @@ available_roles	./app/services/projects/updater.rb	/^    def available_roles$/;"
 available_users	./app/models/concerns/projects/users.rb	/^      def available_users$/;"	f	class:Projects.Users
 available_users	./app/models/project_user.rb	/^  def available_users$/;"	f	class:ProjectUser
 aws_credentials	./app/services/textract/api/configuration.rb	/^      def aws_credentials$/;"	f	class:Textract.Api.Configuration
+base_task_description	./app/services/project_task_services/draw_cost_task_generator.rb	/^    def base_task_description$/;"	f	class:ProjectTaskServices
 base_task_description	./app/services/project_task_services/draw_document_task_generator.rb	/^    def base_task_description$/;"	f	class:ProjectTaskServices
 base_task_description	./app/services/project_task_services/draw_task_generator.rb	/^    def base_task_description$/;"	f	class:ProjectTaskServices
 base_task_description	./app/services/project_task_services/invoice_task_generator.rb	/^    def base_task_description$/;"	f	class:ProjectTaskServices
+base_task_name	./app/services/project_task_services/draw_cost_task_generator.rb	/^    def base_task_name$/;"	f	class:ProjectTaskServices
 base_task_name	./app/services/project_task_services/draw_document_task_generator.rb	/^    def base_task_name$/;"	f	class:ProjectTaskServices
 base_task_name	./app/services/project_task_services/draw_task_generator.rb	/^    def base_task_name$/;"	f	class:ProjectTaskServices
 base_task_name	./app/services/project_task_services/invoice_task_generator.rb	/^    def base_task_name$/;"	f	class:ProjectTaskServices
@@ -386,6 +424,7 @@ budget_total	./app/models/project.rb	/^  def budget_total$/;"	f	class:Project
 bundler_requirement	./bin/bundle	/^  def bundler_requirement$/;"	f
 bundler_requirement_for	./bin/bundle	/^  def bundler_requirement_for(version)$/;"	f
 call	./app/services/development_seeder.rb	/^  def call$/;"	f	class:DevelopmentSeeder
+call	./app/services/project_task_services/draw_cost_task_generator.rb	/^      def call(origin:, assignee: nil, action:)$/;"	f	class:ProjectTaskServices.DrawCostTaskGenerator
 call	./app/services/project_task_services/draw_document_task_generator.rb	/^      def call(origin:, assignee: nil, action:)$/;"	f	class:ProjectTaskServices.DrawDocumentTaskGenerator
 call	./app/services/project_task_services/draw_task_generator.rb	/^      def call(origin:, assignee: nil, action:)$/;"	f	class:ProjectTaskServices.DrawTaskGenerator
 call	./app/services/project_task_services/generator.rb	/^      def call(origin:, assignee: nil, action:)$/;"	f	class:ProjectTaskServices.Generator
@@ -419,17 +458,22 @@ change	./db/migrate/20221104225749_create_change_orders.rb	/^  def change$/;"	f	
 change	./db/migrate/20221108174912_rename.rb	/^  def change$/;"	f	class:Rename
 change	./db/migrate/20221110215333_remove_approval_from_change_orders.rb	/^  def change$/;"	f	class:RemoveApprovalFromChangeOrders
 change	./db/migrate/20230106002416_create_project_tasks.rb	/^  def change$/;"	f	class:CreateProjectTasks
+change	./db/migrate/20230131061032_remove_draw_document_approval_due_date.rb	/^  def change$/;"	f	class:RemoveDrawDocumentApprovalDueDate
+change	./db/migrate/20230201005442_add_remote_updated_at_to_project_tasks.rb	/^  def change$/;"	f	class:AddRemoteUpdatedAtToProjectTasks
 change_order_funding_options	./app/helpers/draws_helper.rb	/^  def change_order_funding_options(change_order)$/;"	f
 change_order_funding_total	./app/models/project_cost.rb	/^  def change_order_funding_total$/;"	f	class:ProjectCost
 change_order_project_cost_options	./app/helpers/draws_helper.rb	/^  def change_order_project_cost_options(project: nil, change_order_project_cost:)$/;"	f
 change_order_total	./app/models/draw_cost.rb	/^  def change_order_total$/;"	f	class:DrawCost
 change_order_total	./app/models/project_cost.rb	/^  def change_order_total$/;"	f	class:ProjectCost
+changed?	./app/services/project_task_service.rb	/^  def changed?$/;"	f	class:ProjectTaskService
 circle_check_image	./app/helpers/images_helper.rb	/^  def circle_check_image$/;"	f
 circle_x_image	./app/helpers/images_helper.rb	/^  def circle_x_image$/;"	f
 clean?	./app/models/draw.rb	/^  def clean?$/;"	f	class:Draw
 cli_arg_version	./bin/bundle	/^  def cli_arg_version$/;"	f
 config	./app/services/clickup/api/base.rb	/^      def config$/;"	f	class:Clickup.Api.Base
 confirmation_instructions	./app/mailers/drafter_devise_mailer.rb	/^  def confirmation_instructions(record, token, opts={})$/;"	f	class:DrafterDeviseMailer
+contingency?	./app/models/change_order.rb	/^  def contingency?$/;"	f	class:ChangeOrder
+contingency?	./app/models/project_cost.rb	/^  def contingency?$/;"	f	class:ProjectCost
 copyright_years	./app/helpers/application_helper.rb	/^  def copyright_years$/;"	f	class:ApplicationHelper
 cost_type_css_class	./app/models/project_cost.rb	/^  def cost_type_css_class$/;"	f	class:ProjectCost
 create	./app/controllers/change_orders_controller.rb	/^  def create$/;"	f	class:ChangeOrdersController
@@ -467,13 +511,17 @@ create_draw_approval_tasks	./app/models/concerns/draws/state_machine.rb	/^      
 create_draws	./app/services/development_seeder.rb	/^  def create_draws(project=nil)$/;"	f	class:DevelopmentSeeder
 create_organizations	./app/services/development_seeder.rb	/^  def create_organizations$/;"	f	class:DevelopmentSeeder
 create_projects	./app/services/development_seeder.rb	/^  def create_projects$/;"	f	class:DevelopmentSeeder
+create_remote_task	./app/models/concerns/project_tasks/sync.rb	/^      def create_remote_task$/;"	f	class:ProjectTasks.Sync
 create_requests	./app/services/development_seeder.rb	/^  def create_requests(project=nil)$/;"	f	class:DevelopmentSeeder
 create_task	./app/models/draw.rb	/^  def create_task(action:, assignee: nil)$/;"	f	class:Draw
+create_task	./app/models/draw_cost.rb	/^  def create_task(action:, assignee: nil)$/;"	f	class:DrawCost
 create_task	./app/models/draw_document.rb	/^  def create_task(action:, assignee: nil)$/;"	f	class:DrawDocument
 create_task	./app/models/invoice.rb	/^  def create_task(action:, assignee: nil)$/;"	f	class:Invoice
+create_task	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def create_task(task_or_attributes, disposition: :default)$/;"	f	class:ProjectTaskServices.SyncAdapters.Clickup
 create_users	./app/services/development_seeder.rb	/^  def create_users$/;"	f	class:DevelopmentSeeder
 deactivate?	./app/policies/user_policy.rb	/^  def deactivate?$/;"	f	class:UserPolicy
 deactivated?	./app/models/user.rb	/^  def deactivated?$/;"	f	class:User
+default_url_options	./app/models/concerns/routing.rb	/^  def default_url_options$/;"	f	class:Routing
 deleteData	./app/services/clickup/api/base.rb	/^      def deleteData(options, dry_run: false)$/;"	f	class:Clickup.Api.Base
 deleteTask	./app/services/clickup/api/tasks.rb	/^      def deleteTask(task_id:)$/;"	f	class:Clickup.Api.Tasks
 delete_data	./app/services/clickup/api/base.rb	/^      def delete_data(url:, body:, headers: {}, options: {})$/;"	f	class:Clickup.Api.Base
@@ -526,6 +574,7 @@ draw_total	./app/models/project.rb	/^  def draw_total$/;"	f	class:Project
 draws	./app/services/draw_service.rb	/^  def draws$/;"	f	class:DrawService
 draws_visible_to	./app/models/project.rb	/^  def draws_visible_to(user)$/;"	f	class:Project
 due?	./app/models/concerns/project_tasks/state_machine.rb	/^      def due?$/;"	f	class:ProjectTasks.StateMachine
+due_at	./app/services/project_task_services/draw_cost_task_generator.rb	/^    def due_at$/;"	f	class:ProjectTaskServices
 due_at	./app/services/project_task_services/draw_document_task_generator.rb	/^    def due_at$/;"	f	class:ProjectTaskServices
 due_at	./app/services/project_task_services/draw_task_generator.rb	/^    def due_at$/;"	f	class:ProjectTaskServices
 due_at	./app/services/project_task_services/invoice_task_generator.rb	/^    def due_at$/;"	f	class:ProjectTaskServices
@@ -573,6 +622,7 @@ finance	./app/models/project_role.rb	/^  def self.finance$/;"	F	class:ProjectRol
 finance?	./app/models/project_role.rb	/^  def finance?$/;"	f	class:ProjectRole
 format_phone	./app/models/user_profile.rb	/^  def self.format_phone(number, prefixed: false)$/;"	F	class:UserProfile
 format_request_id	./app/services/clickup/api/base.rb	/^      def format_request_id$/;"	f	class:Clickup.Api.Base
+format_time	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def format_time(time)$/;"	f	class:ProjectTaskServices.SyncAdapters
 from_CreateTask	./app/services/clickup/data/task.rb	/^      def self.from_CreateTask(data)$/;"	F	class:Clickup.Data.Task
 from_DeleteTask	./app/services/clickup/data/task.rb	/^      def self.from_DeleteTask(data)$/;"	F	class:Clickup.Data.Task
 from_Folders	./app/services/clickup/data/folder.rb	/^      def self.from_Folders(data)$/;"	F	class:Clickup.Data.Folder
@@ -603,10 +653,12 @@ full_role_desc	./app/models/user.rb	/^  def full_role_desc(project)$/;"	f	class:
 fund	./app/controllers/draws_controller.rb	/^  def fund$/;"	f	class:DrawsController
 fund	./app/services/draw_service.rb	/^  def fund$/;"	f	class:DrawService
 fund?	./app/policies/draw_policy.rb	/^  def fund?$/;"	f	class:DrawPolicy
+funding_summary	./app/services/project_task_services/draw_cost_task_generator.rb	/^    def funding_summary$/;"	f	class:ProjectTaskServices
 funds_available	./app/services/change_order_service.rb	/^  def funds_available(funding_source)$/;"	f	class:ChangeOrderService
 funds_available?	./app/services/change_order_service.rb	/^  def funds_available?(funding_source)$/;"	f	class:ChangeOrderService
 gemfile	./bin/bundle	/^  def gemfile$/;"	f
-generate	./app/services/project_task_service.rb	/^  def generate(origin:, assignee:, action:)$/;"	f	class:ProjectTaskService
+generate	./app/services/project_task_service.rb	/^  def generate(origin: nil, assignee:, action:)$/;"	f	class:ProjectTaskService
+generate	./app/services/project_task_services/draw_cost_task_generator.rb	/^    def generate$/;"	f	class:ProjectTaskServices
 generate	./app/services/project_task_services/draw_document_task_generator.rb	/^    def generate$/;"	f	class:ProjectTaskServices
 generate	./app/services/project_task_services/draw_task_generator.rb	/^    def generate$/;"	f	class:ProjectTaskServices
 generate	./app/services/project_task_services/invoice_task_generator.rb	/^    def generate$/;"	f	class:ProjectTaskServices
@@ -623,7 +675,11 @@ getWorkspaces	./app/services/clickup/api/workspaces.rb	/^      def getWorkspaces
 get_analysis	./app/services/invoice_processing_service.rb	/^  def get_analysis(invoice:)$/;"	f	class:InvoiceProcessingService
 get_analysis	./app/services/textract/api/analyzer.rb	/^      def get_analysis(job_id:, expected_total:)$/;"	f	class:Textract.Api.Analyzer.TextractApiError
 get_completed_items	./app/services/textract/api/analyzer.rb	/^      def get_completed_items$/;"	f	class:Textract.Api.Analyzer.TextractApiError
+get_list_id	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def get_list_id$/;"	f	class:ProjectTaskServices.SyncAdapters
 get_prefixed_env	./app/services/clickup/api/configuration.rb	/^      def get_prefixed_env(var)$/;"	f	class:Clickup.Api.Configuration
+get_task	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def get_task(project_task_or_remote_id)$/;"	f	class:ProjectTaskServices.SyncAdapters.Clickup
+get_tasks	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def get_tasks$/;"	f	class:ProjectTaskServices.SyncAdapters.Clickup
+get_workspace_id	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def get_workspace_id$/;"	f	class:ProjectTaskServices.SyncAdapters
 home_image	./app/helpers/images_helper.rb	/^  def home_image$/;"	f
 impersonate?	./app/policies/user_policy.rb	/^  def impersonate?$/;"	f	class:UserPolicy
 included	./spec/support/request_spec_helper.rb	/^  def self.included(base)$/;"	F	class:RequestSpecHelper
@@ -665,9 +721,12 @@ initialize	./app/services/draw_service.rb	/^  def initialize(user:, project: nil
 initialize	./app/services/invoice_processing_service.rb	/^  def initialize(backing_service: :textract, dry_run: false, debug: false)$/;"	f	class:InvoiceProcessingService
 initialize	./app/services/invoice_service.rb	/^  def initialize(user:, draw_cost:, invoice: nil)$/;"	f	class:InvoiceService
 initialize	./app/services/project_task_service.rb	/^  def initialize(project_task=nil)$/;"	f	class:ProjectTaskService
+initialize	./app/services/project_task_services/draw_cost_task_generator.rb	/^    def initialize(draw_cost:, assignee: nil, action:)$/;"	f	class:ProjectTaskServices
 initialize	./app/services/project_task_services/draw_document_task_generator.rb	/^    def initialize(draw_document:, assignee: nil, action:)$/;"	f	class:ProjectTaskServices
 initialize	./app/services/project_task_services/draw_task_generator.rb	/^    def initialize(draw:, assignee: nil, action:)$/;"	f	class:ProjectTaskServices
 initialize	./app/services/project_task_services/invoice_task_generator.rb	/^    def initialize(invoice:, assignee: nil, action:)$/;"	f	class:ProjectTaskServices
+initialize	./app/services/project_task_services/sync.rb	/^    def initialize(adapter: DEFAULT_ADAPTER)$/;"	f	class:ProjectTaskServices.Sync
+initialize	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def initialize(workspace_id: nil, list_id: nil)$/;"	f	class:ProjectTaskServices.SyncAdapters.Clickup
 initialize	./app/services/projects/membership.rb	/^    def initialize(current_user:, project:)$/;"	f	class:Projects.Membership
 initialize	./app/services/projects/updater.rb	/^    def initialize(current_user, project)$/;"	f	class:Projects.Updater
 initialize	./app/services/textract/api/base.rb	/^      def initialize(conf=nil)$/;"	f	class:Textract.Api.Base
@@ -740,6 +799,7 @@ new?	./app/policies/project_task_policy.rb	/^  def new?$/;"	f	class:ProjectTaskP
 new?	./app/policies/project_user_policy.rb	/^  def new?$/;"	f	class:ProjectUserPolicy
 new?	./app/policies/user_policy.rb	/^  def new?$/;"	f	class:UserPolicy
 new_project_cost	./app/controllers/project_costs_controller.rb	/^  def new_project_cost$/;"	f	class:ProjectCostsController
+new_remote_task_disposition	./app/models/concerns/project_tasks/sync.rb	/^      def new_remote_task_disposition$/;"	f	class:ProjectTasks.Sync
 next_index	./app/models/draw.rb	/^  def next_index$/;"	f	class:Draw
 normalize_phone	./app/models/user_profile.rb	/^  def normalize_phone$/;"	f	class:UserProfile
 notify_member_of_membership	./app/services/projects/membership.rb	/^    def notify_member_of_membership(project_user)$/;"	f	class:Projects.Membership
@@ -749,6 +809,14 @@ organization_options_for_select	./app/helpers/users_helper.rb	/^  def organizati
 organization_params	./app/controllers/organizations_controller.rb	/^  def organization_params$/;"	f	class:OrganizationsController
 organizations_for_select	./app/policies/organization_policy.rb	/^  def organizations_for_select$/;"	f	class:OrganizationPolicy
 organizations_for_select	./app/policies/user_policy.rb	/^  def organizations_for_select$/;"	f	class:UserPolicy
+origin_link_markup	./app/services/project_task_services/draw_cost_task_generator.rb	/^    def origin_link_markup$/;"	f	class:ProjectTaskServices
+origin_link_markup	./app/services/project_task_services/draw_document_task_generator.rb	/^    def origin_link_markup$/;"	f	class:ProjectTaskServices
+origin_link_markup	./app/services/project_task_services/draw_task_generator.rb	/^    def origin_link_markup$/;"	f	class:ProjectTaskServices
+origin_link_markup	./app/services/project_task_services/invoice_task_generator.rb	/^    def origin_link_markup$/;"	f	class:ProjectTaskServices
+origin_url	./app/services/project_task_services/draw_cost_task_generator.rb	/^    def origin_url$/;"	f	class:ProjectTaskServices
+origin_url	./app/services/project_task_services/draw_document_task_generator.rb	/^    def origin_url$/;"	f	class:ProjectTaskServices
+origin_url	./app/services/project_task_services/draw_task_generator.rb	/^    def origin_url$/;"	f	class:ProjectTaskServices
+origin_url	./app/services/project_task_services/invoice_task_generator.rb	/^    def origin_url$/;"	f	class:ProjectTaskServices
 over_budget?	./app/models/draw_cost.rb	/^  def over_budget?$/;"	f	class:DrawCost
 over_budget?	./app/models/project_cost.rb	/^  def over_budget?$/;"	f	class:ProjectCost
 owner	./app/models/project_role.rb	/^  def self.owner$/;"	F	class:ProjectRole
@@ -756,6 +824,7 @@ owner?	./app/models/project_role.rb	/^  def owner?$/;"	f	class:ProjectRole
 owners	./app/models/concerns/projects/users.rb	/^      def owners$/;"	f	class:Projects.Users
 password_required?	./app/models/concerns/users/devise.rb	/^      def password_required?$/;"	f	class:Users.Devise
 pending?	./app/models/concerns/project_tasks/state_machine.rb	/^      def pending?$/;"	f	class:ProjectTasks.StateMachine
+pending_project_tasks	./app/services/project_task_services/sync.rb	/^    def pending_project_tasks$/;"	f	class:ProjectTaskServices
 permitted_state_events	./app/models/concerns/draw_costs/state_machine.rb	/^      def permitted_state_events$/;"	f	class:DrawCosts.StateMachine.TransitionError
 permitted_state_events	./app/models/concerns/draw_documents/state_machine.rb	/^      def permitted_state_events$/;"	f	class:DrawDocuments.StateMachine
 permitted_state_events	./app/models/concerns/draws/state_machine.rb	/^      def permitted_state_events$/;"	f	class:Draws.StateMachine
@@ -791,6 +860,7 @@ project_cost_options	./app/helpers/draws_helper.rb	/^  def project_cost_options(
 project_cost_options_with_remaining	./app/helpers/draws_helper.rb	/^  def project_cost_options_with_remaining(project_costs, current_value)$/;"	f
 project_cost_overage	./app/models/draw_cost.rb	/^  def project_cost_overage$/;"	f	class:DrawCost
 project_cost_params	./app/controllers/project_costs_controller.rb	/^  def project_cost_params$/;"	f	class:ProjectCostsController
+project_cost_subtotal	./app/models/draw_cost.rb	/^  def project_cost_subtotal$/;"	f	class:DrawCost
 project_developer?	./app/models/concerns/users/projects.rb	/^      def project_developer?(project)$/;"	f	class:Users.Projects
 project_finance?	./app/models/concerns/users/projects.rb	/^      def project_finance?(project)$/;"	f	class:Users.Projects
 project_internal?	./app/models/concerns/users/projects.rb	/^      def project_internal?(project)$/;"	f	class:Users.Projects
@@ -808,6 +878,11 @@ project_task_origin_url	./app/helpers/project_tasks_helper.rb	/^  def project_ta
 project_task_scope	./app/controllers/project_tasks_controller.rb	/^  def project_task_scope$/;"	f	class:ProjectTasksController
 project_user	./app/services/projects/membership.rb	/^    def project_user$/;"	f	class:Projects.Membership
 project_user_params	./app/controllers/project_users_controller.rb	/^  def project_user_params$/;"	f	class:ProjectUsersController
+pull_project_task_state	./app/services/project_task_services/sync.rb	/^    def pull_project_task_state(project_task, remote_task: nil, remote_task_status: nil)$/;"	f	class:ProjectTaskServices
+pull_project_task_states	./app/services/project_task_services/sync.rb	/^    def pull_project_task_states(provided_project_tasks=nil, force: false)$/;"	f	class:ProjectTaskServices.Sync
+push_project_task_state	./app/services/project_task_services/sync.rb	/^    def push_project_task_state(project_task)$/;"	f	class:ProjectTaskServices.Sync
+push_project_tasks	./app/services/project_task_services/sync.rb	/^    def push_project_tasks$/;"	f	class:ProjectTaskServices.Sync
+push_task_status	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def push_task_status(project_task_or_task_id)$/;"	f	class:ProjectTaskServices.SyncAdapters
 putData	./app/services/clickup/api/base.rb	/^      def putData(options, dry_run: false)$/;"	f	class:Clickup.Api.Base
 put_data	./app/services/clickup/api/base.rb	/^      def put_data(url:, body:, headers: {}, options: {})$/;"	f	class:Clickup.Api.Base
 record	./app/services/textract/data/textract_job_status.rb	/^      def record$/;"	f	class:Textract.Data.TextractJobStatus
@@ -837,7 +912,10 @@ reject?	./app/policies/draw_document_policy.rb	/^  def reject?$/;"	f	class:DrawD
 reject?	./app/policies/draw_policy.rb	/^  def reject?$/;"	f	class:DrawPolicy
 reject?	./app/policies/invoice_policy.rb	/^  def reject?$/;"	f	class:InvoicePolicy
 reject?	./app/policies/project_task_policy.rb	/^  def reject?$/;"	f	class:ProjectTaskPolicy
+rejectTask	./app/services/clickup/api/tasks.rb	/^      def rejectTask(task_id:)$/;"	f	class:Clickup.Api.Tasks
 reject_document?	./app/policies/draw_cost_policy.rb	/^  def reject_document?$/;"	f	class:DrawCostPolicy
+reject_remote_task	./app/models/concerns/project_tasks/sync.rb	/^      def reject_remote_task$/;"	f	class:ProjectTasks.Sync
+reject_task	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def reject_task(project_task_or_task_id)$/;"	f	class:ProjectTaskServices.SyncAdapters
 remaining_documents	./app/models/concerns/draws/draw_documents.rb	/^      def remaining_documents$/;"	f	class:Draws.DrawDocuments
 remove	./app/services/draw_document_service.rb	/^  def remove$/;"	f	class:DrawDocumentService
 remove	./app/services/invoice_service.rb	/^  def remove$/;"	f	class:InvoiceService
@@ -963,9 +1041,12 @@ submit?	./app/policies/invoice_policy.rb	/^  def submit?$/;"	f	class:InvoicePoli
 submit_analysis_request	./app/services/invoice_processing_service.rb	/^  def submit_analysis_request(invoice:, requestid:)$/;"	f	class:InvoiceProcessingService
 submit_draw_costs	./app/models/concerns/draws/state_machine.rb	/^      def submit_draw_costs(user)$/;"	f	class:Draws.StateMachine
 submit_invoices	./app/models/concerns/draw_costs/state_machine.rb	/^      def submit_invoices(user)$/;"	f	class:DrawCosts.StateMachine.TransitionError
+submit_new_tasks	./app/models/draw_cost.rb	/^  def submit_new_tasks$/;"	f	class:DrawCost
 subtotal	./app/models/draw_cost.rb	/^  def subtotal$/;"	f	class:DrawCost
 switch_setting?	./app/policies/user_policy.rb	/^  def switch_setting?$/;"	f	class:UserPolicy
 system!	./bin/setup	/^def system!(*args)$/;"	f
+task_name	./app/services/project_task_services/draw_document_task_generator.rb	/^    def task_name(verb)$/;"	f	class:ProjectTaskServices
+task_name	./app/services/project_task_services/invoice_task_generator.rb	/^    def task_name(verb)$/;"	f	class:ProjectTaskServices
 test_email	./app/mailers/test_mailer.rb	/^  def test_email$/;"	f	class:TestMailer
 textract_client_parameters	./app/services/textract/api/analyzer.rb	/^      def textract_client_parameters$/;"	f	class:Textract.Api.Analyzer.TextractApiError
 to_a	./app/services/breadcrumbs.rb	/^  def to_a$/;"	f	class:Breadcrumbs
@@ -1006,11 +1087,15 @@ update?	./app/policies/project_policy.rb	/^  def update?$/;"	f	class:ProjectPoli
 update?	./app/policies/project_task_policy.rb	/^  def update?$/;"	f	class:ProjectTaskPolicy
 update?	./app/policies/project_user_policy.rb	/^  def update?$/;"	f	class:ProjectUserPolicy
 update?	./app/policies/user_policy.rb	/^  def update?$/;"	f	class:UserPolicy
-updateTask	./app/services/clickup/api/tasks.rb	/^      def updateTask(task:, archived: false, start_date_time: false, due_date_time: false)$/;"	f	class:Clickup.Api.Tasks
+updateTask	./app/services/clickup/api/tasks.rb	/^      def updateTask(task:, archived: false, start_date_time: false, due_date_time: false, status: nil)$/;"	f	class:Clickup.Api.Tasks
+updateTaskStatus	./app/services/clickup/api/tasks.rb	/^      def updateTaskStatus(task:, status:)$/;"	f	class:Clickup.Api.Tasks
 update_member_role	./app/services/projects/membership.rb	/^    def update_member_role(user:, role: )$/;"	f	class:Projects.Membership
+update_remote_task_status	./app/models/concerns/project_tasks/sync.rb	/^      def update_remote_task_status$/;"	f	class:ProjectTasks.Sync
+update_status	./app/services/project_task_service.rb	/^  def update_status(status)$/;"	f	class:ProjectTaskService
 update_task	./app/controllers/project_tasks_controller.rb	/^  def update_task$/;"	f	class:ProjectTasksController
 upload_image	./app/helpers/images_helper.rb	/^  def upload_image$/;"	f
 uploaded_image	./app/helpers/images_helper.rb	/^  def uploaded_image$/;"	f
+url_prefix	./app/models/concerns/routing.rb	/^  def url_prefix$/;"	f	class:Routing
 user	./app/models/role.rb	/^  def self.user$/;"	F	class:Role
 user?	./app/models/concerns/users/role.rb	/^      def user?$/;"	f	class:Users.Role
 user?	./app/models/role.rb	/^  def user?$/;"	f	class:Role
@@ -1020,6 +1105,7 @@ user_not_authorized	./app/controllers/application_controller.rb	/^  def user_not
 user_params	./app/controllers/users_controller.rb	/^  def user_params$/;"	f	class:UsersController
 user_role_desc	./app/services/draw_cost_service.rb	/^  def user_role_desc$/;"	f	class:DrawCostService
 user_timezone	./app/controllers/application_controller.rb	/^  def user_timezone(&block)$/;"	f	class:ApplicationController
+uses_contingency?	./app/models/draw_cost.rb	/^  def uses_contingency?$/;"	f	class:DrawCost
 valid?	./app/services/clickup/api/configuration.rb	/^      def valid?$/;"	f	class:Clickup.Api.Configuration
 valid?	./app/services/textract/api/configuration.rb	/^      def valid?$/;"	f	class:Textract.Api.Configuration
 valid?	./app/services/textract/data/sqs_message.rb	/^      def valid?$/;"	f	class:Textract.Data.SqsMessage
@@ -1027,6 +1113,7 @@ valid?	./app/services/textract/data/textract_job_status.rb	/^      def valid?$/;
 validate	./app/models/draw.rb	/^    def validate(record)$/;"	f	class:Draw.IndexValidator
 validate	./app/models/draw_cost.rb	/^    def validate(record)$/;"	f	class:DrawCost.ProjectCostValidator
 validate	./app/models/draw_document.rb	/^    def validate(record)$/;"	f	class:DrawDocument.DocumenttypeValidator
+validate_adapter_interface	./app/services/project_task_services/sync.rb	/^    def validate_adapter_interface$/;"	f	class:ProjectTaskServices
 validate_settings	./app/services/clickup/api/configuration.rb	/^      def validate_settings$/;"	f	class:Clickup.Api.Configuration
 validate_settings	./app/services/textract/api/configuration.rb	/^      def validate_settings$/;"	f	class:Textract.Api.Configuration
 warden_scope	./spec/support/request_spec_helper.rb	/^  def warden_scope(resource)$/;"	f	class:RequestSpecHelper

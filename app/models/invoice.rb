@@ -131,4 +131,8 @@ class Invoice < ApplicationRecord
     ProjectTaskServices::Generator.call(origin: self, assignee: , action: )
   end
 
+  def archive_project_tasks
+    project_tasks.pending.each{|task| task.trigger_event(event_name: :archive)}
+  end
+
 end

@@ -16,6 +16,7 @@ module Draws
       ALLOW_DOCUMENT_CHANGE_STATES = %i{ pending rejected }.freeze
       ALLOW_DOCUMENT_APPROVALS_STATES = %i{ submitted }.freeze
       ALLOW_INVOICE_APPROVALS_STATES = %i{ submitted }.freeze
+      APPROVAL_LEAD_TIME = 7 # days
 
       scope :visible, -> { where(state: VISIBLE_STATES) }
 
@@ -156,6 +157,10 @@ module Draws
       def after_withdraw(user=nil)
         items = draw_documents.to_a + invoices.to_a
         ProjectTask.where(origin: items).pending.each{ |task| task.trigger_event(event_name: :archive, user: user) }
+      end
+
+      def approval_lead_time
+        APPROVAL_LEAD_TIME
       end
 
     end

@@ -2,17 +2,16 @@
 #
 # Table name: draw_documents
 #
-#  id                :uuid             not null, primary key
-#  approval_due_date :date
-#  approved_at       :datetime
-#  documenttype      :integer          default("other"), not null
-#  notes             :text
-#  state             :string           default("pending")
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  approver_id       :uuid
-#  draw_id           :uuid             not null
-#  user_id           :uuid
+#  id           :uuid             not null, primary key
+#  approved_at  :datetime
+#  documenttype :integer          default("other"), not null
+#  notes        :text
+#  state        :string           default("pending")
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  approver_id  :uuid
+#  draw_id      :uuid             not null
+#  user_id      :uuid
 #
 # Indexes
 #
@@ -35,7 +34,6 @@ FactoryBot.define do
     draw { create(:draw) }
     notes { Faker::Lorem.paragraph(sentence_count: 2) }
     documenttype { 1 }
-    approval_due_date { Date.current + rand(15).days }
     approved_at { nil}
     approver { nil }
   end

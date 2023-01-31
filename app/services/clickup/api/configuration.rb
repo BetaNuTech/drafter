@@ -2,7 +2,7 @@ module Clickup
   module Api
     class Configuration
       ENV_PREFIX = 'CLICKUP'
-      PROPERTIES = [ :api_token ]
+      PROPERTIES = %i{ api_token workspace_id default_list_id }
 
       attr_reader *PROPERTIES
       attr_reader :errors
@@ -46,11 +46,15 @@ module Clickup
       def load_hash_settings(data)
         @errors = []
         @api_token = data.fetch(:api_token, nil)
+        @workspace_id = data.fetch(:workspace_id, nil)
+        @default_list_id = data.fetch(:default_list_id, nil)
       end
 
       def load_env_settings
         @errors = []
         @api_token = get_prefixed_env(:api_token)
+        @workspace_id = get_prefixed_env(:workspace_id)
+        @default_list_id = get_prefixed_env(:default_list_id)
       end
 
       def get_prefixed_env(var)
@@ -59,7 +63,9 @@ module Clickup
       end
 
       def load_rails_credentials
-        @api_token = Rails.application.credentials.dig(:clickup, application_env, :api_token)
+        @api_token = Rails.application.credentials.dig(:clickup, application_env, :api_token) || 'NOT FOUND'
+        @workspace_id = Rails.application.credentials.dig(:clickup, application_env, :workspace_id) || 'NOT FOUND'
+        @default_list_id = Rails.application.credentials.dig(:clickup, application_env, :default_list_id) || 'NOT FOUND'
       end
 
       # Returns Array: [isValid, errorsArr]

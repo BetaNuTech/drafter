@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_06_002416) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_01_005442) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -95,7 +95,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_06_002416) do
     t.uuid "approver_id"
     t.text "notes"
     t.integer "documenttype", default: 0, null: false
-    t.date "approval_due_date"
     t.datetime "approved_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -221,13 +220,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_06_002416) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "remote_updated_at"
     t.index ["approver_id"], name: "index_project_tasks_on_approver_id"
     t.index ["assignee_id"], name: "index_project_tasks_on_assignee_id"
     t.index ["origin_type", "origin_id"], name: "idx_project_tasks_origin"
     t.index ["origin_type", "origin_id"], name: "index_project_tasks_on_origin"
     t.index ["project_id", "assignee_id", "approver_id", "state"], name: "idx_project_tasks_general"
     t.index ["project_id"], name: "index_project_tasks_on_project_id"
-    t.index ["remoteid"], name: "index_project_tasks_on_remoteid"
+    t.index ["remoteid", "remote_updated_at"], name: "idx_project_tasks_remote"
   end
 
   create_table "project_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

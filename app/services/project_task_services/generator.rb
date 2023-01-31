@@ -1,5 +1,7 @@
 module ProjectTaskServices
   class Generator
+    include Routing
+
     class << self
       def call(origin:, assignee: nil, action:)
         class_name = origin.instance_of?(Class) ? origin.name : origin.class.name

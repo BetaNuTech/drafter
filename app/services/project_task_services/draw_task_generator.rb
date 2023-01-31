@@ -1,5 +1,7 @@
 module ProjectTaskServices
   class DrawTaskGenerator
+    include Routing
+
     class Error < StandardError; end
 
     class << self
@@ -45,17 +47,25 @@ module ProjectTaskServices
 
     private
 
+    def due_at
+      Time.current + (@draw.approval_lead_time || 1).days
+    end
+
     def base_task_name
       data = {draw_name: @draw.name, project_name: @draw.project.name}
       "%{draw_name} [%{project_name}]" % data
     end
 
     def base_task_description
-      base_task_name
+      [base_task_name, origin_link_markup].join(' ')
     end
 
-    def due_at
-      Time.current
+    def origin_link_markup
+      "[View in Drafter](#{origin_url})"
+    end
+
+    def origin_url
+      project_draw_path(project_id: @draw.project_id, id: @draw.id)
     end
 
   end

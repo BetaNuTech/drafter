@@ -1,5 +1,7 @@
 module ProjectTaskServices
   class InvoiceTaskGenerator
+    include Routing
+
     class Error < StandardError; end
 
     class << self
@@ -48,8 +50,8 @@ module ProjectTaskServices
     private
 
     def task_name(verb)
-      data = { origin_state: @invoice.state.upcase, verb:, base_task_name:}
-      "[%{origin_state}] %{verb} %{base_task_name}" % data
+      data = { origin_state: @invoice.displayed_invoice_state_name.upcase, verb:, base_task_name:}
+      "%{verb} %{base_task_name}" % data
     end
 
     def base_task_name
@@ -58,11 +60,11 @@ module ProjectTaskServices
     end
 
     def base_task_description
-      [attachment_markup, preview_markup].compact.join(' ')
+      [attachment_markup, preview_markup, origin_link_markup].compact.join(' ')
     end
 
     def due_at
-      @invoice.draw_cost&.project_cost&.approval_lead_time&.days&.from_now || Time.current
+      Time.current + (@invoice.draw_cost&.project_cost&.approval_lead_time || 1).days
     end
 
     def attachment_url
@@ -79,6 +81,14 @@ module ProjectTaskServices
 
     def preview_markup
       "[%{description}](%{url})" % {description: 'Preview', url: preview_url}
+    end
+
+    def origin_link_markup
+      "[View in Drafter](#{origin_url})"
+    end
+
+    def origin_url
+      project_draw_path(project_id: @invoice.draw_cost.draw.project_id, id: @invoice.draw_cost.draw_id)
     end
   end
 end
