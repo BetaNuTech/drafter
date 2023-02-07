@@ -4,7 +4,7 @@ module ProjectTasks
 
     included do
       def create_remote_task
-        return true if remoteid.present?
+        return true if has_remote_task?
 
         ProjectTaskServices::Sync.new.
           create_task(self, new_remote_task_disposition)
@@ -37,6 +37,10 @@ module ProjectTasks
         else
           :review
         end
+      end
+
+      def has_remote_task?
+        remoteid.present?
       end
     end
 

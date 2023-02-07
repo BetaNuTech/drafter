@@ -90,7 +90,7 @@ class ProjectTasksController < ApplicationController
     end
   end
 
-  # POST /project_tasks/update_task.json?id=XXX&token=XXX&status=XXX
+  # POST /project_tasks/update_task.json?id=XXX&token=XXX&status=XXX&force=true
   # !!! Only accepts JSON requests !!!
   #
   def update_task
@@ -100,13 +100,13 @@ class ProjectTasksController < ApplicationController
     @project_task = ProjectTask.where(remoteid: remoteid).first
     raise ActiveRecord::RecordNotFound unless @project_task.present?
 
-    force = params[:force] || false
+    force = ['yes', 'true', 't', '1'].include?((params[:force] || '' ).downcase)
 
     if force
       # Update project_task state now
       status = params[:status] || ''
       service = ProjectTaskService.new(@project_task)
-      result = service.update_status(status)
+      service.update_status(status)
     else
       # Mark project_task for status update
       project_task.remote_updated_at = nil
