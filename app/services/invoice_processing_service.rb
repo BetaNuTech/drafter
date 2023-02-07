@@ -83,12 +83,13 @@ class InvoiceProcessingService
     process_invoice_analysis(invoice: invoice, analysis_job_data:)
 
     if invoice.processing? && analysis_job_data.is_total_present
+      generate_annotated_preview(invoice: invoice)
+      invoice.annotated_preview.reload
       invoice.trigger_event(event_name: :complete_processing)
     else
       invoice.trigger_event(event_name: :fail_processing)
     end
 
-    generate_annotated_preview(invoice: invoice)
   end
 
   def get_analysis(invoice:)

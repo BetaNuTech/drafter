@@ -107,22 +107,24 @@ class DrawCost < ApplicationRecord
     project_cost.contingency? || change_orders.any?(&:contingency?)
   end
 
+  def consult?
+    uses_contingency?
+  end
+
   def archive_project_tasks(recurse: false)
     project_tasks.pending.each{|task| task.trigger_event(event_name: :archive)}
     invoices.each{|invoice| invoice.archive_project_tasks} if recurse
   end
 
   def create_task(action:, assignee: nil)
-    ProjectTaskServices::Generator.call(origin: self, action: :approve, assignee:)
+    task = ProjectTaskServices::Generator.call(origin: self, action: :approve, assignee:)
+    if consult?
+      task.trigger_event(event_name: :submit_for_consult)
+    else
+      task.trigger_event(event_name: :submit_for_review)
+    end
+
+    task
   end
 
-  def submit_new_tasks
-    project_tasks.where(state: :new).each do |task| 
-      if uses_contingency?
-        task.trigger_event(event_name: :submit_for_consult)
-      else
-        task.trigger_event(event_name: :submit_for_review)
-      end
-    end
-  end
 end

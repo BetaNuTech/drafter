@@ -163,6 +163,20 @@ module Draws
         APPROVAL_LEAD_TIME
       end
 
+      def undo_submit
+        return false if Rails.env.production?
+
+        self.state = 'pending'
+        self.save
+        draw_documents.update_all(state: :pending)
+        draw_costs.each do |dc|
+          dc.invoices.each{|i| i.ocr_data = nil; i.annotated_preview = nil; i.state = 'pending'; i.save!}
+          dc.state = 'pending'
+          dc.save
+        end
+        reload
+      end
+
     end
   end
 end

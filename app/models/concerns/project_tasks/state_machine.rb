@@ -78,22 +78,22 @@ module ProjectTasks
       def after_submit(user)
         self.remoteid = nil
         save
-        create_remote_task
+        delay.create_remote_task
         true
       end
 
       def after_approve(user)
-        approve_remote_task
+        delay.approve_remote_task
         true
       end
 
       def after_reject(user)
-        reject_remote_task
+        delay.reject_remote_task
         true
       end
 
       def after_archive(user)
-        archive_remote_task
+        delay.archive_remote_task
         true
       end
 

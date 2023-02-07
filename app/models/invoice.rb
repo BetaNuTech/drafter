@@ -128,11 +128,22 @@ class Invoice < ApplicationRecord
   end
 
   def create_task(action:, assignee: nil)
-    ProjectTaskServices::Generator.call(origin: self, assignee: , action: )
+    task = ProjectTaskServices::Generator.call(origin: self, assignee: , action: )
+    if consult?
+      task.trigger_event(event_name: :submit_for_consult)
+    else
+      task.trigger_event(event_name: :submit_for_review)
+    end
+
+    task
   end
 
   def archive_project_tasks
     project_tasks.pending.each{|task| task.trigger_event(event_name: :archive)}
+  end
+
+  def consult?
+    draw_cost&.consult?
   end
 
 end

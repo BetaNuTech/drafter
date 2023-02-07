@@ -45,9 +45,6 @@ module ProjectTaskServices
         description: description
       )
 
-      @draw_cost.reload
-      @draw_cost.delay(run_at: SUBMISSION_DELAY.seconds.from_now).submit_new_tasks
-
       task
     end
 
@@ -63,11 +60,11 @@ module ProjectTaskServices
     end
 
     def base_task_description
-      [base_task_name, origin_link_markup, funding_summary].join(' ')
+      [base_task_name, origin_link_markup, funding_summary].compact.join(' -- ')
     end
 
     def origin_link_markup
-      "([View in Drafter](#{origin_url}))"
+      "[View in Drafter](#{origin_url})"
     end
 
     def origin_url
@@ -76,7 +73,7 @@ module ProjectTaskServices
 
     def funding_summary
       change_order_line = -> (change_order) {
-        " - *%{name}:* $%{subtotal}" % {
+        "  -- *%{name}:* $%{subtotal}" % {
           name: change_order.funding_source.name,
           subtotal: "%0.2f" % change_order.amount 
          }
@@ -84,8 +81,8 @@ module ProjectTaskServices
       <<~EOF
 
       ```
-      **TOTAL COST:**  #{"$%0.2f" % @draw_cost.invoice_total}
-       - *#{@draw_cost.project_cost.name}:* $#{@draw_cost.project_cost_subtotal}
+      **TOTAL COST**  #{"$%0.2f" % @draw_cost.invoice_total}
+       - *#{@draw_cost.project_cost.name}* $#{@draw_cost.project_cost_subtotal}
       #{@draw_cost.change_orders.map{|co| change_order_line.call(co)}.join('\n')}
       ```
       EOF

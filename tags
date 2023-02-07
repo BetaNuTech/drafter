@@ -472,6 +472,9 @@ clean?	./app/models/draw.rb	/^  def clean?$/;"	f	class:Draw
 cli_arg_version	./bin/bundle	/^  def cli_arg_version$/;"	f
 config	./app/services/clickup/api/base.rb	/^      def config$/;"	f	class:Clickup.Api.Base
 confirmation_instructions	./app/mailers/drafter_devise_mailer.rb	/^  def confirmation_instructions(record, token, opts={})$/;"	f	class:DrafterDeviseMailer
+consult?	./app/models/draw_cost.rb	/^  def consult?$/;"	f	class:DrawCost
+consult?	./app/models/draw_document.rb	/^  def consult?$/;"	f	class:DrawDocument
+consult?	./app/models/invoice.rb	/^  def consult?$/;"	f	class:Invoice
 contingency?	./app/models/change_order.rb	/^  def contingency?$/;"	f	class:ChangeOrder
 contingency?	./app/models/project_cost.rb	/^  def contingency?$/;"	f	class:ProjectCost
 copyright_years	./app/helpers/application_helper.rb	/^  def copyright_years$/;"	f	class:ApplicationHelper
@@ -517,7 +520,7 @@ create_task	./app/models/draw.rb	/^  def create_task(action:, assignee: nil)$/;"
 create_task	./app/models/draw_cost.rb	/^  def create_task(action:, assignee: nil)$/;"	f	class:DrawCost
 create_task	./app/models/draw_document.rb	/^  def create_task(action:, assignee: nil)$/;"	f	class:DrawDocument
 create_task	./app/models/invoice.rb	/^  def create_task(action:, assignee: nil)$/;"	f	class:Invoice
-create_task	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def create_task(task_or_attributes, disposition: :default)$/;"	f	class:ProjectTaskServices.SyncAdapters.Clickup
+create_task	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def create_task(task_or_attributes, disposition=:default)$/;"	f	class:ProjectTaskServices.SyncAdapters.Clickup
 create_users	./app/services/development_seeder.rb	/^  def create_users$/;"	f	class:DevelopmentSeeder
 deactivate?	./app/policies/user_policy.rb	/^  def deactivate?$/;"	f	class:UserPolicy
 deactivated?	./app/models/user.rb	/^  def deactivated?$/;"	f	class:User
@@ -1062,6 +1065,7 @@ trigger_event	./app/models/concerns/project_costs/state_machine.rb	/^      def t
 trigger_event	./app/models/concerns/project_tasks/state_machine.rb	/^      def trigger_event(event_name:, user: nil)$/;"	f	class:ProjectTasks.StateMachine
 trigger_event	./app/services/project_task_service.rb	/^  def trigger_event(event_name)$/;"	f	class:ProjectTaskService
 unapprove	./app/models/draw_document.rb	/^  def unapprove$/;"	f	class:DrawDocument
+undo_submit	./app/models/concerns/draws/state_machine.rb	/^      def undo_submit$/;"	f	class:Draws.StateMachine
 up	./db/migrate/20220714180131_create_delayed_jobs.rb	/^  def self.up$/;"	F	class:CreateDelayedJobs
 update	./app/controllers/draw_costs_controller.rb	/^  def update$/;"	f	class:DrawCostsController
 update	./app/controllers/draws_controller.rb	/^  def update$/;"	f	class:DrawsController

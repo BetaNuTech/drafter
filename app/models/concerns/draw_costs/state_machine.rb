@@ -91,6 +91,7 @@ module DrawCosts
 
       def after_submit(user)
         submit_invoices(user)
+        create_task(action: :approve)
       end
 
       def allow_submit?

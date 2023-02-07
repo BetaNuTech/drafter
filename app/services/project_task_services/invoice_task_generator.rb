@@ -34,7 +34,7 @@ module ProjectTaskServices
         description = base_task_description
       end
 
-      ProjectTask.create(
+      task = ProjectTask.create(
         project: invoice.project,
         assignee: @assignee,
         assignee_name: ( @assignee&.name || '' ),
@@ -45,6 +45,8 @@ module ProjectTaskServices
         name: name,
         description: description
       )
+
+      task
     end
 
     private
@@ -60,7 +62,7 @@ module ProjectTaskServices
     end
 
     def base_task_description
-      [attachment_markup, preview_markup, origin_link_markup].compact.join(' ')
+      [attachment_markup, preview_markup, origin_link_markup].compact.join(" -- ")
     end
 
     def due_at
@@ -68,19 +70,21 @@ module ProjectTaskServices
     end
 
     def attachment_url
-      @invoice.document&.url
+      @invoice.document.attached? ? url_prefix + rails_blob_path(@invoice.document) : nil
     end
 
     def preview_url
-      @invoice.annotated_preview&.url
+      @invoice.annotated_preview.attached? ? url_prefix + rails_blob_path(@invoice.annotated_preview) : nil
     end
 
     def attachment_markup
-      "[%{description}](%{url})" % {description: 'Document', url: attachment_url}
+      url = attachment_url
+      url.present? ? "[%{description}](%{url})" % {description: 'Document', url: url } : nil
     end
 
     def preview_markup
-      "[%{description}](%{url})" % {description: 'Preview', url: preview_url}
+      url = preview_url
+      url.present? ? "[%{description}](%{url})" % {description: 'Preview', url: url } : nil
     end
 
     def origin_link_markup
@@ -88,7 +92,7 @@ module ProjectTaskServices
     end
 
     def origin_url
-      project_draw_path(project_id: @invoice.draw_cost.draw.project_id, id: @invoice.draw_cost.draw_id)
+      url_prefix + project_draw_path(project_id: @invoice.draw_cost.draw.project_id, id: @invoice.draw_cost.draw_id)
     end
   end
 end

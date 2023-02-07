@@ -125,6 +125,7 @@ class Draw < ApplicationRecord
   end
 
   def create_task(action:, assignee: nil)
-    ProjectTaskServices::Generator.call(origin: self, assignee:, action: )
+    ProjectTaskServices::Generator.call(origin: self, assignee:, action: ).
+      trigger_event(event_name: :submit_for_review)
   end
 end

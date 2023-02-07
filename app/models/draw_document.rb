@@ -98,10 +98,15 @@ class DrawDocument < ApplicationRecord
   end
 
   def create_task(action:, assignee: nil)
-    ProjectTaskServices::Generator.call(origin: self, assignee: , action: )
+    ProjectTaskServices::Generator.call(origin: self, assignee: , action: ).
+      trigger_event(event_name: :submit_for_review)
   end
 
   def approval_lead_time
     APPROVAL_LEAD_TIME
+  end
+
+  def consult?
+    false
   end
 end

@@ -18,7 +18,7 @@ module ProjectTaskServices
     def push_project_tasks
       remote_tasks = []
       pending_project_tasks.where(remoteid: nil).each do |task|
-        remote_tasks << create_task(task, disposition: task.new_remote_task_disposition)
+        remote_tasks << create_task(task, task.new_remote_task_disposition)
       end
 
       remote_tasks
@@ -80,7 +80,7 @@ module ProjectTaskServices
         service = ProjectTaskService.new(project_task) 
         service.update_status(remote_task_status)
       else
-        remote_task = create_task(project_task, disposition: project_task.new_remote_task_disposition)
+        remote_task = create_task(project_task, project_task.new_remote_task_disposition)
       end
 
       project_task.reload

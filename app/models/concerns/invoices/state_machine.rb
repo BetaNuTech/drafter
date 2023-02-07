@@ -137,7 +137,7 @@ module Invoices
 
         # Clear pending tasks and create a new approve task
         project_tasks.pending.each{|task| task.trigger_event(event_name: :archive, user: user)}
-        create_task(assignee: nil, action: :approve)
+        create_task(action: :approve)
       end
 
       def after_submit(user)
@@ -145,8 +145,7 @@ module Invoices
       end
 
       def after_processing(user)
-        # Create invoice review task
-        create_task(assignee: nil, action: :approve)
+        create_task(action: :approve)
       end
 
       def displayed_invoice_state_name

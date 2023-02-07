@@ -57,7 +57,7 @@ module ProjectTaskServices
     end
 
     def base_task_description
-      [base_task_name, origin_link_markup].join(' ')
+      [base_task_name, origin_link_markup].join(' -- ')
     end
 
     def origin_link_markup
@@ -65,7 +65,7 @@ module ProjectTaskServices
     end
 
     def origin_url
-      project_draw_path(project_id: @draw.project_id, id: @draw.id)
+      url_prefix + project_draw_path(project_id: @draw.project_id, id: @draw.id)
     end
 
   end

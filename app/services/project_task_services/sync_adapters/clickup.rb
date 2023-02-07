@@ -32,7 +32,7 @@ module ProjectTaskServices
       end
 
       # options => { name: STRING, description: STRING, due_date: DateTime, status: OPTIONAL }
-      def create_task(task_or_attributes, disposition: :default)
+      def create_task(task_or_attributes, disposition=:default)
         project_task = nil
 
         if task_or_attributes.is_a?(ProjectTask)
@@ -69,10 +69,21 @@ module ProjectTaskServices
 
         clickup_task = ::Clickup::Api::Tasks.new.createTask(**task_attributes)
 
-        if project_task.present? && clickup_task&.remoteid&.present?
-          project_task.remoteid = clickup_task.remoteid 
-          project_task.remote_updated_at = Time.current
-          project_task.save
+        if project_task.present? 
+          if clickup_task&.remoteid&.present?
+            # Set remote_id and remote_updated_at
+            project_task.remoteid = clickup_task.remoteid 
+            project_task.remote_updated_at = Time.current
+            project_task.save
+            log_description = "Created ClickUp Task[#{clickup_task.remoteid}] for ProjectTask[#{project_task.id}] for #{project_task.origin_type}[#{project_task.origin_id}]"
+            SystemEvent.log(event_source: project_task, description: log_description, severity: :error)
+          else
+            log_description = "Failed to create ClickUp Task[#{clickup_task.remoteid}] created for ProjectTask[#{project_task.id}] for #{project_task.origin_type}[#{project_task.origin_id}]"
+            SystemEvent.log(event_source: project_task, description: log_description, severity: :error)
+          end
+        else
+          log_description = "Created ClickUp Task[#{clickup_task.remoteid}] with no associated ProjectTask"
+          SystemEvent.log(event_source: nil, description: log_description, severity: :error)
         end
 
         clickup_task
@@ -85,7 +96,15 @@ module ProjectTaskServices
           task_id = project_task_or_task_id
         end
 
-        @service.approveTask(task_id:) if task_id.present?
+        return false unless task_id.present?
+
+        if @service.approveTask(task_id:)
+          log_description = "Approved ClickUp Task[#{task_id}] via API"
+          SystemEvent.log(event_source: project_task, description: log_description)
+        else
+          log_description = "Failed to Approve ClickUp Task#{task_id} via API"
+          SystemEvent.log(event_source: project_task, description: log_description, severity: :error)
+        end
       end
 
       def reject_task(project_task_or_task_id)
@@ -95,7 +114,15 @@ module ProjectTaskServices
           task_id = project_task_or_task_id
         end
 
-        @service.rejectTask(task_id:) if task_id.present?
+        return false unless task_id.present?
+
+        if @service.rejectTask(task_id:)
+          log_description = "Rejected ClickUp Task[#{task_id}] via API"
+          SystemEvent.log(event_source: project_task, description: log_description)
+        else
+          log_description = "Failed to Reject ClickUp Task#{task_id} via API"
+          SystemEvent.log(event_source: project_task, description: log_description, severity: :error)
+        end
       end
 
       def archive_task(project_task_or_task_id)
@@ -105,7 +132,15 @@ module ProjectTaskServices
           task_id = project_task_or_task_id
         end
 
-        @service.archiveTask(task_id:) if task_id.present?
+        return false unless task_id.present?
+
+        if @service.archiveTask(task_id:)
+          log_description = "Archived ClickUp Task[#{task_id}] via API"
+          SystemEvent.log(event_source: project_task, description: log_description)
+        else
+          log_description = "Failed to Archive ClickUp Task#{task_id} via API"
+          SystemEvent.log(event_source: project_task, description: log_description, severity: :error)
+        end
       end
 
       def push_task_status(project_task_or_task_id)
