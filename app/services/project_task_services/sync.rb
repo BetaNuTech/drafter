@@ -17,15 +17,15 @@ module ProjectTaskServices
     # Create remote tasks for unsynced Drafter ProjectTasks
     def push_project_tasks
       remote_tasks = []
-      pending_project_tasks.where(remoteid: nil).each do |task|
-        remote_tasks << create_task(task, task.new_remote_task_disposition)
+      pending_project_tasks.where(remoteid: nil).each do |project_task|
+        remote_tasks << create_task(project_task, project_task.new_remote_task_disposition)
       end
 
       remote_tasks
     end
 
     def push_project_task_state(project_task)
-      return false unless project_task.remoteid.present?
+      return false unless project_task.has_remote_task?
 
       push_task_status(project_task)
       project_task
@@ -72,7 +72,7 @@ module ProjectTaskServices
 
     def pull_project_task_state(project_task, remote_task: nil, remote_task_status: nil)
       remote_task = nil
-      if project_task.remoteid.present?
+      if project_task.has_remote_task?
         unless remote_task_status.present?
           remote_task ||= get_task(project_task) 
           remote_task_status = remote_task.status
