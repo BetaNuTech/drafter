@@ -78,7 +78,7 @@ module ProjectTaskServices
             log_description = "Created ClickUp Task[#{clickup_task.remoteid}] for ProjectTask[#{project_task.id}] for #{project_task.origin_type}[#{project_task.origin_id}]"
             SystemEvent.log(event_source: project_task, description: log_description, severity: :error)
           else
-            log_description = "Failed to create ClickUp Task[#{clickup_task.remoteid}] created for ProjectTask[#{project_task.id}] for #{project_task.origin_type}[#{project_task.origin_id}]"
+            log_description = "Failed to create ClickUp Task for ProjectTask[#{project_task.id}] for #{project_task.origin_type}[#{project_task.origin_id}]"
             SystemEvent.log(event_source: project_task, description: log_description, severity: :error)
           end
         else
