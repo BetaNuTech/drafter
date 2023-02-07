@@ -164,8 +164,6 @@ module Draws
       end
 
       def undo_submit
-        return false if Rails.env.production?
-
         self.state = 'pending'
         self.save
         draw_documents.update_all(state: :pending)
