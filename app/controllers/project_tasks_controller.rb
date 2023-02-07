@@ -109,7 +109,7 @@ class ProjectTasksController < ApplicationController
       service.update_status(status)
     else
       # Mark project_task for status update
-      project_task.remote_updated_at = nil
+      project_task.remote_updated_at = Time.current + 30.seconds
       project_task.save
     end
 
