@@ -4,7 +4,7 @@ module ProjectTaskServices
 
     ADAPTER_INTERFACE_METHODS = %i{get_task create_task approve_task reject_task archive_task push_task_status}.freeze
     DEFAULT_ADAPTER = ProjectTaskServices::SyncAdapters::Clickup
-    PENDING_PROJECT_TASK_STATES = %i{new needs_review needs_consult}.freeze
+    PROJECT_TASK_STATES_FOR_REFRESH = %i{new needs_review needs_consult}.freeze
     REFRESH_WINDOW = 30 # seconds
 
     delegate *ADAPTER_INTERFACE_METHODS, to: :@adapter
@@ -49,7 +49,7 @@ module ProjectTaskServices
                             raise Error.new('Invalid project_tasks colleciton')
                         end
                       when nil
-                        pending_project_tasks
+                        project_tasks_for_refresh
                       else
                         raise Error.new('Invalid project_tasks collection')
                       end
@@ -64,36 +64,45 @@ module ProjectTaskServices
       end
 
       project_tasks = project_tasks.map do |task|
-        pull_project_task_state(task) rescue nil
+        pull_project_task_state(task)
       end
 
       project_tasks.compact
     end
 
     def pull_project_task_state(project_task, remote_task: nil, remote_task_status: nil)
-      remote_task = nil
-      if project_task.has_remote_task?
-        unless remote_task_status.present?
-          remote_task ||= get_task(project_task) 
-          remote_task_status = remote_task.status
+      return nil unless project_task.has_remote_task?
+
+      unless remote_task_status.present?
+        remote_task ||= get_task(project_task) 
+
+        unless remote_task.present?
+          description = "ProjectTaskServices::Sync could not fetch ClickUp Task[#{project_task.remoteid}] for status update"
+          SystemEvent.log(event_source: project_task, description: , severity: :error)
+          return nil
         end
-        service = ProjectTaskService.new(project_task) 
-        service.update_status(remote_task_status)
-      else
-        remote_task = create_task(project_task, project_task.new_remote_task_disposition)
+
+        remote_task_status = remote_task.status
+        project_task.remote_last_checked_at = Time.current
       end
 
-      project_task.reload
-      project_task.remote_updated_at = Time.current
+      project_task.remote_updated_at = remote_task.date_updated.present? ? remote_task.date_updated : Time.current
       project_task.save
 
+      ProjectTaskService.new(project_task).update_status(remote_task_status)
+
       project_task
+    rescue => e
+      description = 'Error in ProjectTaskServices::Sync processing remote task status'
+      SystemEvent.log(event_source: project_task, description:, debug: e.to_s, severity: :fatal)
+      return nil
     end
 
     private
 
-    def pending_project_tasks
-      ProjectTask.where(state: PENDING_PROJECT_TASK_STATES)
+    def project_tasks_for_refresh
+      ProjectTask.where(state: PROJECT_TASK_STATES_FOR_REFRESH).
+        or(ProjectTask.where(remote_last_checked_at: nil))
     end
 
     def validate_adapter_interface

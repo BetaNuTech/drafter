@@ -102,16 +102,20 @@ class ProjectTasksController < ApplicationController
 
     force = ['yes', 'true', 't', '1'].include?((params[:force] || '' ).downcase)
 
+
     if force
       # Update project_task state now
       status = params[:status] || ''
       service = ProjectTaskService.new(@project_task)
       service.update_status(status)
+      @project_task.remote_last_checked_at = Time.current
+      @project_task.remote_updated_at = Time.current
     else
-      # Mark project_task for status update
-      project_task.remote_updated_at = nil
-      project_task.save
+      # Reset timestamp to indicate need for immediate refresh
+      @project_task.remote_last_checked_at = nil
     end
+
+    @project_task.save
 
     respond_to do |format|
       format.json do

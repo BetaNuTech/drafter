@@ -16,8 +16,8 @@ module ProjectTaskServices
 
       def initialize(workspace_id: nil, list_id: nil)
         @configuration = ::Clickup::Api::Configuration.new
-        ( @workspace_id = workspace_id || get_workspace_id ) or raise Error.new('Invalid Workspace ID')
-        ( @list_id = list_id || get_list_id ) or raise Error.new('Invalid List ID')
+        ( @workspace_id = workspace_id || get_workspace_id ) or raise Error.new('Invalid ClickUp Workspace ID')
+        ( @list_id = list_id || get_list_id ) or raise Error.new('Invalid ClickUp List ID')
         @service = ::Clickup::Api::Tasks.new
       end
 
@@ -67,31 +67,38 @@ module ProjectTaskServices
 
         task_attributes = default_attributes.merge(attributes)
 
-        clickup_task = ::Clickup::Api::Tasks.new.createTask(**task_attributes)
+        clickup_task = @service.createTask(**task_attributes)
 
         if project_task.present? 
           if clickup_task&.remoteid&.present?
             # Set remote_id and remote_updated_at
             project_task.remoteid = clickup_task.remoteid 
             project_task.remote_updated_at = Time.current
+            project_task.remote_last_checked_at = Time.current
             project_task.save
             log_description = "Created ClickUp Task[#{clickup_task.remoteid}] for ProjectTask[#{project_task.id}] for #{project_task.origin_type}[#{project_task.origin_id}]"
-            SystemEvent.log(event_source: project_task, description: log_description, severity: :error)
+            SystemEvent.log(event_source: project_task, description: log_description, severity: :info)
           else
             log_description = "Failed to create ClickUp Task for ProjectTask[#{project_task.id}] for #{project_task.origin_type}[#{project_task.origin_id}]"
             SystemEvent.log(event_source: project_task, description: log_description, severity: :error)
           end
         else
           log_description = "Created ClickUp Task[#{clickup_task.remoteid}] with no associated ProjectTask"
-          SystemEvent.log(event_source: nil, description: log_description, severity: :error)
+          SystemEvent.log(event_source: nil, description: log_description, severity: :info)
         end
 
         clickup_task
+      rescue => e
+        description = 'Error in ProjectTaskServices::SyncAdapters::ClickUp creating ClickUp task'
+        SystemEvent.log(event_source: project_task, description:, debug: e.to_s, severity: :fatal)
+        return nil
       end
 
       def approve_task(project_task_or_task_id)
+        project_task = nil
         if project_task_or_task_id.is_a?(ProjectTask)
-          task_id = project_task_or_task_id.remoteid
+          project_task = project_task_or_task_id
+          task_id = project_task.remoteid
         else
           task_id = project_task_or_task_id
         end
@@ -99,6 +106,11 @@ module ProjectTaskServices
         return false unless task_id.present?
 
         if @service.approveTask(task_id:)
+          if project_task.present?
+            project_task.remote_updated_at = Time.current
+            project_task.remote_last_checked_at = Time.current
+            project_task.save
+          end
           log_description = "Approved ClickUp Task[#{task_id}] via API"
           SystemEvent.log(event_source: project_task, description: log_description)
         else
@@ -108,8 +120,10 @@ module ProjectTaskServices
       end
 
       def reject_task(project_task_or_task_id)
+        project_task = nil
         if project_task_or_task_id.is_a?(ProjectTask)
-          task_id = project_task_or_task_id.remoteid
+          project_task = project_task_or_task_id
+          task_id = project_task.remoteid
         else
           task_id = project_task_or_task_id
         end
@@ -117,6 +131,11 @@ module ProjectTaskServices
         return false unless task_id.present?
 
         if @service.rejectTask(task_id:)
+          if project_task.present?
+            project_task.remote_updated_at = Time.current
+            project_task.remote_last_checked_at = Time.current
+            project_task.save
+          end
           log_description = "Rejected ClickUp Task[#{task_id}] via API"
           SystemEvent.log(event_source: project_task, description: log_description)
         else
@@ -126,7 +145,9 @@ module ProjectTaskServices
       end
 
       def archive_task(project_task_or_task_id)
+        project_task = nil
         if project_task_or_task_id.is_a?(ProjectTask)
+          project_task = project_task_or_task_id
           task_id = project_task_or_task_id.remoteid
         else
           task_id = project_task_or_task_id
@@ -135,6 +156,11 @@ module ProjectTaskServices
         return false unless task_id.present?
 
         if @service.archiveTask(task_id:)
+          if project_task.present?
+            project_task.remote_updated_at = Time.current
+            project_task.remote_last_checked_at = Time.current
+            project_task.save
+          end
           log_description = "Archived ClickUp Task[#{task_id}] via API"
           SystemEvent.log(event_source: project_task, description: log_description)
         else
@@ -144,6 +170,7 @@ module ProjectTaskServices
       end
 
       def push_task_status(project_task_or_task_id)
+        project_task = nil
         if project_task_or_task_id.is_a?(ProjectTask)
           project_task = project_task_or_task_id
           task_id = project_task.remoteid
@@ -159,11 +186,15 @@ module ProjectTaskServices
 
         current_clickup_task_status = clickup_task.status
         new_clickup_task_status = TASK_STATUS_MAPPING.fetch(project_task.state.to_sym, DEFAULT_TASK_STATUS)
+
+        project_task.remote_last_checked_at = Time.current
+        project_task.remote_updated_at = clickup_task.date_updated.present? ? clickup_task.date_updated : Time.current
+        project_task.save
         return false if current_clickup_task_status == new_clickup_task_status
 
         clickup_task = @service.updateTaskStatus(task: clickup_task, status: new_clickup_task_status) 
-        if clickup_task.status == new_clickup_task_status
-          project_task.remote_updated_at = Time.current
+        if clickup_task.present? && ( clickup_task.status == new_clickup_task_status )
+          project_task.remote_updated_at = clickup_task.date_updated.present? ? clickup_task.date_updated : Time.current
           project_task.save
         else
           return false

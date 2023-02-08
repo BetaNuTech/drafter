@@ -42,7 +42,7 @@
       <span class="badge bg-success"><%= number_to_currency invoice.amount %></span>
       <% if invoice.annotated_preview.attached? %>
         <span class="annotated_preview_link">
-          <%= link_to(rails_blob_path(invoice.annotated_preview), target: '_blank') do %>
+          <%= link_to(rails_blob_path(invoice.annotated_preview), target: '_blank', style: 'text-decoration: none;') do %>
             <%= inline_icon(icon: :eye, size: 20, fill: :blue) %>
           <% end %>
           <% if invoice.manual_approval_required? || invoice.audit? %>
