@@ -30,6 +30,7 @@ class ProjectCost < ApplicationRecord
   include ProjectCosts::StateMachine
 
   ALLOWED_PARAMS = [:id, :approval_lead_time, :cost_type, :name, :total]
+  CONTINGENCY_COST_MATCH = /Contingency/
   enum :cost_type, [:land, :hard, :soft, :finance]
   
   ### Associations
@@ -111,7 +112,7 @@ class ProjectCost < ApplicationRecord
   end
 
   def contingency?
-    name.match?('Contingency')
+    name.match?(CONTINGENCY_COST_MATCH)
   end
 
 end

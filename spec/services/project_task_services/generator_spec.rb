@@ -66,4 +66,20 @@ RSpec.describe ProjectTaskServices::Generator do
     end
 
   end
+
+  describe 'duplicate handing' do
+    describe 'when there is a pending duplicate project task for the same object' do
+      it 'should fail to create a new task' do
+        #task1 = service_class.call(origin: invoice, assignee: assignee, action: valid_task_action)
+        #task2 = service_class.call(origin: invoice, assignee: assignee, action: valid_task_action)
+      end
+
+    end
+    describe 'when there is an archived duplicate project task for the same object' do
+      it 'should fail to create a new task' do
+        #task1 = service_class.call(origin: invoice, assignee: assignee, action: valid_task_action)
+        #task2 = service_class.call(origin: invoice, assignee: assignee, action: valid_task_action)
+      end
+    end
+  end
 end

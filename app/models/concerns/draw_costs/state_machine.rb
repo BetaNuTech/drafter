@@ -106,9 +106,8 @@ module DrawCosts
       end
 
       def allow_auto_approve?
-        !uses_contingency? &&
-          allow_approve? &&
-          all_invoices_approved?
+        allow_approve? &&
+        all_invoices_approved?
       end
 
       def all_invoices_approved?

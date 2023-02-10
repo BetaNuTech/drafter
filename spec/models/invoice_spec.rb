@@ -175,14 +175,18 @@ RSpec.describe Invoice, type: :model do
 
     describe 'approve' do
       describe 'the last draw cost invoice' do
+        let(:invoice1) { draw_cost_invoices.first }
+        let(:invoice2) { draw_cost_invoices.last }
+
+        before do
+          draw.update(state: :submitted)
+          draw_cost.update(state: :rejected)
+          invoice1.update(state: 'approved')
+          invoice2.update(state: 'submitted')
+        end
+
         describe 'when the draw cost is submitted' do
           it 'approves the draw cost' do
-            draw.update(state: :submitted)
-            draw_cost.update(state: :submitted)
-            expect(draw_cost_invoices.count).to eq 2
-            invoice1, invoice2 = draw_cost_invoices
-            invoice1.update(state: 'approved')
-            invoice2.update(state: 'submitted')
             invoice2.trigger_event(event_name: :approve)
             invoice2.reload
             expect(invoice2.state).to eq('approved')
@@ -192,18 +196,44 @@ RSpec.describe Invoice, type: :model do
         end
         describe 'when the draw cost is rejected' do
           it 'approves the draw cost' do
-            draw.update(state: :submitted)
-            draw_cost.update(state: :rejected)
-            expect(draw_cost_invoices.count).to eq 2
-            invoice1, invoice2 = draw_cost_invoices
-            invoice1.update(state: 'approved')
-            invoice2.update(state: 'submitted')
             invoice2.trigger_event(event_name: :approve)
             invoice2.reload
             expect(invoice2.state).to eq('approved')
             draw_cost.reload
             expect(draw_cost.state).to eq('approved')
           end
+        end
+        describe 'when the draw cost uses contingency funds' do
+          let(:change_order_amount) { 1000.0 }
+          let(:contingency_project_cost) {
+            sample_project.project_costs.select{|pc| pc.contingency? }.first
+          }
+          let(:change_order) {
+            project_cost = draw_cost.project_cost
+            contingency_project_cost
+            create(:change_order,
+                   amount: change_order_amount,
+                   draw_cost: draw_cost,
+                   project_cost: draw_cost.project_cost,
+                   funding_source: contingency_project_cost)
+          }
+          
+          it 'approves the draw cost' do
+            draw_cost.total = draw_cost.total + change_order_amount
+            draw_cost.save!
+            expect(ChangeOrder.count).to eq(0)
+            change_order
+            expect(ChangeOrder.count).to eq(1)
+            draw_cost.change_orders.reload
+            assert(draw_cost.uses_contingency?)
+            invoice1; invoice2
+            invoice2.trigger_event(event_name: :approve)
+            invoice2.reload
+            expect(invoice2.state).to eq('approved')
+            draw_cost.reload
+            expect(draw_cost.state).to eq('approved')
+          end
+
         end
       end
     end
