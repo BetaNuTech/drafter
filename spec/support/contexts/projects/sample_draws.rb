@@ -17,11 +17,14 @@ RSpec.shared_context 'sample_draws' do
       create(:draw_document, draw: draw, user: developer_user, document: uploaded_file, documenttype: :waiver, state: :pending),
     ]
   }
+  let(:sample_project_non_contingency_project_costs) {
+    sample_project.project_costs.to_a.select{|pc| !pc.contingency? }
+  }
   let(:draw_cost) {
-    create(:draw_cost, draw: draw, project_cost: sample_project.project_costs.first, total: 4000.0, state: 'pending')
+    create(:draw_cost, draw: draw, project_cost: sample_project_non_contingency_project_costs.first, total: 4000.0, state: 'pending')
   }
   let(:draw_cost2) {
-    create(:draw_cost, draw: draw, project_cost: sample_project.project_costs.last, total: 4000.0, state: 'pending')
+    create(:draw_cost, draw: draw, project_cost: sample_project_non_contingency_project_costs.last, total: 4000.0, state: 'pending')
   }
   let(:draw_cost_invoices) {
     draw_cost.invoices.create!(amount: 2000.0, description: 'Test invoice 1-1', document: uploaded_file, user: developer_user)
