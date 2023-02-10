@@ -34,6 +34,10 @@ module ProjectTaskServices
         description = base_task_description
       end
 
+      if existing_task = ProjectTask.pending.where(origin: invoice, name: name).first
+        return existing_task
+      end
+
       task = ProjectTask.create(
         project: invoice.project,
         assignee: @assignee,

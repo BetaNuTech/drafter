@@ -77,4 +77,13 @@ RSpec.describe ProjectTaskServices::InvoiceTaskGenerator do
     end
   end
 
+  describe 'attempting to create a project task that duplicates a visible project task' do
+    it 'returns the original instead of creating a new project task' do
+      initial_task_count = ProjectTask.count
+      original_task = service_class.call(origin: invoice, assignee: assignee, action: valid_task_action)
+      new_task = service_class.call(origin: invoice, assignee: assignee, action: valid_task_action)
+      expect(ProjectTask.count).to eq(initial_task_count + 1)
+    end
+  end
+
 end
