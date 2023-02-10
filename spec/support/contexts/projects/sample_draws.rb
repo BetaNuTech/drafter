@@ -24,13 +24,13 @@ RSpec.shared_context 'sample_draws' do
     create(:draw_cost, draw: draw, project_cost: sample_project.project_costs.last, total: 4000.0, state: 'pending')
   }
   let(:draw_cost_invoices) {
-    draw_cost.invoices.create!(amount: 2000.0, description: 'Test invoice 1', document: uploaded_file, user: developer_user)
-    draw_cost.invoices.create!(amount: 2000.0, description: 'Test invoice 1', document: uploaded_file, user: developer_user)
+    draw_cost.invoices.create!(amount: 2000.0, description: 'Test invoice 1-1', document: uploaded_file, user: developer_user)
+    draw_cost.invoices.create!(amount: 2000.0, description: 'Test invoice 1-2', document: uploaded_file, user: developer_user)
     draw_cost.invoices
   }
   let(:draw_cost2_invoices) {
-    draw_cost2.invoices.create!(amount: 2000.0, description: 'Test invoice 1', document: uploaded_file, user: developer_user)
-    draw_cost2.invoices.create!(amount: 2000.0, description: 'Test invoice 1', document: uploaded_file, user: developer_user)
+    draw_cost2.invoices.create!(amount: 2000.0, description: 'Test invoice 2-1', document: uploaded_file, user: developer_user)
+    draw_cost2.invoices.create!(amount: 2000.0, description: 'Test invoice 2-2', document: uploaded_file, user: developer_user)
     draw_cost2.invoices
   }
   let(:invoices) { draw_cost_invoices }

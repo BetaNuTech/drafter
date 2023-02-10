@@ -28,7 +28,7 @@ module ProjectCosts
       def trigger_event(event_name:, user: nil)
         event = event_name.to_sym
         if permitted_state_events.include?(event)
-          self.aasm.fire(event, user)
+          self.aasm.fire!(event, user)
           return self.save
         else
           return false

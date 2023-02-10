@@ -53,8 +53,8 @@ module DrawCosts
       def trigger_event(event_name:, user: nil)
         event = event_name.to_sym
         if permitted_state_events.include?(event)
-          self.aasm.fire(event, user)
-          return self.save
+          self.aasm.fire!(event, user)
+          return true
         else
           return false
         end
@@ -118,7 +118,7 @@ module DrawCosts
 
       def after_last_invoice_approval
         if allow_auto_approve?
-          trigger_event(event_name: :approve, user: user)
+          trigger_event(event_name: :approve)
         else
           # Don't create DrawCost task because they should be auto approved/rejected
           # create_task(action: :approve) 

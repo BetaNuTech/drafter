@@ -58,6 +58,8 @@ class DrawCostService
   end
 
   def submit
+    return true if @draw_cost.submitted?
+
     raise PolicyError.new unless @draw_cost_policy.submit?
 
     @draw_cost.transaction do
@@ -73,6 +75,8 @@ class DrawCostService
   end
 
   def approve
+    return true if @draw_cost.approved?
+
     raise PolicyError.new(user_role_desc + ' cannot approve draw cost') unless @draw_cost_policy.approve?
 
     @draw_cost.trigger_event(event_name: :approve, user: @user)

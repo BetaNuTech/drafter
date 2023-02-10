@@ -39,10 +39,9 @@ module Invoices
             after: Proc.new {|*args| after_processing(*args)}
         end
 
-        event :approve do
+        event :approve, after_commit: :after_approve do
           transitions from: %i{ submitted processing processed processing_failed rejected }, to: :approved,
-            guard: Proc.new { allow_approve? },
-            after: Proc.new{|*args| after_approve(*args)}
+            guard: Proc.new { allow_approve? }
         end
 
         event :reject do
@@ -76,7 +75,7 @@ module Invoices
       def trigger_event(event_name:, user: nil)
         event = event_name.to_sym
         if permitted_state_events.include?(event)
-          self.aasm.fire(event, user)
+          self.aasm.fire!(event, user)
           return self.save
         else
           return false
@@ -103,8 +102,7 @@ module Invoices
         }.fetch(state, 'primary')
       end
 
-      def after_approve(user)
-        draw_cost.invoices.reload
+      def after_approve
         draw_cost.after_last_invoice_approval
       end
 

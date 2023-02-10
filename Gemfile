@@ -43,6 +43,7 @@ gem 'sassc-rails'
 gem 'sprockets-rails'
 gem 'stimulus-rails'
 gem 'turbo-rails'
+gem 'after_commit_everywhere'
 
 group :development do
   gem 'web-console'

@@ -103,11 +103,13 @@ class ProjectTasksController < ApplicationController
     force = ['yes', 'true', 't', '1'].include?((params[:force] || '' ).downcase)
 
 
+    service_errors = false
     if force
       # Update project_task state now
       status = params[:status] || ''
       service = ProjectTaskService.new(@project_task)
       service.update_status(status)
+      service_errors = service.errors?
       @project_task.remote_last_checked_at = Time.current
       @project_task.remote_updated_at = Time.current
     else
@@ -119,10 +121,10 @@ class ProjectTasksController < ApplicationController
 
     respond_to do |format|
       format.json do
-        if service.errors?
+        if service_errors
           render json: service.errors.to_json, status: :unprocessable_entity
         else
-          render json: { status: service.project_task.state }
+          render json: { status: @project_task.state }
         end
       end
     end
