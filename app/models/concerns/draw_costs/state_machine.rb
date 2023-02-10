@@ -91,7 +91,8 @@ module DrawCosts
 
       def after_submit(user)
         submit_invoices(user)
-        create_task(action: :approve)
+        # Don't create DrawCost task because they should be auto approved/rejected
+        # create_task(action: :approve)
       end
 
       def allow_submit?
@@ -119,7 +120,8 @@ module DrawCosts
         if allow_auto_approve?
           trigger_event(event_name: :approve, user: user)
         else
-          create_task(action: :approve) 
+          # Don't create DrawCost task because they should be auto approved/rejected
+          # create_task(action: :approve) 
         end
       end
 
