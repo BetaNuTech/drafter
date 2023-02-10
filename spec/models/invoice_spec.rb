@@ -171,6 +171,41 @@ RSpec.describe Invoice, type: :model do
         expect(invoice.project_tasks.pending.count).to eq(0)
       end
 
+    end # remove
+
+    describe 'approve' do
+      describe 'the last draw cost invoice' do
+        describe 'when the draw cost is submitted' do
+          it 'approves the draw cost' do
+            draw.update(state: :submitted)
+            draw_cost.update(state: :submitted)
+            expect(draw_cost_invoices.count).to eq 2
+            invoice1, invoice2 = draw_cost_invoices
+            invoice1.update(state: 'approved')
+            invoice2.update(state: 'submitted')
+            invoice2.trigger_event(event_name: :approve)
+            invoice2.reload
+            expect(invoice2.state).to eq('approved')
+            draw_cost.reload
+            expect(draw_cost.state).to eq('approved')
+          end
+        end
+        describe 'when the draw cost is rejected' do
+          it 'approves the draw cost' do
+            draw.update(state: :submitted)
+            draw_cost.update(state: :rejected)
+            expect(draw_cost_invoices.count).to eq 2
+            invoice1, invoice2 = draw_cost_invoices
+            invoice1.update(state: 'approved')
+            invoice2.update(state: 'submitted')
+            invoice2.trigger_event(event_name: :approve)
+            invoice2.reload
+            expect(invoice2.state).to eq('approved')
+            draw_cost.reload
+            expect(draw_cost.state).to eq('approved')
+          end
+        end
+      end
     end
   end
 

@@ -88,31 +88,49 @@ RSpec.describe ProjectTasksController, type: :controller do
     end
 
     describe 'as an API user' do
-      it' should approvapprove the task' do
-        expect(invoice_task.state).to eq('needs_review')
-        post :update_task, params: { id: invoice_task.remoteid, status: 'approved', token: token, service: 'clickup', format: :json }
-        expect(response).to be_successful
-        invoice_task.reload
-        expect(invoice_task.state).to eq('approved')
-        expect(invoice_task.origin.state).to eq('approved')
+      describe 'when using the "force" parameter' do
+        it' should approve the task' do
+          expect(invoice_task.state).to eq('needs_review')
+          post :update_task, params: { id: invoice_task.remoteid, status: 'approved', token: token, service: 'clickup', force: 'true', format: :json }
+          expect(response).to be_successful
+          invoice_task.reload
+          expect(invoice_task.state).to eq('approved')
+          expect(invoice_task.origin.state).to eq('approved')
+        end
+        it' should reject the task' do
+          expect(invoice_task.state).to eq('needs_review')
+          post :update_task, params: { id: invoice_task.remoteid, status: 'rejected', token: token, service: 'clickup', force: 'true', format: :json }
+          expect(response).to be_successful
+          invoice_task.reload
+          expect(invoice_task.state).to eq('rejected')
+          expect(invoice_task.origin.state).to eq('rejected')
+        end
+        it' should archive the task' do
+          invoice_starting_state = invoice_task.origin.state
+          expect(invoice_task.state).to eq('needs_review')
+          post :update_task, params: { id: invoice_task.remoteid, status: 'archived', token: token, service: 'clickup', force: 'true', format: :json }
+          expect(response).to be_successful
+          invoice_task.reload
+          expect(invoice_task.state).to eq('archived')
+          expect(invoice_task.origin.state).to eq(invoice_starting_state)
+        end
+
+        describe 'when not using the "force" parameter' do
+          it 'should clear the task remote_updated_at attribute' do
+            invoice_task.remote_last_checked_at = Time.current
+            invoice_task.save
+            expect(invoice_task.state).to eq('needs_review')
+            post :update_task, params: { id: invoice_task.remoteid, status: 'approved', token: token, service: 'clickup', format: :json }
+            expect(response).to be_successful
+            invoice_task.reload
+            expect(invoice_task.remote_last_checked_at).to be_nil
+            expect(invoice_task.state).to_not eq('approved')
+            expect(invoice_task.origin.state).to_not eq('approved')
+          end
+        end
+
       end
-      it' should reject the task' do
-        expect(invoice_task.state).to eq('needs_review')
-        post :update_task, params: { id: invoice_task.remoteid, status: 'rejected', token: token, service: 'clickup', format: :json }
-        expect(response).to be_successful
-        invoice_task.reload
-        expect(invoice_task.state).to eq('rejected')
-        expect(invoice_task.origin.state).to eq('rejected')
-      end
-      it' should archive the task' do
-        invoice_starting_state = invoice_task.origin.state
-        expect(invoice_task.state).to eq('needs_review')
-        post :update_task, params: { id: invoice_task.remoteid, status: 'archived', token: token, service: 'clickup', format: :json }
-        expect(response).to be_successful
-        invoice_task.reload
-        expect(invoice_task.state).to eq('archived')
-        expect(invoice_task.origin.state).to eq(invoice_starting_state)
-      end
+
 
     end
     describe 'as a logged-in user without a valid token' do
