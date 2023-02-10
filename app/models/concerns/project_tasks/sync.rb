@@ -16,8 +16,8 @@ module ProjectTasks
       def approve_remote_task
         ProjectTaskServices::Sync.new.
           approve_task(self)
-        self..remote_updated_at = Time.current
-        self..remote_last_checked_at = Time.current
+        self.remote_updated_at = Time.current
+        self.remote_last_checked_at = Time.current
         save
       end
 
