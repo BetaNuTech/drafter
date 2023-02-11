@@ -4,7 +4,7 @@
     <%= number_to_currency draw_cost.total %>
   </span>
   <br/>
-  <b>Remaining:</b>
+  <b class="tab">Remaining:</b>
   <span class="badge bg-<%= draw_cost.project_cost.over_budget? ? 'danger' : 'success' %>">
     <%= number_to_currency draw_cost.project_cost.budget_balance %>
   </span>
