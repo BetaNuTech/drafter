@@ -127,62 +127,40 @@ RSpec.describe Draw, type: :model do
       describe 'project tasks' do
         let(:user) { sample_project.developers.first }
         let(:draw_document) { DrawDocument.create!(draw: draw, user: user) }
-        let(:completed_document_tasks) {
-          Array.new(3) {
-            task = ProjectTaskServices::Generator.call(origin: draw_document, action: :approve)
-            task.state = 'approved'; task.save!
-            task
-          }
-        }
         let(:pending_document_tasks) {
-          Array.new(2) {
-            task = ProjectTaskServices::Generator.call(origin: draw_document, action: :approve)
-            task.state = 'needs_review'; task.save!
-            task
+          Array.new(1) {
+            ProjectTaskServices::Generator.call(origin: draw_document, action: :approve)
           }
         }
         let(:invoice) { draw_cost_invoices.first }
-        let(:completed_invoice_tasks) {
-          Array.new(3) {
-            task = ProjectTaskServices::Generator.call(origin: invoice, action: :approve)
-            task.state = 'approved'; task.save!
-            task
-          }
-        }
         let(:pending_invoice_tasks) {
-          Array.new(2) {
-            task = ProjectTaskServices::Generator.call(origin: invoice, action: :approve)
-            task.state = 'needs_review'; task.save!
-            task
+          Array.new(1) {
+            ProjectTaskServices::Generator.call(origin: invoice, action: :approve)
           }
         }
 
-        it 'archives any pending project tasks' do
-
-        end
         it 'archives any pending draw document project tasks' do
+          ProjectTask.destroy_all
           pending_document_tasks
-          completed_document_tasks
-          draw_document.reload
-          expect(draw_document.project_tasks.pending.count).to eq(2)
-          expect(draw_document.project_tasks.approved.count).to eq(3)
+          draw_document.project_tasks.reload
+          expect(draw_document.project_tasks.pending.count).to eq(1)
+          expect(draw_document.project_tasks.archived.count).to eq(0)
           draw.trigger_event(event_name: :withdraw)
           draw.reload
           draw_document.reload
-          expect(draw_document.project_tasks.approved.count).to eq(3)
           expect(draw_document.project_tasks.pending.count).to eq(0)
+          expect(draw_document.project_tasks.archived.count).to eq(1)
         end
         it 'archives any pending invoice project tasks' do
           pending_invoice_tasks
-          completed_invoice_tasks
           invoice.reload
-          expect(invoice.project_tasks.approved.count).to eq(3)
-          expect(invoice.project_tasks.pending.count).to eq(2)
+          expect(invoice.project_tasks.pending.count).to eq(1)
+          expect(invoice.project_tasks.archived.count).to eq(0)
           draw.trigger_event(event_name: :withdraw)
           draw.reload
           invoice.reload
-          expect(invoice.project_tasks.approved.count).to eq(3)
           expect(invoice.project_tasks.pending.count).to eq(0)
+          expect(invoice.project_tasks.archived.count).to eq(1)
         end
       end
     end

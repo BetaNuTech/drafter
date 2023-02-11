@@ -35,7 +35,11 @@ module ProjectTaskServices
         description = base_task_description
       end
 
-      task = ProjectTask.create(
+      if existing_task = ProjectTask.pending.where(origin: @draw_cost, name: name).first
+        return existing_task
+      end
+
+      ProjectTask.create(
         project: @draw_cost.project,
         assignee: @assignee,
         assignee_name: ( @assignee&.name || '' ),
@@ -44,8 +48,6 @@ module ProjectTaskServices
         name: name,
         description: description
       )
-
-      task
     end
 
     private

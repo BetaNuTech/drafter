@@ -140,34 +140,24 @@ RSpec.describe Invoice, type: :model do
     end
 
     describe 'remove' do
-      let(:completed_invoice_tasks) {
-        Array.new(3) {
-          task = ProjectTaskServices::Generator.call(origin: invoice, action: :approve)
-          task.state = 'approved'; task.save!
-          task
-        }
-      }
       let(:pending_invoice_tasks) {
-        Array.new(2) {
-          task = ProjectTaskServices::Generator.call(origin: invoice, action: :approve)
-          task.state = 'needs_review'; task.save!
-          task
+        Array.new(1) {
+          ProjectTaskServices::Generator.call(origin: invoice, action: :approve)
         }
       }
       it 'archives pending tasks' do
         invoice.state = 'pending'
         invoice.save!
-        completed_invoice_tasks
         pending_invoice_tasks
         invoice.project_tasks.reload
-        expect(invoice.project_tasks.approved.count).to eq(3)
-        expect(invoice.project_tasks.pending.count).to eq(2)
+        expect(invoice.project_tasks.archived.count).to eq(0)
+        expect(invoice.project_tasks.pending.count).to eq(1)
         task_count = invoice.project_tasks.count
         assert(invoice.allow_remove?)
         invoice.trigger_event(event_name: :remove)
         invoice.project_tasks.reload
         expect(invoice.project_tasks.count).to eq(task_count)
-        expect(invoice.project_tasks.approved.count).to eq(3)
+        expect(invoice.project_tasks.archived.count).to eq(1)
         expect(invoice.project_tasks.pending.count).to eq(0)
       end
 
@@ -206,7 +196,9 @@ RSpec.describe Invoice, type: :model do
         describe 'when the draw cost uses contingency funds' do
           let(:change_order_amount) { 1000.0 }
           let(:contingency_project_cost) {
-            sample_project.project_costs.select{|pc| pc.contingency? }.first
+            cost = create(:project_cost, project: sample_project, name: 'Sample Contingency')
+            sample_project.project_costs.reload
+            cost
           }
           let(:change_order) {
             project_cost = draw_cost.project_cost

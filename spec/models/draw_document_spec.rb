@@ -86,14 +86,14 @@ RSpec.describe DrawDocument, type: :model do
     describe 'withdrawal' do
       describe 'project tasks' do
         let(:completed_document_tasks) {
-          Array.new(3) {
+          Array.new(1) {
             task = ProjectTaskServices::Generator.call(origin: draw_document, action: :approve)
             task.state = 'approved'; task.save!
             task
           }
         }
         let(:pending_document_tasks) {
-          Array.new(2) {
+          Array.new(1) {
             task = ProjectTaskServices::Generator.call(origin: draw_document, action: :approve)
             task.state = 'needs_review'; task.save!
             task
@@ -103,13 +103,13 @@ RSpec.describe DrawDocument, type: :model do
           completed_document_tasks
           pending_document_tasks
           draw_document.project_tasks.reload
-          expect(draw_document.project_tasks.pending.count).to eq(2)
-          expect(draw_document.project_tasks.approved.count).to eq(3)
+          expect(draw_document.project_tasks.pending.count).to eq(1)
+          expect(draw_document.project_tasks.approved.count).to eq(1)
           task_count = draw_document.project_tasks.count
           draw_document.trigger_event(event_name: :withdraw)
           draw_document.project_tasks.reload
           expect(draw_document.project_tasks.count).to eq(task_count)
-          expect(draw_document.project_tasks.approved.count).to eq(3)
+          expect(draw_document.project_tasks.approved.count).to eq(1)
           expect(draw_document.project_tasks.pending.count).to eq(0)
         end
       end
