@@ -32,7 +32,6 @@ class ProjectCost < ApplicationRecord
   ALLOWED_PARAMS = [:id, :approval_lead_time, :cost_type, :name, :total]
   CONTINGENCY_COST_MATCH = /Contingency/
   enum :cost_type, [:land, :hard, :soft, :finance]
-  CONTINGENCY_COST_MATCH = /contingency/
   
   ### Associations
   belongs_to :project
