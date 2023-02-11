@@ -30,11 +30,12 @@
         <%= render partial: 'project_tasks', locals: {project: @project, project_tasks: @project.project_tasks.pending} %> 
       </div>
       <div class="col">
-        <%= render partial: 'system_events', locals: {project: @project, system_events: @project.all_system_events} %> 
-      </div>
-      <div class="col">
         <%= render partial: 'members', locals: {project: @project, service: @service} %> 
       </div>
+      <div class="col">
+        <%= render partial: 'system_events', locals: {project: @project, system_events: @project.all_system_events} %> 
+      </div>
+
     </div>
   </div>
 
