@@ -84,4 +84,130 @@ RSpec.describe ProjectTask, type: :model do
     end
   end # End validations test
 
+  describe 'origin state machines' do
+    describe 'bubbling events to task' do
+      let(:invoice) { draw_cost_invoices.first }
+      let(:invoice_task) {
+        task = ProjectTaskService.new.generate(origin: invoice, action: :approve)
+        task.update(state: :needs_review)
+        task
+      }
+      let(:draw_document) { draw_documents.first }
+      let(:draw_document_task) {
+        task = ProjectTaskService.new.generate(origin: draw_document, action: :approve)
+        task.update(state: :needs_review)
+        task
+      }
+      let(:draw_task) {
+        task = ProjectTaskService.new.generate(origin: draw, action: :approve)
+        task.update(state: :needs_review)
+        task
+      }
+      let(:draw_cost_task) {
+        task = ProjectTaskService.new.generate(origin: draw_cost, action: :approve)
+        task.update(state: :needs_review)
+        task
+      }
+
+      before do
+        draw.update(state: :submitted)
+        draw_cost.update(state: :submitted)
+        draw_cost.invoices.update(state: :approved)
+        invoice.update(state: :submitted)
+      end
+
+      it 'should accept the task on invoice approve' do
+        invoice_task
+        invoice.reload
+        invoice.trigger_event(event_name: :approve)
+        invoice_task.reload
+        expect(invoice_task.state).to eq('approved')
+      end
+      it 'should reject the task on invoice reject' do
+        invoice_task
+        invoice.reload
+        invoice.trigger_event(event_name: :reject)
+        invoice_task.reload
+        expect(invoice_task.state).to eq('rejected')
+      end
+      it 'should archive the task on invoice remove' do
+        invoice_task
+        invoice.reload
+        invoice.update(state: :rejected)
+        invoice.draw_cost.update(state: :rejected)
+        invoice.draw.update(state: :rejected)
+        invoice.reload
+        invoice.trigger_event(event_name: :remove)
+        invoice_task.reload
+        expect(invoice_task.state).to eq('archived')
+      end
+      it 'should accept the task on draw document approve' do
+        draw_document_task
+        draw_document.reload
+        draw_document.trigger_event(event_name: :approve)
+        draw_document_task.reload
+        expect(draw_document_task.state).to eq('approved')
+      end
+      it 'should reject the task on draw document reject' do
+        draw_document_task
+        draw_document.reload
+        draw_document.trigger_event(event_name: :reject)
+        draw_document_task.reload
+        expect(draw_document_task.state).to eq('rejected')
+      end
+      it 'should archive the task on draw document withdraw' do
+        draw_document_task
+        draw_document.reload
+        draw_document.trigger_event(event_name: :withdraw)
+        draw_document_task.reload
+        expect(draw_document_task.state).to eq('archived')
+      end
+      it 'should accept the task on draw approve' do
+        draw_documents
+        draw_task
+        draw.draw_costs.update(state: :approved)
+        draw.draw_documents.update(state: :approved)
+        draw.reload
+        draw.trigger_event(event_name: :approve)
+        draw_task.reload
+        expect(draw_task.state).to eq('approved')
+      end
+      it 'should reject the task on draw reject' do
+        draw_task
+        draw.reload
+        draw.trigger_event(event_name: :reject)
+        draw_task.reload
+        expect(draw_task.state).to eq('rejected')
+      end
+      it 'should archive the task on draw withdraw' do
+        draw_task
+        draw.reload
+        draw.trigger_event(event_name: :withdraw)
+        draw_task.reload
+        expect(draw_task.state).to eq('archived')
+      end
+      it 'should accept the task on draw_cost approve' do
+        draw_cost_task
+        draw_cost.reload
+        draw_cost.trigger_event(event_name: :approve)
+        draw_cost_task.reload
+        expect(draw_cost_task.state).to eq('approved')
+      end
+      it 'should reject the task on draw_cost reject' do
+        draw_cost_task
+        draw_cost.reload
+        draw_cost.trigger_event(event_name: :reject)
+        draw_cost_task.reload
+        expect(draw_cost_task.state).to eq('rejected')
+      end
+      it 'should archive the task on draw_cost remove' do
+        draw_cost_task
+        draw_cost.reload
+        draw_cost.trigger_event(event_name: :withdraw)
+        draw_cost_task.reload
+        expect(draw_cost_task.state).to eq('archived')
+      end
+    end
+  end
+
 end

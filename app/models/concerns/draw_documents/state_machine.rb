@@ -72,10 +72,12 @@ module DrawDocuments
       end
 
       def after_approve(user)
+        bubble_event_to_project_tasks(:approve)
         mark_approval_by(user) 
       end
 
       def after_reject(user)
+        bubble_event_to_project_tasks(:reject)
         unapprove
       end
 
@@ -97,6 +99,18 @@ module DrawDocuments
 
       def after_withdraw(user=nil)
         project_tasks.pending.each{|task| task.trigger_event(event_name: :archive, user: user)}
+      end
+
+      def bubble_event_to_project_tasks(event_name)
+        task_event = case event_name.to_sym
+                     when :approve, :reject
+                       event_name.to_sym
+                     when :withdraw
+                       :archive
+                     end
+        project_tasks.pending.each do |task|
+          task.trigger_event(event_name: task_event) if task.permitted_state_events.include?(task_event)
+        end
       end
     end
 

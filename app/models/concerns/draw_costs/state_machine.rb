@@ -33,11 +33,13 @@ module DrawCosts
 
         event :approve do
           transitions from: %i{ submitted rejected }, to: :approved,
-            guard: :allow_approve?
+            guard: :allow_approve?,
+            after: Proc.new { |*args| after_approve(*args)}
         end
 
         event :reject do
-          transitions from: %i{ submitted approved }, to: :rejected
+          transitions from: %i{ submitted approved }, to: :rejected,
+            after: Proc.new { |*args| after_reject(*args)}
         end
 
         event :withdraw do
@@ -101,6 +103,10 @@ module DrawCosts
         invoices.visible.any?
       end
 
+      def after_approve(user)
+        bubble_event_to_project_tasks(:approve)
+      end
+
       def allow_approve?
         invoices.where(state: %i{submitted approved}).any? && invoices.pending.none?
       end
@@ -124,12 +130,28 @@ module DrawCosts
         end
       end
 
+      def after_reject(user)
+        bubble_event_to_project_tasks(:reject)
+      end
+
       def after_withdraw(user=nil)
         archive_project_tasks(recurse: true)
       end
 
       def approval_lead_time
         APPROVAL_LEAD_TIME
+      end
+
+      def bubble_event_to_project_tasks(event_name)
+        task_event = case event_name.to_sym
+                     when :approve, :reject
+                       event_name.to_sym
+                     when :withdraw
+                       :archive
+                     end
+        project_tasks.pending.each do |task|
+          task.trigger_event(event_name: task_event) if task.permitted_state_events.include?(task_event)
+        end
       end
 
     end

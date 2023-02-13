@@ -104,9 +104,11 @@ module Invoices
 
       def after_approve
         draw_cost.after_last_invoice_approval
+        bubble_event_to_project_tasks(:approve)
       end
 
       def after_reject(user)
+        bubble_event_to_project_tasks(:reject)
         draw_cost.trigger_event(event_name: :reject, user: user)
       end
 
@@ -119,9 +121,9 @@ module Invoices
       end
 
       def after_remove(user)
+        bubble_event_to_project_tasks(:remove)
         draw_cost.trigger_event(event_name: :revert_to_pending, user: user) if
           draw_cost.permitted_state_events.include?(:revert_to_pending)
-        archive_project_tasks
       end
 
       def allow_remove?
@@ -165,6 +167,19 @@ module Invoices
           nil
         end
       end
+
+      def bubble_event_to_project_tasks(event_name)
+        task_event = case event_name.to_sym
+                     when :approve, :reject
+                       event_name.to_sym
+                     when :remove
+                       :archive
+                     end
+        project_tasks.pending.each do |task|
+          task.trigger_event(event_name: task_event) if task.permitted_state_events.include?(task_event)
+        end
+      end
+
     end
 
   end

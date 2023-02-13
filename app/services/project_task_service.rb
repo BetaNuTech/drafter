@@ -10,7 +10,7 @@ class ProjectTaskService
     @changed_at = nil
   end
 
-  def generate(origin: nil, assignee:, action:)
+  def generate(origin:, assignee: nil, action:)
     @project_task = ProjectTaskServices::Generator.call(origin:, assignee:, action:)
   end
 
