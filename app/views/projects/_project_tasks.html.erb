@@ -1,15 +1,1 @@
-<div id="project-tasks-section" class="card">
-  <div class="card-header">
-    <h5>
-      Pending Tasks
-    </h5>
-  </div>
-  <div class="card-body">
-    <ul class="list-group">
-      <%= turbo_stream_from "Project_#{project.id}_project_tasks" %>
-      <%= turbo_frame_tag "Project_#{project.id}_project_tasks" do %>
-        <%= render project_tasks.order(due_at: :asc).limit(10) %>
-      <% end %>
-    </ul>
-  </div>
-</div>
+project_tasks.html.erb

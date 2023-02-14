@@ -4,9 +4,9 @@
       <em><%= short_date(project_task.due_at) %></em>
     </span>
     &nbsp;
-    <%= link_to('Approve', approve_project_task_path(project_task), class: 'project-task-action btn btn-sm btn-success', data: {turbo_method: :post, turbo_confirm: "Are you sure you want to approve this #{project_task.origin.class.name}?"} ) %>
-    <%= link_to('Reject', reject_project_task_path(project_task), class: 'project-task-action btn btn-sm btn-danger', data: {turbo_method: :post, turbo_confirm: "Are you sure you want to reject this #{project_task.origin.class.name}?"} ) %>
-    <%= link_to('Archive', archive_project_task_path(project_task), class: 'project-task-action btn btn-sm btn-warning', data: {turbo_method: :post, turbo_confirm: 'Are you sure you want to archive/delete this task?'} ) %>
+    <%= link_to('Approve', approve_project_task_path(project_task), class: 'project-task-action btn btn-sm btn-success', data: {turbo_method: :post, turbo_confirm: "Are you sure you want to approve this #{project_task.origin.class.name}?"} ) if policy(project_task).approve? %>
+    <%= link_to('Reject', reject_project_task_path(project_task), class: 'project-task-action btn btn-sm btn-danger', data: {turbo_method: :post, turbo_confirm: "Are you sure you want to reject this #{project_task.origin.class.name}?"} ) if policy(project_task).reject? %>
+    <%= link_to('Archive', archive_project_task_path(project_task), class: 'project-task-action btn btn-sm btn-warning', data: {turbo_method: :post, turbo_confirm: 'Are you sure you want to archive/delete this task?'} )  if policy(project_task).archive?%>
     <br/>
     <%= link_to(project_task.name, project_task_origin_url(project_task), { target: '_blank' }) %>
     <span class="badge bg-secondary">

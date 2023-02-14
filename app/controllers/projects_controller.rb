@@ -1,8 +1,14 @@
 class ProjectsController < ApplicationController
+  PROJECT_TASK_FILTERS = %i{all active approved rejected}
+  PROJECT_TASK_FILTER_DEFAULT = :active
+  PROJECT_TASK_COUNT_DEFAULT = 10
+  PROJECT_TASK_COUNT_MAX = 99
+
   before_action :authenticate_user!
-  before_action :set_project, only: [:edit, :update, :show, :destroy, :add_member]
+  before_action :set_project, only: [:edit, :update, :show, :destroy, :add_member, :project_tasks]
   after_action :verify_authorized
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_home
+
 
   def index
     authorize Project
@@ -34,8 +40,17 @@ class ProjectsController < ApplicationController
   def show
     authorize @project
     @service = Projects::Updater.new(@current_user, @project)
+    @project_tasks = filtered_project_tasks
     breadcrumbs.add(label: 'Home', url: '/')
     breadcrumbs.add(label: @project.name, url: project_path(@project), active: true)
+  end
+
+  def project_tasks
+    authorize @project
+    @project_tasks = filtered_project_tasks
+    breadcrumbs.add(label: 'Home', url: '/')
+    breadcrumbs.add(label: @project.name, url: project_path(@project))
+    breadcrumbs.add(label: 'Tasks', url: project_path(@project), active: true)
   end
 
   def edit
@@ -85,11 +100,34 @@ class ProjectsController < ApplicationController
   end
 
   def set_project
-    @project = record_scope.find(params[:id])
+    @project = record_scope.find(params[:id] || params[:project_id])
   end
 
   def project_params
     allowed_params = policy(Project).allowed_params
     params.require(:project).permit(*allowed_params)
+  end
+
+  def filtered_project_tasks
+    if params[:task_filter].present?
+      @task_filter = params[:task_filter].to_sym
+      task_count = PROJECT_TASK_COUNT_MAX
+    else
+      task_count = PROJECT_TASK_COUNT_DEFAULT
+      @task_filter = PROJECT_TASK_FILTER_DEFAULT
+    end
+
+    skope = case @task_filter
+            when :all
+              @project.project_tasks
+            when :active
+              @project.project_tasks.active
+            when :approved
+              @project.project_tasks.approved
+            when :rejected
+              @project.project_tasks.rejected
+            end
+
+    skope.order(due_at: :asc).limit(task_count)
   end
 end

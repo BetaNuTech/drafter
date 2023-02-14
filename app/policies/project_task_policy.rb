@@ -47,15 +47,18 @@ class ProjectTaskPolicy < ApplicationPolicy
   end
 
   def approve?
-    privileged_user? || user.project_internal?(record.project)
+    ( privileged_user? || user.project_internal?(record.project) ) &&
+      record.permitted_state_events.include?(:approve)
   end
 
   def reject?
-    approve?
+    ( privileged_user? || user.project_internal?(record.project) ) &&
+      record.permitted_state_events.include?(:reject)
   end
 
   def archive?
-    approve?
+    ( privileged_user? || user.project_internal?(record.project) ) &&
+      record.permitted_state_events.include?(:archive)
   end
 
 end

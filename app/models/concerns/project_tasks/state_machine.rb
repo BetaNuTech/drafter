@@ -3,6 +3,7 @@ module ProjectTasks
     extend ActiveSupport::Concern
 
     PENDING_STATES = %w{new needs_review needs_consult rejected}
+    ACTIVE_STATES = %w{new needs_review needs_consult}
 
     class_methods do
       def state_names
@@ -14,6 +15,7 @@ module ProjectTasks
       include AASM
 
       scope :pending, -> { where(state: ProjectTasks::StateMachine::PENDING_STATES) }
+      scope :active, -> { where(state: ProjectTasks::StateMachine::ACTIVE_STATES) }
 
       aasm column: :state do
         state :new

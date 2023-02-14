@@ -28,6 +28,10 @@ class ProjectPolicy < ApplicationPolicy
     privileged_user? || user.member?(record)
   end
 
+  def project_tasks?
+    show?
+  end
+
   def edit?
     privileged_user? || user.project_owner?(record)
   end

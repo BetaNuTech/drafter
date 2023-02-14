@@ -30,6 +30,9 @@ Rails.application.routes.draw do
       post 'reject', to: 'draws#reject'
       post 'submit', to: 'draws#submit'
     end
+    member do 
+      get 'project_tasks', to: 'projects#project_tasks'
+    end
   end
 
   resources :project_tasks do

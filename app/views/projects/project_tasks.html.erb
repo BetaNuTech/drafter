@@ -1,0 +1,31 @@
+<% project ||= @project %>
+<% project_tasks ||= @project_tasks %>
+<% task_filter ||= @task_filter %>
+
+<%= turbo_frame_tag dom_id(@project, 'tasks') do %>
+  <div id="project-tasks-section" class="card">
+    <div class="card-header">
+      <div class="float-start">
+        <h5><%= project.name %> Tasks</h5>
+      </div>
+      <div class="float-end filter-links">
+        <%= link_to('Active', project_tasks_project_path(id: project.id, task_filter: 'active'),
+                      class: (task_filter == :active ? 'badge bg-info' : '')) %>
+        <%= link_to('Approved', project_tasks_project_path(id: project.id, task_filter: 'approved'),
+                      class: (task_filter == :approved ? 'badge bg-info' : '')) %>
+        <%= link_to('Rejected', project_tasks_project_path(id: project.id, task_filter: 'rejected'),
+                      class: (task_filter == :rejected ? 'badge bg-info' : '')) %>
+        <%= link_to('All', project_tasks_project_path(id: project.id, task_filter: 'all'),
+                      class: (task_filter == :all ? 'badge bg-info' : '')) %>
+      </div>
+    </div>
+    <div class="card-body">
+      <ul class="list-group">
+        <%= turbo_stream_from "Project_#{project.id}_project_tasks" %>
+        <%= turbo_frame_tag "Project_#{project.id}_project_tasks" do %>
+          <%= render project_tasks.order(due_at: :asc).limit(10) %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>
