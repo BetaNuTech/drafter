@@ -38,9 +38,11 @@
           <% if draw_cost.invoices.any? && policy(draw_cost.invoices.first).show? %>
             <%= render draw_cost.invoices.visible.order(created_at: :asc) %>
           <% end %>
-          <div class="d-flex flex-column justify-content-evenly text-center m-1" >
-            <%= render partial: 'draw_costs/add_invoice_button', locals: { draw_cost: draw_cost } %>
-          </div>
+          <% if draw_cost.allow_invoice_changes? %>
+            <div class="d-flex flex-column justify-content-evenly text-center m-1" >
+              <%= render partial: 'draw_costs/add_invoice_button', locals: { draw_cost: draw_cost } %>
+            </div>
+        <% end %>
         </div> <!-- end invoices -->
       </div> <!-- end Main section -->
 

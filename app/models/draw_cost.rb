@@ -96,7 +96,7 @@ class DrawCost < ApplicationRecord
   end
 
   def allow_new_change_order?
-    project_cost.change_request_allowed?
+    allow_invoice_changes? && project_cost.change_request_allowed?
   end
 
   def name
