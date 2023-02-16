@@ -6,6 +6,14 @@ GIT
       activesupport (>= 4.0)
       terminal-table (>= 1.8)
 
+GIT
+  remote: https://github.com/Rykian/clockwork.git
+  revision: 7ed9042e49cd841e41fe516f74ffd290fcb2105f
+  specs:
+    clockwork (3.0.2)
+      activesupport
+      tzinfo
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -456,6 +464,7 @@ DEPENDENCIES
   bundler-audit
   byebug
   capybara
+  clockwork!
   colorize
   daemons
   debug

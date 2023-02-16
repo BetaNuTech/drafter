@@ -55,6 +55,9 @@ services:
   worker:
     <<: *backend
     command: bin/delayed_job -n 2 start
+  clock:
+    <<: *backend
+    command: bundle exec clockwork clock.rb
   test:
     <<: *backend
     command: "echo 'NOOP (temporary)'"

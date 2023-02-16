@@ -44,6 +44,7 @@ gem 'sprockets-rails'
 gem 'stimulus-rails'
 gem 'turbo-rails'
 gem 'after_commit_everywhere'
+gem 'clockwork', github: 'Rykian/clockwork'
 
 group :development do
   gem 'web-console'
