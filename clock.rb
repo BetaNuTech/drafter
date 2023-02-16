@@ -10,6 +10,6 @@ module Clockwork
 
   every(15.seconds, 'invoices.analyze') { Invoice.analyze_submitted }
 
-  every(1.minute, 'invoices.process') { InvoiceProcessingService.new.process_completion_queue }
+  every(30.seconds, 'invoices.process') { InvoiceProcessingService.new.process_completion_queue }
   every(1.minute, 'tasks.sync') { ProjectTaskServices::Sync.new.pull_project_task_states }
 end
