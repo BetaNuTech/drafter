@@ -8,8 +8,7 @@ module Clockwork
     puts "Running #{job}, at #{time}"
   end
 
-  every(15.seconds, 'invoices.analyze') { Invoice.analyze_submitted }
-
-  every(30.seconds, 'invoices.process') { InvoiceProcessingService.new.delay.process_completion_queue }
+  every(10.seconds, 'invoices.analyze') { Invoice.analyze_submitted }
+  every(15.seconds, 'invoices.process') { InvoiceProcessingService.new.delay.process_completion_queue }
   every(1.minute, 'tasks.sync') { ProjectTaskServices::Sync.new.delay.pull_project_task_states }
 end
