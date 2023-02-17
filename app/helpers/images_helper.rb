@@ -1,5 +1,7 @@
 module ImagesHelper
 
+  # See https://icons.getbootstrap.com/ to preview all icons and their respestive names
+  # All BootStrap Icon svg assets have been downloaded to app/assets/images/icons
   ICONS = {
     alert: 'exclamation-triangle-fill.svg',
     circle_check: 'check-circle-fill.svg',
