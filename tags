@@ -8,6 +8,7 @@
 <=>	./app/models/role.rb	/^  def <=>(other)$/;"	f	class:Role
 AddDrawableToProjectCosts	./db/migrate/20221020170459_add_drawable_to_project_costs.rb	/^class AddDrawableToProjectCosts < ActiveRecord::Migration[7.0]$/;"	c
 AddInitialDrawOnlyToProjectCosts	./db/migrate/20221027012909_add_initial_draw_only_to_project_costs.rb	/^class AddInitialDrawOnlyToProjectCosts < ActiveRecord::Migration[7.0]$/;"	c
+AddRemoteLastCheckedAtToProjectTasks	./db/migrate/20230208001308_add_remote_last_checked_at_to_project_tasks.rb	/^class AddRemoteLastCheckedAtToProjectTasks < ActiveRecord::Migration[7.0]$/;"	c
 AddRemoteUpdatedAtToProjectTasks	./db/migrate/20230201005442_add_remote_updated_at_to_project_tasks.rb	/^class AddRemoteUpdatedAtToProjectTasks < ActiveRecord::Migration[7.0]$/;"	c
 AddStateToDrawDocuments	./db/migrate/20221031212831_add_state_to_draw_documents.rb	/^class AddStateToDrawDocuments < ActiveRecord::Migration[7.0]$/;"	c
 AddTotalToProjectCostSamples	./db/migrate/20221027020721_add_total_to_project_cost_samples.rb	/^class AddTotalToProjectCostSamples < ActiveRecord::Migration[7.0]$/;"	c
@@ -59,6 +60,7 @@ Clickup	./app/services/clickup/data/space.rb	/^module Clickup$/;"	m
 Clickup	./app/services/clickup/data/task.rb	/^module Clickup$/;"	m
 Clickup	./app/services/clickup/data/workspace.rb	/^module Clickup$/;"	m
 Clickup	./app/services/project_task_services/sync_adapters/clickup.rb	/^    class Clickup$/;"	c	class:ProjectTaskServices.SyncAdapters
+Clockwork	./clock.rb	/^module Clockwork$/;"	m
 Configuration	./app/services/clickup/api/configuration.rb	/^    class Configuration$/;"	c	class:Clickup.Api
 Configuration	./app/services/textract/api/configuration.rb	/^    class Configuration$/;"	c	class:Textract.Api
 Connection	./app/channels/application_cable/connection.rb	/^  class Connection < ActionCable::Connection::Base$/;"	c	class:ApplicationCable
@@ -289,14 +291,17 @@ admin?	./app/models/concerns/users/role.rb	/^      def admin?$/;"	f	class:Users.
 admin?	./app/models/role.rb	/^  def admin?$/;"	f	class:Role
 administrator?	./app/models/concerns/users/role.rb	/^      def administrator?$/;"	f	class:Users.Role
 after_approval	./app/models/concerns/draws/state_machine.rb	/^      def after_approval(user)$/;"	f	class:Draws.StateMachine
+after_approve	./app/models/concerns/draw_costs/state_machine.rb	/^      def after_approve(user)$/;"	f	class:DrawCosts.StateMachine.TransitionError
 after_approve	./app/models/concerns/draw_documents/state_machine.rb	/^      def after_approve(user)$/;"	f	class:DrawDocuments.StateMachine
-after_approve	./app/models/concerns/invoices/state_machine.rb	/^      def after_approve(user)$/;"	f	class:Invoices.StateMachine
+after_approve	./app/models/concerns/invoices/state_machine.rb	/^      def after_approve$/;"	f	class:Invoices.StateMachine
 after_approve	./app/models/concerns/project_tasks/state_machine.rb	/^      def after_approve(user)$/;"	f	class:ProjectTasks.StateMachine
 after_archive	./app/models/concerns/project_tasks/state_machine.rb	/^      def after_archive(user)$/;"	f	class:ProjectTasks.StateMachine
 after_confirmation_path_for	./app/controllers/users/confirmations_controller.rb	/^  def after_confirmation_path_for(resource_name, resource)$/;"	f	class:Users
 after_last_invoice_approval	./app/models/concerns/draw_costs/state_machine.rb	/^      def after_last_invoice_approval$/;"	f	class:DrawCosts.StateMachine.TransitionError
 after_processing	./app/models/concerns/invoices/state_machine.rb	/^      def after_processing(user)$/;"	f	class:Invoices.StateMachine
+after_reject	./app/models/concerns/draw_costs/state_machine.rb	/^      def after_reject(user)$/;"	f	class:DrawCosts.StateMachine.TransitionError
 after_reject	./app/models/concerns/draw_documents/state_machine.rb	/^      def after_reject(user)$/;"	f	class:DrawDocuments.StateMachine
+after_reject	./app/models/concerns/draws/state_machine.rb	/^      def after_reject(user)$/;"	f	class:Draws.StateMachine
 after_reject	./app/models/concerns/invoices/state_machine.rb	/^      def after_reject(user)$/;"	f	class:Invoices.StateMachine
 after_reject	./app/models/concerns/project_tasks/state_machine.rb	/^      def after_reject(user)$/;"	f	class:ProjectTasks.StateMachine
 after_remove	./app/models/concerns/invoices/state_machine.rb	/^      def after_remove(user)$/;"	f	class:Invoices.StateMachine
@@ -418,6 +423,10 @@ base_task_name	./app/services/project_task_services/draw_task_generator.rb	/^   
 base_task_name	./app/services/project_task_services/invoice_task_generator.rb	/^    def base_task_name$/;"	f	class:ProjectTaskServices
 breadcrumbs	./app/controllers/application_controller.rb	/^  def breadcrumbs$/;"	f	class:ApplicationController
 breadcrumbs_tag	./app/helpers/application_helper.rb	/^  def breadcrumbs_tag$/;"	f	class:ApplicationHelper
+bubble_event_to_project_tasks	./app/models/concerns/draw_costs/state_machine.rb	/^      def bubble_event_to_project_tasks(event_name)$/;"	f	class:DrawCosts.StateMachine.TransitionError
+bubble_event_to_project_tasks	./app/models/concerns/draw_documents/state_machine.rb	/^      def bubble_event_to_project_tasks(event_name)$/;"	f	class:DrawDocuments.StateMachine
+bubble_event_to_project_tasks	./app/models/concerns/draws/state_machine.rb	/^      def bubble_event_to_project_tasks(event_name)$/;"	f	class:Draws.StateMachine
+bubble_event_to_project_tasks	./app/models/concerns/invoices/state_machine.rb	/^      def bubble_event_to_project_tasks(event_name)$/;"	f	class:Invoices.StateMachine
 budget_balance	./app/models/project_cost.rb	/^  def budget_balance$/;"	f	class:ProjectCost
 budget_balance_without_change_orders	./app/models/project_cost.rb	/^  def budget_balance_without_change_orders$/;"	f	class:ProjectCost
 budget_total	./app/models/project.rb	/^  def budget_total$/;"	f	class:Project
@@ -460,6 +469,7 @@ change	./db/migrate/20221110215333_remove_approval_from_change_orders.rb	/^  def
 change	./db/migrate/20230106002416_create_project_tasks.rb	/^  def change$/;"	f	class:CreateProjectTasks
 change	./db/migrate/20230131061032_remove_draw_document_approval_due_date.rb	/^  def change$/;"	f	class:RemoveDrawDocumentApprovalDueDate
 change	./db/migrate/20230201005442_add_remote_updated_at_to_project_tasks.rb	/^  def change$/;"	f	class:AddRemoteUpdatedAtToProjectTasks
+change	./db/migrate/20230208001308_add_remote_last_checked_at_to_project_tasks.rb	/^  def change$/;"	f	class:AddRemoteLastCheckedAtToProjectTasks
 change_order_funding_options	./app/helpers/draws_helper.rb	/^  def change_order_funding_options(change_order)$/;"	f
 change_order_funding_total	./app/models/project_cost.rb	/^  def change_order_funding_total$/;"	f	class:ProjectCost
 change_order_project_cost_options	./app/helpers/draws_helper.rb	/^  def change_order_project_cost_options(project: nil, change_order_project_cost:)$/;"	f
@@ -620,6 +630,7 @@ executive?	./app/models/role.rb	/^  def executive?$/;"	f	class:Role
 external?	./app/models/project_role.rb	/^  def external?$/;"	f	class:ProjectRole
 failed?	./app/services/textract/data/textract_job_status.rb	/^      def failed?$/;"	f	class:Textract.Data.TextractJobStatus
 fetch_data	./app/services/clickup/api/base.rb	/^      def fetch_data(url:, body:, headers: {}, options: {})$/;"	f	class:Clickup.Api.Base
+filtered_project_tasks	./app/controllers/projects_controller.rb	/^  def filtered_project_tasks$/;"	f	class:ProjectsController
 finance	./app/models/concerns/projects/users.rb	/^      def finance$/;"	f	class:Projects.Users
 finance	./app/models/project_role.rb	/^  def self.finance$/;"	F	class:ProjectRole
 finance?	./app/models/project_role.rb	/^  def finance?$/;"	f	class:ProjectRole
@@ -660,7 +671,7 @@ funding_summary	./app/services/project_task_services/draw_cost_task_generator.rb
 funds_available	./app/services/change_order_service.rb	/^  def funds_available(funding_source)$/;"	f	class:ChangeOrderService
 funds_available?	./app/services/change_order_service.rb	/^  def funds_available?(funding_source)$/;"	f	class:ChangeOrderService
 gemfile	./bin/bundle	/^  def gemfile$/;"	f
-generate	./app/services/project_task_service.rb	/^  def generate(origin: nil, assignee:, action:)$/;"	f	class:ProjectTaskService
+generate	./app/services/project_task_service.rb	/^  def generate(origin:, assignee: nil, action:)$/;"	f	class:ProjectTaskService
 generate	./app/services/project_task_services/draw_cost_task_generator.rb	/^    def generate$/;"	f	class:ProjectTaskServices
 generate	./app/services/project_task_services/draw_document_task_generator.rb	/^    def generate$/;"	f	class:ProjectTaskServices
 generate	./app/services/project_task_services/draw_task_generator.rb	/^    def generate$/;"	f	class:ProjectTaskServices
@@ -683,6 +694,7 @@ get_prefixed_env	./app/services/clickup/api/configuration.rb	/^      def get_pre
 get_task	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def get_task(project_task_or_remote_id)$/;"	f	class:ProjectTaskServices.SyncAdapters.Clickup
 get_tasks	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def get_tasks$/;"	f	class:ProjectTaskServices.SyncAdapters.Clickup
 get_workspace_id	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def get_workspace_id$/;"	f	class:ProjectTaskServices.SyncAdapters
+has_remote_task?	./app/models/concerns/project_tasks/sync.rb	/^      def has_remote_task?$/;"	f	class:ProjectTasks.Sync
 home_image	./app/helpers/images_helper.rb	/^  def home_image$/;"	f
 impersonate?	./app/policies/user_policy.rb	/^  def impersonate?$/;"	f	class:UserPolicy
 included	./spec/support/request_spec_helper.rb	/^  def self.included(base)$/;"	F	class:RequestSpecHelper
@@ -827,7 +839,6 @@ owner?	./app/models/project_role.rb	/^  def owner?$/;"	f	class:ProjectRole
 owners	./app/models/concerns/projects/users.rb	/^      def owners$/;"	f	class:Projects.Users
 password_required?	./app/models/concerns/users/devise.rb	/^      def password_required?$/;"	f	class:Users.Devise
 pending?	./app/models/concerns/project_tasks/state_machine.rb	/^      def pending?$/;"	f	class:ProjectTasks.StateMachine
-pending_project_tasks	./app/services/project_task_services/sync.rb	/^    def pending_project_tasks$/;"	f	class:ProjectTaskServices
 permitted_state_events	./app/models/concerns/draw_costs/state_machine.rb	/^      def permitted_state_events$/;"	f	class:DrawCosts.StateMachine.TransitionError
 permitted_state_events	./app/models/concerns/draw_documents/state_machine.rb	/^      def permitted_state_events$/;"	f	class:DrawDocuments.StateMachine
 permitted_state_events	./app/models/concerns/draws/state_machine.rb	/^      def permitted_state_events$/;"	f	class:Draws.StateMachine
@@ -843,7 +854,6 @@ permitted_states	./app/models/concerns/project_tasks/state_machine.rb	/^      de
 postData	./app/services/clickup/api/base.rb	/^      def postData(options, dry_run: false)$/;"	f	class:Clickup.Api.Base
 post_data	./app/services/clickup/api/base.rb	/^      def post_data(url:, body:, headers: {}, options: {})$/;"	f	class:Clickup.Api.Base
 preview_document	./app/helpers/application_helper.rb	/^  def preview_document(document:, resize:)$/;"	f	class:ApplicationHelper.breadcrumbs_tag
-preview_markup	./app/services/project_task_services/draw_document_task_generator.rb	/^    def preview_markup$/;"	f	class:ProjectTaskServices
 preview_markup	./app/services/project_task_services/invoice_task_generator.rb	/^    def preview_markup$/;"	f	class:ProjectTaskServices
 preview_url	./app/services/project_task_services/invoice_task_generator.rb	/^    def preview_url$/;"	f	class:ProjectTaskServices
 primary_and_foreign_key_types	./db/migrate/20220901195346_create_active_storage_tables.active_storage.rb	/^    def primary_and_foreign_key_types$/;"	f	class:CreateActiveStorageTables
@@ -879,6 +889,9 @@ project_role_background_class	./app/helpers/projects_helper.rb	/^  def project_r
 project_task_due_class	./app/helpers/project_tasks_helper.rb	/^  def project_task_due_class(project_task)$/;"	f	class:ProjectTasksHelper
 project_task_origin_url	./app/helpers/project_tasks_helper.rb	/^  def project_task_origin_url(project_task)$/;"	f	class:ProjectTasksHelper
 project_task_scope	./app/controllers/project_tasks_controller.rb	/^  def project_task_scope$/;"	f	class:ProjectTasksController
+project_tasks	./app/controllers/projects_controller.rb	/^  def project_tasks$/;"	f	class:ProjectsController
+project_tasks?	./app/policies/project_policy.rb	/^  def project_tasks?$/;"	f	class:ProjectPolicy
+project_tasks_for_refresh	./app/services/project_task_services/sync.rb	/^    def project_tasks_for_refresh$/;"	f	class:ProjectTaskServices
 project_user	./app/services/projects/membership.rb	/^    def project_user$/;"	f	class:Projects.Membership
 project_user_params	./app/controllers/project_users_controller.rb	/^  def project_user_params$/;"	f	class:ProjectUsersController
 pull_project_task_state	./app/services/project_task_services/sync.rb	/^    def pull_project_task_state(project_task, remote_task: nil, remote_task_status: nil)$/;"	f	class:ProjectTaskServices
@@ -1044,7 +1057,6 @@ submit?	./app/policies/invoice_policy.rb	/^  def submit?$/;"	f	class:InvoicePoli
 submit_analysis_request	./app/services/invoice_processing_service.rb	/^  def submit_analysis_request(invoice:, requestid:)$/;"	f	class:InvoiceProcessingService
 submit_draw_costs	./app/models/concerns/draws/state_machine.rb	/^      def submit_draw_costs(user)$/;"	f	class:Draws.StateMachine
 submit_invoices	./app/models/concerns/draw_costs/state_machine.rb	/^      def submit_invoices(user)$/;"	f	class:DrawCosts.StateMachine.TransitionError
-submit_new_tasks	./app/models/draw_cost.rb	/^  def submit_new_tasks$/;"	f	class:DrawCost
 subtotal	./app/models/draw_cost.rb	/^  def subtotal$/;"	f	class:DrawCost
 switch_setting?	./app/policies/user_policy.rb	/^  def switch_setting?$/;"	f	class:UserPolicy
 system!	./bin/setup	/^def system!(*args)$/;"	f

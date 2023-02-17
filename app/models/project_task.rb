@@ -60,31 +60,31 @@ class ProjectTask < ApplicationRecord
   scope :pending, -> { where(state: ProjectTasks::StateMachine::PENDING_STATES) }
 
   ### Broadcast Streams
-  after_create_commit -> (project_task) {
-    stream_name = target =  "Project_#{project_task.project_id}_project_tasks"
-    broadcast_prepend_to stream_name,
-                         partial: "project_tasks/project_task",
-                         locals: {project_task: self},
-                         target: target
-  }
-
   after_destroy_commit -> (project_task) {
     stream_name = target =  "Project_#{project_task.project_id}_project_tasks"
     broadcast_remove_to stream_name, target: target
   }
-
-  after_update_commit -> (project_task) {
-    stream_name = "Project_#{project_task.project_id}_project_tasks"
-    target = "project_task_#{project_task.id}"
-    case project_task.state
-      when *ProjectTasks::StateMachine::PENDING_STATES
-        broadcast_replace_to stream_name,
-                         partial: "project_tasks/project_task",
-                         locals: {project_task: self},
-                         target: target
-      else
-        broadcast_remove_to stream_name, target: target
-    end
-  }
+  
+  # Disabled to prevent information disclosure 
+  #after_create_commit -> (project_task) {
+    #stream_name = target =  "Project_#{project_task.project_id}_project_tasks"
+    #broadcast_prepend_to stream_name,
+                         #partial: "project_tasks/project_task",
+                         #locals: {project_task: self},
+                         #target: target
+  #}
+  #after_update_commit -> (project_task) {
+    #stream_name = "Project_#{project_task.project_id}_project_tasks"
+    #target = "project_task_#{project_task.id}"
+    #case project_task.state
+      #when *ProjectTasks::StateMachine::PENDING_STATES
+        #broadcast_replace_to stream_name,
+                         #partial: "project_tasks/project_task",
+                         #locals: {project_task: self},
+                         #target: target
+      #else
+        #broadcast_remove_to stream_name, target: target
+    #end
+  #}
 
 end
