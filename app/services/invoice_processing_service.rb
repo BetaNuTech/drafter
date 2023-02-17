@@ -25,7 +25,7 @@ class InvoiceProcessingService
 
   # Start analysis of provided invoice
   def start_analysis(invoice:, force: false)
-    raise InvalidStateError.new('Invoice must be in submitted state for analysis') unless (force || invoice.submitted?)
+    return false unless (force || invoice.submitted?)
 
     raise MissingDocumentError.new('Invoice has no attached document') unless invoice.document.attached?
 
