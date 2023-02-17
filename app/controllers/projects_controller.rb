@@ -128,6 +128,10 @@ class ProjectsController < ApplicationController
               @project.project_tasks.rejected
             end
 
+    if @current_user.project_developer?(@project)
+      skope = skope.where(assignee: @current_user)
+    end
+
     skope.order(due_at: :asc).limit(task_count)
   end
 end

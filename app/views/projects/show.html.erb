@@ -23,12 +23,16 @@
 
   <div class="col">
     <div class="row row-cols-1 g-3">
+      <!--
       <div class="col">
         <%#= render partial: 'shared/user_notifications', locals: { notifications: @notifications} %>
       </div>
-      <div class="col">
-        <%= render partial: 'project_tasks', locals: {project: @project, project_tasks: @project_tasks} %> 
-      </div>
+      -->
+      <% unless @current_user.project_developer?(@project) %>
+        <div class="col">
+          <%= render partial: 'project_tasks', locals: {project: @project, project_tasks: @project_tasks} %> 
+        </div>
+      <% end %>
       <div class="col">
         <%= render partial: 'members', locals: {project: @project, service: @service} %> 
       </div>
