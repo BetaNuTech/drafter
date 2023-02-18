@@ -109,8 +109,9 @@ RSpec.describe DrawDocument, type: :model do
           draw_document.trigger_event(event_name: :withdraw)
           draw_document.project_tasks.reload
           expect(draw_document.project_tasks.count).to eq(task_count)
-          expect(draw_document.project_tasks.approved.count).to eq(1)
+          expect(draw_document.project_tasks.approved.count).to eq(0)
           expect(draw_document.project_tasks.pending.count).to eq(0)
+          expect(draw_document.project_tasks.archived.count).to eq(2)
         end
       end
     end

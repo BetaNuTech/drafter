@@ -20,7 +20,7 @@ module Draws
 
       scope :visible, -> { where(state: VISIBLE_STATES) }
 
-      aasm column: :state do
+      aasm column: :state, whiny_transitions: false do
         state :pending
         state :submitted
         state :internally_approved
@@ -71,8 +71,7 @@ module Draws
       def trigger_event(event_name:, user: nil)
         event = event_name.to_sym
         if permitted_state_events.include?(event)
-          self.aasm.fire!(event, user)
-          return self.save
+          return ( self.aasm.fire!(event, user) && self.save )
         else
           return false
         end
@@ -161,9 +160,9 @@ module Draws
       end
 
       def after_withdraw(user=nil)
-        bubble_event_to_project_tasks(:withdraw)
-        items = draw_documents.to_a + invoices.to_a
-        ProjectTask.where(origin: items).pending.each{ |task| task.trigger_event(event_name: :archive, user: user) }
+        items = draw_documents.to_a + invoices.to_a + [self]
+        ProjectTask.where(origin: items).each{ |task| task.trigger_event(event_name: :archive, user: user) }
+        project_tasks.each{|task| task.trigger_event(event_name: :archive, user: user) }
       end
 
       def approval_lead_time

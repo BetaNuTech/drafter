@@ -15,7 +15,7 @@ module Invoices
 
       include AASM
 
-      aasm column: :state do
+      aasm column: :state, whiny_transitions: false do
         state :pending
         state :submitted
         state :processing
@@ -75,8 +75,7 @@ module Invoices
       def trigger_event(event_name:, user: nil)
         event = event_name.to_sym
         if permitted_state_events.include?(event)
-          self.aasm.fire!(event, user)
-          return self.save
+          return ( self.aasm.fire!(event, user) && self.save )
         else
           return false
         end

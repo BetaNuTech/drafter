@@ -14,7 +14,7 @@ module DrawDocuments
       scope :visible, -> { where(state: VISIBLE_STATES) }
 
       include AASM
-      aasm column: :state do
+      aasm column: :state, whiny_transitions: false do
         state :pending
         state :approved
         state :rejected
@@ -46,8 +46,7 @@ module DrawDocuments
       def trigger_event(event_name:, user: nil)
         event = event_name.to_sym
         if permitted_state_events.include?(event)
-          self.aasm.fire!(event, user)
-          return self.save
+          return ( self.aasm.fire!(event, user) && self.save )
         else
           return false
         end
@@ -93,12 +92,12 @@ module DrawDocuments
         unapprove 
 
         # Clear pending tasks and create a new Approve task
-        project_tasks.pending.each{|task| task.trigger_event(event_name: :archive, user: user)}
+        project_tasks.each{|task| task.trigger_event(event_name: :archive, user: user)}
         create_task(assignee: nil, action: :approve)
       end
 
       def after_withdraw(user=nil)
-        project_tasks.pending.each{|task| task.trigger_event(event_name: :archive, user: user)}
+        project_tasks.each{|task| task.trigger_event(event_name: :archive, user: user)}
       end
 
       def bubble_event_to_project_tasks(event_name)

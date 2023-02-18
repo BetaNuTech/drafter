@@ -112,7 +112,7 @@ class DrawCost < ApplicationRecord
   end
 
   def archive_project_tasks(recurse: false)
-    project_tasks.pending.each{|task| task.trigger_event(event_name: :archive)}
+    project_tasks.each{|task| task.trigger_event(event_name: :archive)}
     invoices.each{|invoice| invoice.archive_project_tasks} if recurse
   end
 

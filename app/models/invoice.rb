@@ -139,7 +139,7 @@ class Invoice < ApplicationRecord
   end
 
   def archive_project_tasks
-    project_tasks.pending.each{|task| task.trigger_event(event_name: :archive)}
+    project_tasks.each{|task| task.trigger_event(event_name: :archive)}
   end
 
   def consult?

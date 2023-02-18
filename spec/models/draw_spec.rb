@@ -139,7 +139,7 @@ RSpec.describe Draw, type: :model do
           }
         }
 
-        it 'archives any pending draw document project tasks' do
+        it 'archives any draw document project tasks' do
           ProjectTask.destroy_all
           pending_document_tasks
           draw_document.project_tasks.reload
@@ -151,7 +151,7 @@ RSpec.describe Draw, type: :model do
           expect(draw_document.project_tasks.pending.count).to eq(0)
           expect(draw_document.project_tasks.archived.count).to eq(1)
         end
-        it 'archives any pending invoice project tasks' do
+        it 'archives any invoice project tasks' do
           pending_invoice_tasks
           invoice.reload
           expect(invoice.project_tasks.pending.count).to eq(1)

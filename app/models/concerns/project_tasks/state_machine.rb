@@ -17,7 +17,7 @@ module ProjectTasks
       scope :pending, -> { where(state: ProjectTasks::StateMachine::PENDING_STATES) }
       scope :active, -> { where(state: ProjectTasks::StateMachine::ACTIVE_STATES) }
 
-      aasm column: :state do
+      aasm column: :state, whiny_transitions: false do
         state :new
         state :needs_review
         state :needs_consult
@@ -54,8 +54,7 @@ module ProjectTasks
       def trigger_event(event_name:, user: nil)
         event = event_name.to_sym
         if permitted_state_events.include?(event)
-          self.aasm.fire!(event, user)
-          return self.save
+          return ( self.aasm.fire!(event, user) && self.save )
         else
           return false
         end
