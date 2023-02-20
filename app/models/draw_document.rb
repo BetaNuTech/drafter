@@ -109,4 +109,8 @@ class DrawDocument < ApplicationRecord
   def consult?
     false
   end
+
+  def descriptive_name
+    "'%{description}'document for %{draw}" % { draw: draw.name, description: description }
+  end
 end

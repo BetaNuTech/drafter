@@ -163,7 +163,70 @@ RSpec.describe Draw, type: :model do
           expect(invoice.project_tasks.archived.count).to eq(1)
         end
       end
-    end
+    end #withdraw
+
+    describe 'on reject' do
+      before do
+        draw_cost_invoices.update_all(state: :rejected)
+        draw_documents.each{|doc| doc.update(state: :rejected)}
+        draw.reload
+        draw.update(state: 'submitted')
+        draw.reload
+      end
+      describe 'notifications' do
+        it 'should send a notification email' do
+          assert(draw.permitted_state_events.include?(:reject))
+          expect{
+            draw.trigger_event(event_name: :reject)
+          }.to change{ActionMailer::Base.deliveries.count}.by(1)
+          draw.reload
+          assert(draw.rejected?)
+        end
+      end
+    end # reject
+
+    describe 'on internal approval' do
+      before do
+        draw_cost_invoices.update_all(state: :approved)
+        draw_documents.each{|doc| doc.update(state: :approved)}
+        draw.draw_costs.update_all(state: :approved)
+        draw.reload
+        draw.update(state: 'submitted')
+        draw.reload
+      end
+      describe 'notifications' do
+        it 'should send a notification email' do
+          assert(draw.permitted_state_events.include?(:approve))
+          expect{
+            draw.trigger_event(event_name: :approve)
+          }.to change{ActionMailer::Base.deliveries.count}.by(1)
+          draw.reload
+          assert(draw.approved?)
+        end
+      end
+    end # approval
+
+    describe 'on funding' do
+      before do
+        draw_cost_invoices.update_all(state: :approved)
+        draw_documents.each{|doc| doc.update(state: :approved)}
+        draw.draw_costs.update_all(state: :approved)
+        draw.reload
+        draw.update(state: :externally_approved) 
+        draw.reload
+      end
+      describe 'notifications' do
+        it 'should send a notification email' do
+          assert(draw.permitted_state_events.include?(:fund))
+          expect{
+            draw.trigger_event(event_name: :fund)
+          }.to change{ActionMailer::Base.deliveries.count}.by(1)
+          draw.reload
+          assert(draw.approved?)
+        end
+      end
+    end # approval
+
   end
 
 end

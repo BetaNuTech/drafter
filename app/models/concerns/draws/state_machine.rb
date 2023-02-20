@@ -64,7 +64,8 @@ module Draws
         end
 
         event :fund do
-          transitions from: :externally_approved, to: :funded
+          transitions from: :externally_approved, to: :funded,
+            after: Proc.new {|*args| after_funding(*args) }
         end
       end
 
@@ -148,6 +149,7 @@ module Draws
 
       def after_reject(user)
         bubble_event_to_project_tasks(:reject)
+        send_state_notification(aasm.to_state)
       end
 
       def allow_approval?
@@ -157,12 +159,17 @@ module Draws
       def after_approval(user)
         bubble_event_to_project_tasks(:approve)
         approve(user)
+        send_state_notification
       end
 
       def after_withdraw(user=nil)
         items = draw_documents.to_a + invoices.to_a + [self]
         ProjectTask.where(origin: items).each{ |task| task.trigger_event(event_name: :archive, user: user) }
         project_tasks.each{|task| task.trigger_event(event_name: :archive, user: user) }
+      end
+
+      def after_funding(user=nil)
+        send_state_notification
       end
 
       def approval_lead_time

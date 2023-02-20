@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: invoices
+# Table     <liname: invoices
 #
 #  id                       :uuid             not null, primary key
 #  amount                   :decimal(, )      default(0.0), not null
@@ -144,6 +144,10 @@ class Invoice < ApplicationRecord
 
   def consult?
     draw_cost&.consult?
+  end
+
+  def descriptive_name
+    "%{draw_cost} Invoice for %{amount}" % {draw_cost: draw_cost.name, amount: "$%0.2f" % amount }
   end
 
 end

@@ -128,4 +128,15 @@ class Draw < ApplicationRecord
     ProjectTaskServices::Generator.call(origin: self, assignee:, action: ).
       trigger_event(event_name: :submit_for_review)
   end
+
+  def send_state_notification(new_state=nil)
+    mailer = NotificationMailer.with(draw: self, state: ( new_state || state )).
+      draw_status_notification
+
+    if Rails.env.test?
+      mailer.deliver
+    else
+      mailer.deliver_later
+    end
+  end
 end

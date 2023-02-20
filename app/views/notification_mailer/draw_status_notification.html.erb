@@ -1,0 +1,27 @@
+<p>Hello from Drafter!</p>
+
+<h2>
+  NOTICE:
+  <%= @email_data[:draw_full_name] %> is now <i><%= @email_data[:state] %></i>
+</h2>
+
+<% if @draw.draw_documents.rejected.any? %>
+  <h3>Rejected Documents</h3>
+  <ul>
+    <% @draw.draw_documents.rejected.each do |document| %>
+      <li><%= document.descriptive_name %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if @draw.invoices.rejected.any? %>
+  <h3>Rejected Invoices</h3>
+  <ul>
+    <% @draw.invoices.rejected.each do |invoice| %>
+      <li><%= invoice.descriptive_name %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= link_to('Click Here', project_draw_url(project_id: @project.id, id: @draw.id) ) %> to view this Draw in Drafter.
+

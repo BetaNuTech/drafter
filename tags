@@ -151,6 +151,7 @@ List	./app/services/clickup/data/list.rb	/^    class List$/;"	c	class:Clickup.Da
 Lists	./app/services/clickup/api/lists.rb	/^    class Lists < Base$/;"	c	class:Clickup.Api
 Membership	./app/services/projects/membership.rb	/^  class Membership$/;"	c	class:Projects
 MissingDocumentError	./app/services/invoice_processing_service.rb	/^  class MissingDocumentError < InvoiceProcessingServiceError; end$/;"	c	class:InvoiceProcessingService
+NotificationMailer	./app/mailers/notification_mailer.rb	/^class NotificationMailer < ApplicationMailer$/;"	c
 Organization	./app/models/organization.rb	/^class Organization < ApplicationRecord$/;"	c
 OrganizationPolicy	./app/policies/organization_policy.rb	/^class OrganizationPolicy < ApplicationPolicy$/;"	c
 OrganizationsController	./app/controllers/organizations_controller.rb	/^class OrganizationsController < ApplicationController$/;"	c
@@ -297,6 +298,7 @@ after_approve	./app/models/concerns/invoices/state_machine.rb	/^      def after_
 after_approve	./app/models/concerns/project_tasks/state_machine.rb	/^      def after_approve(user)$/;"	f	class:ProjectTasks.StateMachine
 after_archive	./app/models/concerns/project_tasks/state_machine.rb	/^      def after_archive(user)$/;"	f	class:ProjectTasks.StateMachine
 after_confirmation_path_for	./app/controllers/users/confirmations_controller.rb	/^  def after_confirmation_path_for(resource_name, resource)$/;"	f	class:Users
+after_funding	./app/models/concerns/draws/state_machine.rb	/^      def after_funding(user=nil)$/;"	f	class:Draws.StateMachine
 after_last_invoice_approval	./app/models/concerns/draw_costs/state_machine.rb	/^      def after_last_invoice_approval$/;"	f	class:DrawCosts.StateMachine.TransitionError
 after_processing	./app/models/concerns/invoices/state_machine.rb	/^      def after_processing(user)$/;"	f	class:Invoices.StateMachine
 after_reject	./app/models/concerns/draw_costs/state_machine.rb	/^      def after_reject(user)$/;"	f	class:DrawCosts.StateMachine.TransitionError
@@ -540,6 +542,8 @@ deleteTask	./app/services/clickup/api/tasks.rb	/^      def deleteTask(task_id:)$
 delete_data	./app/services/clickup/api/base.rb	/^      def delete_data(url:, body:, headers: {}, options: {})$/;"	f	class:Clickup.Api.Base
 delete_sqs_message	./app/services/textract/api/analyzer.rb	/^      def delete_sqs_message(sqs_message)$/;"	f	class:Textract.Api.Analyzer.TextractApiError
 description	./app/models/draw_document.rb	/^  def description$/;"	f	class:DrawDocument
+descriptive_name	./app/models/draw_document.rb	/^  def descriptive_name$/;"	f	class:DrawDocument
+descriptive_name	./app/models/invoice.rb	/^  def descriptive_name$/;"	f	class:Invoice
 destroy	./app/controllers/change_orders_controller.rb	/^  def destroy$/;"	f	class:ChangeOrdersController
 destroy	./app/controllers/draw_costs_controller.rb	/^  def destroy$/;"	f	class:DrawCostsController
 destroy	./app/controllers/draw_documents_controller.rb	/^  def destroy$/;"	f	class:DrawDocumentsController
@@ -583,6 +587,7 @@ draw_params	./app/controllers/draws_controller.rb	/^  def draw_params$/;"	f	clas
 draw_record_scope	./app/controllers/draw_costs_controller.rb	/^  def draw_record_scope$/;"	f	class:DrawCostsController
 draw_record_scope	./app/controllers/draw_documents_controller.rb	/^  def draw_record_scope$/;"	f	class:DrawDocumentsController
 draw_state_badge	./app/helpers/draws_helper.rb	/^  def draw_state_badge(draw)$/;"	f	class:DrawsHelper
+draw_status_notification	./app/mailers/notification_mailer.rb	/^  def draw_status_notification$/;"	f	class:NotificationMailer
 draw_total	./app/models/project.rb	/^  def draw_total$/;"	f	class:Project
 draws	./app/services/draw_service.rb	/^  def draws$/;"	f	class:DrawService
 draws_visible_to	./app/models/project.rb	/^  def draws_visible_to(user)$/;"	f	class:Project
@@ -981,6 +986,7 @@ sanitize_draw_document_params	./app/services/draw_document_service.rb	/^  def sa
 sanitize_params	./app/services/draw_service.rb	/^  def sanitize_params(params)$/;"	f	class:DrawService
 sanitize_params	./app/services/invoice_service.rb	/^  def sanitize_params(params)$/;"	f	class:InvoiceService
 sanitize_params	./app/services/projects/updater.rb	/^    def sanitize_params(params)$/;"	f	class:Projects.Updater
+send_state_notification	./app/models/draw.rb	/^  def send_state_notification(new_state=nil)$/;"	f	class:Draw
 set_change_order	./app/controllers/change_orders_controller.rb	/^  def set_change_order$/;"	f	class:ChangeOrdersController
 set_draw	./app/controllers/draw_costs_controller.rb	/^  def set_draw$/;"	f	class:DrawCostsController
 set_draw	./app/controllers/draw_documents_controller.rb	/^  def set_draw$/;"	f	class:DrawDocumentsController
