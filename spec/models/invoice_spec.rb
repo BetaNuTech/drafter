@@ -171,8 +171,8 @@ RSpec.describe Invoice, type: :model do
         before do
           draw.update(state: :submitted)
           draw_cost.update(state: :rejected)
-          invoice1.update(state: 'approved')
-          invoice2.update(state: 'submitted')
+          invoice1.update(state: :approved)
+          invoice2.update(state: :submitted)
         end
 
         describe 'when the draw cost is submitted' do
@@ -227,8 +227,34 @@ RSpec.describe Invoice, type: :model do
           end
 
         end
+      end # approve
+
+      describe 'reject' do
+        let(:invoice1) { draw_cost_invoices.first }
+        let(:invoice2) { draw_cost_invoices.last }
+
+        before do
+          draw.update(state: :submitted)
+          draw_cost.update(state: :submitted)
+          invoice1.update(state: :processed)
+          invoice2.update(state: :processed)
+        end
+
+        describe 'when the draw cost is approved' do
+          it 'rejects the draw cost' do
+            assert(draw_cost.submitted?)
+
+            invoice1.trigger_event(event_name: :approve)
+            invoice2.trigger_event(event_name: :approve)
+            invoice2.trigger_event(event_name: :reject)
+            draw_cost.reload
+            assert(draw_cost.rejected?)
+          end
+        end
       end
-    end
+    end 
+
+
   end
 
 

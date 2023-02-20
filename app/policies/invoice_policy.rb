@@ -74,7 +74,8 @@ class InvoicePolicy < ApplicationPolicy
 
   def approve?
     record.permitted_state_events.include?(:approve) &&
-      approvals?
+      approvals? &&
+      (record.consult? ? !user.project_finance?(record.project) : true)
   end
 
   def reject?
