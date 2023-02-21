@@ -14,6 +14,9 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   # GET /resource/confirmation?confirmation_token=abcdef
   def show
     super do |resource|
+      # Force de-auth
+      sign_out @current_user if @current_user
+
       # Special handling of already confirmed users visiting
       # the confirmation link
       if resource.confirmed_at.present?
