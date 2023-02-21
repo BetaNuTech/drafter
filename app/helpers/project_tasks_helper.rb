@@ -1,4 +1,12 @@
 module ProjectTasksHelper
+  PROJECT_TASK_STATE_CLASS_MAPPING = {
+    new: :secondary,
+    needs_review: :info,
+    needs_consult: :info,
+    rejected: :danger,
+    approved: :success,
+    archived: :warning
+  }.freeze
 
   def project_task_origin_url(project_task)
     origin = project_task.origin
@@ -24,5 +32,9 @@ module ProjectTasksHelper
     else
       'success'
     end
+  end
+
+  def project_task_state_class(project_task)
+    PROJECT_TASK_STATE_CLASS_MAPPING.fetch(project_task.state.to_sym, :secondary).to_s
   end
 end
