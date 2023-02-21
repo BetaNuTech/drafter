@@ -43,7 +43,9 @@
       <% if invoice.annotated_preview.attached? %>
         <span class="annotated_preview_link">
           <%= link_to(rails_blob_path(invoice.annotated_preview), target: '_blank', style: 'text-decoration: none;') do %>
-            <%= inline_icon(icon: :eye, size: 20, fill: :blue) %>
+            <%= inline_icon(icon: :eye, size: 20, fill: :blue, opacity: 1.0,
+                              html: { id: 'eye_icon_description_popover', class: "eye_icon_description_popover p-0", style: ( 'cursor: pointer' ),
+                              data: { bs_toggle: :popover, bs_placement: :bottom, bs_content: 'Amount Due Preview', bs_trigger: 'click hover' } }) %>
           <% end %>
           <% if invoice.manual_approval_required? || invoice.audit? %>
             <%= inline_icon(icon: :warning, size: 20, fill: :orange) %>
@@ -51,7 +53,9 @@
         </span>
       <% else %>
         <span class="annotated_preview_link">
-          <%= inline_icon(icon: :eye_slash, size: 20, fill: :gray) %>
+          <%= inline_icon(icon: :eye_slash, size: 20, fill: :gray, opacity: 1.0,
+                              html: { id: 'eye_slash_icon_description_popover', class: "eye_slash_icon_description_popover p-0", style: ( 'cursor: pointer' ),
+                              data: { bs_toggle: :popover, bs_placement: :bottom, bs_content: 'Unavailable: Amount Due Preview', bs_trigger: 'click hover' } }) %>
         </span>
       <% end %>
       <br/>
