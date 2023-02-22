@@ -7,7 +7,7 @@ class NotificationMailer < ApplicationMailer
     @project = @draw.project
     @developers = @project.developers
     @owners = @project.owners
-    @emails = [@developers, @owners].flatten.map(&:email).compact.uniq
+    @emails = [@developers, @owners].flatten.map(&:email).compact.uniq.map(&:email)
 
     @email_data = { project: @project.name,
                     draw: @draw.name,
