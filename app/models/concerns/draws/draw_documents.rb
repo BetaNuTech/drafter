@@ -10,7 +10,15 @@ module Draws
         submitted_types = draw_documents.where(state: match_states).
                             pluck(:documenttype).
                             uniq.map(&:to_sym)
-        ( DrawDocument::REQUIRED_DOCUMENTTYPES.sort - [:other] ) == ( submitted_types.sort - [:other] )
+        reference_required_documents = DrawDocument::REQUIRED_DOCUMENTTYPES.sort - [:other] 
+        reference_submitted_documents = ( submitted_types.sort - [:other] )
+        if reference_submitted_documents == reference_required_documents
+          true
+        else
+          @state_errors ||= []
+          @state_errors << "Missing Documents: %s" % [reference_required_documents - reference_submitted_documents].join(', ')
+          false
+        end
       end
 
       def all_required_documents_approved?

@@ -6,6 +6,7 @@
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 <=>	./app/models/project_role.rb	/^  def <=>(other)$/;"	f	class:ProjectRole
 <=>	./app/models/role.rb	/^  def <=>(other)$/;"	f	class:Role
+AddAutomaticallyApprovedToInvoices	./db/migrate/20230222002315_add_automatically_approved_to_invoices.rb	/^class AddAutomaticallyApprovedToInvoices < ActiveRecord::Migration[7.0]$/;"	c
 AddDrawableToProjectCosts	./db/migrate/20221020170459_add_drawable_to_project_costs.rb	/^class AddDrawableToProjectCosts < ActiveRecord::Migration[7.0]$/;"	c
 AddInitialDrawOnlyToProjectCosts	./db/migrate/20221027012909_add_initial_draw_only_to_project_costs.rb	/^class AddInitialDrawOnlyToProjectCosts < ActiveRecord::Migration[7.0]$/;"	c
 AddRemoteLastCheckedAtToProjectTasks	./db/migrate/20230208001308_add_remote_last_checked_at_to_project_tasks.rb	/^class AddRemoteLastCheckedAtToProjectTasks < ActiveRecord::Migration[7.0]$/;"	c
@@ -406,7 +407,9 @@ attachment_markup	./app/services/project_task_services/invoice_task_generator.rb
 attachment_url	./app/services/project_task_services/draw_document_task_generator.rb	/^    def attachment_url$/;"	f	class:ProjectTaskServices
 attachment_url	./app/services/project_task_services/invoice_task_generator.rb	/^    def attachment_url$/;"	f	class:ProjectTaskServices
 authenticate_service_token	./app/controllers/application_controller.rb	/^  def authenticate_service_token$/;"	f	class:ApplicationController
+auto_approve	./app/models/invoice.rb	/^  def self.auto_approve$/;"	F	class:Invoice
 auto_approve_draw_cost	./app/services/invoice_service.rb	/^  def auto_approve_draw_cost$/;"	f	class:InvoiceService
+auto_approve_invoices	./app/models/draw.rb	/^  def auto_approve_invoices$/;"	f	class:Draw
 available_members	./app/services/projects/membership.rb	/^    def available_members$/;"	f	class:Projects.Membership
 available_members	./app/services/projects/updater.rb	/^    def available_members$/;"	f	class:Projects.Updater
 available_roles	./app/models/project_user.rb	/^  def available_roles$/;"	f	class:ProjectUser
@@ -472,9 +475,9 @@ change	./db/migrate/20230106002416_create_project_tasks.rb	/^  def change$/;"	f	
 change	./db/migrate/20230131061032_remove_draw_document_approval_due_date.rb	/^  def change$/;"	f	class:RemoveDrawDocumentApprovalDueDate
 change	./db/migrate/20230201005442_add_remote_updated_at_to_project_tasks.rb	/^  def change$/;"	f	class:AddRemoteUpdatedAtToProjectTasks
 change	./db/migrate/20230208001308_add_remote_last_checked_at_to_project_tasks.rb	/^  def change$/;"	f	class:AddRemoteLastCheckedAtToProjectTasks
+change	./db/migrate/20230222002315_add_automatically_approved_to_invoices.rb	/^  def change$/;"	f	class:AddAutomaticallyApprovedToInvoices
 change_order_funding_options	./app/helpers/draws_helper.rb	/^  def change_order_funding_options(change_order)$/;"	f
 change_order_funding_total	./app/models/project_cost.rb	/^  def change_order_funding_total$/;"	f	class:ProjectCost
-change_order_project_cost_options	./app/helpers/draws_helper.rb	/^  def change_order_project_cost_options(project: nil, change_order_project_cost:)$/;"	f
 change_order_total	./app/models/draw_cost.rb	/^  def change_order_total$/;"	f	class:DrawCost
 change_order_total	./app/models/project_cost.rb	/^  def change_order_total$/;"	f	class:ProjectCost
 changed?	./app/services/project_task_service.rb	/^  def changed?$/;"	f	class:ProjectTaskService
@@ -699,6 +702,7 @@ get_prefixed_env	./app/services/clickup/api/configuration.rb	/^      def get_pre
 get_task	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def get_task(project_task_or_remote_id)$/;"	f	class:ProjectTaskServices.SyncAdapters.Clickup
 get_tasks	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def get_tasks$/;"	f	class:ProjectTaskServices.SyncAdapters.Clickup
 get_workspace_id	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def get_workspace_id$/;"	f	class:ProjectTaskServices.SyncAdapters
+handle_last_submission	./app/models/concerns/draw_costs/state_machine.rb	/^      def handle_last_submission$/;"	f	class:DrawCosts.StateMachine.TransitionError
 has_remote_task?	./app/models/concerns/project_tasks/sync.rb	/^      def has_remote_task?$/;"	f	class:ProjectTasks.Sync
 home_image	./app/helpers/images_helper.rb	/^  def home_image$/;"	f
 impersonate?	./app/policies/user_policy.rb	/^  def impersonate?$/;"	f	class:UserPolicy
@@ -894,6 +898,7 @@ project_role_background_class	./app/helpers/projects_helper.rb	/^  def project_r
 project_task_due_class	./app/helpers/project_tasks_helper.rb	/^  def project_task_due_class(project_task)$/;"	f	class:ProjectTasksHelper
 project_task_origin_url	./app/helpers/project_tasks_helper.rb	/^  def project_task_origin_url(project_task)$/;"	f	class:ProjectTasksHelper
 project_task_scope	./app/controllers/project_tasks_controller.rb	/^  def project_task_scope$/;"	f	class:ProjectTasksController
+project_task_state_class	./app/helpers/project_tasks_helper.rb	/^  def project_task_state_class(project_task)$/;"	f	class:ProjectTasksHelper
 project_tasks	./app/controllers/projects_controller.rb	/^  def project_tasks$/;"	f	class:ProjectsController
 project_tasks?	./app/policies/project_policy.rb	/^  def project_tasks?$/;"	f	class:ProjectPolicy
 project_tasks_for_refresh	./app/services/project_task_services/sync.rb	/^    def project_tasks_for_refresh$/;"	f	class:ProjectTaskServices

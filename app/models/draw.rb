@@ -121,7 +121,11 @@ class Draw < ApplicationRecord
   def mark_invoices_for_manual_approval
     return false unless ( pending? || submitted? )
 
-    invoices.mark_random_selection_for_manual_approval
+    Invoice.mark_random_selection_for_manual_approval(invoices)
+  end
+
+  def auto_approve_invoices
+    # TODO
   end
 
   def create_task(action:, assignee: nil)

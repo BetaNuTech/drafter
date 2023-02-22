@@ -14,6 +14,8 @@ module DrawCosts
       ALLOW_INVOICE_CHANGE_STATES = %i{pending rejected}
       VISIBLE_STATES = %i{pending submitted approved rejected}
 
+      attr_reader :state_errors
+
       scope :visible, -> { where(state: VISIBLE_STATES) }
 
       include AASM
@@ -88,18 +90,39 @@ module DrawCosts
         invoices.pending.each do |invoice|
           invoice.trigger_event(event_name: :submit, user: user)
         end
+
       end
 
       def after_submit(user)
         submit_invoices(user)
-        # Don't create DrawCost task because they should be auto approved/rejected
-        # create_task(action: :approve)
+        handle_last_submission
+      end
+
+      def handle_last_submission
+        return true
+
+        # NOTE: This doesn't work due to a race condition, must be completed after 
+        #   all invoices are processed.
+        #
+        #is_only_draw_cost = draw.draw_costs.visible.count == 1
+        #all_other_draw_costs_are_submitted = draw.draw_costs.visible.where.not(id: id).
+          #all?{|draw_cost| draw_cost.submitted? }
+
+        #if is_only_draw_cost || all_other_draw_costs_are_submitted
+          #draw.invoices.reload
+          #draw.invoices.submitted.mark_random_selection_for_manual_approval
+          #draw.invoices.reload
+          #draw.invoices.processed.auto_approve
+        #end
       end
 
       def allow_submit?
-        return false if invoices.rejected.any? || over_budget? || invoice_mismatch?
-
-        invoices.visible.any?
+        @state_errors = []
+        @state_errors << 'There are rejected invoices' if invoices.rejected.any?
+        @state_errors << 'Over budget' if over_budget?
+        @state_errors << 'Invoice mismatch' if invoice_mismatch?
+        @state_errors << 'No visible invoices' unless invoices.visible.any?
+        @state_errors.empty?
       end
 
       def after_approve(user)
@@ -107,9 +130,11 @@ module DrawCosts
       end
 
       def allow_approve?
-        invoices.where(state: %i{submitted approved}).any? && 
-        invoices.pending.none? &&
-        invoices.rejected.none?
+        @state_errors = []
+        @state_errors << 'There are no submitted or approved Invoices' unless invoices.where(state: %i{submitted approved}).any?
+        @state_errors << 'There are pending invoices' unless invoices.pending.none?
+        @state_errors << 'There are rejected invoices' unless invoices.rejected.none?
+        @state_errors.empty?
       end
 
       def allow_auto_approve?
@@ -124,12 +149,7 @@ module DrawCosts
       end
 
       def after_last_invoice_approval
-        if allow_auto_approve?
-          trigger_event(event_name: :approve)
-        else
-          # Don't create DrawCost task because they should be auto approved/rejected
-          # create_task(action: :approve) 
-        end
+        trigger_event(event_name: :approve) if allow_auto_approve?
       end
 
       def after_reject(user)

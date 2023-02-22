@@ -18,6 +18,8 @@ module Draws
       ALLOW_INVOICE_APPROVALS_STATES = %i{ submitted }.freeze
       APPROVAL_LEAD_TIME = 7 # days
 
+      attr_reader :state_errors
+
       scope :visible, -> { where(state: VISIBLE_STATES) }
 
       aasm column: :state, whiny_transitions: false do
@@ -126,9 +128,19 @@ module Draws
       end
 
       def allow_submit?
-        all_documents_submitted? &&
-          draw_costs.visible.any? &&
-          draw_costs.visible.all?(&:allow_submit?)
+        @state_errors = []
+        @state_errors << 'Not all documents submitted' unless all_documents_submitted?
+        @state_errors << 'No visible Draw Costs' unless draw_costs.visible.any?
+        unless draw_costs.visible.all?(&:allow_submit?)
+          draw_costs.visible.select{|dc| !dc.allow_submit?}.each do |draw_cost|
+            @state_errors << "DrawCost[%{draw_cost}] can't be submitted: %{errors}" % {
+              draw_cost: draw_cost.name,
+              errors: draw_cost.state_errors.join(', ')
+            }
+          end
+        end
+
+        @state_errors.empty?
       end
 
       def create_document_approve_tasks
