@@ -107,7 +107,9 @@ module DrawCosts
       end
 
       def allow_approve?
-        invoices.where(state: %i{submitted approved}).any? && invoices.pending.none?
+        invoices.where(state: %i{submitted approved}).any? && 
+        invoices.pending.none? &&
+        invoices.rejected.none?
       end
 
       def allow_auto_approve?
@@ -117,7 +119,8 @@ module DrawCosts
 
       def all_invoices_approved?
         invoices.submitted.none? &&
-          invoices.approved.any?
+          invoices.approved.any? &&
+          invoices.rejected.none?
       end
 
       def after_last_invoice_approval

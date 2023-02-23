@@ -9,7 +9,7 @@ class OrganizationPolicy < ApplicationPolicy
       when -> (u) { u.executive? }
         scope
       else
-        Organization.where("1=0")
+        Organization.none
       end
     end
   end

@@ -23,12 +23,14 @@ module ProjectTasksHelper
   end
 
   def project_task_due_class(project_task)
-    now = Date.current
-    case project_task.due_at
-    when (now + 1.day)..(now + 2.days)
-      'warning'
-    when (now + 1.day)..(now)
+    return 'success' if ProjectTasks::StateMachine::PENDING_STATES.include?(project_task.state)
+    today = Date.current
+    due_date = project_task.due_at
+    case 
+    when due_date <= today
       'danger'
+    when due_date > today && due_date <= today + 2.days
+      'warning'
     else
       'success'
     end

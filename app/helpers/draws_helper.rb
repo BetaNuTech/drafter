@@ -11,11 +11,12 @@ module DrawsHelper
   end
 
   def project_cost_options(project: nil, project_cost:)
-    project = project || project_cost&.project 
+    project = project || project_cost&.project
+    return '' if project.nil?
     non_initial_draw = project.draws.where("index > 1").first
     used_project_costs = project.draw_costs.visible.pluck(:project_cost_id)
     used_project_costs = used_project_costs - [ project_cost.id ] if project_cost.present?
-    project_costs = project.project_costs || []
+    project_costs = project.project_costs || ProjectCost.none
     if non_initial_draw.nil?
       project_costs = project_costs.drawable
     else   
@@ -26,17 +27,14 @@ module DrawsHelper
     project_cost_options_with_remaining(project_costs, project_cost&.id)
   end
 
-  def change_order_project_cost_options(project: nil, change_order_project_cost:)
-    project_costs = ( project || project_cost&.project )&.project_costs&.change_requestable&.order(name: :asc) || []
-    options_from_collection_for_select(project_costs, 'id', 'name', change_order_project_cost&.id)
-  end
-
   def draw_document_documenttype_options(draw:, draw_document:)
+    return '' if draw.nil? || draw_document.nil?
     documenttypes =  draw.remaining_documents.inject({}){|memo, obj| memo[obj.capitalize] = obj; memo}
     options_for_select(documenttypes, draw_document.documenttype)
   end
 
   def change_order_funding_options(change_order)
+    return '' if change_order.nil?
     proposed_amount = change_order.draw_cost.project_cost_overage
     project_costs = change_order.project.
       project_costs.
@@ -47,6 +45,7 @@ module DrawsHelper
   end
 
   def draw_cost_invoice_remaining_class(draw_cost)
+    return '' if draw_cost.nil?
     subtotal = draw_cost.subtotal
     case
     when subtotal == 0.0
@@ -59,6 +58,7 @@ module DrawsHelper
   end
 
   def project_cost_options_with_remaining(project_costs, current_value)
+    return '' if project_costs.nil?
     project_cost_options = project_costs.map do |cost|
       balance = cost.budget_balance
       label = "%s (%s)" % [cost.name, number_to_currency(balance)]
@@ -68,6 +68,7 @@ module DrawsHelper
   end
 
   def displayed_invoice_state_name(invoice:, user:)
+    return 'unknown_state' if invoice.nil? || user.nil?
     return invoice.state if user.admin?
 
     case invoice.state
