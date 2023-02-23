@@ -32,11 +32,9 @@ export default class extends Controller {
 
   file_present() {
     const hasdocument_el = this.documentTarget
-    let has_document = null
+    let has_document = false
     if (hasdocument_el != null) {
       has_document = hasdocument_el.dataset.hasdocument == 'true'
-    } else {
-      has_document = false
     }
     if (has_document) {
       return(true)

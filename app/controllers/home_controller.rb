@@ -6,7 +6,7 @@ class HomeController < ApplicationController
     authorize :home, :index? 
     @projects = policy_scope(Project).order(name: :asc)
     @notifications = []  # TODO
-    @events = SystemEvent.where("1=0") # TODO
+    @events = SystemEvent.none # TODO
     #breadcrumbs.add(label: 'Home', url: '/', active: true)
   end
 
