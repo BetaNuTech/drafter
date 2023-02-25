@@ -88,7 +88,6 @@ class InvoiceService
       @invoice.approved_by_desc = @user.name
       @invoice.save
     end
-    auto_approve_draw_cost
     SystemEvent.log(description: "Approved an Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
     return true
   end
@@ -130,14 +129,6 @@ class InvoiceService
   end
 
   private
-
-  def auto_approve_draw_cost
-    @draw_cost.invoices.reload
-    if @draw_cost.invoices.visible.count == @draw_cost.invoices.approved.count
-      service = DrawCostService.new(draw: @draw_cost.draw, draw_cost: @draw_cost, user: @user)
-      service.approve
-    end
-  end
 
   def reset_errors
     @errors = []
