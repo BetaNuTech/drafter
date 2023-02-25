@@ -4,3 +4,4 @@
 <%= link_to('Externally Approve', project_draw_approve_external_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-success m-1', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).approve_external? %>
 <%= link_to('Fund', project_draw_fund_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-success m-1', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).fund? %>
 <%= link_to('Reject', project_draw_reject_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-danger m-1', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).reject? %>
+<% if policy(draw).approve_internal_but_blocked? %><p>Owner/Manager required to internally approve.</p><% end %>

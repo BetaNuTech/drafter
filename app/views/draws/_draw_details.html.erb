@@ -31,6 +31,5 @@
     <%= turbo_frame_tag :action_buttons, draw do %>
       <%= render partial: 'draws/action_buttons', locals: { draw: draw } %>
     <% end %>
-    <% if policy(draw).approve_internal_but_blocked? %><p>Owner/Manager required to internally approve.</p><% end %>
   </div>
 </div>
