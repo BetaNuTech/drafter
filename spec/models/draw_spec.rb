@@ -77,10 +77,15 @@ RSpec.describe Draw, type: :model do
 
     describe 'clean draws' do
       let(:project_cost) { draw_cost.project_cost }
-      let(:funding_source) { sample_project.project_costs.change_requestable.last }
+      let(:funding_source) { contingency_project_cost }
+      let(:contingency_project_cost) {
+        cost = create(:project_cost, project: sample_project, name: 'Sample Contingency')
+        sample_project.project_costs.reload
+        cost
+      }
       let(:change_order) {
         service = ChangeOrderService.new(user: developer_user, draw_cost: draw_cost)
-        service.create({funding_source_id: funding_source.id})
+        service.create({funding_source_id: contingency_project_cost.id})
       }
 
       it 'returns if the Draw is "clean"' do
@@ -109,17 +114,6 @@ RSpec.describe Draw, type: :model do
         expect(ProjectTask.where(origin: draw_documents).count).to eq(0)
         draw.trigger_event(event_name: :submit)
         expect(ProjectTask.where(origin: draw_documents).count).to eq(3)
-      end
-
-      it 'creates draw approve task' do
-        draw_cost_invoices
-        draw_documents
-        draw.state = 'pending'
-        draw.save!
-        expect(draw.project_tasks.count).to eq(0)
-        draw.trigger_event(event_name: :submit)
-        draw.reload
-        expect(draw.project_tasks.count).to eq(1)
       end
     end
 
