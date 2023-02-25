@@ -32,7 +32,7 @@ module DrawCosts
         end
 
         event :approve do
-          transitions from: %i{ submitted rejected }, to: :approved,
+          transitions from: %i{ pending submitted rejected }, to: :approved,
             guard: :allow_approve?,
             after: Proc.new { |*args| after_approve(*args)}
         end
@@ -107,7 +107,7 @@ module DrawCosts
       end
 
       def allow_approve?
-        invoices.where(state: %i{submitted approved}).any? && 
+        invoices.where(state: %i{pending submitted approved}).any? && 
         invoices.pending.none? &&
         invoices.rejected.none?
       end
