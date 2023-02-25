@@ -4,7 +4,7 @@
     <div class="col">
       <% if project_user.new_record? %>
         <div class="form-floating mb-3 g-2">
-          <%= form.select(:user_id, options_from_collection_for_select(project_user.available_users, 'id', 'name'), {}, { class: "form-select" } ) %>
+          <%= form.select(:user_id, options_from_collection_for_select(project_user.available_users, 'id', 'name_with_organization'), {}, { class: "form-select" } ) %>
           <%= form.label :user_id, 'User' %>
         </div>
       <% else %>
