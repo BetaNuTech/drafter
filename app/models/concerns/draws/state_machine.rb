@@ -132,8 +132,8 @@ module Draws
       end
 
       def create_document_approve_tasks
-        draw_documents.visible.each do |doc|
-          doc.create_task(assignee: nil, action: :approve) #rescue false
+        draw_documents.pending.each do |doc|
+          doc.create_task(assignee: nil, action: :approve) rescue false
         end
       end
 
@@ -144,7 +144,6 @@ module Draws
       def after_submit(user)
         submit_draw_costs(user)
         create_document_approve_tasks
-        create_draw_approval_tasks
       end
 
       def after_reject(user)
