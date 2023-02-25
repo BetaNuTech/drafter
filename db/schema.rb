@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_22_002315) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_25_203921) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -120,10 +120,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_22_002315) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "invoice_auto_approvals_completed", default: false
     t.index ["approver_id"], name: "index_draws_on_approver_id"
     t.index ["organization_id"], name: "index_draws_on_organization_id"
     t.index ["project_id", "user_id", "organization_id", "approver_id", "state"], name: "draws_assoc_idx"
     t.index ["project_id"], name: "index_draws_on_project_id"
+    t.index ["state", "invoice_auto_approvals_completed"], name: "draws_auto_approval_idx"
     t.index ["user_id"], name: "index_draws_on_user_id"
   end
 

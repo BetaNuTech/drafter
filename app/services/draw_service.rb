@@ -13,7 +13,7 @@ class DrawService
     @draw = draw || Draw.new(project: @project, organization: @organization, user: @user)
     @policy = DrawPolicy.new(@user, @draw)
 
-    raise PolicyError.new unless @policy.index?
+    #raise PolicyError.new unless @policy.index?
   end
 
   def errors?
@@ -128,6 +128,30 @@ class DrawService
 
   def draws
     DrawPolicy::Scope.new(@user, @project.draws).resolve
+  end
+
+  def auto_approve_invoices
+    return false if @draw.invoice_auto_approvals_completed ||
+                      !@draw.submitted? ||
+                      @draw.invoices.unprocessed.any? 
+
+    # Mark processed invoices for manual approval
+    invoices = @draw.invoices.processing_completed
+    invoices.mark_random_selection_for_manual_approval
+
+    # Auto approve remaining invoices that don't need manual approval
+    invoices.reload
+    invoices.auto_approve
+
+    # Mark Draw as having Invoice auto approval completed
+    @draw.invoice_auto_approvals_completed = true
+    @draw.save
+
+    # Create approval ProjectTasks for processed and unapproved Invoices
+    invoices.reload
+    invoices.create_approval_tasks
+
+    invoices.where(automatically_approved: true)
   end
 
 

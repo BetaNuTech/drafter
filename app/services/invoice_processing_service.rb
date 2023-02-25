@@ -78,7 +78,10 @@ class InvoiceProcessingService
   end
 
   def process_analysis_job_data(invoice: ,analysis_job_data:)
-    return false if analysis_job_data.nil?
+    if analysis_job_data.nil?
+      invoice.trigger_event(event_name: :fail_processing)
+      return false
+    end
 
     process_invoice_analysis(invoice: invoice, analysis_job_data:)
 
@@ -90,6 +93,7 @@ class InvoiceProcessingService
       invoice.trigger_event(event_name: :fail_processing)
     end
 
+    invoice
   end
 
   def get_analysis(invoice:)

@@ -11,7 +11,10 @@ module Invoices
     included do
 
       scope :visible, -> { where.not(state: :removed) }
-      scope :totalable, -> { where.not(state: %i{removed}) }
+      scope :totalable, -> { where.not(state: :removed) }
+      scope :unprocessed, -> { where(state: %i{submitted processing}) }
+      scope :processing_completed, -> { where(state: %i{processed processing_failed})}
+      scope :approval_pending, -> { where(state: %i{submitted processed processing_failed})}
 
       include AASM
 
@@ -139,6 +142,8 @@ module Invoices
       end
 
       def after_reset_approval(user)
+        update(automatically_approved: false, manual_approval_required: true)
+
         # Reset Draw Cost to pending state
         draw_cost.trigger_event(event_name: :revert_to_pending, user: user) if
           draw_cost.permitted_state_events.include?(:revert_to_pending)
@@ -153,7 +158,10 @@ module Invoices
       end
 
       def after_processing(user)
-        create_task(action: :approve)
+        if draw.invoice_auto_approvals_completed
+          update(manual_approval_required: true)
+          create_task(:approve)
+        end
       end
 
       def displayed_invoice_state_name

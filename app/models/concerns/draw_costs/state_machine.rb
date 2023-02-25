@@ -96,25 +96,6 @@ module DrawCosts
 
       def after_submit(user)
         submit_invoices(user)
-        handle_last_submission
-      end
-
-      def handle_last_submission
-        return true
-
-        # NOTE: This doesn't work due to a race condition, must be completed after 
-        #   all invoices are processed.
-        #
-        #is_only_draw_cost = draw.draw_costs.visible.count == 1
-        #all_other_draw_costs_are_submitted = draw.draw_costs.visible.where.not(id: id).
-          #all?{|draw_cost| draw_cost.submitted? }
-
-        #if is_only_draw_cost || all_other_draw_costs_are_submitted
-          #draw.invoices.reload
-          #draw.invoices.submitted.mark_random_selection_for_manual_approval
-          #draw.invoices.reload
-          #draw.invoices.processed.auto_approve
-        #end
       end
 
       def allow_submit?

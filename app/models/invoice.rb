@@ -69,7 +69,7 @@ class Invoice < ApplicationRecord
   end
 
   def self.mark_random_selection_for_manual_approval
-    sample_invoices = self.where(manual_approval_required: false, audit: false)
+    sample_invoices = self.all.where(manual_approval_required: false)
     return Invoice.none if sample_invoices.none?
 
     sample_invoice_count = sample_invoices.size
@@ -96,9 +96,15 @@ class Invoice < ApplicationRecord
   end
 
   def self.auto_approve
-    self.all.where(audit: false, manual_approval_required: false).each do |invoice|
+    self.all.where(manual_approval_required: false).each do |invoice|
       invoice.automatically_approved = true
       invoice.trigger_event(event_name: :approve)
+    end
+  end
+
+  def self.create_approval_tasks
+    self.all.approval_pending.each do |invoice|
+      invoice.create_task(:approve)
     end
   end
 

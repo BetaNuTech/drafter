@@ -2,23 +2,25 @@
 #
 # Table name: draws
 #
-#  id              :uuid             not null, primary key
-#  amount          :decimal(, )      default(0.0), not null
-#  approved_at     :datetime
-#  index           :integer          default(1), not null
-#  notes           :text
-#  reference       :string
-#  state           :string           default("pending"), not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  approver_id     :uuid
-#  organization_id :uuid             not null
-#  project_id      :uuid             not null
-#  user_id         :uuid             not null
+#  id                               :uuid             not null, primary key
+#  amount                           :decimal(, )      default(0.0), not null
+#  approved_at                      :datetime
+#  index                            :integer          default(1), not null
+#  invoice_auto_approvals_completed :boolean          default(FALSE)
+#  notes                            :text
+#  reference                        :string
+#  state                            :string           default("pending"), not null
+#  created_at                       :datetime         not null
+#  updated_at                       :datetime         not null
+#  approver_id                      :uuid
+#  organization_id                  :uuid             not null
+#  project_id                       :uuid             not null
+#  user_id                          :uuid             not null
 #
 # Indexes
 #
 #  draws_assoc_idx                 (project_id,user_id,organization_id,approver_id,state)
+#  draws_auto_approval_idx         (state,invoice_auto_approvals_completed)
 #  index_draws_on_approver_id      (approver_id)
 #  index_draws_on_organization_id  (organization_id)
 #  index_draws_on_project_id       (project_id)
@@ -71,6 +73,12 @@ class Draw < ApplicationRecord
   ### Callbacks
   after_initialize :assign_index
 
+  def self.invoice_auto_approval
+    Draw.submitted.each do |draw|
+      DrawService.new(user: nil, draw:).auto_approve_invoices
+    end
+  end
+
   def name
     "Draw ##{index}"
   end
@@ -116,16 +124,6 @@ class Draw < ApplicationRecord
 
   def clean?
     !change_orders.any?(&:contingency?)
-  end
-
-  def mark_invoices_for_manual_approval
-    return false unless ( pending? || submitted? )
-
-    Invoice.mark_random_selection_for_manual_approval(invoices)
-  end
-
-  def auto_approve_invoices
-    # TODO
   end
 
   def create_task(action:, assignee: nil)
