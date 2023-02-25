@@ -66,4 +66,12 @@ class User < ApplicationRecord
     "#{name}: #{role.name} User and #{project_role(project)&.name || 'UNROLED'} for '#{project.name}'"
   end
 
+  def name_with_organization
+    if organization
+      name + "(#{organization.name})" 
+    else
+      name + "(NO ORG)"
+    end
+  end
+
 end
