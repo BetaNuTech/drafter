@@ -115,7 +115,7 @@ class Draw < ApplicationRecord
   end
 
   def clean?
-    change_orders.none?
+    !change_orders.any?(&:contingency?)
   end
 
   def mark_invoices_for_manual_approval
