@@ -45,7 +45,9 @@ class DrawPolicy < ApplicationPolicy
     record.permitted_state_events.include?(:withdraw) &&
       ( privileged_user? ||
         user.project_owner?(record.project) ||
-        user.project_developer?(record.project) )
+        ( user.project_developer?(record.project) &&
+            %w{pending submitted rejected}.include?(record.state) )
+      )
   end
 
   def withdraw?
