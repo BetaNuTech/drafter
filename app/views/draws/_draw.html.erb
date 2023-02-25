@@ -40,6 +40,7 @@
                     data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }) if policy(draw).withdraw? %>
         <hr/>
         <%= render partial: 'draws/action_buttons', locals: { draw: draw } %>
+        <% if policy(draw).approve_internal_but_blocked? %><p>Owner/Manager required to internally approve.</p><% end %>
       </div>
     </div>
   </div>
