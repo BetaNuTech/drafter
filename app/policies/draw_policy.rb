@@ -45,7 +45,9 @@ class DrawPolicy < ApplicationPolicy
     record.permitted_state_events.include?(:withdraw) &&
       ( privileged_user? ||
         user.project_owner?(record.project) ||
-        user.project_developer?(record.project) )
+        ( user.project_developer?(record.project) &&
+            %w{pending submitted rejected}.include?(record.state) )
+      )
   end
 
   def withdraw?
@@ -70,6 +72,12 @@ class DrawPolicy < ApplicationPolicy
       (record.clean? && user.project_finance?(record.project)) )
   end
 
+  def approve_internal_but_blocked?
+    !approve_internal? &&
+    record.permitted_state_events.include?(:approve_internal) &&
+    ( !record.clean? && user.project_finance?(record.project) ) 
+  end
+
   def approve_external?
     record.permitted_state_events.include?(:approve_external) &&
     ( user.admin? ||
@@ -80,7 +88,7 @@ class DrawPolicy < ApplicationPolicy
     record.permitted_state_events.include?(:reject) &&
     ( user.admin? ||
       user.project_management?(record.project) ||
-      (record.clean? && user.project_finance?(record.project)) )
+      user.project_finance?(record.project) )
   end
 
   def fund?

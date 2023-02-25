@@ -34,7 +34,7 @@ module DrawCosts
         end
 
         event :approve do
-          transitions from: %i{ submitted rejected }, to: :approved,
+          transitions from: %i{ pending submitted rejected }, to: :approved,
             guard: :allow_approve?,
             after: Proc.new { |*args| after_approve(*args)}
         end
@@ -50,7 +50,8 @@ module DrawCosts
         end
 
         event :revert_to_pending do
-          transitions from: %i{ submitted approved rejected }, to: :pending
+          transitions from: %i{ submitted approved rejected }, to: :pending,
+          after: Proc.new { |*args| after_revert_to_pending(*args)}
         end
       end
 
@@ -158,6 +159,13 @@ module DrawCosts
 
       def after_withdraw(user=nil)
         archive_project_tasks(recurse: true)
+      end
+
+      def after_revert_to_pending(user)
+        invoices.reload
+        invoices.approved.each do |invoice|
+          invoice.trigger_event(event_name: :revert_to_pending)
+        end
       end
 
       def approval_lead_time

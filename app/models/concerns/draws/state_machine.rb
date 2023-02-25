@@ -38,13 +38,13 @@ module Draws
         end
 
         event :approve do
-          transitions from: %i{ submitted rejected }, to: :internally_approved,
+          transitions from: %i{ submitted }, to: :internally_approved,
             guard: Proc.new { allow_approval? },
             after: Proc.new {|*args| after_approval(*args) }
         end
 
         event :approve_internal do
-          transitions from: %i{ submitted rejected }, to: :internally_approved,
+          transitions from: %i{ submitted }, to: :internally_approved,
             guard: Proc.new { allow_approval? },
             after: Proc.new {|*args| after_approval(*args) }
         end
@@ -123,7 +123,18 @@ module Draws
       def submit_draw_costs(user)
         draw_costs.reload
         draw_costs.where(state: %i{pending rejected}).each do |draw_cost|
-          draw_cost.trigger_event(event_name: :submit, user: user)
+          if draw_cost.allow_auto_approve?
+            draw_cost.trigger_event(event_name: :approve)
+          else  
+            draw_cost.trigger_event(event_name: :submit, user: user)
+          end
+        end
+      end
+
+      def revert_to_pending_draw_costs
+        draw_costs.reload
+        draw_costs.where(state: %i{approved}).each do |draw_cost|
+          draw_cost.trigger_event(event_name: :revert_to_pending, user: nil)
         end
       end
 
@@ -144,8 +155,8 @@ module Draws
       end
 
       def create_document_approve_tasks
-        draw_documents.visible.each do |doc|
-          doc.create_task(assignee: nil, action: :approve) #rescue false
+        draw_documents.pending.each do |doc|
+          doc.create_task(assignee: nil, action: :approve) rescue false
         end
       end
 
@@ -156,10 +167,10 @@ module Draws
       def after_submit(user)
         submit_draw_costs(user)
         create_document_approve_tasks
-        create_draw_approval_tasks
       end
 
       def after_reject(user)
+        revert_to_pending_draw_costs
         bubble_event_to_project_tasks(:reject)
         send_state_notification(aasm.to_state)
       end

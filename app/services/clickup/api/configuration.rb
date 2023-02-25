@@ -63,9 +63,10 @@ module Clickup
       end
 
       def load_rails_credentials
-        @api_token = Rails.application.credentials.dig(:clickup, application_env, :api_token) || 'NOT FOUND'
-        @workspace_id = Rails.application.credentials.dig(:clickup, application_env, :workspace_id) || 'NOT FOUND'
-        @default_list_id = Rails.application.credentials.dig(:clickup, application_env, :default_list_id) || 'NOT FOUND'
+        load_env_settings
+        @api_token ||= Rails.application.credentials.dig(:clickup, application_env, :api_token) || 'NOT FOUND'
+        @workspace_id ||= Rails.application.credentials.dig(:clickup, application_env, :workspace_id) || 'NOT FOUND'
+        @default_list_id ||= Rails.application.credentials.dig(:clickup, application_env, :default_list_id) || 'NOT FOUND'
       end
 
       # Returns Array: [isValid, errorsArr]

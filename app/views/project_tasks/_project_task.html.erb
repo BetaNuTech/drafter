@@ -6,7 +6,7 @@
     &nbsp;
     <%= link_to('Approve', approve_project_task_path(project_task), class: 'project-task-action btn btn-sm btn-success', data: {turbo_method: :post, turbo_confirm: "Are you sure you want to approve this #{project_task.origin.class.name}?"} ) if project_task.permitted_state_events.include?(:approve) %>
     <%= link_to('Reject', reject_project_task_path(project_task), class: 'project-task-action btn btn-sm btn-danger', data: {turbo_method: :post, turbo_confirm: "Are you sure you want to reject this #{project_task.origin.class.name}?"} ) if project_task.permitted_state_events.include?(:reject) %>
-    <%= link_to('Archive', archive_project_task_path(project_task), class: 'project-task-action btn btn-sm btn-warning', data: {turbo_method: :post, turbo_confirm: 'Are you sure you want to archive/delete this task?'} )  if project_task.permitted_state_events.include?(:reject) %>
+    <%= link_to('Archive', archive_project_task_path(project_task), class: 'project-task-action btn btn-sm btn-warning', data: {turbo_method: :post, turbo_confirm: 'Are you sure you want to archive/delete this task?'} )  if project_task.permitted_state_events.include?(:archive) %>
     <br/>
     <%= link_to(project_task.name, project_task_origin_url(project_task), { target: '_blank' }) %>
     <span class="badge bg-<%= project_task_state_class(project_task) %>">
