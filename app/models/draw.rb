@@ -79,6 +79,24 @@ class Draw < ApplicationRecord
     end
   end
 
+  def self.create_approval_tasks
+    tasks = []
+    where(state: :submitted).each do |draw|
+      next if draw.project_tasks.active.any?
+      next if draw.invoices.where(state: %i{approved rejected}).none? ||
+                draw.invoices.pending.any? ||
+                draw.invoices.approval_pending.any?
+
+      tasks << draw.create_task(action: :approve)
+    end
+
+    tasks
+  end
+
+  def all_invoices_have_approval
+    
+  end
+
   def name
     "Draw ##{index}"
   end

@@ -297,9 +297,73 @@ RSpec.describe Draw, type: :model do
           assert(draw.invoices.approved.count.zero?)
         end
       end
+  end
 
+  describe 'creating approval tasks' do
+    let(:invoice0) { create(:invoice, draw_cost: draw_cost2, state: :approved, amount: 1000.0, manual_approval_required: false, description: 'invoice0') }
+    let(:invoice1) { create(:invoice, draw_cost: draw_cost, state: :rejected, amount: 1000.0, manual_approval_required: false, description: 'invoice1') }
+    let(:invoices) { [ invoice0, invoice1 ]}
+    let(:draw_task) { Pro}
 
+    before do
+      invoices
+      draw.reload
+    end
 
+    describe 'when the draw is submitted' do
+      before do
+        draw.update(state: :submitted)
+      end
+
+      describe 'when it has no project tasks and has approved or rejected tasks' do
+        it 'should create a draw approval project task' do
+          assert(draw.project_tasks.none?)
+          Draw.create_approval_tasks
+          draw.reload
+          expect(draw.project_tasks.count).to eq(1)
+        end
+      end
+
+      describe 'when it has a project task' do
+        before do
+          draw.create_task(action: :approve)
+          draw.reload
+        end
+        it 'does not create a new project task' do
+          expect(draw.project_tasks.count).to eq(1)
+          Draw.create_approval_tasks
+          draw.reload
+          expect(draw.project_tasks.count).to eq(1)
+        end
+      end
+
+      describe 'when it has a pending invoice pending approval' do
+        before do
+          invoice0.update(state: :pending)
+          draw.reload
+        end
+        it 'does not create a new project task' do
+          expect(draw.project_tasks.count).to eq(0)
+          Draw.create_approval_tasks
+          draw.reload
+          expect(draw.project_tasks.count).to eq(0)
+        end
+      end
+
+      describe 'when it has an invoice pending approval' do
+        before do
+          invoice0.update(state: :submitted)
+          draw.reload
+        end
+        it 'does not create a new project task' do
+          expect(draw.project_tasks.count).to eq(0)
+          Draw.create_approval_tasks
+          draw.reload
+          expect(draw.project_tasks.count).to eq(0)
+        end
+      end
+
+    end
   end
 
 end

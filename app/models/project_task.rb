@@ -57,7 +57,6 @@ class ProjectTask < ApplicationRecord
   validates :description, presence: true
 
   ### Scopes
-  scope :pending, -> { where(state: ProjectTasks::StateMachine::PENDING_STATES) }
 
   ### Broadcast Streams
   after_destroy_commit -> (project_task) {
