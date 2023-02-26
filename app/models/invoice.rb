@@ -104,7 +104,7 @@ class Invoice < ApplicationRecord
 
   def self.create_approval_tasks
     self.all.approval_pending.each do |invoice|
-      invoice.create_task(:approve)
+      invoice.create_task(action: :approve)
     end
   end
 

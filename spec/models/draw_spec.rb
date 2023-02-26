@@ -225,4 +225,81 @@ RSpec.describe Draw, type: :model do
 
   end
 
+  describe 'invoice auto approval' do
+      let(:invoice0) { create(:invoice, draw_cost: draw_cost2, state: :processed, amount: 1000.0, manual_approval_required: false, description: 'invoice0') }
+      let(:invoice1) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 1000.0, manual_approval_required: false, description: 'invoice1') }
+      let(:invoice2) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 2000.0, manual_approval_required: true, description: 'invoice2') }
+      let(:invoice3) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 3000.0, manual_approval_required: false, description: 'invoice3') }
+      let(:invoice4) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 4000.0, manual_approval_required: false, description: 'invoice4') }
+      let(:invoice5) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 5000.0, manual_approval_required: false, description: 'invoice5') }
+      let(:invoice6) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 6000.0, manual_approval_required: false, description: 'invoice6') }
+      let(:invoice7) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 7000.0, manual_approval_required: false, description: 'invoice7') }
+      let(:invoice8) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 8000.0, manual_approval_required: false, description: 'invoice8') }
+      let(:invoice9) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 9000.0, manual_approval_required: false, description: 'invoice9') }
+      let(:invoice10) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 10000.0, manual_approval_required: false, audit: false, description: 'invoice10') }
+      let(:invoice11) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 10000.0, manual_approval_required: false, audit: true, description: 'invoice11') }
+      let(:invoice12) { create(:invoice, draw_cost: draw_cost, state: :processed, amount: 10000.0, manual_approval_required: true, description: 'invoice12') }
+
+      let(:invoices) {
+        [ invoice0, invoice1, invoice2, invoice3, invoice4, invoice5, invoice6, invoice7,
+          invoice8, invoice9, invoice10, invoice11, invoice12 ]
+      }
+
+      before do
+        draw_documents
+        draw_cost
+        draw_cost2
+        Invoice.destroy_all
+        invoices
+        draw_cost.total = draw_cost.invoice_total
+        draw_cost.save!
+        pc1 = draw_cost.project_cost
+        pc1 = draw_cost.project_cost
+        pc1.total = draw_cost.total
+        pc1.save!
+        pc2 = draw_cost2.project_cost
+        pc2.total = draw_cost2.total
+        pc2.save!
+        draw_cost2.total = draw_cost2.invoice_total
+        draw_cost2.save!
+        draw.reload
+      end
+
+      describe 'with a submitted draw' do
+        before do
+          draw.update(state: :submitted)
+        end
+        it 'marks invoices for manual approval and automatically approves the rest' do
+          ProjectTask.destroy_all
+          assert(Invoice.approved.count.zero?)
+          expect(draw.invoices.where(manual_approval_required: true).count).to eq(2)
+          Draw.invoice_auto_approval
+          draw.reload
+          assert(draw.invoice_auto_approvals_completed)
+          expect(ProjectTask.count).to be >= 3
+          expect(draw.invoices.where(manual_approval_required: true).count).to eq(ProjectTask.count)
+          refute(draw.invoices.approved.count.zero?)
+        end
+      end
+
+      describe 'without a submitted draw' do
+        before do
+          draw.update(state: :pending)
+        end
+        it 'does not process invoices' do
+          ProjectTask.destroy_all
+          assert(Invoice.approved.count.zero?)
+          expect(draw.invoices.where(manual_approval_required: true).count).to eq(2)
+          Draw.invoice_auto_approval
+          draw.reload
+          refute(draw.invoice_auto_approvals_completed)
+          expect(draw.invoices.where(manual_approval_required: true).count).to eq(2)
+          assert(draw.invoices.approved.count.zero?)
+        end
+      end
+
+
+
+  end
+
 end
