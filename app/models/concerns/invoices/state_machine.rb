@@ -162,6 +162,8 @@ module Invoices
           update(manual_approval_required: true)
           create_task(action: :approve)
         end
+        ocr_processed = Time.current
+        save
       end
 
       def displayed_invoice_state_name

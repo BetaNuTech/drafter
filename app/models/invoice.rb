@@ -74,9 +74,8 @@ class Invoice < ApplicationRecord
 
     sample_invoice_count = sample_invoices.size
     sample_size = [1, ( sample_invoice_count.to_f * RANDOM_SELECTION_RATIO ).to_i].max
-    high_value_invoices = sample_invoices.order(amount: :desc).limit((sample_size * 2))
+    high_value_invoices = sample_invoices.order(amount: :desc).limit((sample_size))
     high_value_invoice_ids = sample_invoices.where(id: high_value_invoices.pluck(:id)).
-                                order('RANDOM()').
                                 limit(sample_size).
                                 pluck(:id)
 
@@ -161,6 +160,18 @@ class Invoice < ApplicationRecord
 
   def descriptive_name
     "%{draw_cost} Invoice for %{amount}" % {draw_cost: draw_cost.name, amount: "$%0.2f" % amount }
+  end
+
+  def ocr_matched?
+    ocr_processed.present? && ocr_amount.present? && ocr_amount == invoice.amount
+  end
+
+  def ocr_no_match?
+    ocr_processed.present? && ocr_amount.present? && ocr_amount != invoice.amount
+  end
+
+  def ocr_failed?
+    ocr_processed.present? && ocr_amount.nil?
   end
 
 end
