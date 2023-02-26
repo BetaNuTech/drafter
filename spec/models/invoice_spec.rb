@@ -148,19 +148,36 @@ RSpec.describe Invoice, type: :model do
     let(:invoice) { create(:invoice, draw_cost: draw_cost, state: :processing, amount: 1000.0, manual_approval_required: false) }
 
     describe 'processing' do
-      it 'creates a project task after failed processing' do
-        expect{
-          invoice.trigger_event(event_name: :fail_processing)  
-        }.to change{ProjectTask.count}.by(1)
-        invoice.project_tasks.reload
-        expect(invoice.project_tasks.count).to eq(1)
+      describe 'task creation' do
+        it 'creates a task if the Draw has already run auto invoice approvals' do
+          refute(invoice.manual_approval_required)
+          invoice.draw.invoice_auto_approvals_completed = true
+          invoice.draw.save
+          expect{
+            invoice.trigger_event(event_name: :complete_processing)  
+          }.to change{ProjectTask.count}.by(1)
+          invoice.project_tasks.reload
+          expect(invoice.project_tasks.count).to eq(1)
+          assert(invoice.manual_approval_required)
+        end
+        it 'does not create a task if the Draw not already run auto invoice approvals' do
+          expect{
+            invoice.trigger_event(event_name: :fail_processing)  
+          }.to_not change{ProjectTask.count}
+          invoice.project_tasks.reload
+          expect(invoice.project_tasks.count).to eq(0)
+        end
       end
-      it 'creates a project task after successful processing' do
-        expect{
-          invoice.trigger_event(event_name: :complete_processing)  
-        }.to change{ProjectTask.count}.by(1)
-        invoice.project_tasks.reload
-        expect(invoice.project_tasks.count).to eq(1)
+    end
+
+    describe 'resetting approval' do
+      it 'sets flags to require manual approval' do
+        invoice.update(state: :approved, automatically_approved: true, manual_approval_required: false)
+        invoice.trigger_event(event_name: :reset_approval)
+        invoice.reload
+        assert(invoice.submitted?)
+        assert(invoice.manual_approval_required?)
+        refute(invoice.automatically_approved?)
       end
     end
 

@@ -160,7 +160,7 @@ module Invoices
       def after_processing(user)
         if draw.invoice_auto_approvals_completed
           update(manual_approval_required: true)
-          create_task(:approve)
+          create_task(action: :approve)
         end
       end
 
