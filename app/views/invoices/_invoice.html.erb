@@ -47,8 +47,8 @@
                               html: { id: 'eye_icon_description_popover', class: "eye_icon_description_popover p-0", style: ( 'cursor: pointer' ),
                               data: { bs_toggle: :popover, bs_placement: :bottom, bs_content: 'Amount Due Preview', bs_trigger: 'click hover' } }) %>
           <% end %>
-          <% if invoice.manual_approval_required? || invoice.audit? %>
-            <%= inline_icon(icon: :warning, size: 20, fill: :orange) %>
+          <% if invoice.automatically_approved? && invoice.approved? %>
+            <%= inline_icon(icon: :patch_check, size: 20, fill: :blue) %>
           <% end %>
         </span>
       <% else %>

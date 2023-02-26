@@ -13,6 +13,7 @@ module ImagesHelper
     eye_slash: 'eye-slash-fill.svg',
     home: 'house-fill.svg',
     info: 'info-circle-fill.svg',
+    patch_check: 'patch-check-fill.svg',
     square_check: 'check-square-fill.svg',
     square_check_open: 'check-square.svg',
     square_x: 'x-square-fill.svg',
