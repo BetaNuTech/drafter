@@ -162,7 +162,7 @@ module Invoices
           update(manual_approval_required: true)
           create_task(action: :approve)
         end
-        ocr_processed = Time.current
+        self.ocr_processed = Time.current
         save
       end
 

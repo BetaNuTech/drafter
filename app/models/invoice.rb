@@ -163,11 +163,11 @@ class Invoice < ApplicationRecord
   end
 
   def ocr_matched?
-    ocr_processed.present? && ocr_amount.present? && ocr_amount == invoice.amount
+    ocr_processed.present? && ocr_amount.present? && ocr_amount == amount
   end
 
   def ocr_no_match?
-    ocr_processed.present? && ocr_amount.present? && ocr_amount != invoice.amount
+    ocr_processed.present? && ocr_amount.present? && ocr_amount != amount
   end
 
   def ocr_failed?
