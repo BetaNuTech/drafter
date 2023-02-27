@@ -49,7 +49,7 @@ class OrganizationPolicy < ApplicationPolicy
     case user
     when ->(u) { u.admin? }
       Organization::ALLOWED_PARAMS
-    when ->(u) { u.corporate? }
+    when ->(u) { u.executive? }
       Organization::ALLOWED_PARAMS
     else
       []
