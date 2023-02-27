@@ -123,6 +123,11 @@ class Draw < ApplicationRecord
     draw_cost_states.size == 1 && draw_cost_states.first == :approved
   end
 
+  def unapproved_draw_costs
+    match_states = %i{pending submitted rejected}
+    draw_costs.where(state: match_states)
+  end
+
   def approve(user)
     self.approver = user
     self.approved_at = Time.current

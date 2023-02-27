@@ -10,8 +10,8 @@ module Draws
         submitted_types = draw_documents.where(state: match_states).
                             pluck(:documenttype).
                             uniq.map(&:to_sym)
-        reference_required_documents = DrawDocument::REQUIRED_DOCUMENTTYPES.sort - [:other] 
-        reference_submitted_documents = ( submitted_types.sort - [:other] )
+        reference_required_documents = ( DrawDocument::REQUIRED_DOCUMENTTYPES.sort - [:other] ).map(&:capitalize)
+        reference_submitted_documents = ( submitted_types.sort - [:other] ).map(&:capitalize)
         if reference_submitted_documents == reference_required_documents
           true
         else
@@ -24,6 +24,11 @@ module Draws
       def all_required_documents_approved?
         all_documents_submitted? &&
           required_documents.all?{|d| d.approved?}
+      end
+
+      def unapproved_documents
+        match_states = %i{pending rejected}
+        draw_documents.where(state: match_states)
       end
 
       def remaining_documents
