@@ -42,7 +42,7 @@
       <span class="badge bg-success"><%= number_to_currency invoice.amount %></span>
       <% if invoice.ocr_matched? %>
         <%= inline_icon(icon: :file_earmark_check, size: 20, fill: :green, opacity: 1.0,
-                              html: { id: 'ocr_no_match_icon_description_popover', class: "eye_slash_icon_description_popover p-0", style: ( 'cursor: pointer' ),
+                              html: { id: 'ocr_matched_icon_description_popover', class: "eye_slash_icon_description_popover p-0", style: ( 'cursor: pointer' ),
                               data: { bs_toggle: :popover, bs_placement: :bottom, bs_content: 'OCR Matched Invoice Amount', bs_trigger: 'click hover' } }) %>
       <% elsif invoice.ocr_no_match? %>
         <%= inline_icon(icon: :file_earmark_break, size: 20, fill: :orange, opacity: 1.0,
