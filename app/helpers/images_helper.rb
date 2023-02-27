@@ -108,4 +108,16 @@ module ImagesHelper
   def uploaded_image
     'icons/cloud-check-fill'
   end
+
+  def file_earmark_check_image
+    'icons/file-earmark-check-fill.svg'
+  end
+
+  def file_earmark_break_image
+    'icons/file-earmark-break-fill.svg'
+  end
+
+  def file_earmark_x_image
+    'icons/file-earmark-x-fill.svg'
+  end
 end
