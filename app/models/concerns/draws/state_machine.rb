@@ -170,6 +170,7 @@ module Draws
       end
 
       def after_reject(user)
+        update(invoice_auto_approvals_completed: false)
         revert_to_pending_draw_costs
         bubble_event_to_project_tasks(:reject)
         send_state_notification(aasm.to_state)
