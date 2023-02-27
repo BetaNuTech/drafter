@@ -61,7 +61,9 @@
                               data: { bs_toggle: :popover, bs_placement: :bottom, bs_content: 'Amount Due Preview', bs_trigger: 'hover' } }) %>
           <% end %>
           <% if invoice.automatically_approved? && invoice.approved? %>
-            <%= inline_icon(icon: :patch_check, size: 20, fill: :blue) %>
+            <%= inline_icon(icon: :patch_check, size: 20, fill: :blue, opacity: 1.0,
+                              html: { id: 'patch_check_icon_description_popover', class: "patch_check_icon_description_popover p-0", style: ( 'cursor: pointer' ),
+                              data: { bs_toggle: :popover, bs_placement: :bottom, bs_content: 'Automatically Approved', bs_trigger: 'hover' } }) %>
           <% end %>
         </span>
       <% else %>
