@@ -10,11 +10,11 @@ module DrawsHelper
     ProjectCost.cost_types.to_a.map{|ct| [ct[0].capitalize, ct[0]]}
   end
 
-  def project_cost_options(project: nil, project_cost:)
-    project = project || project_cost&.project
+  def project_cost_options(draw: , project_cost:)
+    project = draw.project || project_cost&.project
     return '' if project.nil?
     non_initial_draw = project.draws.where("index > 1").first
-    used_project_costs = project.draw_costs.visible.pluck(:project_cost_id)
+    used_project_costs = draw.draw_costs.visible.pluck(:project_cost_id)
     used_project_costs = used_project_costs - [ project_cost.id ] if project_cost.present?
     project_costs = project.project_costs || ProjectCost.none
     if non_initial_draw.nil?
