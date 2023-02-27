@@ -78,4 +78,24 @@ module DrawsHelper
       invoice.state
     end
   end
+
+  def draw_action_issues(draw)
+    proposed_action = nil
+    issues = []
+    case draw.state.to_sym
+    when :pending, :rejected
+      draw.enumerate_submit_problems
+      proposed_action = 'Submitted'
+    when :submitted
+      draw.enumerate_approval_problems
+      proposed_action = 'Approved'
+    else
+      return false
+    end
+
+    issues = draw.state_errors
+    return false unless issues.present?
+
+    {action: proposed_action, issues:}
+  end
 end
