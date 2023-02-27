@@ -66,9 +66,9 @@ class InvoiceProcessingService
     @service.process_completion_queue(Invoice) do |successful_jobs, failed_jobs|
       failed_jobs.each do |job|
         invoice = job.record
-        invoice.trigger_event(event_name: 'fail_processing_attempt') unless invoice.processing_failed?
-        description = "External service error processing document"
+        description = "External OCR service error processing Invoice document"
         SystemEvent.log(description: , event_source: invoice, incidental: invoice.project, severity: :error)
+        invoice.trigger_event(event_name: 'fail_processing_attempt')
       end
 
       successful_jobs.each do |job|
@@ -77,17 +77,32 @@ class InvoiceProcessingService
     end
   end
 
-  def process_analysis_job_data(invoice: ,analysis_job_data:)
-    if analysis_job_data.nil?
-      invoice.trigger_event(event_name: :fail_processing)
-      return false
+  def process_analysis_job_data(invoice:, analysis_job_data: nil, reprocess: false)
+    if reprocess
+      analysis = invoice.ocr_data&.fetch('analysis')
+    else
+      analysis = analysis_job_data&.to_h&.with_indifferent_access
     end
 
-    process_invoice_analysis(invoice: invoice, analysis_job_data:)
+    unless analysis.present?
+      description = "Failed to process invoice OCR analysis due to missing analysis data"
+      SystemEvent.log(description: , event_source: invoice, incidental: invoice.project, severity: :error)
+      invoice.trigger_event(event_name: :fail_processing) unless reprocess
+      return invoice
+    end
 
-    if invoice.processing? && analysis_job_data.is_total_present
-      generate_annotated_preview(invoice: invoice)
-      invoice.annotated_preview.reload
+    process_invoice_analysis(invoice: invoice, analysis_job_data: analysis, reprocess:)
+    invoice.reload
+
+    if analysis['is_total_present']
+      page_found = analysis['page_number'].to_i > 0
+      if page_found
+        generate_annotated_preview(invoice: invoice)
+        invoice.annotated_preview.reload
+      else
+        description = "Could not generate Invoice preview because the page containing the total was not found"
+        SystemEvent.log(description: , event_source: invoice, incidental: invoice.project, severity: :warn)
+      end
       invoice.trigger_event(event_name: :complete_processing)
     else
       invoice.trigger_event(event_name: :fail_processing)
@@ -103,38 +118,44 @@ class InvoiceProcessingService
     @service.get_analysis(job_id:, expected_total: invoice.amount)
   end
 
-  def process_invoice_analysis(invoice:, analysis_job_data:)
-    invoice.init_ocr_data
-    invoice.ocr_data['analysis'] = analysis_job_data.to_h
-
-    if analysis_job_data.is_total_present
-      page = invoice.ocr_data.dig('analysis','page_number').to_i
-      page_found = page > 0
-      amount_match = analysis_job_data.total == invoice.amount
-      invoice.manual_approval_required = !amount_match || !page_found
-      invoice.ocr_amount = analysis_job_data.total
-    else
-      invoice.manual_approval_required = true
-    end
-
-    invoice.save
-  end
 
   def generate_annotated_preview(invoice:)
     analysis = invoice.ocr_data.fetch('analysis',nil)
-    return false unless analysis && invoice.document.attached?
+
+    unless analysis.present?
+      description = "Invoice preview generation failed due to missing analysis data"
+      SystemEvent.log(description: , event_source: invoice, incidental: invoice.project, severity: :error)
+      return false
+    end
+
+    unless invoice.document.attached?
+      description = "Invoice preview generation failed due to missing document"
+      SystemEvent.log(description: , event_source: invoice, incidental: invoice.project, severity: :error)
+      return false
+    end
 
     page = analysis['page_number'].to_i - 1 # zero-indexed page
-    return false if page <= 0
+    if page < 0
+      description = "Invoice preview generation failed because the page containing the total was not found"
+      SystemEvent.log(description: , event_source: invoice, incidental: invoice.project, severity: :error)
+    end
 
     invoice.document.blob.open do |tempfile|
       pdf_page_image = Vips::Image.new_from_file(tempfile.path, access: :sequential, page: page)
 
       width, height = pdf_page_image.size
-      return false if ( width.zero? || height.zero? )
+      if ( width.zero? || height.zero? )
+        description = "Invoice preview generation failed due to invalid page size"
+        SystemEvent.log(description: , event_source: invoice, incidental: invoice.project, severity: :error)
+        return false
+      end
 
       box_width, box_height, box_left, box_top = analysis['bounding_box'].values_at('width', 'height', 'left', 'top')
-      return false if [box_width, box_height, box_left, box_top].any?{|val| val.nil? || val.zero?}
+      if [box_width, box_height, box_left, box_top].any?{|val| val.nil? || val.zero?}
+        description = "Invoice preview generation failed due to invalid total bounding box specification returned from OCR service"
+        SystemEvent.log(description: , event_source: invoice, incidental: invoice.project, severity: :error)
+        return false
+      end
 
       box_width = (box_width * width) + 10 
       box_left = (box_left * width) - 5
@@ -169,6 +190,29 @@ class InvoiceProcessingService
       SystemEvent.log(description: "Invoice processing attempt #{attempt} failed", event_source: invoice, incidental: invoice.project, severity: :warn)
       nil
     end
+  end
+
+  def process_invoice_analysis(invoice:, analysis_job_data: nil, reprocess: false)
+    if reprocess
+      analysis = invoice.ocr_data['analysis']
+    else
+      invoice.init_ocr_data
+      analysis = invoice.ocr_data['analysis'] = analysis_job_data.to_h.with_indifferent_access
+    end
+
+    if analysis['is_total_present']
+      page_found = analysis['page_number'].to_i > 0
+      amount_match = analysis['total'] == invoice.amount
+      invoice.manual_approval_required = !amount_match || !page_found
+      invoice.ocr_amount = analysis['total'] unless reprocess
+    else
+      description = "OCR service could not identify an Invoice total"
+      SystemEvent.log(description: , event_source: invoice, incidental: invoice.project, severity: :warn)
+      invoice.manual_approval_required = true
+    end
+
+    invoice.save
+    invoice
   end
 
   def analyzer_service(service)
