@@ -141,6 +141,7 @@ module Draws
       def allow_submit?
         @state_errors = []
         @state_errors << 'Not all documents submitted' unless all_documents_submitted?
+        @state_errors << 'There are missing document uploads' unless draw_documents.visible.all_documents_attached?
         @state_errors << 'No visible Draw Costs' unless draw_costs.visible.any?
         unless draw_costs.visible.all?(&:allow_submit?)
           draw_costs.visible.select{|dc| !dc.allow_submit?}.each do |draw_cost|

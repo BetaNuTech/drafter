@@ -104,6 +104,7 @@ module DrawCosts
         @state_errors << 'Over budget' if over_budget?
         @state_errors << 'Invoice mismatch' if invoice_mismatch?
         @state_errors << 'No visible invoices' unless invoices.visible.any?
+        @state_errors << 'There are missing invoice uploads' unless invoices.visible.all_documents_attached?
         @state_errors.empty?
       end
 

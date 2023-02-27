@@ -73,6 +73,17 @@ class DrawDocument < ApplicationRecord
   scope :budget, -> { where(documenttype: :budget) }
   scope :application, -> { where(documenttype: :application) }
   scope :waiver, -> { where(documenttype: :waiver) }
+  scope :document_attached, -> { where.not(document: nil) }
+
+  ### Class Methods
+
+  def self.all_documents_attached?
+    all_attachment_exist = true
+    self.all.each do |draw_document|
+      all_attachment_exist = false if !draw_document.document.attached?
+    end 
+    all_attachment_exist
+  end
 
   ### Instance Methods
   
