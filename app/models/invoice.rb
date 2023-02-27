@@ -108,11 +108,7 @@ class Invoice < ApplicationRecord
   end
 
   def self.all_documents_attached?
-    all_attachments_exist = true
-    self.all.each do |invoice|
-      all_attachments_exist = false if !invoice.document.attached?
-    end 
-    all_attachments_exist
+    !self.all.any?{|invoice| !invoice.document.attached?}
   end
 
   def init_ocr_data

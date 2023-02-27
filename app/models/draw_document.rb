@@ -78,11 +78,7 @@ class DrawDocument < ApplicationRecord
   ### Class Methods
 
   def self.all_documents_attached?
-    all_attachment_exist = true
-    self.all.each do |draw_document|
-      all_attachment_exist = false if !draw_document.document.attached?
-    end 
-    all_attachment_exist
+    !self.all.any?{|draw_document| !draw_document.document.attached?}
   end
 
   ### Instance Methods
