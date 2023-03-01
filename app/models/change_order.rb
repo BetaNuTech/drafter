@@ -38,8 +38,9 @@ class ChangeOrder < ApplicationRecord
 
   ### Validations
   validates :amount, presence: true, numericality: { greater_than: 0.0 }
-  validates :draw_cost_id, uniqueness: { scope: :project_cost_id }
-  validates :funding_source_id, exclusion: { in: ->(change_order) { [change_order.project_cost_id] } }
+  validates :funding_source_id, exclusion: { in: ->(change_order) { [change_order.project_cost_id] } },
+                                uniqueness: { scope: [:draw_cost_id],
+                                              message: 'is being used by another Change Order for this Draw Cost' }
 
   def contingency?
     funding_source.contingency?

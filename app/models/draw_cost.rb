@@ -52,6 +52,7 @@ class DrawCost < ApplicationRecord
   has_one :organization, through: :draw
   has_many :invoices, dependent: :destroy
   has_many :change_orders, dependent: :destroy
+  has_many :change_order_funding_sources, class_name: 'ProjectCost', through: :change_orders, source: :funding_source
   has_many :project_tasks, as: :origin, dependent: :destroy
 
   ### Delegations

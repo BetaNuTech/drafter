@@ -7,17 +7,19 @@ RSpec.describe DrawsController, type: :controller do
   let(:valid_draw_attributes) { { amount: 1234.56, name: 'Draw 1', notes: 'Draw notes for test here' } }
 
   let(:project) { sample_project }
+  let(:invoice_file_upload) { fixture_file_upload('sample_document_1.pdf') }
+  let(:document_file_upload) { fixture_file_upload('sample_document_1.pdf') }
   before(:each) { project }
   let(:complete_draw) {
     user = sample_project.developers.first
     sample_draw
     sample_draw_cost
     invoice_service = InvoiceService.new(user: user, draw_cost: sample_draw_cost)
-    invoice_service.create(amount: sample_draw_cost.total, description: 'Sample invoice')
+    invoice_service.create(amount: sample_draw_cost.total, description: 'Sample invoice', document: invoice_file_upload)
     sample_draw_cost.reload
     DrawDocument.documenttypes.keys.each do |ddt|
       doc_service = DrawDocumentService.new(draw: sample_draw, user: user)
-      doc_service.create({documenttype: ddt, notes: "#{ddt} document note"})
+      doc_service.create({documenttype: ddt, notes: "#{ddt} document note", document: document_file_upload})
     end
     sample_draw.reload
     sample_draw
