@@ -4,7 +4,8 @@
   <% else %>
     <% form_url = draw_draw_document_path(draw_id: draw_document.draw_id, id: draw_document.id) %>
   <% end %>
-  <%= form_with(model: draw_document, url: form_url, multipart: true) do |form| %>
+  <%= form_with(model: draw_document, url: form_url, multipart: true,
+                data: { document_form_target: 'form', action: 'document-form#form_submitted' }) do |form| %>
     <% if draw_document.new_record? %>
       <h4>Upload Document</h4>
     <% else %>

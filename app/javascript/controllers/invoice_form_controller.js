@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = ['file_field', 'file_selected_image', 'submit_button', 'file_upload_prompt', 'amount_field', 'document']
+  static targets = ['file_field', 'file_selected_image', 'submit_button', 'file_upload_prompt', 'amount_field', 'document', 'form']
 
   connect() {
     const submit_button_el = this.submit_buttonTarget
@@ -48,6 +48,13 @@ export default class extends Controller {
     const amount_field_el = this.amount_fieldTarget
     const amount = amount_field_el.value
     return(amount > 0.0)
+  }
+
+  form_submitted(event) {
+    const submit_button_el = this.submit_buttonTarget
+    submit_button_el.value = 'Uploading'
+    submit_button_el.setAttribute('disabled', 'disabled')
+    return(true)
   }
 
  } 

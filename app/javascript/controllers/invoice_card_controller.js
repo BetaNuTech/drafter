@@ -33,7 +33,9 @@ export default class extends Controller {
     try {
       var popover = new bootstrap.Popover(el)
     } catch {
-      console.log('skipping popover',el.id, 'with no content')
+      if (el !== null) {
+        console.log('skipping popover for',el.id, 'with no content')
+      }
       return(true)
     }
   }

@@ -4,7 +4,8 @@
   <% else %>
     <% form_url = draw_cost_invoice_path(draw_cost_id: invoice.draw_cost_id, id: invoice.id) %>
   <% end %>
-  <%= form_with(model: invoice, url: form_url, multipart: true) do |form| %>
+  <%= form_with(model: invoice, url: form_url, multipart: true,
+                data: { invoice_form_target: 'form', action: 'invoice-form#form_submitted' }) do |form| %>
     <% if invoice.new_record? %>
       <h4>Upload Invoice</h4>
     <% else %>
@@ -45,7 +46,7 @@
       </div>
     </div>
     <div class="actions align-items-end">
-      <%= form.submit 'Submit', class: 'btn btn-sm btn-success m-1', data: {invoice_form_target: 'submit_button'}, disabled: :disabled %>
+      <%= form.submit 'Submit', class: 'btn btn-sm btn-success m-1', data: {invoice_form_target: 'submit_button' }, disabled: :disabled %>
       <%= link_to('Cancel', :back, class: 'btn btn-sm btn-secondary' ) %>
     </div>
   <% end %>
