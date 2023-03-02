@@ -6,5 +6,17 @@
     <p class="card-text">
       <%= project.description %>
     </p>
+    <% if project.draws.any? %>
+      <% project.draws.visible.order(index: :desc).each do |draw| %>
+        <p>
+        <small><%= draw_state_badge(draw) %></small>
+        <b><%= draw.name %></b>
+        &mdash;
+        <%= number_to_currency(draw.draw_cost_total) %>
+        </p>
+      <% end %>
+    <% else %>
+      No Draws
+    <% end %>
   </div>
 </div>
