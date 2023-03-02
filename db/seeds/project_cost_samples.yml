@@ -15,9 +15,9 @@
       :cost_type: land
       :approval_lead_time: 0
       :standard: true
-      :drawable: false
+      :drawable: true
       :change_requestable: false
-      :initial_draw_only: false
+      :initial_draw_only: true
       :change_request_allowed: false
       :total: 0.00
     - :name: Building Cost
