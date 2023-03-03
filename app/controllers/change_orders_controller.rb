@@ -19,6 +19,7 @@ class ChangeOrdersController < ApplicationController
     authorize @service.change_order
     @change_order = @service.create(params[:change_order])
     @draw_cost.change_orders.reload
+    @related_draw_cost = @change_order.draw.project.draw_costs.where(project_cost: @change_order.funding_source) .first
     if @service.errors?
       render :new, status: :unprocessable_entity
     else
@@ -33,6 +34,7 @@ class ChangeOrdersController < ApplicationController
 
   def destroy
     authorize @change_order
+    @related_draw_cost = @change_order.draw.project.draw_costs.where(project_cost: @change_order.funding_source).first
     @service = ChangeOrderService.new(user: @current_user, change_order: @change_order)
     @service.destroy
     respond_to do |format|
