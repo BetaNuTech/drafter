@@ -35,14 +35,13 @@ module DrawsHelper
 
   def change_order_funding_options(change_order)
     return '' if change_order.nil?
-    proposed_amount = change_order.draw_cost.project_cost_overage
     draw_cost_funding_source_ids = [change_order.draw_cost.project_cost_id] + change_order.draw_cost.change_order_funding_sources.pluck(:id)
     project_costs = change_order.project.
       project_costs.
         change_requestable.
         where.not(id: draw_cost_funding_source_ids).
         order(name: :asc).
-        select{ |cost| cost.budget_balance_without_change_orders >= proposed_amount }
+        select{ |cost| cost.budget_balance_without_change_orders > 0.0 }
         
     project_cost_options_with_remaining(project_costs, change_order.project_cost_id)
   end
