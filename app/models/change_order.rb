@@ -27,6 +27,13 @@
 #  fk_rails_...  (project_cost_id => project_costs.id)
 #
 class ChangeOrder < ApplicationRecord
+  class FundingAmountValidator < ActiveModel::Validator
+    def validate(record)
+      if record.funding_source.budget_balance_without_change_orders < record.amount
+        record.errors.add(:amount, 'exceeds the funding source\'s budget')
+      end
+    end
+  end
   ALLOWED_PARAMS = %i{amount description funding_source_id}.freeze
 
   ### Associations
@@ -37,6 +44,7 @@ class ChangeOrder < ApplicationRecord
   has_one :draw, through: :draw_cost
 
   ### Validations
+  validates_with FundingAmountValidator
   validates :amount, presence: true, numericality: { greater_than: 0.0 }
   validates :funding_source_id, exclusion: { in: ->(change_order) { [change_order.project_cost_id] } },
                                 uniqueness: { scope: [:draw_cost_id],

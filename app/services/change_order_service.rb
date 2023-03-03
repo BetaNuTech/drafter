@@ -37,12 +37,17 @@ class ChangeOrderService
     @change_order.amount = provided_amount < overage ? overage : provided_amount
 
     unless ( @change_order.amount.positive? )
-      @errors << 'Draw Cost does not require a change order'
+      @errors << 'Amount must be positive'
       return @change_order
     end
 
     unless @draw_cost.project_cost.change_request_allowed?
       @errors << 'Change Requests are not allowed for this Draw Cost'
+      return @change_order
+    end
+
+    unless @change_order.funding_source.present?
+      @errors << 'Missing Funding Source'
       return @change_order
     end
 

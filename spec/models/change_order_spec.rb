@@ -31,7 +31,7 @@ require 'rails_helper'
 
 RSpec.describe ChangeOrder, type: :model do
   include_context 'projects'
-  include_context 'sample_projects'
+  include_context 'sample_draws'
 
   describe 'initialization' do
     it 'creates a change_order' do
@@ -42,6 +42,25 @@ RSpec.describe ChangeOrder, type: :model do
         record = build(:change_order, project_cost:, draw_cost: )
         record.save
       }.to change{ChangeOrder.count}.by(1)
+    end
+  end
+
+  let(:user) { developer_user }
+
+  describe 'validations' do
+    let(:draw_cost) { sample_draw_cost }
+    let(:funding_source) { sample_project_non_contingency_project_costs.first }
+    describe 'amount' do
+      let(:service) {ChangeOrderService.new(user: developer_user, draw_cost: draw_cost)} 
+      it 'should not allow an amount exceeding the funding source balance' do
+        funding_source.update(total: 1.0)
+        attrs = {amount: 1000.0, description: 'Test Change Order 1', funding_source_id: funding_source.id}
+        service.create(attrs)
+        assert(service.errors?)
+        funding_source.update(total: 5000.0)
+        service.create(attrs)
+        refute(service.errors?)
+      end
     end
   end
 
