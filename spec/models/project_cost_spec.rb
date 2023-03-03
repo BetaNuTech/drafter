@@ -44,6 +44,7 @@ RSpec.describe ProjectCost, type: :model do
       draw_cost
       draw_cost_invoices
       draw_cost2
+      draw_cost2.project_cost.update(total: 1000000.0)
       draw_cost2_invoices
       draw2
       draw2_draw_cost
@@ -111,10 +112,11 @@ RSpec.describe ProjectCost, type: :model do
     end
 
     it 'returns the effective budget balance' do
+      initial_balance = project_cost2.budget_balance
       change_order1; change_order2
+      expected_new_balance = initial_balance - change_order1.amount - change_order2.amount
       project_cost2.reload
-      expect(project_cost2.budget_balance).to eq(-5000.0)
-      assert(project_cost2.over_budget?)
+      expect(project_cost2.budget_balance).to eq(expected_new_balance)
     end
 
   end

@@ -24,7 +24,7 @@ RSpec.describe InvoicePolicy do
     describe 'when an invoice is not clean' do
       let(:change_order_amount) { 1000.0 }
       let(:contingency_project_cost) {
-        cost = create(:project_cost, project: sample_project, name: 'Sample Contingency')
+        cost = create(:project_cost, project: sample_project, name: 'Sample Contingency', total: 100000.0)
         sample_project.project_costs.reload
         cost
       }

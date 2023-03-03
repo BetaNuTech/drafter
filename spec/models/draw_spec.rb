@@ -81,13 +81,14 @@ RSpec.describe Draw, type: :model do
       let(:project_cost) { draw_cost.project_cost }
       let(:funding_source) { contingency_project_cost }
       let(:contingency_project_cost) {
-        cost = create(:project_cost, project: sample_project, name: 'Sample Contingency')
+        cost = create(:project_cost, project: sample_project, name: 'Sample Contingency', total: 100000.0)
         sample_project.project_costs.reload
         cost
       }
       let(:change_order) {
         service = ChangeOrderService.new(user: developer_user, draw_cost: draw_cost)
-        service.create({funding_source_id: contingency_project_cost.id})
+        service.create({funding_source_id: contingency_project_cost.id, amount: 1000.0})
+        service.change_order
       }
 
       it 'returns if the Draw is "clean"' do
@@ -97,8 +98,10 @@ RSpec.describe Draw, type: :model do
         draw.reload
         assert(draw.clean?)
 
+        developer_user
         change_order
         draw.reload
+        assert(change_order.contingency?)
         refute(draw.clean?)
       end
     end # clean draws

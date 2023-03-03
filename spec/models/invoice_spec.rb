@@ -238,7 +238,7 @@ RSpec.describe Invoice, type: :model do
         describe 'when the draw cost uses contingency funds' do
           let(:change_order_amount) { 1000.0 }
           let(:contingency_project_cost) {
-            cost = create(:project_cost, project: sample_project, name: 'Sample Contingency')
+            cost = create(:project_cost, project: sample_project, name: 'Sample Contingency', total: 1000000.0)
             sample_project.project_costs.reload
             cost
           }
