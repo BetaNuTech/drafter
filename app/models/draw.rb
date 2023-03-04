@@ -63,6 +63,7 @@ class Draw < ApplicationRecord
   has_many :change_orders, through: :draw_costs
   has_many :invoices, through: :draw_costs
   has_many :project_tasks, as: :origin, dependent: :destroy
+  has_one_attached :document_packet
 
   ### Validations
   validates_with IndexValidator

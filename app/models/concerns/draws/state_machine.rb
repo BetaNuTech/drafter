@@ -179,6 +179,7 @@ module Draws
       end
 
       def after_reject(user)
+        remove_document_packet
         update(invoice_auto_approvals_completed: false)
         revert_to_pending_draw_costs
         bubble_event_to_project_tasks(:reject)
@@ -214,9 +215,11 @@ module Draws
         bubble_event_to_project_tasks(:approve)
         approve(user)
         send_state_notification
+        generate_document_packet
       end
 
       def after_withdraw(user=nil)
+        remove_document_packet
         items = draw_documents.to_a + invoices.to_a + [self]
         ProjectTask.where(origin: items).each{ |task| task.trigger_event(event_name: :archive, user: user) }
         project_tasks.each{|task| task.trigger_event(event_name: :archive, user: user) }
@@ -253,6 +256,16 @@ module Draws
         project_tasks.pending.each do |task|
           task.trigger_event(event_name: task_event) if task.permitted_state_events.include?(task_event)
         end
+      end
+
+      def generate_document_packet
+        DrawPacketGenerator.new(draw: self).
+          delay(queue: :low_priority).
+          call
+      end
+
+      def remove_document_packet
+        document_packet.purge_later
       end
 
     end

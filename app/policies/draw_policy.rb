@@ -97,6 +97,13 @@ class DrawPolicy < ApplicationPolicy
       user.project_internal?(record.project))
   end
 
+  def download_packet?
+    record.document_packet.attached? &&
+    ( user.admin? ||
+      user.project_management?(record.project) ||
+      user.project_finance?(record.project) )
+  end
+
   def allowed_params
     allow_params = Draw::ALLOWED_PARAMS
     case user

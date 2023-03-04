@@ -381,6 +381,7 @@ GEM
     ruby-vips (2.1.4)
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
+    rubyzip (2.3.2)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -502,6 +503,7 @@ DEPENDENCIES
   rspec
   rspec-rails
   rspec_junit_formatter
+  rubyzip
   sassc-rails
   simplecov
   sprockets-rails

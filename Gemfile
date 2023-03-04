@@ -45,6 +45,7 @@ gem 'stimulus-rails'
 gem 'turbo-rails'
 gem 'after_commit_everywhere'
 gem 'clockwork', github: 'Rykian/clockwork'
+gem 'rubyzip'
 
 group :development do
   gem 'web-console'
