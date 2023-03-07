@@ -64,6 +64,7 @@ class Draw < ApplicationRecord
   has_many :invoices, through: :draw_costs
   has_many :project_tasks, as: :origin, dependent: :destroy
   has_one_attached :document_packet
+  has_one_attached :draw_summary_sheet
 
   ### Validations
   validates_with IndexValidator

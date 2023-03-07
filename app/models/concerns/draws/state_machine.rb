@@ -179,7 +179,7 @@ module Draws
       end
 
       def after_reject(user)
-        remove_document_packet
+        cleanup_reports
         update(invoice_auto_approvals_completed: false)
         revert_to_pending_draw_costs
         bubble_event_to_project_tasks(:reject)
@@ -219,7 +219,7 @@ module Draws
       end
 
       def after_withdraw(user=nil)
-        remove_document_packet
+        cleanup_reports
         items = draw_documents.to_a + invoices.to_a + [self]
         ProjectTask.where(origin: items).each{ |task| task.trigger_event(event_name: :archive, user: user) }
         project_tasks.each{|task| task.trigger_event(event_name: :archive, user: user) }
@@ -259,13 +259,28 @@ module Draws
       end
 
       def generate_document_packet
-        DrawPacketGenerator.new(draw: self).
+        Reporting::DrawPacketGenerator.new(draw: self).
           delay(queue: :low_priority).
           call
       end
 
+      def generate_draw_summary_sheet
+        Reporting::DrawSummaryGenerator.new(draw: self).
+          delay(queue: :low_priority).
+          call
+      end
+
+      def cleanup_reports
+        remove_draw_summary_sheet
+        remove_document_packet
+      end
+
       def remove_document_packet
         document_packet.purge_later
+      end
+
+      def remove_draw_summary_sheet
+        draw_summary_sheet.purge_later
       end
 
     end

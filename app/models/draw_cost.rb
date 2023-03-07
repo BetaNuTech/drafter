@@ -92,6 +92,12 @@ class DrawCost < ApplicationRecord
     change_orders.sum(:amount)
   end
 
+  def funded_change_order_total
+    project_cost.visible_change_orders_funded.
+      where(draw: draw).
+      sum(:amount)
+  end
+
   def requires_change_order?
     allow_new_change_order? && project_cost_overage.positive? 
   end
