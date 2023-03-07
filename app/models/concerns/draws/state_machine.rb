@@ -214,18 +214,24 @@ module Draws
       def after_approval(user)
         bubble_event_to_project_tasks(:approve)
         approve(user)
-        send_state_notification
+        generate_reports
+        regenerate_subsequent_draw_reports
         generate_document_packet
+        send_state_notification
       end
 
       def after_withdraw(user=nil)
         cleanup_reports
+        regenerate_subsequent_draw_reports
         items = draw_documents.to_a + invoices.to_a + [self]
         ProjectTask.where(origin: items).each{ |task| task.trigger_event(event_name: :archive, user: user) }
         project_tasks.each{|task| task.trigger_event(event_name: :archive, user: user) }
       end
 
       def after_funding(user=nil)
+        generate_reports
+        generate_document_packet
+        regenerate_subsequent_draw_reports
         send_state_notification
       end
 
@@ -258,30 +264,6 @@ module Draws
         end
       end
 
-      def generate_document_packet
-        Reporting::DrawPacketGenerator.new(draw: self).
-          delay(queue: :low_priority).
-          call
-      end
-
-      def generate_draw_summary_sheet
-        Reporting::DrawSummaryGenerator.new(draw: self).
-          delay(queue: :low_priority).
-          call
-      end
-
-      def cleanup_reports
-        remove_draw_summary_sheet
-        remove_document_packet
-      end
-
-      def remove_document_packet
-        document_packet.purge_later
-      end
-
-      def remove_draw_summary_sheet
-        draw_summary_sheet.purge_later
-      end
 
     end
   end

@@ -6,7 +6,7 @@ module Reporting
 
     READY_STATES = %i{internally_approved externally_approved}
 
-    attr_reader :debug, :draw, :errors, :project, :document_packet, :draw_summary_sheet
+    attr_reader :debug, :draw, :errors, :project, :document_packet
 
     def initialize(draw:, debug: false)
       @debug = debug
@@ -21,7 +21,6 @@ module Reporting
       reset_errors
       return false unless check_state
 
-      @draw_summary_sheet = generate_draw_summary_sheet
       @draw.reload
       @document_packet = generate_document_packet
     end
@@ -90,14 +89,18 @@ module Reporting
     end
 
     def get_reports
-      draw_name = formatted_draw_name(@draw)
-      [
-        {
-          filename: "%{draw_name}-_Summary.csv" % { draw_name: },
-          document: @draw.draw_summary_sheet,
-          draw_name:
-        }
-      ]
+      # No additional reports included at this time
+      return []
+
+      #generate_draw_summary_sheet
+      #draw_name = formatted_draw_name(@draw)
+      #[
+        #{
+          #filename: "%{draw_name}-_Summary.csv" % { draw_name: },
+          #document: @draw.draw_summary_sheet,
+          #draw_name:
+        #}
+      #]
     end
 
     def get_draw_documents

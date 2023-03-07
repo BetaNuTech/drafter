@@ -34,8 +34,9 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Draw < ApplicationRecord
-  include Draws::StateMachine
   include Draws::DrawDocuments
+  include Draws::Reporting
+  include Draws::StateMachine
 
   class IndexValidator < ActiveModel::Validator
     def validate(record)

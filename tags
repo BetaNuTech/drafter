@@ -120,9 +120,9 @@ DrawPacketGenerator	./app/services/reporting/draw_packet_generator.rb	/^  class 
 DrawPolicy	./app/policies/draw_policy.rb	/^class DrawPolicy < ApplicationPolicy$/;"	c
 DrawService	./app/services/draw_service.rb	/^class DrawService$/;"	c
 DrawSummaryGenerator	./app/services/reporting/draw_summary_generator.rb	/^  class DrawSummaryGenerator$/;"	c	class:Reporting
-DrawSummaryService	./app/services/draw_summary_service.rb	/^class DrawSummaryService$/;"	c
 DrawTaskGenerator	./app/services/project_task_services/draw_task_generator.rb	/^  class DrawTaskGenerator$/;"	c	class:ProjectTaskServices
 Draws	./app/models/concerns/draws/draw_documents.rb	/^module Draws$/;"	m
+Draws	./app/models/concerns/draws/reporting.rb	/^module Draws$/;"	m
 Draws	./app/models/concerns/draws/state_machine.rb	/^module Draws$/;"	m
 DrawsController	./app/controllers/draws_controller.rb	/^class DrawsController < ApplicationController$/;"	c
 DrawsHelper	./app/helpers/draws_helper.rb	/^module DrawsHelper$/;"	m
@@ -211,6 +211,7 @@ RemoveNameFromDraws	./db/migrate/20221020175700_remove_name_from_draws.rb	/^clas
 RemoveProjectBudget	./db/migrate/20221018040730_remove_project_budget.rb	/^class RemoveProjectBudget < ActiveRecord::Migration[7.0]$/;"	c
 RemoveUserProfileCompany	./db/migrate/20221018041101_remove_user_profile_company.rb	/^class RemoveUserProfileCompany < ActiveRecord::Migration[7.0]$/;"	c
 Rename	./db/migrate/20221108174912_rename.rb	/^class Rename < ActiveRecord::Migration[7.0]$/;"	c
+Reporting	./app/models/concerns/draws/reporting.rb	/^  module Reporting$/;"	m	class:Draws
 Reporting	./app/services/reporting/draw_packet_generator.rb	/^module Reporting$/;"	m
 Reporting	./app/services/reporting/draw_summary_generator.rb	/^module Reporting$/;"	m
 RequestSpecHelper	./spec/support/request_spec_helper.rb	/^module RequestSpecHelper$/;"	m
@@ -503,6 +504,7 @@ check_state	./app/services/reporting/draw_summary_generator.rb	/^    def check_s
 circle_check_image	./app/helpers/images_helper.rb	/^  def circle_check_image$/;"	f
 circle_x_image	./app/helpers/images_helper.rb	/^  def circle_x_image$/;"	f
 clean?	./app/models/draw.rb	/^  def clean?$/;"	f	class:Draw
+cleanup_reports	./app/models/concerns/draws/reporting.rb	/^      def cleanup_reports$/;"	f	class:Draws.Reporting
 cli_arg_version	./bin/bundle	/^  def cli_arg_version$/;"	f
 config	./app/services/clickup/api/base.rb	/^      def config$/;"	f	class:Clickup.Api.Base
 confirmation_instructions	./app/mailers/drafter_devise_mailer.rb	/^  def confirmation_instructions(record, token, opts={})$/;"	f	class:DrafterDeviseMailer
@@ -600,6 +602,7 @@ displayed_invoice_state_name	./app/models/concerns/invoices/state_machine.rb	/^ 
 document_processing_display_state	./app/models/concerns/invoices/state_machine.rb	/^      def document_processing_display_state$/;"	f	class:Invoices.StateMachine
 down	./db/migrate/20220714180131_create_delayed_jobs.rb	/^  def self.down$/;"	F	class:CreateDelayedJobs
 download_packet?	./app/policies/draw_policy.rb	/^  def download_packet?$/;"	f	class:DrawPolicy
+download_summary_sheet?	./app/policies/draw_policy.rb	/^  def download_summary_sheet?$/;"	f	class:DrawPolicy
 draw_action_issues	./app/helpers/draws_helper.rb	/^  def draw_action_issues(draw)$/;"	f
 draw_cost_invoice_remaining_class	./app/helpers/draws_helper.rb	/^  def draw_cost_invoice_remaining_class(draw_cost)$/;"	f
 draw_cost_invoices_total	./app/models/draw.rb	/^  def draw_cost_invoices_total$/;"	f	class:Draw
@@ -719,9 +722,11 @@ generate	./app/services/project_task_services/invoice_task_generator.rb	/^    de
 generate_annotated_preview	./app/models/invoice.rb	/^  def generate_annotated_preview$/;"	f	class:Invoice
 generate_annotated_preview	./app/services/invoice_processing_service.rb	/^  def generate_annotated_preview(invoice:)$/;"	f	class:InvoiceProcessingService
 generate_csv	./app/services/reporting/draw_summary_generator.rb	/^    def generate_csv(line_item_data)$/;"	f	class:Reporting.DrawSummaryGenerator
-generate_document_packet	./app/models/concerns/draws/state_machine.rb	/^      def generate_document_packet$/;"	f	class:Draws.StateMachine
+generate_document_packet	./app/models/concerns/draws/reporting.rb	/^      def generate_document_packet$/;"	f	class:Draws.Reporting
 generate_document_packet	./app/services/reporting/draw_packet_generator.rb	/^    def generate_document_packet$/;"	f	class:Reporting.DrawPacketGenerator
+generate_draw_summary_sheet	./app/models/concerns/draws/reporting.rb	/^      def generate_draw_summary_sheet$/;"	f	class:Draws.Reporting
 generate_draw_summary_sheet	./app/services/reporting/draw_packet_generator.rb	/^    def generate_draw_summary_sheet$/;"	f	class:Reporting.DrawPacketGenerator
+generate_reports	./app/models/concerns/draws/reporting.rb	/^      def generate_reports$/;"	f	class:Draws.Reporting
 getData	./app/services/clickup/api/base.rb	/^      def getData(options, dry_run: false)$/;"	f	class:Clickup.Api.Base
 getFolderlessLists	./app/services/clickup/api/lists.rb	/^      def getFolderlessLists(space_id:)$/;"	f	class:Clickup.Api.Lists
 getFolders	./app/services/clickup/api/folders.rb	/^      def getFolders(space_id:)$/;"	f	class:Clickup.Api.Folders
@@ -969,6 +974,7 @@ record_scope	./app/controllers/projects_controller.rb	/^  def record_scope$/;"	f
 record_scope	./app/controllers/users_controller.rb	/^  def record_scope$/;"	f	class:UsersController
 redirect_to_home	./app/controllers/projects_controller.rb	/^  def redirect_to_home$/;"	f	class:ProjectsController
 refresh_policy	./app/services/projects/updater.rb	/^    def refresh_policy$/;"	f	class:Projects.Updater
+regenerate_subsequent_draw_reports	./app/models/concerns/draws/reporting.rb	/^      def regenerate_subsequent_draw_reports$/;"	f	class:Draws.Reporting
 reject	./app/controllers/draw_documents_controller.rb	/^  def reject$/;"	f	class:DrawDocumentsController
 reject	./app/controllers/draws_controller.rb	/^  def reject$/;"	f	class:DrawsController
 reject	./app/controllers/invoices_controller.rb	/^  def reject$/;"	f	class:InvoicesController
@@ -990,7 +996,8 @@ remaining_documents	./app/models/concerns/draws/draw_documents.rb	/^      def re
 remove	./app/services/draw_document_service.rb	/^  def remove$/;"	f	class:DrawDocumentService
 remove	./app/services/invoice_service.rb	/^  def remove$/;"	f	class:InvoiceService
 remove?	./app/policies/invoice_policy.rb	/^  def remove?$/;"	f	class:InvoicePolicy
-remove_document_packet	./app/models/concerns/draws/state_machine.rb	/^      def remove_document_packet$/;"	f	class:Draws.StateMachine
+remove_document_packet	./app/models/concerns/draws/reporting.rb	/^      def remove_document_packet$/;"	f	class:Draws.Reporting
+remove_draw_summary_sheet	./app/models/concerns/draws/reporting.rb	/^      def remove_draw_summary_sheet$/;"	f	class:Draws.Reporting
 remove_member	./app/controllers/projects_controller.rb	/^  def remove_member$/;"	f	class:ProjectsController
 remove_member	./app/services/projects/membership.rb	/^    def remove_member(user)$/;"	f	class:Projects.Membership
 remove_member?	./app/policies/project_policy.rb	/^  def remove_member?$/;"	f	class:ProjectPolicy
