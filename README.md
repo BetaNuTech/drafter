@@ -200,7 +200,6 @@ APPLICATION_PROTOCOL="https"
 APPLICATION_DOMAIN=drafter-staging.herokuapp.com
 APPLICATION_ENV=staging
 LANG=en_US.UTF-8
-PORT=80
 RACK_ENV=production
 RAILS_ENV=production
 RAILS_MAX_THREADS=5
