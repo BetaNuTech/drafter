@@ -4,7 +4,10 @@
 <%= link_to('Externally Approve', project_draw_approve_external_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-success m-1', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).approve_external? %>
 <%= link_to('Fund', project_draw_fund_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-success m-1', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).fund? %>
 <%= link_to('Reject', project_draw_reject_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-danger m-1', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).reject? %>
-<%= link_to('Summary Packet', draw.document_packet.url, class: 'btn btn-info m1') if policy(draw).download_packet? %>
-<%= link_to('Summary Sheet', draw.draw_summary_sheet.url, class: 'btn btn-info m1') if policy(draw).download_summary_sheet? %>
 <% if policy(draw).approve_internal_but_blocked? %><p>Owner/Manager required to internally approve.</p><% end %>
 <%= render partial: 'draws/action_issues', locals: {draw: draw} %>
+<% if policy(draw).download_packet? || policy(draw).download_summary_sheet? %>
+  <hr/>
+  <%= link_to('Summary Packet', draw.document_packet.url, class: 'btn btn-info m1') if policy(draw).download_packet? %>
+  <%= link_to('Summary Sheet', draw.draw_summary_sheet.url, class: 'btn btn-info m1') if policy(draw).download_summary_sheet? %>
+<% end %>
