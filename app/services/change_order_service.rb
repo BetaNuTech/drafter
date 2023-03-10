@@ -17,7 +17,7 @@ class ChangeOrderService
     @user = user
     @draw = @draw_cost.draw
     @project = @draw_cost.project
-    @change_order_policy = ChangeOrderPolicy.new(@user, @change_order)
+    @policy = ChangeOrderPolicy.new(@user, @change_order)
   end
 
   def errors?
@@ -25,7 +25,7 @@ class ChangeOrderService
   end
 
   def create(params)
-    raise PolicyError.new unless @change_order_policy.create?
+    raise PolicyError.new unless @policy.create?
 
     reset_errors
 
@@ -66,7 +66,7 @@ class ChangeOrderService
   end
 
   def destroy
-    raise PolicyError.new unless @change_order_policy.destroy?
+    raise PolicyError.new unless @policy.destroy?
 
     @change_order.destroy
 
@@ -74,6 +74,51 @@ class ChangeOrderService
       @draw_cost.permitted_state_events.include?(:revert_to_pending)
 
     SystemEvent.log(description: "Removed Change Order for #{@draw_cost.project_cost.name} Cost for Draw '#{@draw.name}'", event_source: @draw, incidental: @project, severity: :warn)
+  end
+
+  def approve
+    raise PolicyError.new unless @policy.approve?
+
+    reset_errors
+
+    unless @change_order.permitted_state_events.include?(:approve)
+      @errors << 'Cannot approve Change Order at this time'
+      return false
+    end
+
+    @change_order.trigger_event(event_name: :approve, user: @user)
+    SystemEvent.log(description: "Approved a Change Order for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
+    return true
+  end
+
+  def reject
+    raise PolicyError.new unless @policy.reject?
+
+    reset_errors
+
+    unless @change_order.permitted_state_events.include?(:reject)
+      @errors << 'Cannot reject Change Order at this time'
+      return false
+    end
+
+    @change_order.trigger_event(event_name: :reject, user: @user)
+    SystemEvent.log(description: "Rejected a Change Order for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
+    return true
+  end
+
+  def reset_approval
+    raise PolicyError.new unless @policy.reset_approval?
+
+    reset_errors
+
+    unless @change_order.permitted_state_events.include?(:reset_approval)
+      @errors << 'Cannot reset approval for Change Order at this time'
+      return false
+    end
+
+    @change_order.trigger_event(event_name: :reset_approval, user: @user)
+    SystemEvent.log(description: "Reset approval for a Change Order for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
+    return true
   end
 
   def funds_available?(funding_source)
@@ -96,7 +141,7 @@ class ChangeOrderService
   end
 
   def sanitize_change_order_params(params)
-    allowed_params = @change_order_policy.allowed_params
+    allowed_params = @policy.allowed_params
     if params.is_a?(ActionController::Parameters)
       params.permit(*allowed_params)
     else

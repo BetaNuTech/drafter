@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
   PROJECT_TASK_COUNT_MAX = 99
 
   before_action :authenticate_user!
-  before_action :set_project, only: [:edit, :update, :show, :destroy, :add_member, :project_tasks]
+  before_action :set_project, only: [:edit, :update, :show, :destroy, :add_member, :project_tasks, :apply_default_project_costs_budget]
   after_action :verify_authorized
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_home
 
@@ -51,6 +51,12 @@ class ProjectsController < ApplicationController
     breadcrumbs.add(label: 'Home', url: '/')
     breadcrumbs.add(label: @project.name, url: project_path(@project))
     breadcrumbs.add(label: 'Tasks', url: project_path(@project), active: true)
+  end
+
+  def apply_default_project_costs_budget
+    authorize @project
+    @project.project_costs.where(total: [0.0, nil]).update_all(total: 10000)
+    redirect_to project_path(@project), notice: 'Project Costs defaulted to $10,000.00'
   end
 
   def edit

@@ -1,0 +1,3 @@
+<%= turbo_stream.update @draw_cost, @draw_cost %>
+<%= turbo_stream.update(@related_draw_cost, @related_draw_cost) if @related_draw_cost.present?  %>
+<%= turbo_stream.update dom_id(@draw_cost.draw, :action_buttons), partial: 'draws/action_buttons', locals: {draw: @draw_cost.draw} %>

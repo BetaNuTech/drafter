@@ -31,6 +31,21 @@ RSpec.describe DrawCost, type: :model do
   include_context 'sample_draws'
 
   let(:user) { developer_user }
+  let(:change_order_amount) { 1000.0 }
+  let(:contingency_project_cost) {
+    cost = create(:project_cost, project: sample_project, name: 'Sample Contingency', total: 1000000.0)
+    sample_project.project_costs.reload
+    cost
+  }
+  let(:change_order) {
+    project_cost = draw_cost.project_cost
+    contingency_project_cost
+    create(:change_order,
+           amount: change_order_amount,
+           draw_cost: draw_cost,
+           project_cost: draw_cost.project_cost,
+           funding_source: contingency_project_cost)
+  }
 
   describe 'initialization' do
     it 'creates a DrawCost' do
@@ -68,7 +83,7 @@ RSpec.describe DrawCost, type: :model do
         refute(draw_cost.submitted?)
       end
       it 'automatically submits pending invoices' do
-        draw_cost.state = 'submitted'
+        draw_cost.state = 'pending'
         draw_cost.save!
 
         invoices
@@ -77,6 +92,17 @@ RSpec.describe DrawCost, type: :model do
         draw_cost.save
         draw_cost.reload
         assert(draw_cost.submitted?)
+      end
+      it 'automatically creates tasks for change orders' do
+        draw_cost.state = 'pending'
+        draw_cost.save!
+        invoices
+        change_order
+        expect(change_order.project_tasks.count).to eq(0)
+        draw_cost.reload
+        draw_cost.trigger_event(event_name: :submit, user: )
+        change_order.reload
+        expect(change_order.project_tasks.count).to eq(1)
       end
     end
   end

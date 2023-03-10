@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_25_203921) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_10_192411) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -54,7 +54,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_25_203921) do
     t.integer "integration_attempt_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["draw_cost_id"], name: "index_change_orders_on_draw_cost_id"
+    t.string "state", default: "pending"
+    t.index ["draw_cost_id", "state"], name: "index_change_orders_on_draw_cost_id_and_state"
     t.index ["funding_source_id"], name: "index_change_orders_on_funding_source_id"
     t.index ["project_cost_id"], name: "index_change_orders_on_project_cost_id"
   end

@@ -21,9 +21,6 @@
           <%= turbo_frame_tag :summary_amounts, draw_cost do %>
             <%= render partial: 'draw_costs/summary_amounts', locals: { draw_cost: draw_cost } %>
           <% end %>
-          <%= turbo_frame_tag :change_orders, draw_cost do %>
-            <%= render partial: 'draw_costs/change_orders', locals: { draw_cost: draw_cost } %>
-          <% end %>
         </div>
 
         <div class="col-sm-12 col-md-4">
@@ -32,6 +29,14 @@
           <% end %>
         </div>
       </div> <!-- END draw cost header row -->
+      <div class="row m-2">
+        <div class="col border border-1 shadow">
+          <%= turbo_frame_tag :change_orders, draw_cost do %>
+            <%= render partial: 'draw_costs/change_orders', locals: { draw_cost: draw_cost } %>
+          <% end %>
+        </div>
+
+      </div>
 
       <div class="row"> <!-- Main section -->
         <div class="col-12 d-flex flex-wrap p-2"> <!-- right col -- invoices -->

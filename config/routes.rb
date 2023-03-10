@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     end
     member do 
       get 'project_tasks', to: 'projects#project_tasks'
+      post 'apply_default_project_costs_budget', to: 'projects#apply_default_project_costs_budget'
     end
   end
 
@@ -64,7 +65,11 @@ Rails.application.routes.draw do
       post 'reject', to: 'invoices#reject'
       post 'reset_approval', to: 'invoices#reset_approval'
     end
-    resources :change_orders
+    resources :change_orders do
+      post 'approve', to: 'change_orders#approve'
+      post 'reject', to: 'change_orders#reject'
+      post 'reset_approval', to: 'change_orders#reset_approval'
+    end
   end
 
 end

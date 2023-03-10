@@ -109,7 +109,7 @@ class InvoiceService
       @invoice.approved_by_desc = nil
       @invoice.save
     end
-    SystemEvent.log(description: "Rejected Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
+    SystemEvent.log(description: "Rejected an Invoice for Draw Cost '#{@draw_cost.project_cost.name}'", event_source: @draw_cost, incidental: @project, severity: :warn)
     return true
   end
 
