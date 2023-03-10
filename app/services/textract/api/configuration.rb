@@ -44,7 +44,7 @@ module Textract
             if Rails.env.development?
               :development
             else
-              ( ENV.fetch('APPLICATION_ENV','production') == 'production' ) ? :production : :staging
+              APPLICATION_ENV 
             end
           end
       end

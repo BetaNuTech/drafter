@@ -37,7 +37,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
   # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
 
-  if ENV.fetch('APPLICATION_ENV','production') == 'production'
+  if PRODUCTION_MODE
     config.active_storage.service = :amazon
   else
     config.active_storage.service = :amazon_staging

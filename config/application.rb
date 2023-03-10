@@ -13,6 +13,8 @@ end
 
 # Misc Constants
 HOSTNAME = ENV['HOSTNAME']
+APPLICATION_ENV = ENV.fetch('APPLICATION_ENV','production').to_sym
+PRODUCTION_MODE = APPLICATION_ENV == :production
 
 module Drafter
   class Application < Rails::Application

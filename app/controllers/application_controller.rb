@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
         elsif Rails.env.test?
           :test
         else
-          ( ENV.fetch('APPLICATION_ENV','production') == 'production' ) ? :production : :staging
+          APPLICATION_ENV
         end
       end
   end
