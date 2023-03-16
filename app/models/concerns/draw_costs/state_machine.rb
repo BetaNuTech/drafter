@@ -141,7 +141,7 @@ module DrawCosts
       def all_change_orders_approved?
         change_orders.reload
         change_orders.visible.none? ||
-          (change_orders.approved.any? && change_orders.rejected.none?)
+          (change_orders.pending.none? && change_orders.approved.any? && change_orders.rejected.none?)
       end
 
       def after_last_change_order_approval
