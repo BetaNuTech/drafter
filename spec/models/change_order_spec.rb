@@ -40,7 +40,7 @@ RSpec.describe ChangeOrder, type: :model do
       draw_cost = sample_draw_cost
       project_cost = draw_cost.project_cost
       expect {
-        record = build(:change_order, project_cost:, draw_cost: )
+        record = build(:change_order, project_cost:, draw_cost:, amount: 1.0 )
         record.save
       }.to change{ChangeOrder.count}.by(1)
     end
