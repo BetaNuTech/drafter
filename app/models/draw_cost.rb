@@ -64,7 +64,7 @@ class DrawCost < ApplicationRecord
   validates :state, presence: true
 
   def project_cost_subtotal
-    total - change_orders.sum(:amount) 
+    total - change_order_total
   end
 
   def invoice_total
@@ -88,8 +88,12 @@ class DrawCost < ApplicationRecord
     subtotal.negative? || project_cost_overage.positive?
   end
 
+  def underfunded?
+    ( subtotal + change_order_total ).negative?
+  end
+
   def change_order_total
-    change_orders.sum(:amount)
+    change_orders.visible.sum(:amount)
   end
 
   def funded_change_order_total
@@ -98,8 +102,13 @@ class DrawCost < ApplicationRecord
       sum(:amount)
   end
 
+  def overfunded_by_change_orders?
+    change_orders.visible.any? &&
+      ( subtotal + change_order_total ).positive?
+  end
+
   def requires_change_order?
-    allow_new_change_order? && project_cost_overage.positive? 
+    ( subtotal + change_order_total ).negative? || project_cost_overage.positive?
   end
 
   def allow_new_change_order?

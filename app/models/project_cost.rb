@@ -88,7 +88,7 @@ class ProjectCost < ApplicationRecord
   end
 
   def visible_change_orders
-    ChangeOrder.includes(draw_cost: :draw).
+    ChangeOrder.visible.includes(draw_cost: :draw).
       where(draws: { state: Draw::VISIBLE_STATES},
             draw_costs: { state: DrawCost::VISIBLE_STATES,
                           project_cost_id: self.id })
@@ -99,7 +99,7 @@ class ProjectCost < ApplicationRecord
   end
 
   def visible_change_orders_funded
-    ChangeOrder.includes(draw_cost: :draw).
+    ChangeOrder.visible.includes(draw_cost: :draw).
       where(draws: { state: Draw::VISIBLE_STATES},
             draw_costs: { state: DrawCost::VISIBLE_STATES },
             change_orders: { funding_source_id: self.id })
