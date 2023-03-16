@@ -40,7 +40,7 @@ module DrawCosts
         end
 
         event :reject do
-          transitions from: %i{ submitted approved }, to: :rejected,
+          transitions from: %i{ pending submitted approved }, to: :rejected,
             after: Proc.new { |*args| after_reject(*args)}
         end
 
@@ -91,15 +91,16 @@ module DrawCosts
         invoices.pending.each do |invoice|
           invoice.trigger_event(event_name: :submit, user: user)
         end
-
       end
 
       def after_submit(user)
         submit_invoices(user)
+        change_orders.create_approval_tasks
       end
 
       def allow_submit?
         @state_errors = []
+        @state_errors << 'There are rejected change orders' if change_orders.rejected.any?
         @state_errors << 'There are rejected invoices' if invoices.rejected.any?
         @state_errors << 'Over budget' if over_budget?
         if invoices.visible.any?
@@ -118,27 +119,40 @@ module DrawCosts
       def allow_approve?
         @state_errors = []
         @state_errors << 'There are no submitted or approved Invoices' unless invoices.where(state: %i{submitted approved}).any?
-        @state_errors << 'There are pending invoices' unless invoices.pending.none?
-        @state_errors << 'There are rejected invoices' unless invoices.rejected.none?
+        @state_errors << 'There are pending invoices' if invoices.pending.any?
+        @state_errors << 'There are rejected invoices' if invoices.rejected.any?
+        @state_errors << 'There are rejected change orders' if change_orders.rejected.any?
         @state_errors.empty?
       end
 
       def allow_auto_approve?
         allow_approve? &&
-        all_invoices_approved?
+          all_invoices_approved? &&
+          all_change_orders_approved?
       end
 
       def all_invoices_approved?
+        invoices.reload
         invoices.submitted.none? &&
           invoices.approved.any? &&
           invoices.rejected.none?
+      end
+
+      def all_change_orders_approved?
+        change_orders.reload
+        change_orders.visible.none? ||
+          (change_orders.approved.any? && change_orders.rejected.none?)
+      end
+
+      def after_last_change_order_approval
+        after_last_invoice_approval
       end
 
       def after_last_invoice_approval
         trigger_event(event_name: :approve) if allow_auto_approve?
       end
 
-      def after_reject(user)
+      def after_reject(user=nil)
         bubble_event_to_project_tasks(:reject)
       end
 
@@ -151,6 +165,10 @@ module DrawCosts
         invoices.approved.each do |invoice|
           invoice.trigger_event(event_name: :revert_to_pending)
         end
+        change_orders.reload
+        #change_orders.approved.each do |change_order|
+          #change_order.trigger_event(event_name: :reset_approval)
+        #end
       end
 
       def approval_lead_time

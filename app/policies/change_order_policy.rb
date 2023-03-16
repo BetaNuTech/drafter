@@ -59,6 +59,28 @@ class ChangeOrderPolicy < ApplicationPolicy
        user.project_developer?(record.project) )
   end
 
+  def approvals?
+    record.draw_cost.draw.allow_invoice_approvals? &&
+    ( user.admin? ||
+      user.project_internal?(record.project) ||
+      user.project_finance?(record.project) )
+  end
+
+  def approve?
+    record.permitted_state_events.include?(:approve) &&
+      approvals?
+  end
+
+  def reject?
+    record.permitted_state_events.include?(:reject) &&
+      approvals?
+  end
+
+  def reset_approval?
+    record.permitted_state_events.include?(:reset_approval) &&
+      approvals?
+  end
+
   def allowed_params
     case user
     when -> (u) { u.admin? }

@@ -9,7 +9,39 @@
         <%= change_order.funding_source.name %>
       </span>
     </span>
-    <div class="float-end position-top">
+    <div class="float-end position-top m-2">
+      <% if policy(change_order).approvals? %>
+        <% if policy(change_order).approve? %>
+          <div class="document_approvals_button float-start">
+            <%= link_to(draw_cost_change_order_approve_path(draw_cost_id: change_order.draw_cost_id, change_order_id: change_order.id), data: {turbo_method: :post}) do %>
+              <%= inline_icon(icon: :square_check_open, size: 40, fill: :green) %>
+            <% end %>
+          </div>
+        <% elsif change_order.approved? %>
+          <div class="document_approvals_decided_button float-start">
+            <%= link_to(draw_cost_change_order_reset_approval_path(draw_cost_id: change_order.draw_cost_id, change_order_id: change_order.id), data: {turbo_method: :post}) do %>
+              <%= inline_icon(icon: :square_check, size: 40, fill: :green) %>
+            <% end %>
+          </div>
+        <% end %>
+        <% if policy(change_order).reject? %>
+          <div class="document_approvals_button float-start">
+            <%= link_to(draw_cost_change_order_reject_path(draw_cost_id: change_order.draw_cost_id, change_order_id: change_order.id), data: {turbo_method: :post}) do %>
+              <%= inline_icon(icon: :square_x_open, size: 40, fill: :red) %>
+            <% end %>
+          </div>
+        <% elsif change_order.rejected? %>
+          <div class="document_approvals_decided_button float-start">
+            <%= link_to(draw_cost_change_order_reset_approval_path(draw_cost_id: change_order.draw_cost_id, change_order_id: change_order.id), data: {turbo_method: :post}) do %>
+              <%= inline_icon(icon: :square_x, size: 40, fill: :red) %>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <span class="badge bg-<%= change_order.state_css_class %>">
+          <%= change_order.displayed_state_name.capitalize %>
+        </span>
+      <% end %>
       <%= link_to('Withdraw', draw_cost_change_order_path(draw_cost_id: change_order.draw_cost_id, id: change_order.id), class: 'btn btn-sm btn-danger p-1', data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }) if policy(change_order).destroy? %>
     </div>
   </div>

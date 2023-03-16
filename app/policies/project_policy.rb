@@ -52,6 +52,10 @@ class ProjectPolicy < ApplicationPolicy
     add_member?
   end
 
+  def apply_default_project_costs_budget?
+    user.admin? || user.project_owner?(record)
+  end
+
   def allowed_params
     case user
     when ->(u) { u.admin? || u.executive? }

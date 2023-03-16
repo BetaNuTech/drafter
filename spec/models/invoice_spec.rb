@@ -258,6 +258,7 @@ RSpec.describe Invoice, type: :model do
             expect(ChangeOrder.count).to eq(0)
             change_order
             expect(ChangeOrder.count).to eq(1)
+            change_order.trigger_event(event_name: :approve)
             draw_cost.change_orders.reload
             assert(draw_cost.uses_contingency?)
             invoice1; invoice2

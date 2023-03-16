@@ -4,9 +4,7 @@
       Projects
       <% if policy(Project).new?  %>
       <small>
-        <%= link_to(new_project_path, class: 'action-link') do %>
-          <%= inline_icon(icon: :add) %>
-        <% end %>
+        <%= link_to('Start New Project', new_project_path, class: 'btn btn-primary')%>
       </small>
       <% end %>
     </h2>

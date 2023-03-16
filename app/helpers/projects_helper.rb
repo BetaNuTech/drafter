@@ -8,4 +8,8 @@ module ProjectsHelper
       developer: 'primary'
     }.fetch(role.slug.to_sym, :developer)
   end
+
+  def show_default_project_costs_budget_button?(project)
+    !PRODUCTION_MODE && project.project_costs.where(total: [0.0, nil]).any?
+  end
 end

@@ -7,6 +7,7 @@
 #  description                :text
 #  integration_attempt_at     :datetime
 #  integration_attempt_number :integer
+#  state                      :string           default("pending")
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
 #  draw_cost_id               :uuid             not null
@@ -16,9 +17,9 @@
 #
 # Indexes
 #
-#  index_change_orders_on_draw_cost_id       (draw_cost_id)
-#  index_change_orders_on_funding_source_id  (funding_source_id)
-#  index_change_orders_on_project_cost_id    (project_cost_id)
+#  index_change_orders_on_draw_cost_id_and_state  (draw_cost_id,state)
+#  index_change_orders_on_funding_source_id       (funding_source_id)
+#  index_change_orders_on_project_cost_id         (project_cost_id)
 #
 # Foreign Keys
 #
