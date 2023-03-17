@@ -39,9 +39,6 @@ class DrawCostService
     reset_errors
 
     if @draw_cost.update(sanitize_draw_cost_params(params))
-      @draw_cost.change_orders.destroy_all
-      @draw_cost.change_orders.reload
-      @draw.draw_costs.reload
       SystemEvent.log(description: "Updated #{@draw_cost.project_cost.name} Cost for Draw '#{@draw.name}'", event_source: @draw, incidental: @project, severity: :warn)
     else
       @errors = @draw_cost.errors.full_messages
