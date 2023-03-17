@@ -27,7 +27,17 @@
 #  fk_rails_...  (project_id => projects.id)
 #
 class ProjectCost < ApplicationRecord
+  ### Concerns
   include ProjectCosts::StateMachine
+
+  class TotalValidator < ActiveModel::Validator
+    include ActionView::Helpers::NumberHelper
+
+    def validate(record)
+      minimum_total = record.draw_expensed_total - record.change_order_total
+      record.errors.add(:total, "must be at least #{number_to_currency(minimum_total)} to balance current expenses") unless record.total >= minimum_total
+    end
+  end
 
   ALLOWED_PARAMS = [:id, :approval_lead_time, :cost_type, :name, :total]
   CONTINGENCY_COST_MATCH = /Contingency/
@@ -40,6 +50,7 @@ class ProjectCost < ApplicationRecord
   has_many :change_orders, dependent: :destroy
 
   ### Validations
+  validates_with TotalValidator, on: :update
   validates :approval_lead_time, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :cost_type, presence: true
   validates :name, presence: true
@@ -62,12 +73,16 @@ class ProjectCost < ApplicationRecord
     }.fetch(cost_type.to_sym)
   end
 
-  def budget_balance
-    total + change_order_total - change_order_funding_total - draw_cost_total
+  def draw_expensed_total
+    change_order_funding_total + invoice_total
   end
 
   def budget_balance_without_change_orders
-    total - change_order_funding_total - draw_cost_total
+    total - draw_expensed_total
+  end
+
+  def budget_balance
+    total + change_order_total - draw_expensed_total
   end
 
   def invoice_total

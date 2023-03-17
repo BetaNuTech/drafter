@@ -31,6 +31,46 @@ require 'rails_helper'
 RSpec.describe ProjectCost, type: :model do
   include_context 'sample_draws'
 
+  let(:init_draws) {
+    draw
+    draw_cost
+    draw_cost.project_cost.update(total: 1000000.0)
+    draw_cost.reload
+    draw_cost_invoices
+    draw_cost2
+    draw_cost2.project_cost.update(total: 1000000.0)
+    draw_cost2.reload
+    draw_cost2_invoices
+    draw2
+    draw2_draw_cost
+    draw2_draw_cost_invoices
+    draw2_draw_cost2
+    draw2_draw_cost2_invoices
+    [draw, draw2]
+  }
+
+  let(:change_order1) {
+    changeorder = build(:change_order,
+                        draw_cost: draw_cost,
+                        project_cost_id: draw_cost.project_cost_id,
+                        funding_source_id: draw_cost2.project_cost_id,
+                        amount: 1000.0)
+                        changeorder.save!
+                        changeorder
+  }
+  let(:change_order2) {
+    changeorder = build(:change_order,
+                        draw_cost: draw2_draw_cost,
+                        project_cost_id: draw_cost.project_cost_id,
+                        funding_source_id: draw_cost2.project_cost_id,
+                        amount: 1000.0)
+                        changeorder.save!
+                        changeorder
+  }
+
+  let(:project_cost) { draw_cost.project_cost }
+  let(:project_cost2) { draw_cost2.project_cost }
+
   describe 'initialization' do
     it 'creates a ProjectCost' do
       project_cost = build(:project_cost)
@@ -39,42 +79,6 @@ RSpec.describe ProjectCost, type: :model do
   end
 
   describe 'totals' do
-    let(:init_draws) {
-      draw
-      draw_cost
-      draw_cost_invoices
-      draw_cost2
-      draw_cost2.project_cost.update(total: 1000000.0)
-      draw_cost2_invoices
-      draw2
-      draw2_draw_cost
-      draw2_draw_cost_invoices
-      draw2_draw_cost2
-      draw2_draw_cost2_invoices
-      [draw, draw2]
-    }
-
-    let(:change_order1) {
-      changeorder = build(:change_order,
-               draw_cost: draw_cost,
-               project_cost_id: draw_cost.project_cost_id,
-               funding_source_id: draw_cost2.project_cost_id,
-               amount: 1000.0)
-      changeorder.save!
-      changeorder
-    }
-    let(:change_order2) {
-      changeorder = build(:change_order,
-               draw_cost: draw2_draw_cost,
-               project_cost_id: draw_cost.project_cost_id,
-               funding_source_id: draw_cost2.project_cost_id,
-               amount: 1000.0)
-      changeorder.save!
-      changeorder
-    }
-
-    let(:project_cost) { draw_cost.project_cost }
-    let(:project_cost2) { draw_cost2.project_cost }
 
     before(:each) do
       init_draws
@@ -119,6 +123,20 @@ RSpec.describe ProjectCost, type: :model do
       expect(project_cost2.budget_balance).to eq(expected_new_balance)
     end
 
+  end
+
+  describe 'validating' do
+    describe 'with TotalValidator' do
+      before do
+        init_draws
+      end
+
+      it 'prevents changing the amount to a value that would bring the budget_balance below zero' do
+        assert(project_cost.update(total: 1000001.0))
+        assert(project_cost.update(total: project_cost.draw_expensed_total - project_cost.change_order_total))
+        refute(project_cost.update(total: 1.0))
+      end
+    end
   end
 
 

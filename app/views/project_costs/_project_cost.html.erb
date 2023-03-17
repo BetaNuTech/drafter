@@ -1,5 +1,5 @@
 <%= turbo_frame_tag project_cost do %>
-  <div id="<%= dom_id(project_cost) %>" class="card project-card">
+  <div id="<%= dom_id(project_cost) %>" class="card project-card shadow">
     <div class="card-body">
       <h3 class="card-title">
         <%= project_cost.name %>
@@ -9,18 +9,70 @@
           </span>
         </small>
       </h3>
+
       <div class="card-action-buttons">
         <%= link_to('Edit', edit_project_project_cost_path(project_id: project_cost.project_id, id: project_cost.id), class: 'btn btn-sm btn-primary', data: { turbo_frame: project_cost }) if policy(project_cost).edit? %>
         <%= link_to('Delete', project_project_cost_path(project_id: project_cost.project, id: project_cost.id), class: 'btn btn-sm btn-danger', data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }) if policy(project_cost).destroy? %>
       </div>
+
       <div class="card-text">
+        <table class="table" style="width: 75%;">
+          <tbody>
+            <tr>
+              <td class="text-end">
+                <h5>Budget</h5>
+              </td>
+              <td>
+                <h5>
+                  <span class="fw-bold text-<%= project_cost.missing_total? || project_cost.over_budget? ? 'danger' : 'success' %>">
+                    <%= number_to_currency(project_cost.total) %>
+                  </span>
+                </h5>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-end">
+                Invoice Total
+              </td>
+              <td>
+                (<%= number_to_currency(project_cost.invoice_total) %>)
+              </td>
+            </tr>
+            <tr>
+              <td class="text-end">
+                Change Order Debits
+              </td>
+              <td>
+                (<%= number_to_currency(project_cost.change_order_funding_total) %>)
+              </td>
+            </tr>
+            <tr>
+              <td class="text-end">
+                Change Order Credits
+              </td>
+              <td>
+                <%= number_to_currency(project_cost.change_order_total) %>
+              </td>
+            </tr>
+            <tfoot>
+              <tr>
+                <td class="text-end">
+                  <h5>Balance</h5>
+                </td>
+                <td>
+                  <h5>
+                    <span class="fw-bold text-<%= project_cost.over_budget? ? 'danger' : 'success' %>">
+                      <%= number_to_currency(project_cost.budget_balance) %>
+                    </span>
+                  </h5>
+                </td>
+              </tr>
+            </tfoot>
+          </tbody>
+        </table>
+
         <p>
-          <b>Budget:</b> 
-          <span class="badge bg-<%= project_cost.missing_total? ? 'danger' : 'success' %>">
-            <%= number_to_currency(project_cost.total) %>
-          </span>
-          <br/>
-          <b>Approval Lead Time:</b> <%= project_cost.approval_lead_time > 0 ? "#{project_cost.approval_lead_time} days" : 'None' %>
+          <b>Approval Lead Time:</b> <%= project_cost.approval_lead_time > 0 ? "#{project_cost.approval_lead_time} days" : 'Unlimited' %>
           <br/>
           <b>Drawable?:</b> <%= project_cost.drawable? ? 'Yes' : 'No' %>
           <br/>
