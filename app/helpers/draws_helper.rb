@@ -47,12 +47,13 @@ module DrawsHelper
   end
 
   def draw_cost_invoice_remaining_class(draw_cost)
-    return '' if draw_cost.nil?
-    subtotal = draw_cost.subtotal
+    return 'warning' if draw_cost.nil?
+
+    balance = draw_cost.balance
     case
-    when subtotal == 0.0
+    when balance == 0.0
       'success'
-    when subtotal < 0.0
+    when balance < 0.0
       'danger'
     else
       'warning'

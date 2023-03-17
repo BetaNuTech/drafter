@@ -75,8 +75,8 @@ class DrawCost < ApplicationRecord
     total - invoice_total
   end
 
-  def invoice_mismatch?
-    0.0 != subtotal
+  def balance
+    subtotal + change_order_total
   end
 
   def project_cost_overage
@@ -89,7 +89,7 @@ class DrawCost < ApplicationRecord
   end
 
   def underfunded?
-    ( subtotal + change_order_total ).negative?
+    balance.negative?
   end
 
   def change_order_total
