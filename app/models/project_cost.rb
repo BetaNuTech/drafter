@@ -72,10 +72,10 @@ class ProjectCost < ApplicationRecord
 
   def invoice_total
     Invoice.includes(draw_cost: :draw).
+      totalable.
       where(draws: { state: Draw::VISIBLE_STATES},
             draw_costs: { state: DrawCost::VISIBLE_STATES,
                           project_cost_id: self.id }).
-      totalable.
       sum(:amount)
   end
 
@@ -88,7 +88,8 @@ class ProjectCost < ApplicationRecord
   end
 
   def visible_change_orders
-    ChangeOrder.visible.includes(draw_cost: :draw).
+    ChangeOrder.includes(draw_cost: :draw).
+      visible.
       where(draws: { state: Draw::VISIBLE_STATES},
             draw_costs: { state: DrawCost::VISIBLE_STATES,
                           project_cost_id: self.id })

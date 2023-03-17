@@ -94,5 +94,17 @@ class ChangeOrder < ApplicationRecord
   def contingency?
     funding_source.contingency?
   end
+  
+  def possible_project_costs_for_funding
+    return ProjectCost.none unless draw_cost_id.present?
+
+    draw_cost_funding_source_ids = [ draw_cost.project_cost_id ] +
+                                     draw_cost.change_order_funding_sources.pluck(:id)
+    project.project_costs.
+      change_requestable.
+      where.not(id: draw_cost_funding_source_ids).
+      order(name: :asc).
+      select{ |cost| cost.budget_balance > 0.0 }
+  end
 
 end

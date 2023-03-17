@@ -35,15 +35,9 @@ module DrawsHelper
 
   def change_order_funding_options(change_order)
     return '' if change_order.nil?
-    draw_cost_funding_source_ids = [change_order.draw_cost.project_cost_id] + change_order.draw_cost.change_order_funding_sources.pluck(:id)
-    project_costs = change_order.project.
-      project_costs.
-        change_requestable.
-        where.not(id: draw_cost_funding_source_ids).
-        order(name: :asc).
-        select{ |cost| cost.budget_balance_without_change_orders > 0.0 }
-        
-    project_cost_options_with_remaining(project_costs, change_order.project_cost_id)
+
+    project_cost_options_with_remaining(change_order.possible_project_costs_for_funding,
+                                        change_order.project_cost_id)
   end
 
   def draw_cost_invoice_remaining_class(draw_cost)
@@ -62,6 +56,7 @@ module DrawsHelper
 
   def project_cost_options_with_remaining(project_costs, current_value)
     return '' if project_costs.nil?
+
     project_cost_options = project_costs.map do |cost|
       balance = cost.budget_balance
       label = "%s (%s)" % [cost.name, number_to_currency(balance)]
