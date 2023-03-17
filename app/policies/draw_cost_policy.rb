@@ -98,6 +98,10 @@ class DrawCostPolicy < ApplicationPolicy
     approve_document?
   end
 
+  def add_change_order?
+    update? && record.requires_change_order? && record.allow_new_change_order?
+  end
+
   def allowed_params
     case user
     when -> (u) { u.admin? }
