@@ -178,4 +178,8 @@ class Invoice < ApplicationRecord
     ocr_processed.present? && ocr_amount.nil?
   end
 
+  def has_processing_errors?
+    SystemEvent.error.where(event_source: invoice, description: MAX_ATTEMPT_ERROR).any?
+  end
+
 end

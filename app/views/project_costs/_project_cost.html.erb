@@ -32,18 +32,10 @@
             </tr>
             <tr>
               <td class="text-end">
-                Invoice Total
+                Draw Cost Total
               </td>
               <td>
-                (<%= number_to_currency(project_cost.invoice_total) %>)
-              </td>
-            </tr>
-            <tr>
-              <td class="text-end">
-                Change Order Debits
-              </td>
-              <td>
-                (<%= number_to_currency(project_cost.change_order_funding_total) %>)
+                (<%= number_to_currency(project_cost.draw_cost_total) %>)
               </td>
             </tr>
             <tr>
@@ -52,6 +44,14 @@
               </td>
               <td>
                 <%= number_to_currency(project_cost.change_order_total) %>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-end">
+                Change Order Debits
+              </td>
+              <td>
+                (<%= number_to_currency(project_cost.change_order_funding_total) %>)
               </td>
             </tr>
             <tfoot>

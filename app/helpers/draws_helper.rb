@@ -24,7 +24,7 @@ module DrawsHelper
     end
     project_costs = project_costs.where.not(id: used_project_costs)
     project_costs = project_costs.order(name: :asc)
-    project_cost_options_with_remaining(project_costs, project_cost&.id)
+    project_cost_options_with_remaining(project_costs, project_cost&.id, draw)
   end
 
   def draw_document_documenttype_options(draw:, draw_document:)
@@ -43,7 +43,7 @@ module DrawsHelper
   def draw_cost_invoice_remaining_class(draw_cost)
     return 'warning' if draw_cost.nil?
 
-    balance = draw_cost.balance
+    balance = draw_cost.balance_without_change_orders
     case
     when balance == 0.0
       'success'
@@ -54,13 +54,13 @@ module DrawsHelper
     end
   end
 
-  def project_cost_options_with_remaining(project_costs, current_value)
+  def project_cost_options_with_remaining(project_costs, current_value, draw=nil)
     return '' if project_costs.nil?
 
     project_cost_options = project_costs.map do |cost|
-      balance = cost.budget_balance
-      label = "%s (%s)" % [cost.name, number_to_currency(balance)]
-      [label, cost.id, {data: {remaining: cost.budget_balance}}]
+      remaining_balance = draw.present? ? cost.balance_available_for_draw(draw) : cost.budget_balance
+      label = "%s (%s)" % [cost.name, number_to_currency(remaining_balance)]
+      [label, cost.id, {data: {remaining: remaining_balance}}]
     end
     options_for_select(project_cost_options, current_value)
   end

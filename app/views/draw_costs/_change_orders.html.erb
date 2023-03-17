@@ -1,15 +1,15 @@
-<div class="row pb-2">
-  <div class="col">
-    <b>Change Orders</b>
-    <% if draw_cost.change_orders.visible.any? %>
-      <%= render draw_cost.change_orders.visible.order(created_at: :asc) %>
-    <% else %>
-      &mdash; None
-    <% end %>
-    <% if draw_cost.allow_new_change_order? %>
-      <%= turbo_frame_tag :new_change_order, draw_cost do %>
-        <%= link_to('Create Change Order', new_draw_cost_change_order_path(draw_cost_id: draw_cost.id), class: "btn btn-sm btn-primary m-2", data: {turbo_frame: dom_id(draw_cost, :new_change_order)}) if policy(draw_cost).add_change_order? %> 
-      <% end %> 
-    <% end %>
+<% if draw_cost.change_orders.visible.any? || policy(draw_cost).add_change_order? %>
+  <div class="row">
+    <div class="col">
+      <% if draw_cost.change_orders.visible.any? %>
+        <h5 class="p-2">Change Orders</h5>
+        <%= render draw_cost.change_orders.visible.order(created_at: :asc) %>
+      <% end %>
+      <% if draw_cost.allow_new_change_order? %>
+        <%= turbo_frame_tag :new_change_order, draw_cost do %>
+          <%= link_to('Create Change Order', new_draw_cost_change_order_path(draw_cost_id: draw_cost.id), class: "btn btn-sm btn-primary m-2", data: {turbo_frame: dom_id(draw_cost, :new_change_order)}) if policy(draw_cost).add_change_order? %> 
+        <% end %> 
+      <% end %>
+    </div>
   </div>
-</div>
+<% end %>

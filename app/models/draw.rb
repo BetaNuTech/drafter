@@ -96,10 +96,6 @@ class Draw < ApplicationRecord
     tasks
   end
 
-  def all_invoices_have_approval
-    
-  end
-
   def name
     "Draw ##{index}"
   end

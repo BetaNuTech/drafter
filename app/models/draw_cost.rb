@@ -88,8 +88,8 @@ class DrawCost < ApplicationRecord
     subtotal.negative? || project_cost_overage.positive?
   end
 
-  def underfunded?
-    balance.negative?
+  def balance_without_change_orders
+    total - invoice_total
   end
 
   def change_order_total
@@ -103,12 +103,11 @@ class DrawCost < ApplicationRecord
   end
 
   def overfunded_by_change_orders?
-    change_orders.visible.any? &&
-      ( subtotal + change_order_total ).positive?
+    change_orders.visible.any? && project_cost.budget_balance.positive?
   end
 
   def requires_change_order?
-    ( subtotal + change_order_total ).negative? || project_cost_overage.positive?
+    project_cost_overage.positive?
   end
 
   def allow_new_change_order?

@@ -74,7 +74,7 @@ class ProjectCost < ApplicationRecord
   end
 
   def draw_expensed_total
-    change_order_funding_total + invoice_total
+    change_order_funding_total + draw_cost_total
   end
 
   def budget_balance_without_change_orders
@@ -83,6 +83,13 @@ class ProjectCost < ApplicationRecord
 
   def budget_balance
     total + change_order_total - draw_expensed_total
+  end
+
+  def balance_available_for_draw(draw)
+    draw_cost = draw.draw_costs.visible.where(project_cost: self).first
+    return budget_balance unless draw_cost.present?
+
+    budget_balance + draw_cost.total + draw_cost.change_order_total
   end
 
   def invoice_total

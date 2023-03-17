@@ -268,6 +268,7 @@ Textract	./app/services/textract/data/sqs_message.rb	/^module Textract$/;"	m
 Textract	./app/services/textract/data/textract_job_status.rb	/^module Textract$/;"	m
 TextractApiError	./app/services/textract/api/analyzer.rb	/^      class TextractApiError < StandardError; end;$/;"	c	class:Textract.Api.Analyzer
 TextractJobStatus	./app/services/textract/data/textract_job_status.rb	/^    class TextractJobStatus$/;"	c	class:Textract.Data
+TotalValidator	./app/models/project_cost.rb	/^  class TotalValidator < ActiveModel::Validator$/;"	c	class:ProjectCost
 TransitionError	./app/models/concerns/change_orders/state_machine.rb	/^      class TransitionError < StandardError; end;$/;"	c	class:ChangeOrders.StateMachine
 TransitionError	./app/models/concerns/draw_costs/state_machine.rb	/^      class TransitionError < StandardError; end;$/;"	c	class:DrawCosts.StateMachine
 TurboDeviseUserController	./app/controllers/turbo_devise_user_controller.rb	/^class TurboDeviseUserController < ApplicationController$/;"	c
@@ -297,6 +298,7 @@ activate_bundler	./bin/bundle	/^  def activate_bundler$/;"	f
 activation_error_handling	./bin/bundle	/^  def activation_error_handling$/;"	f
 active_for_authentication?	./app/models/concerns/users/devise.rb	/^      def active_for_authentication?$/;"	f	class:Users.Devise
 add	./app/services/breadcrumbs.rb	/^  def add(label:, url: nil, active: false)$/;"	f	class:Breadcrumbs
+add_change_order?	./app/policies/draw_cost_policy.rb	/^  def add_change_order?$/;"	f	class:DrawCostPolicy
 add_document?	./app/policies/draw_cost_policy.rb	/^  def add_document?$/;"	f	class:DrawCostPolicy
 add_image	./app/helpers/images_helper.rb	/^  def add_image$/;"	f
 add_member	./app/controllers/projects_controller.rb	/^  def add_member$/;"	f	class:ProjectsController
@@ -348,7 +350,6 @@ all_documents_attached	./app/models/invoice.rb	/^  def self.all_documents_attach
 all_documents_submitted?	./app/models/concerns/draws/draw_documents.rb	/^      def all_documents_submitted?$/;"	f	class:Draws.DrawDocuments
 all_draw_costs_approved?	./app/models/draw.rb	/^  def all_draw_costs_approved?$/;"	f	class:Draw
 all_invoices_approved?	./app/models/concerns/draw_costs/state_machine.rb	/^      def all_invoices_approved?$/;"	f	class:DrawCosts.StateMachine.TransitionError
-all_invoices_have_approval	./app/models/draw.rb	/^  def all_invoices_have_approval$/;"	f	class:Draw
 all_required_documents_approved?	./app/models/concerns/draws/draw_documents.rb	/^      def all_required_documents_approved?$/;"	f	class:Draws.DrawDocuments
 all_system_events	./app/models/project.rb	/^  def all_system_events$/;"	f	class:Project
 allow_approval?	./app/models/concerns/draws/state_machine.rb	/^      def allow_approval?$/;"	f	class:Draws.StateMachine
@@ -458,6 +459,9 @@ available_roles	./app/services/projects/updater.rb	/^    def available_roles$/;"
 available_users	./app/models/concerns/projects/users.rb	/^      def available_users$/;"	f	class:Projects.Users
 available_users	./app/models/project_user.rb	/^  def available_users$/;"	f	class:ProjectUser
 aws_credentials	./app/services/textract/api/configuration.rb	/^      def aws_credentials$/;"	f	class:Textract.Api.Configuration
+balance	./app/models/draw_cost.rb	/^  def balance$/;"	f	class:DrawCost
+balance_available_for_draw	./app/models/project_cost.rb	/^  def balance_available_for_draw(draw)$/;"	f	class:ProjectCost
+balance_without_change_orders	./app/models/draw_cost.rb	/^  def balance_without_change_orders$/;"	f	class:DrawCost
 base_task_description	./app/services/project_task_services/change_order_task_generator.rb	/^    def base_task_description$/;"	f	class:ProjectTaskServices
 base_task_description	./app/services/project_task_services/draw_cost_task_generator.rb	/^    def base_task_description$/;"	f	class:ProjectTaskServices
 base_task_description	./app/services/project_task_services/draw_document_task_generator.rb	/^    def base_task_description$/;"	f	class:ProjectTaskServices
@@ -646,6 +650,7 @@ draw_cost_scope	./app/controllers/invoices_controller.rb	/^  def draw_cost_scope
 draw_cost_total	./app/models/draw.rb	/^  def draw_cost_total$/;"	f	class:Draw
 draw_cost_total	./app/models/project_cost.rb	/^  def draw_cost_total$/;"	f	class:ProjectCost
 draw_document_documenttype_options	./app/helpers/draws_helper.rb	/^  def draw_document_documenttype_options(draw:, draw_document:)$/;"	f
+draw_expensed_total	./app/models/project_cost.rb	/^  def draw_expensed_total$/;"	f	class:ProjectCost
 draw_params	./app/controllers/draws_controller.rb	/^  def draw_params$/;"	f	class:DrawsController
 draw_record_scope	./app/controllers/draw_costs_controller.rb	/^  def draw_record_scope$/;"	f	class:DrawCostsController
 draw_record_scope	./app/controllers/draw_documents_controller.rb	/^  def draw_record_scope$/;"	f	class:DrawDocumentsController
@@ -782,6 +787,7 @@ get_reports	./app/services/reporting/draw_packet_generator.rb	/^    def get_repo
 get_task	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def get_task(project_task_or_remote_id)$/;"	f	class:ProjectTaskServices.SyncAdapters.Clickup
 get_tasks	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def get_tasks$/;"	f	class:ProjectTaskServices.SyncAdapters.Clickup
 get_workspace_id	./app/services/project_task_services/sync_adapters/clickup.rb	/^      def get_workspace_id$/;"	f	class:ProjectTaskServices.SyncAdapters
+has_processing_errors?	./app/models/invoice.rb	/^  def has_processing_errors?$/;"	f	class:Invoice
 has_remote_task?	./app/models/concerns/project_tasks/sync.rb	/^      def has_remote_task?$/;"	f	class:ProjectTasks.Sync
 home_image	./app/helpers/images_helper.rb	/^  def home_image$/;"	f
 impersonate?	./app/policies/user_policy.rb	/^  def impersonate?$/;"	f	class:UserPolicy
@@ -843,7 +849,6 @@ investor	./app/models/project_role.rb	/^  def self.investor$/;"	F	class:ProjectR
 investor?	./app/models/project_role.rb	/^  def investor?$/;"	f	class:ProjectRole
 investors	./app/models/concerns/projects/users.rb	/^      def investors$/;"	f	class:Projects.Users
 invoice_auto_approval	./app/models/draw.rb	/^  def self.invoice_auto_approval$/;"	F	class:Draw
-invoice_mismatch?	./app/models/draw_cost.rb	/^  def invoice_mismatch?$/;"	f	class:DrawCost
 invoice_total	./app/models/draw_cost.rb	/^  def invoice_total$/;"	f	class:DrawCost
 invoice_total	./app/models/project_cost.rb	/^  def invoice_total$/;"	f	class:ProjectCost
 invoked_as_script?	./bin/bundle	/^  def invoked_as_script?$/;"	f
@@ -931,6 +936,7 @@ origin_url	./app/services/project_task_services/draw_task_generator.rb	/^    def
 origin_url	./app/services/project_task_services/invoice_task_generator.rb	/^    def origin_url$/;"	f	class:ProjectTaskServices
 over_budget?	./app/models/draw_cost.rb	/^  def over_budget?$/;"	f	class:DrawCost
 over_budget?	./app/models/project_cost.rb	/^  def over_budget?$/;"	f	class:ProjectCost
+overfunded_by_change_orders?	./app/models/draw_cost.rb	/^  def overfunded_by_change_orders?$/;"	f	class:DrawCost
 owner	./app/models/project_role.rb	/^  def self.owner$/;"	F	class:ProjectRole
 owner?	./app/models/project_role.rb	/^  def owner?$/;"	f	class:ProjectRole
 owners	./app/models/concerns/projects/users.rb	/^      def owners$/;"	f	class:Projects.Users
@@ -950,6 +956,7 @@ permitted_states	./app/models/concerns/draws/state_machine.rb	/^      def permit
 permitted_states	./app/models/concerns/invoices/state_machine.rb	/^      def permitted_states$/;"	f	class:Invoices.StateMachine
 permitted_states	./app/models/concerns/project_costs/state_machine.rb	/^      def permitted_states$/;"	f	class:ProjectCosts.StateMachine
 permitted_states	./app/models/concerns/project_tasks/state_machine.rb	/^      def permitted_states$/;"	f	class:ProjectTasks.StateMachine
+possible_project_costs_for_funding	./app/models/change_order.rb	/^  def possible_project_costs_for_funding$/;"	f	class:ChangeOrder
 postData	./app/services/clickup/api/base.rb	/^      def postData(options, dry_run: false)$/;"	f	class:Clickup.Api.Base
 post_data	./app/services/clickup/api/base.rb	/^      def post_data(url:, body:, headers: {}, options: {})$/;"	f	class:Clickup.Api.Base
 preview_document	./app/helpers/application_helper.rb	/^  def preview_document(document:, resize:)$/;"	f	class:ApplicationHelper.breadcrumbs_tag
@@ -969,7 +976,7 @@ project	./app/policies/application_policy.rb	/^  def project$/;"	f	class:Applica
 project_cost_cost_type_options	./app/helpers/draws_helper.rb	/^  def project_cost_cost_type_options$/;"	f
 project_cost_issues	./app/models/project.rb	/^  def project_cost_issues$/;"	f	class:Project
 project_cost_options	./app/helpers/draws_helper.rb	/^  def project_cost_options(draw: , project_cost:)$/;"	f
-project_cost_options_with_remaining	./app/helpers/draws_helper.rb	/^  def project_cost_options_with_remaining(project_costs, current_value)$/;"	f
+project_cost_options_with_remaining	./app/helpers/draws_helper.rb	/^  def project_cost_options_with_remaining(project_costs, current_value, draw=nil)$/;"	f
 project_cost_overage	./app/models/draw_cost.rb	/^  def project_cost_overage$/;"	f	class:DrawCost
 project_cost_params	./app/controllers/project_costs_controller.rb	/^  def project_cost_params$/;"	f	class:ProjectCostsController
 project_cost_subtotal	./app/models/draw_cost.rb	/^  def project_cost_subtotal$/;"	f	class:DrawCost
@@ -1149,6 +1156,7 @@ square_x_image	./app/helpers/images_helper.rb	/^  def square_x_image$/;"	f
 square_x_open_image	./app/helpers/images_helper.rb	/^  def square_x_open_image$/;"	f
 start_analysis	./app/models/invoice.rb	/^  def start_analysis(force: false)$/;"	f	class:Invoice
 start_analysis	./app/services/invoice_processing_service.rb	/^  def start_analysis(invoice:, force: false)$/;"	f	class:InvoiceProcessingService
+state_css_class	./app/models/concerns/change_orders/state_machine.rb	/^      def state_css_class$/;"	f	class:ChangeOrders.StateMachine
 state_css_class	./app/models/concerns/draw_costs/state_machine.rb	/^      def state_css_class$/;"	f	class:DrawCosts.StateMachine.TransitionError
 state_css_class	./app/models/concerns/draw_documents/state_machine.rb	/^      def state_css_class$/;"	f	class:DrawDocuments.StateMachine
 state_css_class	./app/models/concerns/draws/state_machine.rb	/^      def state_css_class$/;"	f	class:Draws.StateMachine
@@ -1251,6 +1259,7 @@ validate	./app/models/change_order.rb	/^    def validate(record)$/;"	f	class:Cha
 validate	./app/models/draw.rb	/^    def validate(record)$/;"	f	class:Draw.IndexValidator
 validate	./app/models/draw_cost.rb	/^    def validate(record)$/;"	f	class:DrawCost.ProjectCostValidator
 validate	./app/models/draw_document.rb	/^    def validate(record)$/;"	f	class:DrawDocument.DocumenttypeValidator
+validate	./app/models/project_cost.rb	/^    def validate(record)$/;"	f	class:ProjectCost.TotalValidator
 validate_adapter_interface	./app/services/project_task_services/sync.rb	/^    def validate_adapter_interface$/;"	f	class:ProjectTaskServices
 validate_settings	./app/services/clickup/api/configuration.rb	/^      def validate_settings$/;"	f	class:Clickup.Api.Configuration
 validate_settings	./app/services/textract/api/configuration.rb	/^      def validate_settings$/;"	f	class:Textract.Api.Configuration
