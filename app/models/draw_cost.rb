@@ -130,6 +130,7 @@ class DrawCost < ApplicationRecord
   def archive_project_tasks(recurse: false)
     project_tasks.each{|task| task.trigger_event(event_name: :archive)}
     invoices.each{|invoice| invoice.archive_project_tasks} if recurse
+    change_orders.each{|change_order| change_order.archive_project_tasks} if recurse
   end
 
   def create_task(action:, assignee: nil)
