@@ -86,7 +86,11 @@ class ChangeOrder < ApplicationRecord
 
   def create_task(action:, assignee: nil)
     task = ProjectTaskServices::Generator.call(origin: self, assignee: , action: )
-    task.trigger_event(event_name: :submit_for_consult)
+    if consult?
+      task.trigger_event(event_name: :submit_for_consult)
+    else
+      task.trigger_event(event_name: :submit_for_review)
+    end
     task
   end
 
