@@ -34,7 +34,7 @@ class ChangeOrderService
 
     provided_amount = @change_order.amount || 0.0
     overage = @draw_cost.project_cost_overage
-    @change_order.amount = provided_amount < overage ? overage : provided_amount
+    @change_order.amount = provided_amount.zero? ? overage : provided_amount
 
     unless ( @change_order.amount.positive? )
       @errors << 'Amount must be positive'
