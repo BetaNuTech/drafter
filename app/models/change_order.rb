@@ -31,9 +31,16 @@ class ChangeOrder < ApplicationRecord
   include ChangeOrders::StateMachine
 
   class FundingAmountValidator < ActiveModel::Validator
+    include ActionView::Helpers::NumberHelper
+
     def validate(record)
       if record.funding_source.budget_balance_without_change_orders < record.amount
         record.errors.add(:amount, 'exceeds the funding source\'s budget')
+      end
+
+      variance = record.draw_cost.change_order_total + record.amount - record.draw_cost.total
+      if variance.positive?
+        record.errors.add(:amount, "will over-fund the Draw Cost by #{number_to_currency(variance)}")
       end
     end
   end

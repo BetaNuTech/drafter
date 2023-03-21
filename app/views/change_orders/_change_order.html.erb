@@ -1,15 +1,17 @@
 <div class="row border-top p-1">
   <div class="col">
-    <span class="badge bg-success">
-      <%= number_to_currency change_order.amount %>
-    </span>
-    <span class="fst-italic">
-      from
-      <span class="fw-bold text-nowrap">
-        <%= change_order.funding_source.name %>
+    <div class="float-start m-2">
+      <span class="badge bg-success">
+        <%= number_to_currency change_order.amount %>
       </span>
-    </span>
-    <div class="float-end position-top m-2">
+      <span class="fst-italic">
+        from
+        <span class="fw-bold text-nowrap">
+          <%= change_order.funding_source.name %>
+        </span>
+      </span>
+    </div>
+    <div class="float-end position-top m-1">
       <% if policy(change_order).approvals? %>
         <% if policy(change_order).approve? %>
           <div class="document_approvals_button float-start">

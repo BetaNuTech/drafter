@@ -4,6 +4,11 @@
     <%= number_to_currency draw_cost.total %>
   </span>
   <br/>
+  <b class="tab">Change Order Total:</b>
+  <span class="badge bg-<%= draw_cost.overfunded_by_change_orders? ? 'danger' : 'info' %>" >
+    <%= number_to_currency draw_cost.change_order_total %>
+  </span>
+  <br/>
   <b class="tab">Project Remaining:</b>
   <span class="badge bg-<%= draw_cost.project_cost.over_budget? ? 'danger' : 'success' %>">
     <%= number_to_currency draw_cost.project_cost.budget_balance %>

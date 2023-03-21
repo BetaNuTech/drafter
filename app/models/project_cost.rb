@@ -89,7 +89,7 @@ class ProjectCost < ApplicationRecord
     draw_cost = draw.draw_costs.visible.where(project_cost: self).first
     return budget_balance unless draw_cost.present?
 
-    budget_balance + draw_cost.total + draw_cost.change_order_total
+    budget_balance + draw_cost.total - draw_cost.change_order_total
   end
 
   def invoice_total

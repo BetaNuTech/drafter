@@ -43,7 +43,7 @@ module DrawsHelper
   def draw_cost_invoice_remaining_class(draw_cost)
     return 'warning' if draw_cost.nil?
 
-    balance = draw_cost.balance_without_change_orders
+    balance = draw_cost.subtotal
     case
     when balance == 0.0
       'success'

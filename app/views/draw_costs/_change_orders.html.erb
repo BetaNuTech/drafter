@@ -7,7 +7,7 @@
       <% end %>
       <% if draw_cost.allow_new_change_order? %>
         <%= turbo_frame_tag :new_change_order, draw_cost do %>
-          <%= link_to('Create Change Order', new_draw_cost_change_order_path(draw_cost_id: draw_cost.id), class: "btn btn-sm btn-primary m-2", data: {turbo_frame: dom_id(draw_cost, :new_change_order)}) if policy(draw_cost).add_change_order? %> 
+          <%= link_to('Create Change Order', new_draw_cost_change_order_path(draw_cost_id: draw_cost.id), class: "btn btn-sm btn-#{draw_cost.requires_change_order? ? 'success' : 'primary'} m-2", data: {turbo_frame: dom_id(draw_cost, :new_change_order)}) if policy(draw_cost).add_change_order? %> 
         <% end %> 
       <% end %>
     </div>
