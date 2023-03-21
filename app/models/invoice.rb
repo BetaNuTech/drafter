@@ -42,6 +42,7 @@ class Invoice < ApplicationRecord
   ALLOWED_PARAMS = %i{amount description document}
   PROCESSING_QUEUE = :invoice_processing
   RANDOM_SELECTION_RATIO = 0.1
+  MAX_ATTEMPT_ERROR = 'Exceeded maximum invoice processing attempts'
   
   ### Concerns
   include Invoices::StateMachine

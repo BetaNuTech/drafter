@@ -9,7 +9,6 @@ class InvoiceProcessingService
   #ANNOTATION_COLOR = [70.0,190.0,60.0,100.0].freeze # a shade of green
   ANNOTATION_COLOR = [0.0, 255.0, 0.0, 100.0].freeze # a shade of green
   ANALYSIS_ATTEMPTS_MAX = 5
-  MAX_ATTEMPT_ERROR = 'Exceeded maximum invoice processing attempts'
 
   attr_reader :invoice, :errors, :service_name, :service
 
@@ -42,7 +41,7 @@ class InvoiceProcessingService
     attempt = invoice.ocr_data.dig('meta', 'attempts')
     if ANALYSIS_ATTEMPTS_MAX < attempt
       invoice.trigger_event(event_name: 'fail_processing')
-      SystemEvent.log(description: MAX_ATTEMPT_ERROR, event_source: invoice, incidental: invoice.project, severity: :error)
+      SystemEvent.log(description: Invoice::MAX_ATTEMPT_ERROR, event_source: invoice, incidental: invoice.project, severity: :error)
       return false
     end
 
