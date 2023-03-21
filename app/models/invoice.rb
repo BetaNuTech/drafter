@@ -179,7 +179,7 @@ class Invoice < ApplicationRecord
   end
 
   def has_processing_errors?
-    SystemEvent.error.where(event_source: invoice, description: MAX_ATTEMPT_ERROR).any?
+    SystemEvent.error.where(event_source: self, description: MAX_ATTEMPT_ERROR).any?
   end
 
 end
