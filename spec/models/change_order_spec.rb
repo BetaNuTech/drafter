@@ -68,4 +68,48 @@ RSpec.describe ChangeOrder, type: :model do
     end
   end
 
+  describe 'state machine' do
+    let(:draw_cost) { sample_draw_cost }
+    let(:project_cost) { sample_draw_cost.project_cost }
+    let(:funding_source) { sample_project_non_contingency_project_costs.first }
+    let(:service) {ChangeOrderService.new(user: developer_user, draw_cost: draw_cost)} 
+    before do
+      draw_documents
+      draw_cost_invoices
+      draw_cost.reload
+      draw_cost.update(total: draw_cost.invoice_total)
+      project_cost.update(total: draw_cost.total * 2.0)
+      project_cost.reload
+      funding_source.update(total: draw_cost.total * 2.0)
+      funding_source.reload
+      draw_cost.reload
+      draw.reload
+    end
+    describe 'approval event' do
+      let(:change_order) {
+        attrs = {amount: draw_cost.total, description: 'Test Change Order 1', funding_source_id: funding_source.id}
+        service.create(attrs)
+      }
+      before do
+        change_order
+        assert(draw.trigger_event(event_name: :submit))
+        change_order.reload
+      end
+      it 'approves the Change Order' do
+        assert(change_order.trigger_event(event_name: :approve))
+      end
+      it 'allows approving a Change Order if the Draw Cost is in the rejected state' do
+        draw_cost.update_column(:state, :rejected)
+        change_order.reload
+        assert(change_order.trigger_event(event_name: :approve))
+      end
+      it 'approves the change order if the change order task is approved' do
+        task = change_order.project_tasks.first
+        ProjectTaskService.new(task).approve
+        change_order.reload
+        assert(change_order.approved?)
+      end
+    end
+  end
+
 end
