@@ -9,7 +9,7 @@
     <%= turbo_frame_tag draw, 'new_draw_document' do %>
       <%= link_to('Add Document',
                     new_draw_draw_document_path(draw_id: draw.id),
-                    class: 'btn btn-primary', data: {turbo_frame: dom_id(draw, 'new_draw_document' )}) if policy(DrawDocument.new(draw: draw)).new? %>
+                    class: "btn btn-#{draw.all_documents_submitted? ? 'primary' : 'success'}", data: {turbo_frame: dom_id(draw, 'new_draw_document' )}) if policy(DrawDocument.new(draw: draw)).new? %>
     <% end %>
   </div>
 </div>
