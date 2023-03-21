@@ -94,13 +94,11 @@ RSpec.describe DrawCost, type: :model do
         assert(draw_cost.submitted?)
       end
       it 'automatically creates tasks for change orders' do
-        draw_cost.state = 'pending'
-        draw_cost.save!
         invoices
+        draw_cost.invoices.reload
+        draw_cost.update!(total: draw_cost.invoice_total, state: 'pending')
         change_order
         expect(change_order.project_tasks.count).to eq(0)
-        draw_cost.update(total: draw_cost.total - change_order.amount)
-        draw_cost.reload
         assert(draw_cost.allow_submit?)
         draw_cost.trigger_event(event_name: :submit, user: )
         change_order.reload
@@ -114,6 +112,11 @@ RSpec.describe DrawCost, type: :model do
     let(:change_order2_amount) { 777.0 }
     let(:contingency_project_cost) {
       cost = create(:project_cost, project: sample_project, name: 'Sample Contingency', total: 1000000.0)
+      sample_project.project_costs.reload
+      cost
+    }
+    let(:secondary_project_cost) {
+      cost = create(:project_cost, project: sample_project, name: 'Secondary Project Cost', total: 1000000.0)
       sample_project.project_costs.reload
       cost
     }
@@ -140,6 +143,15 @@ RSpec.describe DrawCost, type: :model do
              project_cost: draw_cost.project_cost,
              funding_source: project_cost2)
     }
+    let(:change_order3) {
+      project_cost = draw_cost.project_cost
+      contingency_project_cost
+      create(:change_order,
+             amount: 100,
+             draw_cost: draw_cost,
+             project_cost: draw_cost.project_cost,
+             funding_source: secondary_project_cost)
+    }
 
     before do
       draw_cost_invoices
@@ -152,39 +164,38 @@ RSpec.describe DrawCost, type: :model do
         refute(draw_cost.overfunded_by_change_orders?)
 
         # With excess change orders
-        change_order1; change_order2
+        change_order1; change_order2; change_order3
+        change_order3.update_column(:amount, 10000)
         draw_cost.reload
         assert(draw_cost.overfunded_by_change_orders?)
       end
     end
     describe 'determining if the draw cost requires a change order to be fully funded' do
-      it 'returns true if the value of invoices exceeds the draw cost "amount"' do
+      it 'returns true if the project cost budget is exceeded by submitting the draw cost' do
         refute(draw_cost.requires_change_order?)
-        draw_cost.update(total: 3000)
+        draw_cost.project_cost.update_column(:total, 1000.0)
         assert(draw_cost.requires_change_order?)
-        change_order1
-        draw_cost.reload
-        assert(draw_cost.allow_new_change_order?)
-        refute(draw_cost.requires_change_order?)
       end
     end
     describe 'submission validation' do
       it 'disallows submission if the draw cost is over funded by change orders' do
         assert(draw_cost.allow_submit?)
         change_order1
+        change_order1.update_column(:amount, 100000)
         refute(draw_cost.allow_submit?)
       end
       it 'disallows submission if the draw cost is not fully funded' do
-        draw_cost.update(total: draw_cost.total - change_order1_amount)
+        draw_cost.project_cost.update_column(:total, 100.0)
         refute(draw_cost.allow_submit?)
-        change_order1
+        change_order3
+        change_order3.update_column(:amount, draw_cost.invoice_total)
+        draw_cost.reload
         assert(draw_cost.allow_submit?)
       end
       it 'disallows submission if any change orders are rejected' do
         assert(draw_cost.allow_submit?)
         draw_cost.invoices.first.update(state: :rejected)
         draw_cost.reload
-        #binding.pry
         refute(draw_cost.allow_submit?)
       end
     end

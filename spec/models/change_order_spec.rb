@@ -54,8 +54,11 @@ RSpec.describe ChangeOrder, type: :model do
     describe 'amount' do
       let(:service) {ChangeOrderService.new(user: developer_user, draw_cost: draw_cost)} 
       it 'should not allow an amount exceeding the funding source balance' do
+        draw_cost_invoices
+        draw_cost.reload
+        draw_cost.update_column(:total, draw_cost.invoice_total)
         funding_source.update(total: 1.0)
-        attrs = {amount: 1000.0, description: 'Test Change Order 1', funding_source_id: funding_source.id}
+        attrs = {amount: draw_cost.total, description: 'Test Change Order 1', funding_source_id: funding_source.id}
         service.create(attrs)
         assert(service.errors?)
         funding_source.update(total: 5000.0)

@@ -47,31 +47,21 @@ RSpec.describe ChangeOrderService do
       end
     end
 
-    describe 'when the invoice total is greater than the draw cost budget' do
+    describe 'considering the project cost budget' do
       before do
         # add an invoice to the draw cost to bring it over budget
         Invoice.create!(draw_cost:, user: , amount: draw_cost.total)
         draw_cost.invoices.reload
-        draw_cost.total = draw_cost.invoice_total - 100.0
-        draw_cost.save!
       end
       describe 'when there is sufficient project cost budget remaining' do
-        it 'should create a change order for the invoice overage' do
-          #project_cost.total = 1.0
-          #project_cost.save!
-          #draw_cost.project_cost.reload
-
-          #assert(draw_cost.requires_change_order?)
-          #expect(project_cost.budget_balance).to be < 0.0
-
+        it 'should create a change order' do
+          draw_cost.project_cost.update_column(:total, 10.0)
           service = ChangeOrderService.new(user:, draw_cost:)
-          change_order = service.create(valid_attributes.merge(amount: 1000.0))
-
+          change_order = service.create(valid_attributes.merge(amount: draw_cost.total - 1.0))
           refute(service.errors?)
           expect(change_order).to eq(service.change_order)
-          expect(change_order.amount).to eq(1000.0)
+          expect(change_order.amount).to eq(draw_cost.total - 1.0)
           expect(draw_cost.project_cost_overage).to eq(0.0)
-          refute(draw_cost.over_budget?)
         end
       end
       describe 'when there is insufficient project cost budget remaining' do

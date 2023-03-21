@@ -18,7 +18,7 @@ RSpec.shared_context 'sample_draws' do
     ]
   }
   let(:sample_project_non_contingency_project_costs) {
-    sample_project.project_costs.to_a.select{|pc| !pc.contingency? }
+    sample_project.project_costs.change_requestable.to_a.select{|pc| !pc.contingency? }
   }
   let(:draw_cost) {
     create(:draw_cost, draw: draw, project_cost: sample_project_non_contingency_project_costs.first, total: 4000.0, state: 'pending')
