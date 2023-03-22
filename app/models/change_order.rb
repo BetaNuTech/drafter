@@ -34,7 +34,9 @@ class ChangeOrder < ApplicationRecord
     include ActionView::Helpers::NumberHelper
 
     def validate(record)
-      if (record.funding_source.budget_balance + record.amount) < record.amount
+      effective_balance = record.new_record? ? record.funding_source.budget_balance :
+        (record.funding_source.budget_balance + record.amount)
+      if effective_balance < record.amount
         record.errors.add(:amount, 'exceeds the funding source\'s budget')
       end
 
