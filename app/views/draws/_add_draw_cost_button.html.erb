@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center" >
     <%= link_to('Add Draw Cost',
                 new_draw_draw_cost_path(draw_id: draw.id),
-                class: 'btn btn-primary m-2 align-self-center', data: {turbo_frame: 'new_draw_cost' }) if policy(DrawCost.new(draw: draw)).new? %>
+                class: "btn btn-#{draw.draw_costs.visible.any? ? 'primary' : 'success'} m-2 align-self-center", data: {turbo_frame: 'new_draw_cost' }) if policy(DrawCost.new(draw: draw)).new? %>
 </div>
