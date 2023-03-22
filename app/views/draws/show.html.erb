@@ -16,7 +16,7 @@
     <div class="col m-2 p-3 border shadow">
       <h3 class="text-center">Costs</h3>
       <%= turbo_frame_tag('draw_costs', @draw) do %>
-        <%= render @draw.draw_costs.visible %>
+        <%= render @draw.draw_costs.visible.order(created_at: :asc) %>
       <% end %>
       <%= turbo_frame_tag 'new_draw_cost' do %>
         <%= render partial: 'draws/add_draw_cost_button', locals: { draw: @draw } %>
