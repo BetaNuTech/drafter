@@ -156,12 +156,15 @@ module Invoices
       end
 
       def after_processing(user)
+        unless self.ocr_processed.present?
+          self.ocr_processed = Time.current
+          save
+        end
+
         if draw.invoice_auto_approvals_completed
           update(manual_approval_required: true)
           create_task(action: :approve)
         end
-        self.ocr_processed = Time.current
-        save
       end
 
       def displayed_invoice_state_name

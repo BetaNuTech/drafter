@@ -173,6 +173,7 @@ class InvoiceProcessingService
       pdf_page_image = pdf_page_image.draw_rect(border_color, box_left, box_top, box_width, box_height)
       annotated_page_data = pdf_page_image.write_to_buffer '.jpg[Q=90]'
       invoice.annotated_preview.attach(io: StringIO.new(annotated_page_data), filename: 'annotated_preview.jpg')
+      invoice.update(ocr_processed: Time.current)
       true
     end
   rescue => e
