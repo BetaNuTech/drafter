@@ -41,7 +41,8 @@ module ChangeOrders
         end
 
         event :withdraw, after_commit: :after_withdraw do
-          transitions from: %i{ pending approved rejected }, to: :withdrawn
+          transitions from: %i{ pending approved rejected }, to: :withdrawn,
+            guard: Proc.new { allow_withdraw? }
         end
       end
 
@@ -81,6 +82,10 @@ module ChangeOrders
 
       def allow_reset_approval?
         draw_cost.draw.allow_invoice_approvals?
+      end
+
+      def allow_withdraw?
+        draw_cost.allow_change_order_changes?
       end
 
       def bubble_event_to_project_tasks(event_name)

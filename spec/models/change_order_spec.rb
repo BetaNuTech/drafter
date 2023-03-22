@@ -47,6 +47,19 @@ RSpec.describe ChangeOrder, type: :model do
   end
 
   let(:user) { developer_user }
+  let(:draw_cost) { sample_draw_cost }
+  let(:project_cost) { sample_draw_cost.project_cost }
+  let(:funding_source) { sample_project_non_contingency_project_costs.first }
+  let(:service) {ChangeOrderService.new(user: developer_user, draw_cost: draw_cost)} 
+  let(:change_order_attrs) {
+    { amount: draw_cost.total, description: 'Test Change Order 1', funding_source_id: funding_source.id }
+  }
+  let(:change_order) {
+    co = service.create(change_order_attrs)
+    raise 'Failed to create change_order test variable' if service.errors?
+
+    co
+  }
 
   describe 'validations' do
     let(:draw_cost) { sample_draw_cost }
@@ -58,21 +71,16 @@ RSpec.describe ChangeOrder, type: :model do
         draw_cost.reload
         draw_cost.update_column(:total, draw_cost.invoice_total)
         funding_source.update(total: 1.0)
-        attrs = {amount: draw_cost.total, description: 'Test Change Order 1', funding_source_id: funding_source.id}
-        service.create(attrs)
+        service.create(change_order_attrs)
         assert(service.errors?)
         funding_source.update(total: 5000.0)
-        service.create(attrs)
+        service.create(change_order_attrs)
         refute(service.errors?)
       end
     end
   end
 
   describe 'state machine' do
-    let(:draw_cost) { sample_draw_cost }
-    let(:project_cost) { sample_draw_cost.project_cost }
-    let(:funding_source) { sample_project_non_contingency_project_costs.first }
-    let(:service) {ChangeOrderService.new(user: developer_user, draw_cost: draw_cost)} 
     before do
       draw_documents
       draw_cost_invoices
@@ -85,11 +93,8 @@ RSpec.describe ChangeOrder, type: :model do
       draw_cost.reload
       draw.reload
     end
+
     describe 'approval event' do
-      let(:change_order) {
-        attrs = {amount: draw_cost.total, description: 'Test Change Order 1', funding_source_id: funding_source.id}
-        service.create(attrs)
-      }
       before do
         change_order
         assert(draw.trigger_event(event_name: :submit))
@@ -110,6 +115,28 @@ RSpec.describe ChangeOrder, type: :model do
         assert(change_order.approved?)
       end
     end
-  end
+  end # 'approval event' 
+
+  describe 'withdrawl' do
+    before do
+      draw_cost_invoices
+      draw_cost.reload
+      draw_cost.update(total: draw_cost.invoice_total)
+    end
+    it 'allows change orders to be withdrawn if the draw cost is pending or rejected' do
+      assert(draw_cost.pending?)
+      assert(change_order.trigger_event(event_name: :withdraw))
+      change_order.reload
+      assert(change_order.withdrawn?)
+    end
+    it 'prevents change orders to be withdrawn if the draw cost is in a non-modifiable state' do
+      assert(draw_cost.pending?)
+      assert(draw_cost.trigger_event(event_name: :submit))
+      draw_cost.reload
+      refute(change_order.trigger_event(event_name: :withdraw))
+      change_order.reload
+      refute(change_order.withdrawn?)
+    end
+  end # describe 'withdrawl'
 
 end

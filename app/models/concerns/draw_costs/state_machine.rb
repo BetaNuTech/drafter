@@ -86,6 +86,10 @@ module DrawCosts
           ALLOW_INVOICE_CHANGE_STATES.include?(state.to_sym)
       end
 
+      def allow_change_order_changes?
+        allow_invoice_changes?
+      end
+
       def submit_invoices(user)
         invoices.reload
         invoices.pending.each do |invoice|
