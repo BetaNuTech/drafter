@@ -76,9 +76,6 @@ class ChangeOrder < ApplicationRecord
   validates_with FundingAmountValidator
   validates_with FundingSourceValidator
   validates :amount, presence: true, numericality: { greater_than: 0.0 }
-  #validates :funding_source_id, exclusion: { in: ->(change_order) { [change_order.project_cost_id] } },
-                                #uniqueness: { scope: [:draw_cost_id],
-                                              #message: 'is being used by another Change Order for this Draw Cost' }
 
   def self.create_approval_tasks
     self.all.pending.each do |change_order|
