@@ -176,7 +176,8 @@ class Invoice < ApplicationRecord
   end
 
   def ocr_failed?
-    ocr_processed.present? && ocr_amount.nil?
+    ( ocr_processed.present? && ocr_amount.nil? ) ||
+      (ocr_processed.blank? && !(pending? || submitted? || processing? ))
   end
 
   def has_processing_errors?
