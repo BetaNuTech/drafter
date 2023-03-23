@@ -14,7 +14,7 @@ module Reporting
     }.freeze
 
     COLUMN_TITLES = {
-      project_cost: 'Project Cost Type',
+      project_cost: 'Type of Improvement Furnished',
       contract_price: 'Total Contract Price',
       change_order: 'Change Order',
       adjusted_contract: 'Adjusted Contract',
