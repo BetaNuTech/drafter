@@ -2,7 +2,7 @@ module ProjectTasksHelper
   PROJECT_TASK_STATE_CLASS_MAPPING = {
     new: :secondary,
     needs_review: :info,
-    needs_consult: :info,
+    needs_consult: :warning,
     rejected: :danger,
     approved: :success,
     archived: :warning

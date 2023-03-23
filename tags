@@ -358,6 +358,7 @@ allow_approve?	./app/models/concerns/draw_costs/state_machine.rb	/^      def all
 allow_approve?	./app/models/concerns/draw_documents/state_machine.rb	/^      def allow_approve?$/;"	f	class:DrawDocuments.StateMachine
 allow_approve?	./app/models/concerns/invoices/state_machine.rb	/^      def allow_approve?$/;"	f	class:Invoices.StateMachine
 allow_auto_approve?	./app/models/concerns/draw_costs/state_machine.rb	/^      def allow_auto_approve?$/;"	f	class:DrawCosts.StateMachine.TransitionError
+allow_change_order_changes?	./app/models/concerns/draw_costs/state_machine.rb	/^      def allow_change_order_changes?$/;"	f	class:DrawCosts.StateMachine.TransitionError
 allow_document_approvals?	./app/models/concerns/draws/state_machine.rb	/^      def allow_document_approvals?$/;"	f	class:Draws.StateMachine
 allow_document_changes?	./app/models/concerns/draws/state_machine.rb	/^      def allow_document_changes?$/;"	f	class:Draws.StateMachine
 allow_draw_cost_changes?	./app/models/concerns/draws/state_machine.rb	/^      def allow_draw_cost_changes?$/;"	f	class:Draws.StateMachine
@@ -374,6 +375,7 @@ allow_reset_approval?	./app/models/concerns/change_orders/state_machine.rb	/^   
 allow_revert_to_pending?	./app/models/concerns/invoices/state_machine.rb	/^      def allow_revert_to_pending?$/;"	f	class:Invoices.StateMachine
 allow_submit?	./app/models/concerns/draw_costs/state_machine.rb	/^      def allow_submit?$/;"	f	class:DrawCosts.StateMachine.TransitionError
 allow_submit?	./app/models/concerns/draws/state_machine.rb	/^      def allow_submit?$/;"	f	class:Draws.StateMachine
+allow_withdraw?	./app/models/concerns/change_orders/state_machine.rb	/^      def allow_withdraw?$/;"	f	class:ChangeOrders.StateMachine.TransitionError
 allowed_params	./app/policies/change_order_policy.rb	/^  def allowed_params$/;"	f	class:ChangeOrderPolicy
 allowed_params	./app/policies/draw_cost_policy.rb	/^  def allowed_params$/;"	f	class:DrawCostPolicy
 allowed_params	./app/policies/draw_document_policy.rb	/^  def allowed_params$/;"	f	class:DrawDocumentPolicy
@@ -461,7 +463,6 @@ available_users	./app/models/project_user.rb	/^  def available_users$/;"	f	class
 aws_credentials	./app/services/textract/api/configuration.rb	/^      def aws_credentials$/;"	f	class:Textract.Api.Configuration
 balance	./app/models/draw_cost.rb	/^  def balance$/;"	f	class:DrawCost
 balance_available_for_draw	./app/models/project_cost.rb	/^  def balance_available_for_draw(draw)$/;"	f	class:ProjectCost
-balance_without_change_orders	./app/models/draw_cost.rb	/^  def balance_without_change_orders$/;"	f	class:DrawCost
 base_task_description	./app/services/project_task_services/change_order_task_generator.rb	/^    def base_task_description$/;"	f	class:ProjectTaskServices
 base_task_description	./app/services/project_task_services/draw_cost_task_generator.rb	/^    def base_task_description$/;"	f	class:ProjectTaskServices
 base_task_description	./app/services/project_task_services/draw_document_task_generator.rb	/^    def base_task_description$/;"	f	class:ProjectTaskServices
@@ -1205,6 +1206,7 @@ trigger_event	./app/services/project_task_service.rb	/^  def trigger_event(event
 unapprove	./app/models/draw_document.rb	/^  def unapprove$/;"	f	class:DrawDocument
 unapproved_documents	./app/models/concerns/draws/draw_documents.rb	/^      def unapproved_documents$/;"	f	class:Draws.DrawDocuments
 unapproved_draw_costs	./app/models/draw.rb	/^  def unapproved_draw_costs$/;"	f	class:Draw
+under_funded?	./app/models/draw_cost.rb	/^  def under_funded?$/;"	f	class:DrawCost
 undo_submit	./app/models/concerns/draws/state_machine.rb	/^      def undo_submit$/;"	f	class:Draws.StateMachine
 up	./db/migrate/20220714180131_create_delayed_jobs.rb	/^  def self.up$/;"	F	class:CreateDelayedJobs
 update	./app/controllers/draw_costs_controller.rb	/^  def update$/;"	f	class:DrawCostsController

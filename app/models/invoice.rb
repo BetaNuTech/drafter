@@ -160,7 +160,8 @@ class Invoice < ApplicationRecord
   end
 
   def consult?
-    draw_cost&.consult?
+    #draw_cost&.consult?
+    false
   end
 
   def descriptive_name
