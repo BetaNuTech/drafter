@@ -89,6 +89,8 @@ class Draw < ApplicationRecord
       next if draw.invoices.where(state: %i{approved rejected}).none? ||
                 draw.invoices.pending.any? ||
                 draw.invoices.approval_pending.any?
+      next if draw.change_orders.where(state: %i{approved rejected}).none? ||
+                draw.change_orders.pending.any?
 
       tasks << draw.create_task(action: :approve)
     end
