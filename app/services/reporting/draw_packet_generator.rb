@@ -136,9 +136,10 @@ module Reporting
         doc_indices[index_key] = 1 + doc_indices[index_key]
         doc_index = "%03d" % doc_indices[index_key]
         draw_cost_name = invoice.draw_cost.name.parameterize.underscore
+        invoice_amount = invoice.amount.to_s.sub('.','_')
         {
-          filename: "%{draw_name}-%{draw_cost_name}%{doc_index}.pdf" %
-                      { draw_name:, draw_cost_name:, doc_index:, },
+          filename: "%{draw_name}-%{draw_cost_name}%{doc_index}-%{invoice_amount}.pdf" %
+                      { draw_name:, draw_cost_name:, doc_index:, invoice_amount:},
           invoice_id: invoice.id,
           document: invoice.document,
           draw_name:
