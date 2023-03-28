@@ -103,6 +103,8 @@ module DrawCosts
       end
 
       def allow_submit?
+        invoices.reload
+        change_orders.reload
         @state_errors = []
         @state_errors << 'Invoices missing' if invoices.visible.none?
         @state_errors << 'There are rejected invoices' if invoices.rejected.any?

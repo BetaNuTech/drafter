@@ -8,6 +8,6 @@
 <%= render partial: 'draws/action_issues', locals: {draw: draw} %>
 <% if policy(draw).download_packet? || policy(draw).download_summary_sheet? %>
   <hr/>
-  <%= link_to('Summary Packet', draw.document_packet.url, class: 'btn btn-info m1') if policy(draw).download_packet? %>
-  <%= link_to('Summary Sheet', draw.draw_summary_sheet.url, class: 'btn btn-info m1') if policy(draw).download_summary_sheet? %>
+  <%= link_to('Summary Packet', ( draw.document_packet.url rescue '#' ), class: 'btn btn-info m1') if policy(draw).download_packet? %>
+  <%= link_to('Summary Sheet', ( draw.draw_summary_sheet.url rescue '#' ), class: 'btn btn-info m1') if policy(draw).download_summary_sheet? %>
 <% end %>
