@@ -60,7 +60,6 @@ module Projects
           approval_lead_time: sample.approval_lead_time,
           drawable: sample.drawable,
           change_requestable: sample.change_requestable,
-          initial_draw_only: sample.initial_draw_only,
           change_request_allowed: sample.change_request_allowed,
           total: sample.total
         }

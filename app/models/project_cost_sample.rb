@@ -8,7 +8,6 @@
 #  change_requestable     :boolean          default(TRUE)
 #  cost_type              :integer          not null
 #  drawable               :boolean          default(TRUE)
-#  initial_draw_only      :boolean          default(FALSE)
 #  name                   :string           not null
 #  standard               :boolean          default(TRUE), not null
 #  total                  :decimal(, )      default(0.0), not null

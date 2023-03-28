@@ -10,9 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_10_192411) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_28_174641) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -171,7 +170,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_192411) do
     t.datetime "updated_at", null: false
     t.boolean "drawable", default: true
     t.boolean "change_requestable", default: true
-    t.boolean "initial_draw_only", default: false
     t.boolean "change_request_allowed", default: true
     t.decimal "total", default: "0.0", null: false
     t.index ["standard", "name"], name: "project_cost_samples_idx"
@@ -188,9 +186,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_192411) do
     t.datetime "updated_at", null: false
     t.boolean "drawable", default: true
     t.boolean "change_requestable", default: true
-    t.boolean "initial_draw_only", default: false
     t.boolean "change_request_allowed", default: true
-    t.index ["drawable", "change_requestable", "initial_draw_only", "change_request_allowed"], name: "project_costs_drawable_idx"
+    t.index ["drawable", "change_requestable", "change_request_allowed"], name: "project_costs_drawable_idx"
     t.index ["project_id", "state"], name: "project_costs_project_idx"
     t.index ["project_id"], name: "index_project_costs_on_project_id"
   end

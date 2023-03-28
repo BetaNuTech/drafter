@@ -13,15 +13,10 @@ module DrawsHelper
   def project_cost_options(draw: , project_cost:)
     project = draw.project || project_cost&.project
     return '' if project.nil?
-    non_initial_draw = project.draws.where("index > 1").first
     used_project_costs = draw.draw_costs.visible.pluck(:project_cost_id)
     used_project_costs = used_project_costs - [ project_cost.id ] if project_cost.present?
     project_costs = project.project_costs || ProjectCost.none
-    if non_initial_draw.nil?
-      project_costs = project_costs.drawable
-    else   
-      project_costs = project_costs.drawable_and_non_initial
-    end
+    project_costs = project_costs.drawable
     project_costs = project_costs.where.not(id: used_project_costs)
     project_costs = project_costs.order(name: :asc)
     project_cost_options_with_remaining(project_costs, project_cost&.id, draw)

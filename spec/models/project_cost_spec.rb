@@ -8,7 +8,6 @@
 #  change_requestable     :boolean          default(TRUE)
 #  cost_type              :integer          not null
 #  drawable               :boolean          default(TRUE)
-#  initial_draw_only      :boolean          default(FALSE)
 #  name                   :string           not null
 #  state                  :string           default("pending"), not null
 #  total                  :decimal(, )      default(0.0), not null
@@ -19,7 +18,7 @@
 # Indexes
 #
 #  index_project_costs_on_project_id  (project_id)
-#  project_costs_drawable_idx         (drawable,change_requestable,initial_draw_only,change_request_allowed)
+#  project_costs_drawable_idx         (drawable,change_requestable,change_request_allowed)
 #  project_costs_project_idx          (project_id,state)
 #
 # Foreign Keys
