@@ -25,7 +25,7 @@ if [[ ! -f $dumpfile ]]; then
 fi
 
 docker-compose run web pg_restore --verbose --clean --no-acl --no-owner -d postgres://postgres:postgres@postgres:5432/drafter_development < $dumpfile
-docker-compose run web psql -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;" -d postgres://postgres:postgres@postgres:5432/drafter_development
+docker-compose run web psql -d drafter_development -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;" -d postgres://postgres:postgres@postgres:5432
 docker-compose run web bundle exec rake db:migrate
 
 echo "DONE."
