@@ -1,0 +1,31 @@
+#!/bin/bash
+
+heroku_app=drafter-prod
+dumpfile=latest.dump
+
+echo -n "Loading Drafter production database into Docker development stack. This will stop the development environment. Continue? (Y/N) "
+read DO_RUN
+
+if [[ "$DO_RUN" != 'y' && "$DO_RUN" != "Y" ]]; then
+  echo "Aborting!"
+  exit 1
+fi
+
+docker-compose down
+
+if [[ ! -f $dumpfile ]]; then
+  echo -n "Capture a fresh backup? (Y/N) "
+  read DO_RUN
+  if [[ "$DO_RUN" = 'y' || "$DO_RUN" = "Y" ]]; then
+    heroku pg:backups:capture --app $heroku_app
+  fi
+
+  echo "Downloading latest production backup..."
+  heroku pg:backups:download --app $heroku_app
+fi
+
+docker-compose run web pg_restore --verbose --clean --no-acl --no-owner -d postgres://postgres:postgres@postgres:5432/drafter_development < $dumpfile
+docker-compose run web psql -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;" -d postgres://postgres:postgres@postgres:5432/drafter_development
+docker-compose run web bundle exec rake db:migrate
+
+echo "DONE."
