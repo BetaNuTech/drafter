@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_28_174641) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_31_163344) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -112,7 +112,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_28_174641) do
     t.uuid "user_id", null: false
     t.uuid "organization_id", null: false
     t.uuid "approver_id"
-    t.integer "index", default: 1, null: false
+    t.integer "index", default: 0, null: false
     t.decimal "amount", default: "0.0", null: false
     t.string "state", default: "pending", null: false
     t.string "reference"

@@ -5,7 +5,7 @@
 #  id                               :uuid             not null, primary key
 #  amount                           :decimal(, )      default(0.0), not null
 #  approved_at                      :datetime
-#  index                            :integer          default(1), not null
+#  index                            :integer          default(0), not null
 #  invoice_auto_approvals_completed :boolean          default(FALSE)
 #  notes                            :text
 #  reference                        :string
@@ -69,7 +69,7 @@ class Draw < ApplicationRecord
 
   ### Validations
   validates_with IndexValidator
-  validates :index, presence: true, numericality: { greater_than_or_equal_to: 1}
+  validates :index, presence: true, numericality: { greater_than_or_equal_to: 0}
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0.0}
   validates :state, presence: true
 
@@ -104,7 +104,7 @@ class Draw < ApplicationRecord
   end
 
   def next_index
-    return 1 unless project.present?
+    return 0 unless project.present?
 
    (project.draws.visible.pluck(:index).sort.last || 0) + 1
   end

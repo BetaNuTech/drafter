@@ -5,7 +5,7 @@
 #  id                               :uuid             not null, primary key
 #  amount                           :decimal(, )      default(0.0), not null
 #  approved_at                      :datetime
-#  index                            :integer          default(1), not null
+#  index                            :integer          default(0), not null
 #  invoice_auto_approvals_completed :boolean          default(FALSE)
 #  notes                            :text
 #  reference                        :string
