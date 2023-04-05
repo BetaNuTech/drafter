@@ -21,7 +21,13 @@ Rails.application.routes.draw do
   resources :users
 
   resources :projects do
-    resources :project_costs
+    resources :project_costs do
+      collection do
+        get 'edit_multiple', to: 'project_costs#edit_multiple'
+        post 'update_multiple', to: 'project_costs#update_multiple'
+      end
+    end
+
     resources :project_users
     resources :draws do
       post 'approve_internal', to: 'draws#approve_internal'

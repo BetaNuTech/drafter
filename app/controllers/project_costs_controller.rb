@@ -41,6 +41,16 @@ class ProjectCostsController < ApplicationController
     authorize @project_cost
   end
 
+  def edit_multiple
+    @new_project_cost = @project.project_costs.new
+    authorize @new_project_cost
+    @project_costs = record_scope.where(project: @project).order(name: :asc)
+    breadcrumbs.add(label: 'Home', url: '/')
+    breadcrumbs.add(label: @project.name, url: project_path(@project))
+    breadcrumbs.add(label: 'Project Costs', url: project_project_costs_path(project_id: @project.id))
+    breadcrumbs.add(label: 'Bulk Edit', url: update_multiple_project_project_costs_path(project_id: @project.id), active: true)
+  end
+
   def update
     authorize @project_cost
     if @project_cost.update(project_cost_params)
@@ -52,6 +62,20 @@ class ProjectCostsController < ApplicationController
     else
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def update_multiple
+    @new_project_cost = @project.project_costs.new
+    authorize @new_project_cost
+
+    project_costs_params = params.require(:project_costs).permit!
+
+    permitted_params = policy(ProjectCost).allowed_params
+    project_costs_params.each do |id, values|
+      record_scope.find(id).update(values.slice(*permitted_params))
+    end
+
+    redirect_to edit_multiple_project_project_costs_path(project_id: @project.id), notice: 'Project Costs updated'
   end
 
   def destroy

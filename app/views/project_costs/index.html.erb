@@ -1,6 +1,7 @@
 <div class="row">
   <div class="col">
     <%= link_to('Add Project Cost', new_project_project_cost_path(project_id: @project.id), data: {turbo_frame: dom_id(@new_project_cost) }, class: 'btn btn-success') %>
+    <%= link_to('Bulk Edit', edit_multiple_project_project_costs_path(project_id: @project.id), class: 'btn btn-primary') %>
     <%= link_to('Default Project Costs', apply_default_project_costs_budget_project_path(id: @project.id), data: {turbo_method: :post, turbo_confirm: 'Are you sure you want to default all Project Cost budgets to $10k for testing?'}, class: 'btn btn-primary') if show_default_project_costs_budget_button?(@project) %>
   </div>
 </div>

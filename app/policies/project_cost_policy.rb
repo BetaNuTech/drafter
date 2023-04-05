@@ -38,7 +38,18 @@ class ProjectCostPolicy < ApplicationPolicy
           user.project_management?(project) ) )
   end
 
+  def edit_multiple?
+    user.admin? || 
+      ( project.allow_project_cost_changes? &&
+        ( privileged_user? ||
+          user.project_management?(project) ) )
+  end
+
   def update?
+    edit?
+  end
+
+  def update_multiple?
     edit?
   end
 

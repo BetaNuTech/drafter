@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col">
+    <%= turbo_frame_tag @new_project_cost %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <%= turbo_frame_tag 'project_costs' do %>
+      <%= form_with( url: update_multiple_project_project_costs_path(project_id: @project.id), method: :post, data: { turbo: false } ) do |form| %>
+        <% tabindex = 0 %>
+        <% @project_costs.each do |project_cost| %>
+          <%= fields_for 'project_costs[]', project_cost do |project_cost_field| %>
+            <%= turbo_frame_tag "project_cost_#{project_cost.id}" do %>
+              <div class="row">
+                <div class="col-5 form-floating mb-2 g-1">
+                  <%= project_cost_field.text_field :name, { class: 'form-control' } %>
+                  <%= project_cost_field.label :name%>
+                </div>
+                <div class="col form-floating mb-2 g-1">
+                  <%= project_cost_field.select(:cost_type, options_for_select(project_cost_cost_type_options, project_cost.cost_type), {}, {class: 'form-select'}) %>
+                  <%= project_cost_field.label :cost_type, 'Cost Type' %>
+                </div>
+                <div class="col form-floating mb-2 g-1">
+                  <%= project_cost_field.number_field :approval_lead_time, { class: 'form-control', step: 1, min: 0 } %>
+                  <%= project_cost_field.label :approval_lead_time, 'Approval Due (Days)' %>
+                </div>
+                <div class="col form-floating mb-2 g-1">
+                  <%= project_cost_field.number_field :total, {class: 'currency_input form-control', step: 0.01, min: 0, tabindex: tabindex += 1} %>
+                  <%= project_cost_field.label :total, 'Total $' %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+        <%= submit_tag "Submit", class: "btn btn-lg btn-success" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
