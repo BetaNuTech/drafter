@@ -1,0 +1,10 @@
+/node_modules
+/coverage
+latest.dump
+tmp/
+/spec/fixtures
+.env
+/config/credentials
+.irb_history
+.log
+.json

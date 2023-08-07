@@ -24,3 +24,4 @@
 ._.DS_Store
 chatgpt.log
 latest.dump*
+.vectordatadb
