@@ -40,10 +40,11 @@ class ChangeOrder < ApplicationRecord
         record.errors.add(:amount, 'exceeds the funding source\'s budget')
       end
 
-      variance = record.draw_cost.change_orders.where.not(id: record.id).sum(:amount) + record.amount - record.draw_cost.total
-      if variance.positive?
-        record.errors.add(:amount, "will over-fund the Draw Cost by #{number_to_currency(variance)}")
-      end
+      # Disable check for overfunding Draw Costs
+      # variance = record.draw_cost.change_orders.where.not(id: record.id).sum(:amount) + record.amount - record.draw_cost.total
+      # if variance.positive?
+      #  record.errors.add(:amount, "will over-fund the Draw Cost by #{number_to_currency(variance)}")
+      # end
     end
   end
 

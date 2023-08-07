@@ -179,6 +179,7 @@ RSpec.describe DrawCost, type: :model do
     end
     describe 'submission validation' do
       it 'disallows submission if the draw cost is over funded by change orders' do
+        skip 'Validation disabled (TODO: remove test)'
         assert(draw_cost.allow_submit?)
         change_order1
         change_order1.update_column(:amount, 100000)
