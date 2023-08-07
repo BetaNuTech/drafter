@@ -47,7 +47,7 @@ export default class extends Controller {
   valid_amount() {
     const amount_field_el = this.amount_fieldTarget
     const amount = amount_field_el.value
-    return(amount > 0.0)
+    return(amount != 0.0)
   }
 
   form_submitted(event) {
