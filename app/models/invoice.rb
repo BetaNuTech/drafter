@@ -58,7 +58,7 @@ class Invoice < ApplicationRecord
   has_many :project_tasks, as: :origin, dependent: :destroy
 
   ### Validations
-  validates :amount, presence: true, numericality: { greater_than: 0.0}
+  validates :amount, presence: true, numericality: { other_than: 0.0}
   validates :state, presence: true
 
   delegate :organization, to: :draw_cost

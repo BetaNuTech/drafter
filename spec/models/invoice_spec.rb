@@ -49,6 +49,24 @@ RSpec.describe Invoice, type: :model do
     end
   end
 
+  describe 'Validations' do
+    let(:invoice) { create(:invoice, draw_cost: draw_cost) }
+    describe 'amount' do
+      it 'can have a negative value' do
+        invoice.amount = -100.0
+        assert(invoice.valid?)
+      end
+      it 'can have a positive value' do
+        assert(invoice.amount.positive?)
+        assert(invoice.valid?)
+      end
+      it 'cannot be zero' do
+        invoice.amount = 0.0
+        refute(invoice.valid?)
+      end
+    end
+  end
+
   describe 'helper methods' do
     let(:invoice) { create(:invoice, draw_cost: draw_cost) }
     describe 'initializing ocr_data' do
@@ -154,7 +172,7 @@ RSpec.describe Invoice, type: :model do
           invoice.draw.invoice_auto_approvals_completed = true
           invoice.draw.save
           expect{
-            invoice.trigger_event(event_name: :complete_processing)  
+            invoice.trigger_event(event_name: :complete_processing)
           }.to change{ProjectTask.count}.by(1)
           invoice.project_tasks.reload
           expect(invoice.project_tasks.count).to eq(1)
@@ -162,7 +180,7 @@ RSpec.describe Invoice, type: :model do
         end
         it 'does not create a task if the Draw not already run auto invoice approvals' do
           expect{
-            invoice.trigger_event(event_name: :fail_processing)  
+            invoice.trigger_event(event_name: :fail_processing)
           }.to_not change{ProjectTask.count}
           invoice.project_tasks.reload
           expect(invoice.project_tasks.count).to eq(0)
@@ -251,7 +269,7 @@ RSpec.describe Invoice, type: :model do
                    project_cost: draw_cost.project_cost,
                    funding_source: contingency_project_cost)
           }
-          
+
           it 'approves the draw cost' do
             draw_cost.total = draw_cost.total + change_order_amount
             draw_cost.save!
@@ -295,7 +313,7 @@ RSpec.describe Invoice, type: :model do
           end
         end
       end
-    end 
+    end
 
 
   end

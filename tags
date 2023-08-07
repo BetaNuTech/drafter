@@ -119,6 +119,7 @@ DrawDocumentTaskGenerator	./app/services/project_task_services/draw_document_tas
 DrawDocuments	./app/models/concerns/draw_documents/state_machine.rb	/^module DrawDocuments$/;"	m
 DrawDocuments	./app/models/concerns/draws/draw_documents.rb	/^  module DrawDocuments$/;"	m	class:Draws
 DrawDocumentsController	./app/controllers/draw_documents_controller.rb	/^class DrawDocumentsController < ApplicationController$/;"	c
+DrawIndexDefaultValue	./db/migrate/20230331163344_draw_index_default_value.rb	/^class DrawIndexDefaultValue < ActiveRecord::Migration[7.0]$/;"	c
 DrawPacketGenerator	./app/services/reporting/draw_packet_generator.rb	/^  class DrawPacketGenerator$/;"	c	class:Reporting
 DrawPolicy	./app/policies/draw_policy.rb	/^class DrawPolicy < ApplicationPolicy$/;"	c
 DrawService	./app/services/draw_service.rb	/^class DrawService$/;"	c
@@ -213,6 +214,7 @@ RemoveConsultantRole	./db/migrate/20221023182655_remove_consultant_role.rb	/^cla
 RemoveDrawCostPlanChangeAttributes	./db/migrate/20221019173638_remove_draw_cost_plan_change_attributes.rb	/^class RemoveDrawCostPlanChangeAttributes < ActiveRecord::Migration[7.0]$/;"	c
 RemoveDrawDocumentApprovalDueDate	./db/migrate/20230131061032_remove_draw_document_approval_due_date.rb	/^class RemoveDrawDocumentApprovalDueDate < ActiveRecord::Migration[7.0]$/;"	c
 RemoveDrawIndexUniqueScope	./db/migrate/20221020191457_remove_draw_index_unique_scope.rb	/^class RemoveDrawIndexUniqueScope < ActiveRecord::Migration[7.0]$/;"	c
+RemoveInitialDrawOnlyProjectCosts	./db/migrate/20230328174641_remove_initial_draw_only_project_costs.rb	/^class RemoveInitialDrawOnlyProjectCosts < ActiveRecord::Migration[7.0]$/;"	c
 RemoveNameFromDraws	./db/migrate/20221020175700_remove_name_from_draws.rb	/^class RemoveNameFromDraws < ActiveRecord::Migration[7.0]$/;"	c
 RemoveProjectBudget	./db/migrate/20221018040730_remove_project_budget.rb	/^class RemoveProjectBudget < ActiveRecord::Migration[7.0]$/;"	c
 RemoveUserProfileCompany	./db/migrate/20221018041101_remove_user_profile_company.rb	/^class RemoveUserProfileCompany < ActiveRecord::Migration[7.0]$/;"	c
@@ -529,6 +531,8 @@ change	./db/migrate/20230208001308_add_remote_last_checked_at_to_project_tasks.r
 change	./db/migrate/20230222002315_add_automatically_approved_to_invoices.rb	/^  def change$/;"	f	class:AddAutomaticallyApprovedToInvoices
 change	./db/migrate/20230225203921_add_draw_invoice_auto_approvals_completed.rb	/^  def change$/;"	f	class:AddDrawInvoiceAutoApprovalsCompleted
 change	./db/migrate/20230310192411_add_change_order_state.rb	/^  def change$/;"	f	class:AddChangeOrderState
+change	./db/migrate/20230328174641_remove_initial_draw_only_project_costs.rb	/^  def change$/;"	f	class:RemoveInitialDrawOnlyProjectCosts
+change	./db/migrate/20230331163344_draw_index_default_value.rb	/^  def change$/;"	f	class:DrawIndexDefaultValue
 change_order_funding_options	./app/helpers/draws_helper.rb	/^  def change_order_funding_options(change_order)$/;"	f
 change_order_funding_total	./app/models/project_cost.rb	/^  def change_order_funding_total$/;"	f	class:ProjectCost
 change_order_total	./app/models/draw_cost.rb	/^  def change_order_total$/;"	f	class:DrawCost
@@ -688,6 +692,8 @@ edit?	./app/policies/project_task_policy.rb	/^  def edit?$/;"	f	class:ProjectTas
 edit?	./app/policies/project_user_policy.rb	/^  def edit?$/;"	f	class:ProjectUserPolicy
 edit?	./app/policies/user_policy.rb	/^  def edit?$/;"	f	class:UserPolicy
 edit_image	./app/helpers/images_helper.rb	/^  def edit_image$/;"	f
+edit_multiple	./app/controllers/project_costs_controller.rb	/^  def edit_multiple$/;"	f	class:ProjectCostsController
+edit_multiple?	./app/policies/project_cost_policy.rb	/^  def edit_multiple?$/;"	f	class:ProjectCostPolicy
 enumerate_approval_problems	./app/models/concerns/draws/state_machine.rb	/^      def enumerate_approval_problems$/;"	f	class:Draws.StateMachine
 enumerate_submit_problems	./app/models/concerns/draws/state_machine.rb	/^      def enumerate_submit_problems$/;"	f	class:Draws.StateMachine
 env_var_version	./bin/bundle	/^  def env_var_version$/;"	f
@@ -1236,6 +1242,8 @@ update?	./app/policies/user_policy.rb	/^  def update?$/;"	f	class:UserPolicy
 updateTask	./app/services/clickup/api/tasks.rb	/^      def updateTask(task:, archived: false, start_date_time: false, due_date_time: false, status: nil)$/;"	f	class:Clickup.Api.Tasks
 updateTaskStatus	./app/services/clickup/api/tasks.rb	/^      def updateTaskStatus(task:, status:)$/;"	f	class:Clickup.Api.Tasks
 update_member_role	./app/services/projects/membership.rb	/^    def update_member_role(user:, role: )$/;"	f	class:Projects.Membership
+update_multiple	./app/controllers/project_costs_controller.rb	/^  def update_multiple$/;"	f	class:ProjectCostsController
+update_multiple?	./app/policies/project_cost_policy.rb	/^  def update_multiple?$/;"	f	class:ProjectCostPolicy
 update_remote_task_status	./app/models/concerns/project_tasks/sync.rb	/^      def update_remote_task_status$/;"	f	class:ProjectTasks.Sync
 update_status	./app/services/project_task_service.rb	/^  def update_status(status)$/;"	f	class:ProjectTaskService
 update_task	./app/controllers/project_tasks_controller.rb	/^  def update_task$/;"	f	class:ProjectTasksController

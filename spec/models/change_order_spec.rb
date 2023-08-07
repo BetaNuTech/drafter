@@ -50,7 +50,7 @@ RSpec.describe ChangeOrder, type: :model do
   let(:draw_cost) { sample_draw_cost }
   let(:project_cost) { sample_draw_cost.project_cost }
   let(:funding_source) { sample_project_non_contingency_project_costs.first }
-  let(:service) {ChangeOrderService.new(user: developer_user, draw_cost: draw_cost)} 
+  let(:service) {ChangeOrderService.new(user: developer_user, draw_cost: draw_cost)}
   let(:change_order_attrs) {
     { amount: draw_cost.total, description: 'Test Change Order 1', funding_source_id: funding_source.id }
   }
@@ -65,7 +65,7 @@ RSpec.describe ChangeOrder, type: :model do
     let(:draw_cost) { sample_draw_cost }
     let(:funding_source) { sample_project_non_contingency_project_costs.first }
     describe 'amount' do
-      let(:service) {ChangeOrderService.new(user: developer_user, draw_cost: draw_cost)} 
+      let(:service) {ChangeOrderService.new(user: developer_user, draw_cost: draw_cost)}
       it 'should not allow an amount exceeding the funding source balance' do
         draw_cost_invoices
         draw_cost.reload
@@ -115,7 +115,7 @@ RSpec.describe ChangeOrder, type: :model do
         assert(change_order.approved?)
       end
     end
-  end # 'approval event' 
+  end # 'approval event'
 
   describe 'withdrawl' do
     before do
@@ -133,6 +133,7 @@ RSpec.describe ChangeOrder, type: :model do
       assert(draw_cost.pending?)
       assert(draw_cost.trigger_event(event_name: :submit))
       draw_cost.reload
+      assert(change_order.draw_cost.project_cost.change_request_allowed?)
       refute(change_order.trigger_event(event_name: :withdraw))
       change_order.reload
       refute(change_order.withdrawn?)

@@ -128,7 +128,7 @@ class ChangeOrderService
   def funds_available(funding_source)
     funding_source.budget_balance
   end
-  
+
   private
 
   def draw_cost_overage
