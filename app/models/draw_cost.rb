@@ -60,7 +60,7 @@ class DrawCost < ApplicationRecord
 
   ### Validations
   validates_with ProjectCostValidator
-  validates :total, presence: true, numericality: { greater_than_or_equal_to: 0.0}
+  validates :total, presence: true
   validates :state, presence: true
 
   def project_cost_subtotal

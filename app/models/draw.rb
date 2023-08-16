@@ -70,7 +70,7 @@ class Draw < ApplicationRecord
   ### Validations
   validates_with IndexValidator
   validates :index, presence: true, numericality: { greater_than_or_equal_to: 0}
-  validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0.0}
+  validates :amount, presence: true
   validates :state, presence: true
 
   ### Callbacks
