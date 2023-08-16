@@ -98,9 +98,9 @@ Rails uses the `RAILS_MASTER_KEY` environment variable to decrypt this file.
 In development, store the master key in `.env`
 
 Edit credentials/secrets with:
-`RAILS_MASTER_KEY=XXXX rails credentials:edit --environment development`
+`docker-compose run -e RAILS_MASTER_KEY=XXXX web rails credentials:edit --environment development`
 
-`RAILS_MASTER_KEY=XXXX rails credentials:edit --environment production`
+`docker-compose run -e RAILS_MASTER_KEY=XXXX web rails credentials:edit --environment production`
 
 # Email
 
@@ -228,7 +228,7 @@ On your development/deployment machine:
 
 ### 4. Add Heroku Ruby Buildpack
 
-Go to the Settings tab in the applicaiton control panel, and add the `heroku/ruby` buildpack.
+Go to the Settings tab in the application control panel, and add the `heroku/ruby` buildpack.
 
 ### 4. Deploy
 
