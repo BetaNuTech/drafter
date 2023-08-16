@@ -223,6 +223,7 @@ heroku config:set \
 On your development/deployment machine:
 
 * Add a 'heroku-staging' git remote: `git remote add heroku-staging https://git.heroku.com/drafter-staging.git`
+* Add a 'heroku-prod' git remote: `git remote add heroku-prod https://git.heroku.com/drafter-prod.git`
 * Update `bin/deploy_heroku` variables for staging/production application names if needed (and commit changes)
 * Update `staging` branch. `git checkout staging && git reset --hard main && git push`
 
@@ -231,6 +232,8 @@ On your development/deployment machine:
 Go to the Settings tab in the application control panel, and add the `heroku/ruby` buildpack.
 
 ### 4. Deploy
+
+Update the version number in the `VERSION` file and commit.
 
 `bin/deploy_heroku staging`
 
