@@ -18,9 +18,10 @@ class ProjectCostPolicy < ApplicationPolicy
 
   def new?
     user.admin? || 
-      ( project.allow_project_cost_changes? &&
-        ( privileged_user? ||
-          user.project_management?(project) ) )
+    user.project_owner?(project) ||
+    ( project.allow_project_cost_changes? &&
+      ( privileged_user? ||
+        user.project_management?(project) ) )
   end
 
   def create?
@@ -32,17 +33,19 @@ class ProjectCostPolicy < ApplicationPolicy
   end
 
   def edit?
-    user.admin? || 
-      ( project.allow_project_cost_changes? &&
-        ( privileged_user? ||
-          user.project_management?(project) ) )
+    user.admin? ||
+    user.project_owner?(project) ||
+    ( project.allow_project_cost_changes? &&
+      ( privileged_user? ||
+        user.project_management?(project) ) )
   end
 
   def edit_multiple?
     user.admin? || 
-      ( project.allow_project_cost_changes? &&
-        ( privileged_user? ||
-          user.project_management?(project) ) )
+    user.project_owner?(project) ||
+    ( project.allow_project_cost_changes? &&
+      ( privileged_user? ||
+        user.project_management?(project) ) )
   end
 
   def update?
