@@ -56,6 +56,9 @@ class ProjectCost < ApplicationRecord
   validates :state, presence: true
   validates :total, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
 
+  ### Callbacks
+  around_destroy :delete_change_orders
+
   ### Scopes
   scope :drawable, -> { where(drawable: true) }
   scope :change_requestable, -> { where(change_requestable: true) }
@@ -139,6 +142,19 @@ class ProjectCost < ApplicationRecord
 
   def contingency?
     name.match?(CONTINGENCY_COST_MATCH)
+  end
+
+  private
+
+  def delete_change_orders
+    transaction do
+      ChangeOrder.where(project_cost: self).destroy_all
+      ChangeOrder.where(funding_source_id: self.id).destroy_all
+
+      yield
+
+      raise ActiveRecord::Rollback unless self.destroyed?
+    end
   end
 
 end

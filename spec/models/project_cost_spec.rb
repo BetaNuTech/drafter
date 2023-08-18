@@ -66,6 +66,15 @@ RSpec.describe ProjectCost, type: :model do
                         changeorder.save!
                         changeorder
   }
+  let(:change_order3) {
+    changeorder = build(:change_order,
+                        draw_cost: draw2_draw_cost,
+                        project_cost_id: draw_cost2.project_cost_id,
+                        funding_source_id: draw_cost.project_cost_id,
+                        amount: 1000.0)
+                        changeorder.save!
+                        changeorder
+  }
 
   let(:project_cost) { draw_cost.project_cost }
   let(:project_cost2) { draw_cost2.project_cost }
@@ -135,6 +144,33 @@ RSpec.describe ProjectCost, type: :model do
         assert(project_cost.update(total: project_cost.draw_expensed_total - project_cost.change_order_total))
         refute(project_cost.update(total: 1.0))
       end
+    end
+  end
+
+  describe 'on destroy' do
+    before do
+      init_draws
+    end
+
+    it 'should destroy funded or funding change orders' do
+      change_order1; change_order2; change_order3
+
+      project_cost = draw_cost.project_cost
+      DrawCost.where(project_cost: project_cost).destroy_all
+
+      assert(project_cost.destroy)
+    end
+
+    it 'should fail if there are associated draw costs' do
+      change_order1; change_order2; change_order3
+
+      project_cost = draw_cost.project_cost
+      expect {
+        project_cost.destroy
+      }.to raise_error(ActiveRecord::InvalidForeignKey)
+
+      DrawCost.where(project_cost: project_cost).destroy_all
+      assert(project_cost.destroy)
     end
   end
 
