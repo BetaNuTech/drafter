@@ -102,9 +102,9 @@
       :cost_type: soft
       :approval_lead_time: 0
       :standard: true
-      :drawable: false
+      :drawable: true
       :change_requestable: true
-      :change_request_allowed: false
+      :change_request_allowed: true
       :total: 0.00
     - :name: Development Fee
       :cost_type: soft
