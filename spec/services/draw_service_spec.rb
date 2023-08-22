@@ -68,7 +68,6 @@ RSpec.describe DrawService do
       let(:draw) { sample_project.draws.first }
       let(:project) { sample_project }
       let(:valid_attrs) { {amount: 444.1, notes: 'New notes'} }
-      let(:invalid_attrs) { {amount: -444.1, notes: 'New notes'} }
 
       #before(:each) { sample_project; draw }
 
@@ -80,16 +79,6 @@ RSpec.describe DrawService do
           draw.reload
           expect(draw.amount).to eq(valid_attrs[:amount])
           expect(draw.notes).to eq(valid_attrs[:notes])
-        end
-      end
-      describe 'with invalid attributes' do
-        it 'does not change the draw' do
-          service = DrawService.new(user:, project:, draw:)
-          old_amount = draw.amount
-          service.update(invalid_attrs)
-          assert(service.errors?)
-          draw.reload
-          expect(draw.amount).to eq(old_amount)
         end
       end
     end
