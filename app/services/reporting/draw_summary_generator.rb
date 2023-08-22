@@ -24,7 +24,7 @@ module Reporting
       balance: 'Balance to Complete'
     }
 
-    READY_STATES = %i{internally_approved externally_approved}
+    READY_STATES = %i{internally_approved externally_approved funded}
 
     attr_reader :draw, :errors, :project
 

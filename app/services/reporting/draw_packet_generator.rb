@@ -4,7 +4,7 @@ module Reporting
 
     class Error < StandardError; end
 
-    READY_STATES = %i{internally_approved externally_approved}
+    READY_STATES = %i{internally_approved externally_approved funded}
 
     attr_reader :debug, :draw, :errors, :project, :document_packet
 
