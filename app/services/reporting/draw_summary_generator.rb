@@ -83,18 +83,19 @@ module Reporting
       }
 
       @project.project_costs.order(name: :asc).map do |project_cost|
+        lowest_index = (@draw.project.draws.visible.pluck(:index).sort.first || @draw.index) 
         draw_cost = project_cost.draw_costs.visible.where(draw: @draw).first
         contract_price = project_cost.total
         change_order_total = project_cost.visible_change_orders.
-          where(draws: {index: 0..@draw.index}).
+          where(draws: {index: lowest_index..@draw.index}).
           sum(:amount)
         change_order_funding_total = project_cost.visible_change_orders_funded.
-          where(draws: {index: 0..@draw.index}).
+          where(draws: {index: lowest_index..@draw.index}).
           sum(:amount)
         overall_change_order_total = change_order_total - change_order_funding_total
         adjusted_contract =  project_cost.total + overall_change_order_total
         current_draw_costs = project_cost.draw_costs.includes(:draw).visible.
-          where(draws: {index: 0..@draw.index})
+          where(draws: {index: lowest_index..@draw.index})
         previous_draw_costs = draw_cost.present? ? current_draw_costs.where.not(id: draw_cost.id) : current_draw_costs
         amount_due = ( draw_cost&.total || 0.0 ) + previous_draw_costs.where.not(state: :funded).sum(:total)
         total_draw_request = current_draw_costs.sum(:total)

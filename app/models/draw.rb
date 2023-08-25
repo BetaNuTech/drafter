@@ -106,7 +106,8 @@ class Draw < ApplicationRecord
   def next_index
     return 0 unless project.present?
 
-   (project.draws.visible.pluck(:index).sort.last || 0) + 1
+    # Start at 0 OR +1 last index
+   (project.draws.visible.pluck(:index).sort.last || -1) + 1
   end
 
   def draw_cost_total
