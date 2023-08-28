@@ -11,6 +11,7 @@ module Reporting
       amount_due
       total_draw_request
       balance
+      percent_complete
     }.freeze
 
     COLUMN_TITLES = {
@@ -21,7 +22,8 @@ module Reporting
       amount_paid: 'Amount Already Paid',
       amount_due: 'Amount Due',
       total_draw_request: 'Total Request as of Draw',
-      balance: 'Balance to Complete'
+      balance: 'Balance to Complete',
+      percent_complete: '% Complete'
     }
 
     READY_STATES = %i{internally_approved externally_approved funded}
@@ -80,27 +82,29 @@ module Reporting
         contract_price: 0.0,
         project_cost: 'Total Uses',
         total_draw_request: 0.0,
+        percent_complete: 0.0,
       }
 
       @project.project_costs.order(name: :asc).map do |project_cost|
-        lowest_index = (@draw.project.draws.visible.pluck(:index).sort.first || @draw.index) 
+        lowest_draw_index = (@project.draws.visible.pluck(:index).sort.first || @draw.index) 
         draw_cost = project_cost.draw_costs.visible.where(draw: @draw).first
         contract_price = project_cost.total
         change_order_total = project_cost.visible_change_orders.
-          where(draws: {index: lowest_index..@draw.index}).
+          where(draws: {index: lowest_draw_index..@draw.index}).
           sum(:amount)
         change_order_funding_total = project_cost.visible_change_orders_funded.
-          where(draws: {index: lowest_index..@draw.index}).
+          where(draws: {index: lowest_draw_index..@draw.index}).
           sum(:amount)
         overall_change_order_total = change_order_total - change_order_funding_total
         adjusted_contract =  project_cost.total + overall_change_order_total
         current_draw_costs = project_cost.draw_costs.includes(:draw).visible.
-          where(draws: {index: lowest_index..@draw.index})
+          where(draws: {index: lowest_draw_index..@draw.index})
         previous_draw_costs = draw_cost.present? ? current_draw_costs.where.not(id: draw_cost.id) : current_draw_costs
-        amount_due = ( draw_cost&.total || 0.0 ) + previous_draw_costs.where.not(state: :funded).sum(:total)
+        amount_due = ( draw_cost&.total || 0.0 ) + previous_draw_costs.joins(:draw).where.not(draws: {state: :funded}).sum(:total)
         total_draw_request = current_draw_costs.sum(:total)
         amount_paid = total_draw_request - amount_due
         balance = project_cost.total - current_draw_costs.sum(:total) + overall_change_order_total
+        percent_complete = (adjusted_contract > 0) ? total_draw_request / adjusted_contract * 100.0 : 0.0
 
         totals[:adjusted_contract] += adjusted_contract
         totals[:amount_due] += amount_due
@@ -109,6 +113,7 @@ module Reporting
         totals[:change_order] += overall_change_order_total
         totals[:contract_price] += contract_price
         totals[:total_draw_request] += total_draw_request
+        totals[:percent_complete] += percent_complete
 
         {
           adjusted_contract:,
@@ -119,6 +124,7 @@ module Reporting
           contract_price:,
           project_cost: project_cost.name,
           total_draw_request:,
+          percent_complete:,
         }
       end << totals
     end
