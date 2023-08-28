@@ -33,6 +33,10 @@ module Users
         project_role(project)&.internal?
       end
 
+      def project_external?(project)
+        project_role(project)&.external?
+      end
+
       def project_developer?(project)
         project_role(project)&.developer?
       end

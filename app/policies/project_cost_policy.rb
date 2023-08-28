@@ -13,12 +13,11 @@ class ProjectCostPolicy < ApplicationPolicy
   end
 
   def index?
-    privileged_user? || user.project_internal?(project)
+    privileged_user? || user.member?(record.project)
   end
 
   def new?
     user.admin? || 
-    user.project_owner?(project) ||
     ( project.allow_project_cost_changes? &&
       ( privileged_user? ||
         user.project_management?(project) ) )
@@ -29,12 +28,11 @@ class ProjectCostPolicy < ApplicationPolicy
   end
 
   def show?
-    privileged_user? || user.project_internal?(project)
+    privileged_user? || user.member?(record.project)
   end
 
   def edit?
     user.admin? ||
-    user.project_owner?(project) ||
     ( project.allow_project_cost_changes? &&
       ( privileged_user? ||
         user.project_management?(project) ) )
@@ -42,7 +40,6 @@ class ProjectCostPolicy < ApplicationPolicy
 
   def edit_multiple?
     user.admin? || 
-    user.project_owner?(project) ||
     ( project.allow_project_cost_changes? &&
       ( privileged_user? ||
         user.project_management?(project) ) )

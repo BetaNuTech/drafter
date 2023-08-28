@@ -36,9 +36,7 @@ class ChangeOrderPolicy < ApplicationPolicy
   end
 
   def show?
-    privileged_user? ||
-      user.project_internal?(record.project) ||
-      user.project_developer?(record.project)
+    privileged_user? || user.member?(record.project)
   end
 
   def edit?

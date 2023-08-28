@@ -92,6 +92,8 @@ module ChangeOrders
         task_event = case event_name.to_sym
                      when :approve, :reject
                        event_name.to_sym
+                     when :withdraw
+                       :archive
                      end
         project_tasks.pending.each do |task|
           task.trigger_event(event_name: task_event) if task.permitted_state_events.include?(task_event)

@@ -70,7 +70,7 @@ class ProjectCostsController < ApplicationController
 
     project_costs_params = params.require(:project_costs).permit!
 
-    permitted_params = policy(ProjectCost).allowed_params
+    permitted_params = policy(@new_project_cost).allowed_params
     project_costs_params.each do |id, values|
       record_scope.find(id).update(values.slice(*permitted_params))
     end
@@ -107,7 +107,8 @@ class ProjectCostsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def project_cost_params
-    allowed_params = policy(ProjectCost).allowed_params
+    new_project_cost = @project.project_costs.new
+    allowed_params = policy(new_project_cost).allowed_params
     params.require(:project_cost).permit(*allowed_params)
   end
   

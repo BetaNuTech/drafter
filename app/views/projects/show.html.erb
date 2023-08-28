@@ -28,7 +28,7 @@
         <%#= render partial: 'shared/user_notifications', locals: { notifications: @notifications} %>
       </div>
       -->
-      <% unless @current_user.project_developer?(@project) %>
+      <% unless @current_user.project_external?(@project) %>
         <div class="col">
           <%= render partial: 'project_tasks', locals: {project: @project, project_tasks: @project_tasks} %> 
         </div>

@@ -13,7 +13,7 @@ class InvoicePolicy < ApplicationPolicy
   end
 
   def index?
-    user.admin? || user.member?(record.project)
+    privileged_user? || user.member?(record.project)
   end
 
   def new?
@@ -28,9 +28,7 @@ class InvoicePolicy < ApplicationPolicy
   end
 
   def show?
-    user.admin? ||
-    user.project_internal?(record.project) ||
-    user.project_developer?(record.project)
+    privileged_user? || user.member?(record.project) 
   end
 
   def edit?
