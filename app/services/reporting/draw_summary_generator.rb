@@ -104,7 +104,7 @@ module Reporting
         total_draw_request = current_draw_costs.sum(:total)
         amount_paid = total_draw_request - amount_due
         balance = project_cost.total - current_draw_costs.sum(:total) + overall_change_order_total
-        percent_complete = (adjusted_contract > 0) ? total_draw_request / adjusted_contract * 100.0 : 0.0
+        percent_complete = (adjusted_contract > 0) ? (total_draw_request / adjusted_contract).round(4) : 0.0
 
         totals[:adjusted_contract] += adjusted_contract
         totals[:amount_due] += amount_due
@@ -113,7 +113,7 @@ module Reporting
         totals[:change_order] += overall_change_order_total
         totals[:contract_price] += contract_price
         totals[:total_draw_request] += total_draw_request
-        totals[:percent_complete] += percent_complete
+        totals[:percent_complete] = (totals[:adjusted_contract] > 0) ? (totals[:total_draw_request] / totals[:adjusted_contract]).round(4) : 0.0
 
         {
           adjusted_contract:,

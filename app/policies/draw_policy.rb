@@ -99,16 +99,12 @@ class DrawPolicy < ApplicationPolicy
 
   def download_packet?
     record.document_packet.attached? &&
-    ( user.admin? ||
-      user.project_management?(record.project) ||
-      user.project_finance?(record.project) )
+    ( privileged_user? || user.member?(record.project) )
   end
 
   def download_summary_sheet?
     record.draw_summary_sheet.attached? &&
-    ( user.admin? ||
-      user.project_management?(record.project) ||
-      user.project_finance?(record.project) )
+    ( privileged_user? || user.member?(record.project) )
   end
 
   def allowed_params

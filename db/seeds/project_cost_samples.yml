@@ -16,7 +16,7 @@
       :standard: true
       :drawable: true
       :change_requestable: false
-      :change_request_allowed: false
+      :change_request_allowed: true
       :total: 0.00
     - :name: Building Cost
       :cost_type: hard
