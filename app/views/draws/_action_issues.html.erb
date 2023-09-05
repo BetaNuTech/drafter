@@ -1,5 +1,3 @@
-<% if policy(draw).approve_but_blocked? %><p>Owner/Manager required to approve.</p><% end %>
-
 <% if issues = draw_action_issues(draw) %>
   <div class="m-2 p-2 bg-warning bg-gradient shadow-sm text-left">
     <h5>The following must be resolved before the Draw can be <%= issues[:action] %>:</h5>
