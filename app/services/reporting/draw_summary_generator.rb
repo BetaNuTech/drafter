@@ -26,7 +26,7 @@ module Reporting
       percent_complete: '% Complete'
     }
 
-    READY_STATES = %i{internally_approved externally_approved funded}
+    READY_STATES = %i{internally_approved externally_approved approved funded}
 
     attr_reader :draw, :errors, :project
 

@@ -1,4 +1,4 @@
-<% if policy(draw).approve_internal_but_blocked? %><p>Owner/Manager required to internally approve.</p><% end %>
+<% if policy(draw).approve_but_blocked? %><p>Owner/Manager required to approve.</p><% end %>
 
 <% if issues = draw_action_issues(draw) %>
   <div class="m-2 p-2 bg-warning bg-gradient shadow-sm text-left">

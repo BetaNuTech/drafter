@@ -10,8 +10,8 @@ module Draws
 
     included do
       include AASM
-      APPROVED_STATES = %i{ internally_approved externally_approved funded }.freeze
-      VISIBLE_STATES = %i{ pending submitted internally_approved externally_approved funded rejected }.freeze
+      APPROVED_STATES = %i{ internally_approved externally_approved approved funded }.freeze
+      VISIBLE_STATES = %i{ pending submitted internally_approved externally_approved approved funded rejected }.freeze
       ALLOW_DRAW_COST_CHANGE_STATES = %i{ pending rejected }.freeze
       ALLOW_DOCUMENT_CHANGE_STATES = %i{ pending rejected }.freeze
       ALLOW_DOCUMENT_APPROVALS_STATES = %i{ submitted }.freeze
@@ -25,8 +25,9 @@ module Draws
       aasm column: :state, whiny_transitions: false do
         state :pending
         state :submitted
-        state :internally_approved
-        state :externally_approved
+        state :internally_approved # No longer used
+        state :externally_approved # No longer used
+        state :approved
         state :funded
         state :rejected
         state :withdrawn
@@ -38,35 +39,35 @@ module Draws
         end
 
         event :approve do
-          transitions from: %i{ submitted }, to: :internally_approved,
+          transitions from: %i{ submitted internally_approved }, to: :approved,
             guard: Proc.new { allow_approval? },
             after: Proc.new {|*args| after_approval(*args) }
         end
 
-        event :approve_internal do
-          transitions from: %i{ submitted }, to: :internally_approved,
-            guard: Proc.new { allow_approval? },
-            after: Proc.new {|*args| after_approval(*args) }
-        end
+        # event :approve_internal do
+        #   transitions from: %i{ submitted }, to: :internally_approved,
+        #     guard: Proc.new { allow_approval? },
+        #     after: Proc.new {|*args| after_approval(*args) }
+        # end
 
-        event :approve_external do
-          transitions from: :internally_approved, to: :externally_approved,
-            guard: Proc.new { allow_approval? },
-            after: Proc.new {|*args| after_approval(*args) }
-        end
+        # event :approve_external do
+        #   transitions from: :internally_approved, to: :externally_approved,
+        #     guard: Proc.new { allow_approval? },
+        #     after: Proc.new {|*args| after_approval(*args) }
+        # end
 
         event :reject do
-          transitions from: %i{ submitted internally_approved externally_approved }, to: :rejected,
+          transitions from: %i{ submitted internally_approved externally_approved approved }, to: :rejected,
             after: Proc.new {|*args| after_reject(*args) }
         end
 
         event :withdraw do
-          transitions from: %i{ pending submitted rejected internally_approved }, to: :withdrawn,
+          transitions from: %i{ pending submitted rejected internally_approved approved }, to: :withdrawn,
             after: Proc.new {|*args| after_withdraw(*args) }
         end
 
         event :fund do
-          transitions from: :externally_approved, to: :funded,
+          transitions from: %i{ externally_approved approved }, to: :funded,
             after: Proc.new {|*args| after_funding(*args) }
         end
       end
@@ -95,6 +96,7 @@ module Draws
           'submitted' => 'warning',
           'internally_approved' => 'primary',
           'externally_approved' => 'primary',
+          'approved' => 'primary',
           'funded' => 'success',
           'rejected' => 'danger'
         }.fetch(state, 'light')

@@ -75,12 +75,12 @@ class DrawService
     end
   end
 
-  def approve_internal
-    raise PolicyError unless @policy.approve_internal?
+  def approve
+    raise PolicyError unless @policy.approve?
 
-    if @draw.permitted_state_events.include?(:approve_internal)
-      @draw.trigger_event(event_name: :approve_internal, user: @user)
-      SystemEvent.log(description: "Internally Approved Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
+    if @draw.permitted_state_events.include?(:approve)
+      @draw.trigger_event(event_name: :approve, user: @user)
+      SystemEvent.log(description: "Approved Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
       @project.draws.reload
       return true
     else
@@ -88,18 +88,31 @@ class DrawService
     end
   end
 
-  def approve_external
-    raise PolicyError unless @policy.approve_external?
+  # def approve_internal
+  #   raise PolicyError unless @policy.approve_internal?
 
-    if @draw.permitted_state_events.include?(:approve_external)
-      @draw.trigger_event(event_name: :approve_external, user: @user)
-      SystemEvent.log(description: "Externally Approved Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
-      @project.draws.reload
-      return true
-    else
-      return false
-    end
-  end
+  #   if @draw.permitted_state_events.include?(:approve_internal)
+  #     @draw.trigger_event(event_name: :approve_internal, user: @user)
+  #     SystemEvent.log(description: "Internally Approved Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
+  #     @project.draws.reload
+  #     return true
+  #   else
+  #     return false
+  #   end
+  # end
+
+  # def approve_external
+  #   raise PolicyError unless @policy.approve_external?
+
+  #   if @draw.permitted_state_events.include?(:approve_external)
+  #     @draw.trigger_event(event_name: :approve_external, user: @user)
+  #     SystemEvent.log(description: "Externally Approved Draw '#{@draw.index}' for Project '#{@project.name}'", event_source: @draw, incidental: @project, severity: :warn)
+  #     @project.draws.reload
+  #     return true
+  #   else
+  #     return false
+  #   end
+  # end
 
   def fund
     raise PolicyError unless @policy.fund?

@@ -5,7 +5,7 @@ module Draws
     included do
 
       def regenerate_subsequent_draw_reports
-        visible_states = %i{internally_approved externally_approved funded}
+        visible_states = %i{internally_approved externally_approved approved funded}
         subsequent_draws = project.draws.where(index: self.index.., state: visible_states)
         subsequent_draws.each(&:generate_reports)
       end

@@ -184,7 +184,7 @@ RSpec.describe Draw, type: :model do
       end
     end # reject
 
-    describe 'on internal approval' do
+    describe 'on approval' do
       before do
         draw_cost_invoices.update_all(state: :approved)
         draw_documents.each{|doc| doc.update(state: :approved)}
@@ -211,7 +211,7 @@ RSpec.describe Draw, type: :model do
         draw_documents.each{|doc| doc.update(state: :approved)}
         draw.draw_costs.update_all(state: :approved)
         draw.reload
-        draw.update(state: :externally_approved) 
+        draw.update(state: :approved) 
         draw.reload
       end
       describe 'notifications' do

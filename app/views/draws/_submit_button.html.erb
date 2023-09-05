@@ -1,3 +1,3 @@
 <%= link_to('Submit', project_draw_submit_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-success', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).submit? %>
-<%= link_to('Internally Approve', project_draw_approve_internal_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-success', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).internally_approve? %>
+<%= link_to('Approve', project_draw_approve_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-success', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).approve? %>
 <%= link_to('Reject', project_draw_reject_path(project_id: draw.project_id, draw_id: draw.id), class: 'btn btn-danger', data: { turbo_frame: :_top, turbo_method: :post }) if policy(draw).reject? %>

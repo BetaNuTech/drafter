@@ -97,31 +97,44 @@ class DrawsController < ApplicationController
     end
   end
 
-  def approve_internal
+  def approve
     authorize @draw
     @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
 
-    if @service.approve_internal
+    if @service.approve
       respond_to do |format|
-        format.html { redirect_to draw_path(id: @draw.id), notice: "Draw was internally approved." }
+        format.html { redirect_to draw_path(id: @draw.id), notice: "Draw was approved." }
       end
     else
       render :show, status: :unprocessable_entity
     end
   end
 
-  def approve_external
-    authorize @draw
-    @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
+  # def approve_internal
+  #   authorize @draw
+  #   @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
 
-    if @service.approve_external
-      respond_to do |format|
-        format.html { redirect_to draw_path(id: @draw.id), notice: "Draw was externally approved." }
-      end
-    else
-      render :show, status: :unprocessable_entity
-    end
-  end
+  #   if @service.approve_internal
+  #     respond_to do |format|
+  #       format.html { redirect_to draw_path(id: @draw.id), notice: "Draw was internally approved." }
+  #     end
+  #   else
+  #     render :show, status: :unprocessable_entity
+  #   end
+  # end
+
+  # def approve_external
+  #   authorize @draw
+  #   @service = DrawService.new(user: @current_user, project: @project, draw: @draw)
+
+  #   if @service.approve_external
+  #     respond_to do |format|
+  #       format.html { redirect_to draw_path(id: @draw.id), notice: "Draw was externally approved." }
+  #     end
+  #   else
+  #     render :show, status: :unprocessable_entity
+  #   end
+  # end
 
   def fund
     authorize @draw

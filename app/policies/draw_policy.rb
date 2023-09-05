@@ -65,24 +65,37 @@ class DrawPolicy < ApplicationPolicy
     record.funded? && user.project_internal?(record.project)
   end
 
-  def approve_internal?
-    record.permitted_state_events.include?(:approve_internal) &&
+  def approve?
+    record.permitted_state_events.include?(:approve) &&
     ( user.admin? ||
       user.project_management?(record.project) ||
       (record.clean? && user.project_finance?(record.project)) )
   end
 
-  def approve_internal_but_blocked?
-    !approve_internal? &&
-    record.permitted_state_events.include?(:approve_internal) &&
+  def approve_but_blocked?
+    !approve? &&
+    record.permitted_state_events.include?(:approve) &&
     ( !record.clean? && user.project_finance?(record.project) ) 
   end
 
-  def approve_external?
-    record.permitted_state_events.include?(:approve_external) &&
-    ( user.admin? ||
-      user.project_internal?(record.project) )
-  end
+  # def approve_internal?
+  #   record.permitted_state_events.include?(:approve_internal) &&
+  #   ( user.admin? ||
+  #     user.project_management?(record.project) ||
+  #     (record.clean? && user.project_finance?(record.project)) )
+  # end
+
+  # def approve_internal_but_blocked?
+  #   !approve_internal? &&
+  #   record.permitted_state_events.include?(:approve_internal) &&
+  #   ( !record.clean? && user.project_finance?(record.project) ) 
+  # end
+
+  # def approve_external?
+  #   record.permitted_state_events.include?(:approve_external) &&
+  #   ( user.admin? ||
+  #     user.project_internal?(record.project) )
+  # end
 
   def reject?
     record.permitted_state_events.include?(:reject) &&

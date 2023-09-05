@@ -137,7 +137,7 @@ RSpec.describe DrawsController, type: :controller do
       end
     end
 
-    describe '#approve_internal' do
+    describe '#approve' do
       let(:approver) { sample_project.managers.first }
       let(:developer) { sample_project.developers.first }
       let(:draw) {
@@ -150,14 +150,14 @@ RSpec.describe DrawsController, type: :controller do
       }
       describe 'with a full populated and submitted draw and approved draw costs' do
         describe 'as a manager' do
-          it 'should internally approve the draw' do
+          it 'should approve the draw' do
             sign_in approver
             assert(draw.all_draw_costs_approved?)
             assert(draw.all_required_documents_approved?)
-            post :approve_internal, params: {project_id: draw.project_id, draw_id: draw.id}
+            post :approve, params: {project_id: draw.project_id, draw_id: draw.id}
             expect(response).to be_redirect
             draw.reload
-            assert(draw.internally_approved?)
+            assert(draw.approved?)
             expect(draw.approver).to eq(approver)
           end
         end
@@ -168,10 +168,10 @@ RSpec.describe DrawsController, type: :controller do
             sign_in developer
             assert(draw.submitted?)
             assert(developer.project_developer?(draw.project))
-            post :approve_internal, params: {project_id: draw.project_id, draw_id: draw.id}
+            post :approve, params: {project_id: draw.project_id, draw_id: draw.id}
             expect(response).to be_redirect
             draw.reload
-            refute(draw.internally_approved?)
+            refute(draw.approved?)
           end
         end
       end
@@ -181,9 +181,9 @@ RSpec.describe DrawsController, type: :controller do
           draw.draw_costs.update_all(state: :submitted)
           draw.reload
           sign_in approver
-          post :approve_internal, params: {project_id: draw.project_id, draw_id: draw.id}
+          post :approve, params: {project_id: draw.project_id, draw_id: draw.id}
           draw.reload
-          refute(draw.internally_approved?)
+          refute(draw.approved?)
         end
       end
     end # Approve internal

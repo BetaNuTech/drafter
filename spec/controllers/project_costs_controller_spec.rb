@@ -31,7 +31,7 @@ RSpec.describe ProjectCostsController, type: :controller do
       describe 'after the first draw is approved' do
         it 'will not be created' do
           assert(project.allow_project_cost_changes?)
-          draw = create(:draw, project:, state: 'internally_approved', index: 10)
+          draw = create(:draw, project:, state: 'approved', index: 10)
           project.reload
           refute(project.allow_project_cost_changes?)
           sign_in user
@@ -60,7 +60,7 @@ RSpec.describe ProjectCostsController, type: :controller do
       describe 'after the first draw is approved' do
         it 'will not update the project cost' do
           assert(project.allow_project_cost_changes?)
-          draw = create(:draw, project:, state: 'internally_approved', index: 10)
+          draw = create(:draw, project:, state: 'approved', index: 10)
           project.reload
           refute(project.allow_project_cost_changes?)
           sign_in user
