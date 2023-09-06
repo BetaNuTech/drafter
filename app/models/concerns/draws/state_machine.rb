@@ -57,12 +57,12 @@ module Draws
         # end
 
         event :reject do
-          transitions from: %i{ submitted internally_approved externally_approved approved }, to: :rejected,
+          transitions from: %i{ submitted internally_approved externally_approved approved funded }, to: :rejected,
             after: Proc.new {|*args| after_reject(*args) }
         end
 
         event :withdraw do
-          transitions from: %i{ pending submitted rejected internally_approved approved }, to: :withdrawn,
+          transitions from: %i{ pending submitted rejected internally_approved approved funded }, to: :withdrawn,
             after: Proc.new {|*args| after_withdraw(*args) }
         end
 

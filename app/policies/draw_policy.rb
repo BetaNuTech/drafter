@@ -42,12 +42,16 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.permitted_state_events.include?(:withdraw) &&
-      ( privileged_user? ||
+    return false unless record.permitted_state_events.include?(:withdraw)
+  
+    if record.state == 'funded'
+      user.admin?
+    else
+      privileged_user? ||
         user.project_owner?(record.project) ||
         ( user.project_developer?(record.project) &&
-            %w{pending submitted rejected}.include?(record.state) )
-      )
+          %w{pending submitted rejected}.include?(record.state) )
+    end
   end
 
   def withdraw?
@@ -98,10 +102,15 @@ class DrawPolicy < ApplicationPolicy
   # end
 
   def reject?
-    record.permitted_state_events.include?(:reject) &&
-    ( user.admin? ||
-      user.project_management?(record.project) ||
-      user.project_finance?(record.project) )
+    return false unless record.permitted_state_events.include?(:reject)
+  
+    if record.state == 'funded'
+      user.admin?
+    else
+      user.admin? ||
+        user.project_management?(record.project) ||
+        user.project_finance?(record.project)
+    end
   end
 
   def fund?
