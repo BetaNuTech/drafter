@@ -110,6 +110,7 @@ module DrawCosts
         @state_errors << 'There are rejected invoices' if invoices.rejected.any?
         @state_errors << 'Invoice total does not match estimate' unless subtotal.zero?
         @state_errors << 'One or more invoice documents are missing' unless invoices.visible.all_documents_attached?
+        @state_errors << 'One or more change order documents are missing' unless change_orders.visible.all_documents_attached?
         @state_errors << 'Requires change order' if requires_change_order?
         # Disable overfunding check
         # @state_errors << 'Over-funded by change orders' if overfunded_by_change_orders?

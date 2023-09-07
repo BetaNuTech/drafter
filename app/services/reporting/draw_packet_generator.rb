@@ -138,10 +138,32 @@ module Reporting
         draw_cost_name = invoice.draw_cost.name.parameterize.underscore
         invoice_amount = invoice.amount.to_s.sub('.','_')
         {
-          filename: "%{draw_name}-%{draw_cost_name}%{doc_index}-%{invoice_amount}.pdf" %
+          filename: "%{draw_name}-%{draw_cost_name}-Invoice%{doc_index}-%{invoice_amount}.pdf" %
                       { draw_name:, draw_cost_name:, doc_index:, invoice_amount:},
           invoice_id: invoice.id,
           document: invoice.document,
+          draw_name:
+        }
+      end.compact
+    end
+
+    def get_change_order_documents
+      draw_name = formatted_draw_name(@draw)
+      doc_indices = { }
+      @draw.change_orders.approved.map do |change_order|
+        next nil unless change_order.document.attached?
+
+        index_key = change_order.draw_cost.name.parameterize.underscore.to_sym
+        doc_indices[index_key] ||= 0
+        doc_indices[index_key] = 1 + doc_indices[index_key]
+        doc_index = "%03d" % doc_indices[index_key]
+        draw_cost_name = change_order.draw_cost.name.parameterize.underscore
+        change_order_amount = change_order.amount.to_s.sub('.','_')
+        {
+          filename: "%{draw_name}-%{draw_cost_name}-ChangeOrder%{doc_index}-%{change_order_amount}.pdf" %
+                      { draw_name:, draw_cost_name:, doc_index:, change_order_amount:},
+          invoice_id: change_order.id,
+          document: change_order.document,
           draw_name:
         }
       end.compact

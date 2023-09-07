@@ -63,7 +63,7 @@ class ChangeOrder < ApplicationRecord
     end
   end
 
-  ALLOWED_PARAMS = %i{amount description funding_source_id}.freeze
+  ALLOWED_PARAMS = %i{amount description funding_source_id document}.freeze
 
   ### Associations
   belongs_to :project_cost
@@ -72,17 +72,26 @@ class ChangeOrder < ApplicationRecord
   has_one :project, through: :draw_cost
   has_one :draw, through: :draw_cost
   has_many :project_tasks, as: :origin, dependent: :destroy
+  has_one_attached :document
 
   ### Validations
   validates_with FundingAmountValidator
   validates_with FundingSourceValidator
   validates :amount, presence: true, numericality: { greater_than: 0.0 }
 
+  ### Class Methods
+
+  def self.all_documents_attached?
+    !self.all.any?{|change_order| !change_order.document.attached?}
+  end
+
   def self.create_approval_tasks
     self.all.pending.each do |change_order|
       change_order.create_task(action: :approve)
     end
   end
+
+  ### Instance Methods
 
   def create_task(action:, assignee: nil)
     task = ProjectTaskServices::Generator.call(origin: self, assignee: , action: )

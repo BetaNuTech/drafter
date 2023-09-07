@@ -43,6 +43,7 @@ module ProjectTaskServices
         assignee: assignee,
         assignee_name: ( assignee&.name || '' ),
         origin: change_order,
+        attachment_url: attachment_url,
         due_at: due_at,
         name: name,
         description: description
@@ -69,11 +70,20 @@ module ProjectTaskServices
         funding_source: change_order.funding_source.name,
         draw_cost: change_order.draw_cost.name
       }
-      [description, origin_link_markup].compact.join(" -- ")
+      [attachment_markup, description, origin_link_markup].compact.join(" -- ")
     end
 
     def due_at
       Time.current + (change_order.draw_cost&.project_cost&.approval_lead_time || 1).days
+    end
+
+    def attachment_url
+      change_order.document.attached? ? url_prefix + rails_blob_path(change_order.document) : nil
+    end
+
+    def attachment_markup
+      url = attachment_url
+      url.present? ? "[%{description}](%{url})" % {description: 'Document', url: url} : nil
     end
 
     def origin_link_markup

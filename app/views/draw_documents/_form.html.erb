@@ -13,10 +13,10 @@
     <% end %>
     <hr/>
     <div class="preview_container" data-document-form-target='document' data-hasdocument="<%= draw_document.document.attached? %>" >
-        <% if draw_document.document.attached? %>
-          <%= image_tag preview_document(document: draw_document.document, resize: [150,150]) %>
-        <% end %>
-      </div>
+      <% if draw_document.document.attached? %>
+        <%= image_tag preview_document(document: draw_document.document, resize: [150,150]) %>
+      <% end %>
+    </div>
     <% if draw_document.new_record? %>
       <div class="card_upload_button">
         <%= form.label :document, style: 'display: block;' do %>

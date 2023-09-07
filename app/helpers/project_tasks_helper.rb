@@ -11,7 +11,7 @@ module ProjectTasksHelper
   def project_task_origin_url(project_task)
     origin = project_task.origin
     case origin
-      when Invoice, DrawDocument
+      when Invoice, DrawDocument, ChangeOrder
         if origin.respond_to?(:document) && origin.document.attached?
           rails_blob_path(origin.document)
         else
