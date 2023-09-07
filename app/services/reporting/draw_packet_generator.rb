@@ -50,8 +50,9 @@ module Reporting
     def generate_document_packet
       draw_documents = get_draw_documents
       invoice_documents = get_invoice_documents
+      change_order_documents = get_change_order_documents
       reports = get_reports
-      all_docs = draw_documents + invoice_documents + reports
+      all_docs = draw_documents + invoice_documents + change_order_documents + reports
       zipfile_full_filename = nil
       zipfile_name = nil
 
