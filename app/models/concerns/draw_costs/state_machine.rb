@@ -115,6 +115,7 @@ module DrawCosts
         # Disable overfunding check
         # @state_errors << 'Over-funded by change orders' if overfunded_by_change_orders?
         @state_errors << 'There are rejected change orders' if change_orders.rejected.any?
+        puts @state_errors
         @state_errors.empty?
       end
 

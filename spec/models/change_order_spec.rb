@@ -51,8 +51,9 @@ RSpec.describe ChangeOrder, type: :model do
   let(:project_cost) { sample_draw_cost.project_cost }
   let(:funding_source) { sample_project_non_contingency_project_costs.first }
   let(:service) {ChangeOrderService.new(user: developer_user, draw_cost: draw_cost)}
+  let(:uploaded_file) {Rack::Test::UploadedFile.new("#{Rails.root}/spec/fixtures/files/sample_document_1.pdf", 'application/pdf')}
   let(:change_order_attrs) {
-    { amount: draw_cost.total, description: 'Test Change Order 1', funding_source_id: funding_source.id }
+    { amount: draw_cost.total, description: 'Test Change Order 1', funding_source_id: funding_source.id, document: uploaded_file }
   }
   let(:change_order) {
     co = service.create(change_order_attrs)

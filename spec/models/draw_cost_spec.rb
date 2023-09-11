@@ -37,6 +37,7 @@ RSpec.describe DrawCost, type: :model do
     sample_project.project_costs.reload
     cost
   }
+  let(:uploaded_file) {Rack::Test::UploadedFile.new("#{Rails.root}/spec/fixtures/files/sample_document_1.pdf", 'application/pdf')}
   let(:change_order) {
     project_cost = draw_cost.project_cost
     contingency_project_cost
@@ -44,6 +45,7 @@ RSpec.describe DrawCost, type: :model do
            amount: change_order_amount,
            draw_cost: draw_cost,
            project_cost: draw_cost.project_cost,
+           document: uploaded_file,
            funding_source: contingency_project_cost)
   }
 
@@ -132,6 +134,7 @@ RSpec.describe DrawCost, type: :model do
              amount: change_order_amount,
              draw_cost: draw_cost,
              project_cost: draw_cost.project_cost,
+             document: uploaded_file,
              funding_source: contingency_project_cost)
     }
     let(:change_order2) {
@@ -150,6 +153,7 @@ RSpec.describe DrawCost, type: :model do
              amount: 100,
              draw_cost: draw_cost,
              project_cost: draw_cost.project_cost,
+             document: uploaded_file,
              funding_source: secondary_project_cost)
     }
 
@@ -196,6 +200,12 @@ RSpec.describe DrawCost, type: :model do
       it 'disallows submission if any change orders are rejected' do
         assert(draw_cost.allow_submit?)
         draw_cost.invoices.first.update(state: :rejected)
+        draw_cost.reload
+        refute(draw_cost.allow_submit?)
+      end
+      it 'disallows submission if any change order is missing document' do
+        assert(draw_cost.allow_submit?)
+        change_order2
         draw_cost.reload
         refute(draw_cost.allow_submit?)
       end
