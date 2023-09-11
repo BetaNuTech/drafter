@@ -27,6 +27,9 @@ export default class extends Controller {
 
     var description_button_8 = container.querySelector(".patch_check_icon_description_popover")
     this.init_description_popover(description_button_8)
+
+    var description_button_9 = container.querySelector(".ocr_processing_icon_description_popover")
+    this.init_description_popover(description_button_9)
   }
 
   init_description_popover(el) {

@@ -14,6 +14,7 @@ module ImagesHelper
     file_earmark_check: 'file-earmark-check-fill.svg',
     file_earmark_break: 'file-earmark-break-fill.svg',
     file_earmark_x: 'file-earmark-x-fill.svg',
+    file_earmark_binary: 'file-earmark-binary-fill.svg',
     home: 'house-fill.svg',
     info: 'info-circle-fill.svg',
     patch_check: 'patch-check-fill.svg',
