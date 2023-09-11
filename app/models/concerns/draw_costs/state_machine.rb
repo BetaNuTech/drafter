@@ -125,6 +125,7 @@ module DrawCosts
       def allow_approve?
         @state_errors = []
         @state_errors << 'There are no submitted or approved invoices' unless invoices.where(state: %i{submitted approved}).any?
+        @state_errors << 'There are invoices being processed' if invoices.processing.any?
         @state_errors << 'There are pending invoices' if invoices.pending.any?
         @state_errors << 'There are rejected invoices' if invoices.rejected.any?
         @state_errors << 'Requires change order' if requires_change_order?
@@ -142,7 +143,7 @@ module DrawCosts
 
       def all_invoices_approved?
         invoices.reload
-        invoices.submitted.none? &&
+        invoices.approval_pending.none? &&
           invoices.approved.any? &&
           invoices.rejected.none?
       end
