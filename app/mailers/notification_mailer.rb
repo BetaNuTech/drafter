@@ -19,5 +19,22 @@ class NotificationMailer < ApplicationMailer
     mail(bcc: @emails, subject:)
   end
 
+  def project_role_notification
+    @project = params[:project]
+    @user = params[:user]
+    @role = params[:project_role]
+    @owners = @project.owners
+    @emails = @owners.map(&:email).compact.uniq
+
+    @email_data = { project: @project.name,
+                    role: @role.name,
+                    user: @user.full_name,
+                    user_email: @user.email
+                  }
+    subject = "Project Notification: %{user} is now a %{role} in %{project}" % @email_data
+
+    mail(bcc: @emails, subject:)
+  end
+
   
 end

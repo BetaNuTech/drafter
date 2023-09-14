@@ -1,5 +1,3 @@
-<p>Hello from Drafter!</p>
-
 <h2>
   NOTICE:
   <%= @email_data[:draw_full_name] %> is now <i><%= @email_data[:state] %></i>
@@ -24,4 +22,3 @@
 <% end %>
 
 <%= link_to('Click Here', project_draw_url(project_id: @project.id, id: @draw.id) ) %> to view this Draw in Drafter.
-

@@ -47,7 +47,9 @@ module Projects
         SystemEvent.log(description: msg, event_source: @project, incidental: user, severity: :warn)
         user.projects.reload
         project.users.reload
-        notify_member_of_role_change(project_user)
+        if project_role.external?
+          notify_owners_of_membership(@project, user, project_role)
+        end
         return project_user
       else
         msg = "Could not add member: #{project_user.full_messages.join(', ')}"
@@ -56,11 +58,14 @@ module Projects
       end
     end
 
-    def notify_member_of_membership(project_user)
-      # TODO create notification record for user
-      # TODO create Project mailer
-      # TODO create Project mailer action
-      # TODO send notification email
+    def notify_owners_of_membership(project, user, project_role)
+      mailer = NotificationMailer.with(project: project, user: user, project_role: project_role).project_role_notification
+  
+      if Rails.env.test?
+        mailer.deliver
+      else
+        mailer.deliver_later
+      end
     end
 
     def notify_member_of_role_change(project_user)
@@ -99,7 +104,9 @@ module Projects
       end
       msg = "#{user.name} was re-assigned to the #{project_role.name} role"
       SystemEvent.log(description: msg, event_source: @project, incidental: project_user.user, severity: :info)
-      notify_member_of_role_change(project_user)
+      if project_role.external?
+        notify_owners_of_membership(@project, user, project_role)
+      end
       project_user
     end
 

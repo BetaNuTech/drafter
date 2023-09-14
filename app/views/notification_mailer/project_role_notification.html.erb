@@ -1,0 +1,10 @@
+<h2>
+  NOTICE:
+  <%= @email_data[:user] %> (email: <%= @email_data[:user_email] %>) is now a <i><%= @email_data[:role] %></i> in <%= @email_data[:project] %>
+</h2>
+
+<p>
+  This is to inform you that <%= @email_data[:user] %> (email: <%= @email_data[:user_email] %>) has been assigned as a <%= @email_data[:role] %> in the <%= @email_data[:project] %> project.
+</p>
+
+<%= link_to('Click Here', project_url(id: @project.id)) %> to view the project details in Drafter.
